@@ -121,6 +121,16 @@ inline double natural_mortality(double body_length, double temp, double M0, doub
 	return (M0 + alpha_3 * pow(body_length / body_length_ref, gamma_3)) * pow(temp/Tref, cT);
 }
 
+// [[Rcpp::export]]
+/// @brief Calculate fishing selectivity
+/// @param len   Length og fish
+/// @param sf    Slope of the selectivity curve
+/// @param lf50  Midpoint of the selectivity curve
+/// @return      Selectivity
+inline double fishing_selectivity(double len, double sf, double lf50){
+	return 1/(1+exp(-sf*(len-lf50)));
+}
+
 
 // [[Rcpp::export]]
 /// @brief Calculate survival probability over a time interval dt (years) 

@@ -72,12 +72,12 @@ void Fish::set_length(double s){
 
 void Fish::set_traits(vector<double> traits){
 	vector<double>::iterator it = traits.begin();
-	par.alpha1         = *it++;
-	par.gsi            = *it++;
-	par.pmrn_intercept = *it++;
+	par.alpha1         = fmax(0, *it++);
+	par.gsi            = fmax(0, *it++);
+	par.pmrn_intercept = fmax(0, *it++);
 	par.pmrn_slope     = *it++;
-	par.pmrn_width     = *it++;
-	par.s0             = *it++;
+	par.pmrn_width     = fmax(0, *it++);
+	par.s0             = fmax(0, *it++);
 }
 
 vector<double> Fish::get_traits(){
@@ -102,7 +102,8 @@ double Fish::naturalMortalityRate(double temp){
 			return rate;
 		}
 		else if (par.mortality_model == MortalityModel::Bioenergetic){
-			return fish::natural_mortality(length, temp, par.M0, par.gamma3, par.alpha3, par.Lref, par.Tref, par.cT);
+			//return fish::natural_mortality(length, temp, par.M0, par.gamma3, par.alpha3, par.Lref, par.Tref, par.cT);
+			return (par.M0 + par.alpha3 * pow(length / par.Lref, par.gamma3) + par.alpha4*(par.alpha1 - par.alpha1_ref) + par.alpha5*(par.gsi - par.gsi_ref)) * pow(temp/par.Tref, par.cT);
 		}
 		else{
 			throw std::runtime_error("Invalid mortality model specified");
@@ -237,7 +238,7 @@ void Fish::print_header(){
 }	
 
 std::vector<double> Fish::get_state(){
-	return {t_birth, age, isMature, isAlive, length, weight};
+	return {t_birth, static_cast<double>(age), static_cast<double>(isMature), static_cast<double>(isAlive), length, weight};
 }
 
 
@@ -300,6 +301,13 @@ void FishParams::initFromFile(std::string params_file){
 	// temperature dependence of maturation and recruitment
 	READ_PAR(beta3); // = 0.196;
 	READ_PAR(beta4); // = 0.196;
+
+	// Trait dependence of mortality
+	READ_PAR(alpha4);
+	READ_PAR(alpha1_ref);
+	READ_PAR(alpha5);
+	READ_PAR(gsi_ref);
+
 
 	#undef READ_PAR
 
@@ -377,6 +385,11 @@ void FishParams::print(){
 	// mortality
 	PRINT_PAR(gamma3); // = -1.20565;
 	PRINT_PAR(alpha3); // = 0.57792;
+
+	PRINT_PAR(alpha4);
+	PRINT_PAR(alpha1_ref);
+	PRINT_PAR(alpha5);
+	PRINT_PAR(gsi_ref);
 
 	PRINT_PAR(beta4);  // calculated by constructor
 	PRINT_PAR(verbose);  // calculated by constructor

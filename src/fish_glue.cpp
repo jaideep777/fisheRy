@@ -24,6 +24,7 @@ RCPP_MODULE(fish_module) {
 	function("gsi", &fish::gsi);
 	function("natural_mortality", &fish::natural_mortality);
 	function("survival_probability", &fish::survival_probability);
+	function("fishing_selectivity", &fish::fishing_selectivity);
 	
 	class_ <FishParams>("FishParams")
 		.constructor()
@@ -42,6 +43,12 @@ RCPP_MODULE(fish_module) {
 		.field("r0", &FishParams::r0)
 		.field("M0", &FishParams::M0)
 
+		.field("alpha1", &FishParams::alpha1)
+		.field("gsi", &FishParams::gsi)
+		.field("pmrn_intercept", &FishParams::pmrn_intercept)
+		.field("pmrn_slope", &FishParams::pmrn_slope)
+		.field("pmrn_width", &FishParams::pmrn_width)
+		
 		.method("print", &FishParams::print)
 		.method("initFromFile", &FishParams::initFromFile)	
 	;

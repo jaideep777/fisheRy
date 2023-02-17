@@ -1,0 +1,56 @@
+---
+title: 'Fitness Landscapes'
+author: "Jaideep Joshi"
+date: "28 March 2022"
+output:
+  html_document: default
+editor_options:
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+rm(list=ls())
+```
+
+```{r, include = F, echo = F}
+library(fisheRy)
+library(tidyverse)
+source("../tests/ref/parameters.cod.R")
+source("../tests/ref/simulator.7.R")
+```
+
+```{r}
+params_file = "../params/cod_params.ini"
+```
+
+```{r}
+fish = new(Fish, params_file)
+fish$init(0, 5.61)
+
+ssb = 2.3692e9
+tsb = 2.5136e9
+temp = 5.61
+am = 29
+years = 1:am
+length = numeric(am)
+M = numeric(am)
+for (i in years){
+  length[i] = fish$length
+  fish$updateMaturity(temp)
+  fish$grow(tsb/1e6, temp)
+  fish$set_age(fish$age+1)
+  M[i] = fish$naturalMortalityRate(temp)
+}
+
+par(mfrow=c(3,3), mar=c(4,4,1,1), oma=c(1,1,1,1))
+plot(length~years, xlab="Age", ylab="Length", type="l", lwd=2)
+plot(M~years, xlab="Age", ylab="Natural mortality rate", type="l", lwd=2)
+plot(cumsum(M)~years, xlab="Age", ylab="Cumm mortality", type="l", lwd=2)
+plot(exp(-cumsum(M))~years, xlab="Age", ylab="Survival Prob", type="l", lwd=2)
+
+```
+
+
+
+

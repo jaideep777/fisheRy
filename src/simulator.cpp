@@ -27,7 +27,7 @@ vector<double> Simulator::equilibriateNaturalPopulation(double tsb0, double temp
 
 Tensor<double> Simulator::simulate_multi(Population &pop, vector<double> hvec, int nyears, double tsb0, double temp, bool re_init){
 	int niters = 1;
-	Tensor<double> res({niters, 4, hvec.size(), nyears});
+	Tensor<double> res({niters, 4, static_cast<int>(hvec.size()), nyears});
 	Population pop_ref = pop;
 
 	for (int iter = 0; iter < niters; ++iter){
@@ -109,7 +109,7 @@ vector<double> Simulator::stakeholder_satisfaction(vector<int> dims, vector<doub
 
 Tensor<double> Simulator::simulate_multi_2d(Population pop, vector<double> Tvec, vector<double> lminvec, vector<double> hvec, int nyears, double tsb0, bool re_init){
 	int niters = 1;
-	Tensor<double> res({niters, pop.colnames.size(), Tvec.size(), lminvec.size(), hvec.size(), nyears});
+	Tensor<double> res({niters, static_cast<int>(pop.colnames.size()), static_cast<int>(Tvec.size()), static_cast<int>(lminvec.size()), static_cast<int>(hvec.size()), nyears});
 	Population pop_ref = pop;
 
 	for (int iter = 0; iter < niters; ++iter){

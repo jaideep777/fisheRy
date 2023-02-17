@@ -92,6 +92,10 @@ class FishParams {
 	double gamma3; // = -1.20565;
 	double alpha3; // = 0.57792;
 //	double lref   = 18.25037;
+	double alpha4;
+	double alpha1_ref;
+	double alpha5;
+	double gsi_ref;
 	
 	// *********** OLD MODEL *****************
 	// biology
