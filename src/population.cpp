@@ -100,6 +100,9 @@ void Population::set_minSizeLimit(double _lf50){
 //	calc_athresh();
 }
 
+void Population::set_traitVariances(vector<double> var){
+	proto_fish.trait_variances = var;
+}
 
 void Population::init(int n, double tsb, double temp){
 	current_year = 1;
@@ -309,7 +312,7 @@ std::vector<double> Population::update(double temp){
 	double h1, h2;
 	double B = fishableBiomass();
 	h1 = par.f_harvest_spg * par.h * B / (ssb+1);
-	h1 = fmin(fmax(h1, 0), 0.3);
+	h1 = fmin(fmax(h1, 0), 0.4);
 	h2 = (par.h * B - h1 * ssb) / B;
 	h2 = fmin(fmax(h2, 0), 1);
 	if (h2 == 0) h1 = fmin(par.h * B / (ssb+1), 1);

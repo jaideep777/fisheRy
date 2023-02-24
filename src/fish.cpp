@@ -72,12 +72,12 @@ void Fish::set_length(double s){
 
 void Fish::set_traits(vector<double> traits){
 	vector<double>::iterator it = traits.begin();
-	par.alpha1         = fmax(0, *it++);
-	par.gsi            = fmax(0, *it++);
-	par.pmrn_intercept = fmax(0, *it++);
+	par.alpha1         = fmax(1e-3, *it++);
+	par.gsi            = fmax(1e-6, *it++);
+	par.pmrn_intercept = fmax(1e-3, *it++);
 	par.pmrn_slope     = *it++;
-	par.pmrn_width     = fmax(0, *it++);
-	par.s0             = fmax(0, *it++);
+	par.pmrn_width     = fmax(1e-3, *it++);
+	par.s0             = fmax(1e-6, *it++);
 }
 
 vector<double> Fish::get_traits(){

@@ -137,6 +137,7 @@ class Population{
 
 	void set_harvestProp(double _h);
 	void set_minSizeLimit(double _lf50);
+	void set_traitVariances(std::vector<double>var);
 	void init(int n, double tsb, double temp);	// initialize population with n individuals
 
 	std::vector<double> noFishingEquilibriate(double tsb0, double temp);	
