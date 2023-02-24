@@ -52,6 +52,8 @@ class PopulationParams {
 
 	double n = 5e6;	// superfish size
 
+	double f_harvest_spg = 0.2;
+
 	// ***
 	// calculated variables
 	double mort_fishing_mature = 0; 
@@ -100,7 +102,7 @@ class Population{
 	     "profit.sea", "profit.shore", "tsb", 
 	     "r0", "nrecruits", "nfish_ra", "nsuperfish",
 	     "factor_dg", "factor_dr", "max_length", "length90", 
-	     "survival_mean", "maturity", "Nrel"};
+	     "survival_mean", "maturity", "Nrel_sea", "Nrel_spg"};
 
 	public:
 	// SeaEnvironment
@@ -112,7 +114,8 @@ class Population{
 	
 	public:
 	double K_fishableBiomass = 0;  ///< Fishable biomass under zero fishing pressure. This is set by the simulator
-	
+	double K_ssb = 0;              ///< Spawning stock biomass under zero fishing pressure. This is set by the simulator
+
 	public:
 	double current_year = 1;       ///< Current simulation year
 

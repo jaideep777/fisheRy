@@ -305,24 +305,56 @@ std::vector<double> Population::update(double temp){
 	// 4. Mortality 
 //	if (par.use_old_model_effort) summarize(); // population summary for calculation of Nrel
 	
+	// Calculate mortality rate in spawning-grounds (h1) and open sea (h2)
+	double h1, h2;
+	double B = fishableBiomass();
+	h1 = par.f_harvest_spg * par.h * B / (ssb+1);
+	h1 = fmin(fmax(h1, 0), 0.3);
+	h2 = (par.h * B - h1 * ssb) / B;
+	h2 = fmin(fmax(h2, 0), 1);
+	if (h2 == 0) h1 = fmin(par.h * B / (ssb+1), 1);
+	if (verbose) cout << "h1/h2 = " << h1 << " / " << h2 << endl;
+
 //	// calculate realized mortality rate
-	double F_req = par.mort_fishing_mature; //, M = proto_fish.par.mam[proto_fish.par.amax];
-	double F_real = F_req; 
+	// double F_req = par.mort_fishing_mature; //, M = proto_fish.par.mam[proto_fish.par.amax];
+	// double F_real = F_req;
+	double F_req_sea = -log(1-h2);
+	double F_req_spg = -log(1-h1);
+
+	double F_real_sea = F_req_sea;
+	double F_real_spg = F_req_spg;
+
+	double E_req_sea = 0, E_real_sea = 0;
+	double E_req_spg = 0, E_real_spg = 0;
 	double E_req = 0, E_real = 0;
+
 	double D_sea_req = 0, D_sea_real = 0;
-	double Nrel = 0;
+
+	double Nrel_sea = 0, Nrel_spg = 0;
 
 	if (!par.simulate_bio_only){
 		if (par.h > 0){
-			Nrel = (K_fishableBiomass > 0)? fishableBiomass() / K_fishableBiomass : 1e-20;
+			// Ignore effort limitation in the following calcs
+			Nrel_sea = (K_fishableBiomass > 0)? B / K_fishableBiomass : 1e-20;
+			E_req_sea = (Nrel_sea < 1e-10)? 0 : effort(Nrel_sea, F_req_sea, temp); 
+
+			Nrel_spg = (K_ssb > 0)? ssb / K_fishableBiomass : 1e-20;
+			E_req_spg = (Nrel_spg < 1e-10)? 0 : effort(Nrel_spg, F_req_spg, temp); 
+
+			E_req = E_req_sea + E_req_spg;
+			E_real = E_req;
 			
-			E_req = (Nrel < 1e-10)? 0 : effort(Nrel, F_req, temp); //pow(Nrel, 1-par.b) * F * (exp(-(F+M)*(1-par.b))-1) / (par.q*(F+M)*(par.b-1));
 			D_sea_req  = par.dsea * E_req;
-			D_sea_real = D_sea_req / (1 + D_sea_req/par.dmax);
 			
-			E_real = D_sea_real / par.dsea;
-			// Solve for F_real
-			F_real = pn::zero(0, F_req, [E_real, Nrel, temp, this](double F){ return (E_real - effort(Nrel, F, temp));}, 1e-6).root;
+			// Nrel = (K_fishableBiomass > 0)? fishableBiomass() / K_fishableBiomass : 1e-20;
+			
+			// E_req = (Nrel < 1e-10)? 0 : effort(Nrel, F_req, temp); //pow(Nrel, 1-par.b) * F * (exp(-(F+M)*(1-par.b))-1) / (par.q*(F+M)*(par.b-1));
+			// D_sea_req  = par.dsea * E_req;
+			// D_sea_real = D_sea_req / (1 + D_sea_req/par.dmax);
+			
+			// E_real = D_sea_real / par.dsea;
+			// // Solve for F_real
+			// F_real = pn::zero(0, F_req, [E_real, Nrel, temp, this](double F){ return (E_real - effort(Nrel, F, temp));}, 1e-6).root;
 		}
 	}
 
@@ -330,7 +362,7 @@ std::vector<double> Population::update(double temp){
 	double yield = 0;
 	double survival_mean = 0;
 	for (auto& f : fishes){
-		double fishing_mort_rate = selectivity(f.length)*F_real; //(f.isMature)? par.mort_fishing_mature : par.mort_fishing_immature;
+		double fishing_mort_rate = selectivity(f.length)*F_real_sea + double(f.isMature)*F_real_spg; //(f.isMature)? par.mort_fishing_mature : par.mort_fishing_immature;
 		double mortality_rate = f.naturalMortalityRate(temp) + fishing_mort_rate; // post-spawning mortality rate is same for mature and immature individuals
 		double survival_prob = exp(-mortality_rate*1.0);	// mortality during post-spawining, over full year.
 		survival_mean += survival_prob;
@@ -366,9 +398,9 @@ std::vector<double> Population::update(double temp){
 	//}
 	}
 
-	if (verbose) cout << "year = " << current_year << " | TSB = " << tsb/1e9 << ", SSB = " << ssb/1.0e9 << ", recruits = " << nrecruits_real << "/" << std::accumulate(nrecruits_vec.begin(), nrecruits_vec.end(), 0.0) << ", N_rel = " << Nrel << ", F_real = " << F_real << "(" << F_real/F_req*100 << "%), r0_avg = " << r0_avg << "\n";
+	if (verbose) cout << "year = " << current_year << " | TSB = " << tsb/1e9 << ", SSB = " << ssb/1.0e9 << ", recruits = " << nrecruits_real << "/" << std::accumulate(nrecruits_vec.begin(), nrecruits_vec.end(), 0.0) << ", N_rel_sea/spg = " << Nrel_sea << " / " << Nrel_spg << ", F_real = " << F_real_sea << "(" << F_real_sea/F_req_sea*100 << "%), r0_avg = " << r0_avg << ", % harvest = " << yield/tsb << "\n";
 	++current_year;
-	return {ssb, yield, emp_sea+emp_shore, profit_sea+profit_shr, emp_sea, emp_shore, profit_sea, profit_shr, tsb, r0_avg, nrecruits_real, nfish_ra, static_cast<double>(nfish()), factor_dg, factor_dr, lmax, length90, survival_mean, maturity, Nrel};	
+	return {ssb, yield, emp_sea+emp_shore, profit_sea+profit_shr, emp_sea, emp_shore, profit_sea, profit_shr, tsb, r0_avg, nrecruits_real, nfish_ra, static_cast<double>(nfish()), factor_dg, factor_dr, lmax, length90, survival_mean, maturity, Nrel_sea, Nrel_spg};	
 }
 
 

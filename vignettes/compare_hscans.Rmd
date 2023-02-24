@@ -141,7 +141,7 @@ for (i in 1:length(Tvec)){
   dat_ibm[nrow(dat_ibm)+1,] = v_ibm
 }
 
-plot_scan(dat_ibm, xname = expression("Harvest proportion"), xvec = hvec) #, dat_ref=dat_ref)
+plot_scan(dat_ibm, xname = expression("Harvest proportion"), xvec = hvec, dat_ref=dat_ref)
 ```
 
 ### Effect of harvest proportion (Dankel et al. model)

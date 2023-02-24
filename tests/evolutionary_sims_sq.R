@@ -5,16 +5,17 @@ source("tests/ref/simulator.7.R")
 params_file = "params/cod_params.ini"
 
 fish = new(Fish, params_file)
-fish$trait_variances = c(1, 0, 1, 1, 1, 0)*0.01
+fish$trait_variances = c(1, 1, 1, 1, 1, 0)*0.01
 
 pop = new(Population, fish)  
-pop$par$n = 1e6  # Each superfish contains so many fish
+pop$par$n = 4e6  # Each superfish contains so many fish
+pop$par$f_harvest_spg = 0.23
 pop$par$simulate_bio_only = T
 pop$set_harvestProp(0)
 pop$init(1000, 1.93e3, 5.61)  # initialize the population with 1000 agents (superfish)
 
 pop$verbose = T
-nsteps = 50             # Let's simulate for 200 years
+nsteps = 1000             # Let's simulate for 200 years
 nfish = numeric(nsteps)  # Let's keep track of the number of superfish
 nfish[1]=1000            # Since we initialized the population with 1000 superfish
 
@@ -26,10 +27,11 @@ dat = data.frame(matrix(ncol=length(cnames), nrow=0))
 colnames(dat) = cnames
 trait_dist = array(dim = c(6, nsteps, 100))
 trait_scalars = c(6.5, 0.09, 150, -6.6, 50, 0.06)
-trait_breaks = seq(0,4,length.out=101)
+trait_breaks = seq(0,2.5,length.out=101)
 trait_names = c("alpha1", "gsi", "pmrn_intercept", "pmrn_slope", "pmrn_width", "s0")
 trait_means = array(dim=c(6, nsteps))
-for (i in 1:nsteps){
+
+for (i in 1:100){
   v = pop$update(5.61) #temp[i])       # Update all fish over 1 year 
   dat[i,] = v    # some book-keeping
   traits = pop$get_traits()
@@ -42,6 +44,36 @@ for (i in 1:nsteps){
   nfish[i] = pop$nfish()
 }
 
+pop$set_harvestProp(0.5)
+
+for (i in 1:(nsteps/2)){
+  v = pop$update(5.61) #temp[i])       # Update all fish over 1 year 
+  dat[i,] = v    # some book-keeping
+  traits = pop$get_traits()
+  traits = pop$get_traits()
+  for (it in 1:6){
+    h = hist(traits[,it]/trait_scalars[it], breaks = trait_breaks, plot=F)
+    trait_dist[it,i,] = h$density
+    trait_means[it,i] = abs(mean(traits[,it]))
+  }
+  nfish[i] = pop$nfish()
+}
+
+
+for (i in (nsteps/2+1):nsteps){
+  v = pop$update(5.61) #temp[i])       # Update all fish over 1 year 
+  dat[i,] = v    # some book-keeping
+  traits = pop$get_traits()
+  traits = pop$get_traits()
+  for (it in 1:6){
+    h = hist(traits[,it]/trait_scalars[it], breaks = trait_breaks, plot=F)
+    trait_dist[it,i,] = h$density
+    trait_means[it,i] = abs(mean(traits[,it]))
+  }
+  nfish[i] = pop$nfish()
+}
+
+
 d = pop$get_state()
 dist = table(d$age, d$length)
 
@@ -50,7 +82,7 @@ plot(nfish~seq(1,nsteps,1), ylab="No. of superfish", xlab="Year")
 image(x=as.numeric(rownames(dist)), y = as.numeric(colnames(dist)), z=log(1+3*log(dist)), col=scales::viridis_pal()(100), xlab="Age", ylab="Length")
 
 res = simulate(0, 45, F)
-matplot(cbind(dat$ssb/1e9, res$summaries$SSB[1:nsteps]/1e9), ylab="SSB (MT)", xlab="Year", col=c("cyan", "black"), lty=1, type=c("p","l"), pch=1)
+matplot(cbind(dat$ssb/1e9), ylab="SSB (MT)", xlab="Year", col=c("cyan4", "black"), lty=1, type=c("p","l"), pch=1)
 
 
 par(mfrow = c(3,2), mar=c(4,4,1,1), oma=c(1,1,1,1), cex.lab=1.3, cex.axis=1.2)

@@ -96,7 +96,8 @@ class FishParams {
 	double alpha1_ref;
 	double alpha5;
 	double gsi_ref;
-	
+	double Mspawning;
+
 	// *********** OLD MODEL *****************
 	// biology
 	double theta = 8.10e-6; // kg/cm 

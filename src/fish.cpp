@@ -103,7 +103,7 @@ double Fish::naturalMortalityRate(double temp){
 		}
 		else if (par.mortality_model == MortalityModel::Bioenergetic){
 			//return fish::natural_mortality(length, temp, par.M0, par.gamma3, par.alpha3, par.Lref, par.Tref, par.cT);
-			return (par.M0 + par.alpha3 * pow(length / par.Lref, par.gamma3) + par.alpha4*(par.alpha1 - par.alpha1_ref) + par.alpha5*(par.gsi - par.gsi_ref)) * pow(temp/par.Tref, par.cT);
+			return (par.Mspawning*double(isMature)*(par.L0/length) + par.M0 + par.alpha3 * pow(length / par.Lref, par.gamma3) + par.alpha4*(par.alpha1 - par.alpha1_ref) + par.alpha5*(par.gsi - par.gsi_ref)) * pow(temp/par.Tref, par.cT);
 		}
 		else{
 			throw std::runtime_error("Invalid mortality model specified");
@@ -307,6 +307,7 @@ void FishParams::initFromFile(std::string params_file){
 	READ_PAR(alpha1_ref);
 	READ_PAR(alpha5);
 	READ_PAR(gsi_ref);
+	READ_PAR(Mspawning);
 
 
 	#undef READ_PAR
@@ -390,6 +391,7 @@ void FishParams::print(){
 	PRINT_PAR(alpha1_ref);
 	PRINT_PAR(alpha5);
 	PRINT_PAR(gsi_ref);
+	PRINT_PAR(Mspawning);
 
 	PRINT_PAR(beta4);  // calculated by constructor
 	PRINT_PAR(verbose);  // calculated by constructor

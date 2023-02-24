@@ -57,3 +57,12 @@ for (h in seq(0, 0.6, 0.1)){
   fitness = sapply(X = pmrn_int_vec, FUN=calc_fitness, h=h, plot = F)
   plot(fitness~pmrn_int_vec, main=paste("h = ", h))
 }
+
+
+par(mfrow=c(3,3), mar=c(4,4,1,1), oma=c(1,1,1,1), cex.axis=1.3, cex.lab=1.3)
+calc_fitness(pmrn_int = 100, h = 0.5, plot=T)
+calc_fitness(pmrn_int = 0, h = 0.5, plot=T)
+
+calc_fitness(pmrn_int = 100, h = 0, plot=T)
+calc_fitness(pmrn_int = 0, h = 0, plot=T)
+

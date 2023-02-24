@@ -35,10 +35,14 @@ Tensor<double> Simulator::simulate_multi(Population &pop, vector<double> hvec, i
 			pop = pop_ref;
 
 			noFishingPop.set_harvestProp(hvec[ih]);
-			double K = noFishingPop.fishableBiomass();
-			cout << "h = " << hvec[ih] << ", K = " << K << endl;
-			pop.K_fishableBiomass = K;
+			double K_fishable = noFishingPop.fishableBiomass();
+			double K_ssb      = noFishingPop.calcSSB();
+			cout << "h = " << hvec[ih] << ", K_fishable = " << K_fishable << ", K_ssb = " << K_ssb << endl;
+
+			pop.K_fishableBiomass = K_fishable;
+			pop.K_ssb = K_ssb;
 			pop.set_harvestProp(hvec[ih]);
+
 			if (hvec[ih] > 0.5) pop.set_superFishSize(1e5);
 
 			if (re_init) pop.init(1000, tsb0, temp);
