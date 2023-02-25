@@ -312,7 +312,7 @@ std::vector<double> Population::update(double temp){
 	double h1, h2;
 	double B = fishableBiomass();
 	h1 = par.f_harvest_spg * par.h * B / (ssb+1);
-	h1 = fmin(fmax(h1, 0), 0.4);
+	h1 = fmin(fmax(h1, 0), 0.3);
 	h2 = (par.h * B - h1 * ssb) / B;
 	h2 = fmin(fmax(h2, 0), 1);
 	if (h2 == 0) h1 = fmin(par.h * B / (ssb+1), 1);
@@ -432,15 +432,23 @@ void Population::summarize(){
 
 
 void Population::print_summary(){
+	cout << "------ overall summary ----\n";
+	cout << "Current year = " << current_year << '\n';
+	cout << "K_fishable   = " << K_fishableBiomass << '\n';
+	cout << "K_ssb        = " << K_ssb << '\n';
+	cout << "nfish        = " << fishes.size() << '\n';
+	cout << "SSB          = " << calcSSB() << '\n';
+	cout << "TSB          = " << calcTSB() << '\n';
+	cout << "B_fishable   = " << fishableBiomass() << '\n';
+
 	summarize();
+	cout << "----classwise summary ----\n";
 	int n = vage.size();
-	cout << "---------------\n";
-	cout << "K = " << K_fishableBiomass << "\n";
 	cout << "age: "; for (int i=0; i<n; ++i) cout << vage[i] << "\t"; cout << "\n";
 	cout << "len: "; for (int i=0; i<n; ++i) cout << vlen[i] << "\t"; cout << "\n";
 	cout << "mat: "; for (int i=0; i<n; ++i) cout << vmat[i] << "\t"; cout << "\n";
 	cout << "num: "; for (int i=0; i<n; ++i) cout << vfreq[i] << "\t"; cout << "\n";
-	cout << "---------------\n";
+	cout << "--------------------------\n";
 }
 
 
