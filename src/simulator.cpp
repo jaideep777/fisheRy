@@ -13,6 +13,7 @@ void Simulator::setNaturalPopulation(Population &pop){
 
 vector<double> Simulator::equilibriateNaturalPopulation(double tsb0, double temp, double _n){
 	noFishingPop.set_superFishSize(_n);
+	noFishingPop.set_traitVariances({0,0,0,0,0,0});
 	return noFishingPop.noFishingEquilibriate(tsb0, temp);
 }
 

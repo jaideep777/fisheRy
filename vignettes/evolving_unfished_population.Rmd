@@ -46,7 +46,7 @@ pop$set_harvestProp(0)
 pop$init(1000, 1.93e3, 5.61)  # initialize the population with 1000 agents (superfish)
 
 pop$verbose = T
-nsteps = 2000             # Let's simulate for 200 years
+nsteps = 10000             # Let's simulate for 200 years
 nfish = numeric(nsteps)  # Let's keep track of the number of superfish
 nfish[1]=1000            # Since we initialized the population with 1000 superfish
 
@@ -146,12 +146,9 @@ pop$set_harvestProp(0)
 pop$init(1000, 1.93e3, 5.61)  # initialize the population with 1000 agents (superfish)
 
 pop$verbose = T
-nsteps = 1000             # Let's simulate for 200 years
+nsteps = 2500             # Let's simulate for 200 years
 nfish = numeric(nsteps)  # Let's keep track of the number of superfish
 nfish[1]=1000            # Since we initialized the population with 1000 superfish
-
-temp = rep(5.61, nsteps)
-temp[(nsteps/2+1):nsteps] = seq(5.61,10, length.out=nsteps/2)
 
 cnames = pop$colnames
 dat = data.frame(matrix(ncol=length(cnames), nrow=0))
@@ -177,7 +174,7 @@ for (i in 1:100){
 
 pop$set_harvestProp(0.5)
 
-for (i in 1:(nsteps/2)){
+for (i in 1:2000){
   v = pop$update(5.61) #temp[i])       # Update all fish over 1 year 
   dat[i,] = v    # some book-keeping
   traits = pop$get_traits()
@@ -191,7 +188,7 @@ for (i in 1:(nsteps/2)){
 }
 
 
-for (i in (nsteps/2+1):nsteps){
+for (i in 2001:nsteps){
   v = pop$update(7.61) #temp[i])       # Update all fish over 1 year 
   dat[i,] = v    # some book-keeping
   traits = pop$get_traits()

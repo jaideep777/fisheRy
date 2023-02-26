@@ -70,6 +70,7 @@ RCPP_MODULE(fish_module) {
 
 		.method("set_age", &Fish::set_age)
 		.method("set_length", &Fish::set_length)
+		.method("set_traits", &Fish::set_traits)
 
 		.method("init", &Fish::init)
 		//.method("matureNow", &Fish::matureNow)
@@ -156,7 +157,7 @@ RCPP_MODULE(simulator_module){
 	class_ <Simulator>("Simulator")
 	.constructor<Fish>()
 
-	//.field("noFishingPop", &Simulator::noFishingPop)
+	.field_readonly("noFishingPop", &Simulator::noFishingPop)
 
 	.method("setNaturalPopulation", &Simulator::setNaturalPopulation)
 	.method("equilibriateNaturalPopulation", &Simulator::equilibriateNaturalPopulation)

@@ -11,7 +11,7 @@
 // FIXME: See why harmonic mean blows up
 
 class Simulator{
-	private:
+	public:
 	Population noFishingPop;
 	
 	public:
