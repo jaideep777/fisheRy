@@ -11,7 +11,7 @@
 // FIXME: See why harmonic mean blows up
 
 class Simulator{
-	private:
+	public:
 	Population noFishingPop;
 	
 	public:
@@ -33,7 +33,9 @@ class Simulator{
 	Tensor<double> simulate_multi_2d(Population pop, std::vector<double> Tvec, std::vector<double> lminvec, std::vector<double> hvec, int nyears, double tsb0, bool re_init);
 	std::vector<double> max_avg_utils_2d(std::vector<int> dims, std::vector<double> data);
 	std::vector<double> stakeholder_satisfaction_2d(std::vector<int> dims, std::vector<double> data);
-	
+
+	std::vector<double> stakeholder_satisfaction_2d_t(std::vector<int> dims, std::vector<double> data);
+
 	Rcpp::DataFrame simulate_r(Population &pop, double lf, double h, int nyears, double tsb0, double temp, bool re_init);
 
 	Rcpp::NumericVector simulate_multi_r(Population &pop, std::vector<double> hvec, int nyears, double tsb0, double temp, bool re_init);

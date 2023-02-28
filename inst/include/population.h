@@ -12,12 +12,12 @@
 
 class PopulationParams {	
 	public:
-	bool update_env = true;
+	bool update_env = false;
 	bool simulate_bio_only = false;
 	
 	// reproduction
 	//double r0 = 21.77072;		// recruitment rate per kg SSB 
-	double rmax = 1e20;
+	double rmax = 1e10;
 //	double Bhalf = 3.65e8*10; ///5000;	// Half saturation constant of recruitment
 
 //	double s0 = 0.1126797; //0.11;          // Egg survival propbability
@@ -52,6 +52,8 @@ class PopulationParams {
 
 	double n = 5e6;	// superfish size
 
+	double f_harvest_spg = 0.2;
+
 	// ***
 	// calculated variables
 	double mort_fishing_mature = 0; 
@@ -78,6 +80,7 @@ class PopulationSummary{
 
 class SeaEnvironment{
 	public:
+	double year = 0;
 	double temperature = 5.61;
 	double recruitment_noise_multiplier = 1;
 };
@@ -100,7 +103,7 @@ class Population{
 	     "profit.sea", "profit.shore", "tsb", 
 	     "r0", "nrecruits", "nfish_ra", "nsuperfish",
 	     "factor_dg", "factor_dr", "max_length", "length90", 
-	     "survival_mean", "maturity", "Nrel"};
+	     "survival_mean", "maturity", "Nrel_sea", "Nrel_spg"};
 
 	public:
 	// SeaEnvironment
@@ -112,7 +115,8 @@ class Population{
 	
 	public:
 	double K_fishableBiomass = 0;  ///< Fishable biomass under zero fishing pressure. This is set by the simulator
-	
+	double K_ssb = 0;              ///< Spawning stock biomass under zero fishing pressure. This is set by the simulator
+
 	public:
 	double current_year = 1;       ///< Current simulation year
 
@@ -134,6 +138,7 @@ class Population{
 
 	void set_harvestProp(double _h);
 	void set_minSizeLimit(double _lf50);
+	void set_traitVariances(std::vector<double>var);
 	void init(int n, double tsb, double temp);	// initialize population with n individuals
 
 	std::vector<double> noFishingEquilibriate(double tsb0, double temp);	

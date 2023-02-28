@@ -33,5 +33,5 @@ plot_scan = function(dat_ibm, xname, xvec, dat_ref = NULL){
   matplot(ylab="dl ratio,\nr ratio",y=cbind(dat_ibm$factor_dg, dat_ibm$factor_dr), x=xvec, type="l", col=c("cyan3", "magenta3"), lwd=1, lty=1, xlab = xname)
   matplot(ylab="Superfish",y=cbind(dat_ibm$nsuperfish), x=xvec, type="l", col=c("cyan2", "cyan4"), lwd=1, lty=1, xlab = xname)
   matplot(ylab="Survival prob,\nMaturity",y=cbind(dat_ibm$survival_mean, dat_ibm$maturity), x=xvec, type="l", col=c("cyan3", "magenta3"), lwd=1, lty=1, xlab = xname)
-  matplot(ylab="Nrel",y=cbind(dat_ibm$Nrel), x=xvec, type="l", col=c("cyan3", "magenta3", "yellow3"), lwd=1, lty=1, xlab = xname)
+  matplot(ylab="Nrel_sea",y=cbind(dat_ibm$Nrel_sea), x=xvec, type="l", col=c("cyan3", "magenta3", "yellow3"), lwd=1, lty=1, xlab = xname)
 }
