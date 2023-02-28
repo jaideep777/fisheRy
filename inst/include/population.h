@@ -12,12 +12,12 @@
 
 class PopulationParams {	
 	public:
-	bool update_env = true;
+	bool update_env = false;
 	bool simulate_bio_only = false;
 	
 	// reproduction
 	//double r0 = 21.77072;		// recruitment rate per kg SSB 
-	double rmax = 1e20;
+	double rmax = 1e10;
 //	double Bhalf = 3.65e8*10; ///5000;	// Half saturation constant of recruitment
 
 //	double s0 = 0.1126797; //0.11;          // Egg survival propbability
@@ -80,6 +80,7 @@ class PopulationSummary{
 
 class SeaEnvironment{
 	public:
+	double year = 0;
 	double temperature = 5.61;
 	double recruitment_noise_multiplier = 1;
 };

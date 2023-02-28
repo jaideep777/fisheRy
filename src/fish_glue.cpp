@@ -104,6 +104,7 @@ RCPP_MODULE(population_module){
 	class_ <PopulationParams>("PopulationParams")
 		.constructor()
 		.field("n", &PopulationParams::n)
+		.field("rmax", &PopulationParams::rmax)
 		.field_readonly("h", &PopulationParams::h)
 		.field_readonly("lf50", &PopulationParams::lf50)
 //		.field("mort_fishing_mature", &PopulationParams::mort_fishing_mature) 
@@ -124,8 +125,10 @@ RCPP_MODULE(population_module){
 		.field("K_fishableBiomass", &Population::K_fishableBiomass)
 		.field("K_ssb", &Population::K_ssb)
 		.field("colnames", &Population::colnames)
+		.field("current_year", &Population::current_year)
 
 		.method("set_superFishSize", &Population::set_superFishSize) 
+		.method("set_traitVariances", &Population::set_traitVariances) 
 		
 		.method("set_harvestProp", &Population::set_harvestProp) 
 		.method("set_minSizeLimit", &Population::set_minSizeLimit) 
@@ -171,6 +174,8 @@ RCPP_MODULE(simulator_module){
 	.method("simulate_multi_2d", &Simulator::simulate_multi_2d_r)
     .method("max_avg_utils_2d", &Simulator::max_avg_utils_2d)
     .method("stakeholder_satisfaction_2d", &Simulator::stakeholder_satisfaction_2d)
+
+    .method("stakeholder_satisfaction_2d_t", &Simulator::stakeholder_satisfaction_2d_t)
 	;
 }
 
