@@ -10,6 +10,83 @@
 
 using namespace std;
 
+void PopulationParams::initFromFile(std::string params_file, bool verbose){
+	io::Initializer I;
+	I.parse(params_file, false, verbose);
+
+	#define READ_PAR(x) x = I.get<double>("population", #x)
+
+	READ_PAR(recruitmentAge);
+
+	// management / fishing selectivity
+	READ_PAR(sf);
+	READ_PAR(lf50);
+
+	// environmental stochasticity
+	READ_PAR(sigmaf);
+
+	// effort dynamics and employment
+	READ_PAR(q);
+	READ_PAR(dsea);
+	READ_PAR(dmax);
+	READ_PAR(dshr);
+	READ_PAR(b);
+
+	// revenue and profit 
+	READ_PAR(price_sea);
+	READ_PAR(price_shore);
+	READ_PAR(salary_sea);
+	READ_PAR(salary_shore);
+	READ_PAR(fixed_costs_sea);
+	READ_PAR(fixed_costs_shore);
+	READ_PAR(variable_costs_sea);
+	READ_PAR(scale_catch);
+
+	// Fraction of harvest from spawning grounds
+	READ_PAR(f_harvest_spg);
+
+	// READ_PAR(h);
+
+	// READ_PAR(n);
+	#undef READ_PAR
+}
+
+void PopulationParams::print(){
+	#define PRINT_PAR(x) std::cout << #x << " = " << x << "\n"
+
+	PRINT_PAR(recruitmentAge);
+
+	// management / fishing selectivity
+	PRINT_PAR(sf);
+	PRINT_PAR(lf50);
+
+	// environmental stochasticity
+	PRINT_PAR(sigmaf);
+
+	// effort dynamics and employment
+	PRINT_PAR(q);
+	PRINT_PAR(dsea);
+	PRINT_PAR(dmax);
+	PRINT_PAR(dshr);
+	PRINT_PAR(b);
+
+	// revenue and profit 
+	PRINT_PAR(price_sea);
+	PRINT_PAR(price_shore);
+	PRINT_PAR(salary_sea);
+	PRINT_PAR(salary_shore);
+	PRINT_PAR(fixed_costs_sea);
+	PRINT_PAR(fixed_costs_shore);
+	PRINT_PAR(variable_costs_sea);
+	PRINT_PAR(scale_catch);
+
+	// Fraction of harvest from spawning grounds
+	PRINT_PAR(f_harvest_spg);
+
+	#undef PRINT_PAR
+}
+
+
 int Population::readEnvironmentFile(std::string filename){
 	
 	ifstream fin(filename.c_str());
@@ -69,6 +146,11 @@ void Population::updateEnv(double t){
 Population::Population(Fish f) : proto_fish(f){
 //	proto_fish = f;
 //	calc_athresh();
+}
+
+int Population::readParams(std::string filename, bool verbose){
+	par.initFromFile(filename, verbose);
+	return 0;
 }
 
 void Population::set_superFishSize(double _n){
@@ -416,6 +498,7 @@ std::vector<double> Population::update(double temp){
 					  << ", F_real = " << F_real_sea << "(" << F_real_sea/(F_req_sea+1e-20)*100 
 					  << "%), r0_avg = " << r0_avg 
 					  << ", % harvest = " << yield/tsb 
+					  << ", dg/dr = " << factor_dg << "/" << factor_dr
 					  << "\n";
 	++current_year;
 	return {ssb, yield, emp_sea+emp_shore, profit_sea+profit_shr, emp_sea, emp_shore, profit_sea, profit_shr, tsb, r0_avg, nrecruits_real, nfish_ra, static_cast<double>(nfish()), factor_dg, factor_dr, lmax, length90, survival_mean, maturity, Nrel_sea, Nrel_spg};	
@@ -545,3 +628,4 @@ Rcpp::DataFrame Population::get_traits(){
 }
 
 #endif
+

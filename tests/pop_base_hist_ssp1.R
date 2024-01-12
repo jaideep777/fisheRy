@@ -22,7 +22,8 @@ fish = new(Fish, params_file)
 
 #### Initial run to remove initial condition transient ####
 
-pop = new(Population, fish)  
+pop = new(Population, fish)
+pop$readParams(params_file, F)
 pop$par$n = 1e6  # Each superfish contains so many fish
 pop$par$f_harvest_spg = 0.30
 pop$set_harvestProp(0)
@@ -74,25 +75,36 @@ fish$set_traits(as.numeric(colMeans(pop$get_traits())))
 nsteps_jss=2100-2016+1
 
 sim = new(Simulator, fish)
-sim$equilibriateNaturalPopulation(1.93e3, pop$env$temperature, 1e6)
+sim$equilibriateNaturalPopulation(params_file, 1.93e3, pop$env$temperature, 1e6)
 colMeans(sim$noFishingPop$get_traits())
 
-hvec = c(0.1)
+hvec = c(0.5)
 tvec = c(5.61)
 lfvec = c(50)
 
-pop$readEnvironmentFile("../data/env_ssp5.csv")
+pop$readEnvironmentFile("../data/env_ssp1.csv")
 
 res_ibm_full = sim$simulate_multi_2d(pop, tvec, lfvec, hvec, nsteps_jss, 1.93e3, F)
 
 
+# png(filename = paste0("../results_repoty/ppo_spinups_",str_replace_all(Sys.time(), ":", "."),".png"), width = 500*3, height = 400*3, res=300)
+par(mfrow=c(2,1), mar=c(4,4,1,1), oma=c(1,1,1,1))
 ssb_vec = c(dat$ssb, res_ibm_full[,1,1,1,1])
 years = seq(to=2100, by=1, length.out=length(ssb_vec))
-# png(filename = paste0("../results_repoty/ppo_spinups_",str_replace_all(Sys.time(), ":", "."),".png"), width = 500*3, height = 400*3, res=300)
 plot(y=ssb_vec/1e9,
      x= years,
      type="l", col="cyan3",
      ylab="SSB (MT)", xlab="Year")
 abline(v=2001, col="pink")
 abline(v=years[1]+100, col="grey")
+abline(v=2015, col="violet")
+
+emp_sea_vec = c(dat$employment.sea, res_ibm_full[,1,1,1,3])
+plot(y=emp_sea_vec,
+     x= years,
+     type="l", col="cyan3",
+     ylab="Employment (sea)", xlab="Year")
+abline(v=2001, col="pink")
+abline(v=years[1]+100, col="grey")
+abline(v=2015, col="violet")
 # dev.off()

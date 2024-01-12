@@ -9,25 +9,27 @@ extract_yearly = function(filename){
   dat_yearly
 }
 
-dat = extract_yearly("~/Downloads/wpd_datasets(4).csv")
+dat = extract_yearly("~/codes/fisheRy/data/raw/wpd_datasets(4).csv")
 dat_hist = dat %>% filter(year < 2015)
 dat_ssp5 = dat %>% filter(year >= 2015)
 
-dat_ssp5 %>% with(plot(dt~year, type="l", col="red"))
+dat_hist %>% with(plot(dt~year, type="l", col="grey40", ylim=c(-1.5,4), xlim=c(1950,2100)))
+
+dat_ssp5 %>% with(points(dt~year, type="l", col="red"))
 abline(h=0, col="grey")
 abline(v=2001, col="pink")
 
-dat_ssp3 = extract_yearly("~/Downloads/wpd_datasets(3).csv")
+dat_ssp3 = extract_yearly("~/codes/fisheRy/data/raw/wpd_datasets(3).csv")
 dat_ssp3 %>% with(points(dt~year, type="l", col="orange"))
 abline(h=0, col="grey")
 abline(v=2001, col="pink")
 
-dat_ssp2 = extract_yearly("~/Downloads/wpd_datasets(2).csv")
+dat_ssp2 = extract_yearly("~/codes/fisheRy/data/raw/wpd_datasets(2).csv")
 dat_ssp2 %>% with(points(dt~year, type="l", col="green2"))
 abline(h=0, col="grey")
 abline(v=2001, col="pink")
 
-dat_ssp1 = extract_yearly("~/Downloads/wpd_datasets(1).csv")
+dat_ssp1 = extract_yearly("~/codes/fisheRy/data/raw/wpd_datasets(1).csv")
 dat_ssp1 %>% with(points(dt~year, type="l", col="skyblue2"))
 abline(h=0, col="grey")
 abline(v=2001, col="pink")

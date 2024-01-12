@@ -7,9 +7,9 @@ using namespace std;
 
 // ************************ Fish ***************************
 
-Fish::Fish(double tb){
-	t_birth = tb;
-}
+// Fish::Fish(double tb){
+// 	t_birth = tb;
+// }
 
 /// Reads parameters from the file and initializes them
 /// @param params_file Parameters in .ini format
@@ -263,7 +263,7 @@ void FishParams::initFromFile(std::string params_file){
 	io::Initializer I;
 	I.parse(params_file, false, verbose);
 
-	#define READ_PAR(x) x = I.get<double>(#x)
+	#define READ_PAR(x) x = I.get<double>("fish", #x)
 
 	READ_PAR(beta); // = 0.655793; // 0.648728;
 	READ_PAR(r); // = 0.090367; // 0.077281;
@@ -323,10 +323,10 @@ void FishParams::initFromFile(std::string params_file){
 	gamma3 = -b;
 	
 
-	growth_model_name = I.get<string>("growth_model_name");
-	recruitment_model_name = I.get<string>("recruitment_model_name");
-	mortality_model_name = I.get<string>("mortality_model_name");
-	maturation_model_name = I.get<string>("maturation_model_name");
+	growth_model_name = I.get<string>("fish", "growth_model_name");
+	recruitment_model_name = I.get<string>("fish", "recruitment_model_name");
+	mortality_model_name = I.get<string>("fish", "mortality_model_name");
+	maturation_model_name = I.get<string>("fish", "maturation_model_name");
 
 	init();	
 }

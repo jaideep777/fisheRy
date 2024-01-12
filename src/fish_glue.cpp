@@ -54,7 +54,6 @@ RCPP_MODULE(fish_module) {
 	;
 
 	class_ <Fish>("Fish")
-		.constructor()
 		.constructor<std::string>()
 		
 		.field("age", &Fish::age)
@@ -115,6 +114,9 @@ RCPP_MODULE(population_module){
 		.field("recruitmentAge", &PopulationParams::recruitmentAge)
 		.field("update_env", &PopulationParams::update_env)
 		.field("simulate_bio_only", &PopulationParams::simulate_bio_only)
+
+		.method("initFromFile", &PopulationParams::initFromFile)
+		.method("print", &PopulationParams::print)
 	;
 	
 	class_ <Population>("Population")
@@ -126,6 +128,8 @@ RCPP_MODULE(population_module){
 		.field("K_ssb", &Population::K_ssb)
 		.field("colnames", &Population::colnames)
 		.field("current_year", &Population::current_year)
+
+		.method("readParams", &Population::readParams) 
 
 		.method("set_superFishSize", &Population::set_superFishSize) 
 		.method("set_traitVariances", &Population::set_traitVariances) 

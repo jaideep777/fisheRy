@@ -238,7 +238,7 @@ for (iy in c(1,30,60)){
   res_ibm_composite_20mean[i,,,,] = apply(res_ibm_composite[iy:(iy+19),,,,], c(2,3,4,5), mean)
   i=i+1
 }  
-  
+
 png(filename = paste0("../results_repoty/timeseries_20yrmeans_4x4_scenarioxcontrol_",str_replace_all(Sys.time(), ":", "."),".png"), width = 800*3, height = 800*3, res=300)
 par(mfrow=c(2,2), mar=c(5,5,3,1), oma=c(1,1,1,1), cex.lab=1.2)
 matplot(y=res_ibm_composite_20mean[,10,10,,1]/1e9, x=2016+10+c(1,30,60), type="o", pch=1, lty=1, col = scales::viridis_pal()(4), ylab="SSB", xlab="Year",
@@ -295,8 +295,6 @@ dev.off()
 
 ##### Plot JSS scenario x time ####
 
-
-
 hvec = seq(0, 0.85, length.out = 20)
 lfvec = seq(10, 80, length.out = 20)
 tvec = c(1,2,3,4)
@@ -327,6 +325,118 @@ for (issp in c(1,2,3,4)){
 dev.off()
 
 
+#### JSS and SOS timeseries ####
+
+##### Calculate composite with 20 year means ####
+
+dim_20_rolling = dim(res_ibm_composite)
+dim_20_rolling[1] = dim_20_rolling[1] - 20 + 1
+res_ibm_composite_20mean_rolling = array(data=NA, dim = dim_20_rolling)
+for (iy in c(1:dim_20_rolling[1])){
+  res_ibm_composite_20mean_rolling[iy,,,,] = apply(res_ibm_composite[iy:(iy+19),,,,], c(2,3,4,5), mean)
+}  
+
+nsteps_jss_rolling = dim_20_rolling[1]
+tvec_rolling = 1:nsteps_jss_rolling
+
+png(filename = paste0("../results_sysnthesis_paper/timeseries_20yrmeans_rolling_ssb_SQ_",str_replace_all(Sys.time(), ":", "."),".png"), width = 800*3, height = 800*3, res=300)
+par(mfrow=c(2,2), mar=c(5,5,3,1), oma=c(1,1,1,1), cex.lab=1.2)
+matplot(y=res_ibm_composite[10+tvec_rolling,10,10,,1]/1e9, x=2016+10+tvec_rolling, type="l", pch=1, lty=1, col = scales::viridis_pal()(4), ylab="SSB", xlab="Year",
+        main=sprintf("h = %.2f, L = %.2f\n", hvec[10], lfvec[10]))
+matplot(y=res_ibm_composite_20mean_rolling[,10,10,,1]/1e9, x=2016+10+tvec_rolling, type="l", pch=1, lty=1, col = scales::viridis_pal()(4), ylab="SSB", xlab="Year",
+        main=sprintf("h = %.2f, L = %.2f\n(rollmean)", hvec[10], lfvec[10]))
+matplot(y=res_ibm_composite[10+tvec_rolling,20,20,,1]/1e9, x=2016+10+tvec_rolling, type="l", pch=1, lty=1, col = scales::viridis_pal()(4), ylab="SSB", xlab="Year",
+        main=sprintf("h = %.2f, L = %.2f\n", hvec[20], lfvec[20]))
+matplot(y=res_ibm_composite_20mean_rolling[,20,20,,1]/1e9, x=2016+10+tvec_rolling, type="l", pch=1, lty=1, col = scales::viridis_pal()(4), ylab="SSB", xlab="Year",
+        main=sprintf("h = %.2f, L = %.2f\n(rollmean)", hvec[20], lfvec[20]))
+dev.off()
+
+png(filename = paste0("../results_sysnthesis_paper/timeseries_20yrmeans_rolling_yield_SQ_",str_replace_all(Sys.time(), ":", "."),".png"), width = 800*3, height = 800*3, res=300)
+par(mfrow=c(2,2), mar=c(5,5,3,1), oma=c(1,1,1,1), cex.lab=1.2)
+matplot(y=res_ibm_composite[10+tvec_rolling,10,10,,2]/1e9, x=2016+10+tvec_rolling, type="l", pch=1, lty=1, col = scales::viridis_pal()(4), ylab="Yield", xlab="Year",
+        main=sprintf("h = %.2f, L = %.2f\n", hvec[10], lfvec[10]))
+matplot(y=res_ibm_composite_20mean_rolling[,10,10,,2]/1e9, x=2016+10+tvec_rolling, type="l", pch=1, lty=1, col = scales::viridis_pal()(4), ylab="Yield", xlab="Year",
+        main=sprintf("h = %.2f, L = %.2f\n(rollmean)", hvec[10], lfvec[10]))
+matplot(y=res_ibm_composite[10+tvec_rolling,20,20,,2]/1e9, x=2016+10+tvec_rolling, type="l", pch=1, lty=1, col = scales::viridis_pal()(4), ylab="Yield", xlab="Year",
+        main=sprintf("h = %.2f, L = %.2f\n", hvec[20], lfvec[20]))
+matplot(y=res_ibm_composite_20mean_rolling[,20,20,,2]/1e9, x=2016+10+tvec_rolling, type="l", pch=1, lty=1, col = scales::viridis_pal()(4), ylab="Yield", xlab="Year",
+        main=sprintf("h = %.2f, L = %.2f\n(rollmean)", hvec[20], lfvec[20]))
+dev.off()
+
+
+##### Calculate JSS timeseries ####
+
+params_file = "../params/cod_params.ini"
+
+fish = new(Fish, params_file)
+sim = new(Simulator, fish)
+
+JSS_t20_rolling = calc_jss_t(res_ibm_composite_20mean_rolling, nsteps_jss_rolling)
+
+
+##### Plot JSS scenario x time ####
+
+hvec = seq(0, 0.85, length.out = 20)
+lfvec = seq(10, 80, length.out = 20)
+tvec = c(1,2,3,4)
+
+png(filename = paste0("../results_sysnthesis_paper/with_contour_jss_n2e6_ssp","all_hmeanxt_",str_replace_all(Sys.time(), ":", "."),".png"), width = 1000*6, height = 1100*3, res=300)
+par(mfrow=c(4,6), mar=c(5,5,4,1), oma=c(1,1,1,1), cex.lab=1.25, cex.axis=1.2)
+for (issp in c(1,2,3,4)){
+  cols = scales::viridis_pal()(100)
+  cols = RColorBrewer::brewer.pal(11, "Spectral")
+  cols = viridis::inferno(100)
+  cols = paletteer::paletteer_c("ggthemes::Sunset-Sunrise Diverging", 100) 
+  cols = paletteer::paletteer_c("ggthemes::Red-Blue-White Diverging", 30) 
+  for (iy in c(1,15,30,45,60)){
+    m = JSS_t20_rolling$JSS[iy,,,issp,3]
+    my.image(x=hvec, y=lfvec, z=m, col=cols, zlim=c(0,1), main=paste0("Year = ", 2016+10+tvec_rolling)[iy], 
+             xlab="Harvest proportion", ylab="Minimum size limit (cm)")
+    contour(x=hvec, y=lfvec, z=m, zlim=c(0,1), 
+            levels = c(0.2,0.5,0.8,0.9), col=c("brown4", "red3", "pink", "white"), add=T)
+    #points(x=0.5, y=45, pch=4, lwd=2, cex=1.5, col="white")
+    m = oce::matrixSmooth(m)
+    m = oce::matrixSmooth(m)
+    idx = which(m == max(m, na.rm=T), arr.ind=T)
+    points(x=hvec[idx[1,1]], y=lfvec[idx[1,2]], pch=4, lwd=2, cex=1.5, col="black")
+  }
+  color.bar(cols, 0,1, nticks = 5)
+}
+dev.off()
+
+sos_size = apply(JSS_t20_rolling$JSS, MARGIN = c(1,4,5), FUN=function(x){length(which(x > 0.5))})
+max_jss = apply(JSS_t20_rolling$JSS, MARGIN = c(1,4,5), FUN=function(x){max(x, na.rm = T)})
+
+### T scenarios plot ###
+
+temp_ssp1 = read.csv(paste0("../data/env_ssp",1,".csv"))
+temp_ssp2 = read.csv(paste0("../data/env_ssp",2,".csv"))
+temp_ssp3 = read.csv(paste0("../data/env_ssp",3,".csv"))
+temp_ssp5 = read.csv(paste0("../data/env_ssp",5,".csv"))
+
+
+
+png(filename = paste0("../results_sysnthesis_paper/","max_jss_sos_size_",str_replace_all(Sys.time(), ":", "."),".png"), width = 500*3, height = 500*3, res=300)
+par(mfrow=c(2,2), mar=c(5,5,1,1), oma=c(1,1,1,1), cex.lab=1.2)
+matplot(y=max_jss[,,3], x = 2016+10+tvec_rolling, type="l", lty=1, col = scales::viridis_pal()(4), ylab="Max JSS", xlab="Year")
+matplot(y=sos_size[,,3]/sos_size[1,1,3], x = 2016+10+tvec_rolling, type="l", lty=1, col = scales::viridis_pal()(4), ylab="SOS size", xlab="Year")
+matplot(x=temp_ssp1$year, 
+        y=cbind(temp_ssp1$temp,
+                temp_ssp2$temp,
+                temp_ssp3$temp,
+                temp_ssp5$temp),
+        type="l", lty=1, col = scales::viridis_pal()(4), ylab="Temperature", xlab="Year")
+
+plot(x=1,y=NA, xlim=c(0,1), ylim=c(0,1), xaxt="n", yaxt="n", frame.plot=F, xlab="", ylab="")
+legend(x=0.25, y=1, legend=paste0("SSP", c(1,2,3,5)), col = scales::viridis_pal()(4), lty=1)
+dev.off()
+
+### Final data frame for submissin
+
+jss_sos = data.frame(year = 2015+tvec_rolling, sos_size = (sos_size[,,3]/sos_size[1,1,3])[,2], max_jss = max_jss[,2,3])
+ssb_y_sq = data.frame(year = 2016:2100, temp = temp_ssp2$temp, ssb=res_ibm_composite[,10,10,2,1]/1e9, yield = res_ibm_composite[,10,10,2,2]/1e9)
+combined_df = ssb_y_sq %>% left_join(jss_sos)
+combined_df %>% write.csv(file = paste0("../results_sysnthesis_paper/output_tseries_data.csv"))
 
 # 
 # ##### Plot from saved data ####
