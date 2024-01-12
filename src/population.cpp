@@ -154,7 +154,7 @@ double Population::calcTSB(){
 vector<double> Population::calcSB(){
 	double tsb = 0, ssb = 0;
 	for (auto& f : fishes){
-		if (f.isAlive && f.age >= f.age >= par.recruitmentAge){
+		if (f.isAlive && f.age >= par.recruitmentAge){
 			tsb += par.n * f.weight;
 			if (f.isMature) ssb += par.n * f.weight;
 		} 
@@ -213,7 +213,8 @@ inline double rnorm(double mu=0, double sd=1){
 
 std::vector<double> Population::update(double temp){
 	for (auto& f : fishes) assert(f.isAlive);
-	
+	int nfish_start = fishes.size();
+
 	// 1. Maturation
 	// update maturity 
 	for (auto& f: fishes){
@@ -280,7 +281,7 @@ std::vector<double> Population::update(double temp){
 //	for (auto& nn : nrecruits_vec) nn = nn*nrecruits_real/(nrecruits_total+1e-20); 
 
 	// ** for analysis
-	double r0_avg = nrecruits_real * (1 + ssb/proto_fish.par.Bhalf) / ssb;
+	double r0_avg = (ssb>0)? (nrecruits_real * (1 + ssb/proto_fish.par.Bhalf) / ssb) : -999;
 	double factor_dr = nrecruits_real / (nrecruits_potential+1e-12);
 	double nrecruits_per_fish = nrecruits_real/nspawners;
 	// **
@@ -382,7 +383,7 @@ std::vector<double> Population::update(double temp){
 	
 	// remove dead fish from population
 	fishes.erase(std::remove_if(fishes.begin(), fishes.end(), [](Fish &f){return !f.isAlive;}), fishes.end());
-
+	int nfish_after_mort = fishes.size();
 
 	// 5. Increment age and advance to new year
 	for (auto& f: fishes){
@@ -405,7 +406,17 @@ std::vector<double> Population::update(double temp){
 	//}
 	}
 
-	if (verbose) cout << "year = " << current_year << " | TSB = " << tsb/1e9 << ", SSB = " << ssb/1.0e9 << ", recruits = " << nrecruits_real << "/" << std::accumulate(nrecruits_vec.begin(), nrecruits_vec.end(), 0.0) << ", N_rel_sea/spg = " << Nrel_sea << " / " << Nrel_spg << ", F_real = " << F_real_sea << "(" << F_real_sea/F_req_sea*100 << "%), r0_avg = " << r0_avg << ", % harvest = " << yield/tsb << "\n";
+	if (verbose) cout << "year = " << current_year 
+	                  << " | TSB(MT) = " << tsb/1e9 << ", SSB(MT) = " << ssb/1.0e9 
+					  << ", recruits = " << nrecruits_real << "/" << std::accumulate(nrecruits_vec.begin(), nrecruits_vec.end(), 0.0) 
+					  << ", maturity = " << maturity 
+					  << ", survival = " << nfish_after_mort << "/" << nfish_start
+					  << ", survival_prob = " << survival_mean << " --> " << double(nfish_after_mort)/nfish_start
+					  << ", N_rel_sea/spg = " << Nrel_sea << " / " << Nrel_spg 
+					  << ", F_real = " << F_real_sea << "(" << F_real_sea/(F_req_sea+1e-20)*100 
+					  << "%), r0_avg = " << r0_avg 
+					  << ", % harvest = " << yield/tsb 
+					  << "\n";
 	++current_year;
 	return {ssb, yield, emp_sea+emp_shore, profit_sea+profit_shr, emp_sea, emp_shore, profit_sea, profit_shr, tsb, r0_avg, nrecruits_real, nfish_ra, static_cast<double>(nfish()), factor_dg, factor_dr, lmax, length90, survival_mean, maturity, Nrel_sea, Nrel_spg};	
 }

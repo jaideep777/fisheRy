@@ -12,6 +12,7 @@ int main(){
 	cout << "Length = " << f.length << endl;
 
 	Population pop(f);
+	pop.verbose = true;
 	pop.noFishingEquilibriate(1.93e3, 5.61);
 
 	cout << "Fishable biomass = " << pop.fishableBiomass()/1e9 << " MT" << endl;
