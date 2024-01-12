@@ -11,7 +11,8 @@ void Simulator::setNaturalPopulation(Population &pop){
 	noFishingPop = pop;
 }
 
-vector<double> Simulator::equilibriateNaturalPopulation(double tsb0, double temp, double _n){
+vector<double> Simulator::equilibriateNaturalPopulation(std::string params_file, double tsb0, double temp, double _n){
+	noFishingPop.readParams(params_file);
 	noFishingPop.set_superFishSize(_n);
 	noFishingPop.set_traitVariances({0,0,0,0,0,0});
 	return noFishingPop.noFishingEquilibriate(tsb0, temp);
@@ -122,7 +123,7 @@ Tensor<double> Simulator::simulate_multi_2d(Population pop, vector<double> Tvec,
 			for (int il=0; il<lminvec.size(); ++il){ // loop over control parameter 2
 				for (int ih=0; ih<hvec.size(); ++ih){ // loop over control parameter 1
 					pop = pop_ref;
-	//				if (hvec[ih] > 0.5) pop.set_superFishSize(1e0);
+					// if (hvec[ih] > 0.5) pop.set_superFishSize(1e0);
 					
 					noFishingPop.set_harvestProp(hvec[ih]);
 					noFishingPop.set_minSizeLimit(lminvec[il]);
@@ -137,7 +138,7 @@ Tensor<double> Simulator::simulate_multi_2d(Population pop, vector<double> Tvec,
 					pop.set_minSizeLimit(lminvec[il]);
 
 					if (re_init) pop.init(1000, tsb0, Tvec[it]);
-	//				pop.print_summary();
+					// pop.print_summary();
 				
 					for (int t=0; t<nyears; ++t){
 						double Tnow;
@@ -156,12 +157,12 @@ Tensor<double> Simulator::simulate_multi_2d(Population pop, vector<double> Tvec,
 						for (int col=0; col<state_now.size(); ++col){
 							res({iter, col, it, il, ih, t}) = state_now[col];
 						}
-	//					res({iter, 0, il, ih, t}) = state_now[0];               // ssb
-	//					res({iter, 1, il, ih, t}) = state_now[1];               // yield
-	//					res({iter, 2, il, ih, t}) = state_now[2];  // employment sea
-	//					res({iter, 3, il, ih, t}) = state_now[3];  // employment shore
-	//					res({iter, 4, il, ih, t}) = state_now[4];  // profit sea
-	//					res({iter, 5, il, ih, t}) = state_now[5];  // profit shore
+						// res({iter, 0, il, ih, t}) = state_now[0];               // ssb
+						// res({iter, 1, il, ih, t}) = state_now[1];               // yield
+						// res({iter, 2, il, ih, t}) = state_now[2];  // employment sea
+						// res({iter, 3, il, ih, t}) = state_now[3];  // employment shore
+						// res({iter, 4, il, ih, t}) = state_now[4];  // profit sea
+						// res({iter, 5, il, ih, t}) = state_now[5];  // profit shore
 					}
 				}
 				std::this_thread::sleep_for(std::chrono::microseconds(100));

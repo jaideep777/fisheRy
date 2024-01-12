@@ -21,7 +21,7 @@ class Simulator{
 	Simulator(Fish f);
 
 	void setNaturalPopulation(Population & pop); 
-	std::vector<double> equilibriateNaturalPopulation(double tsb0, double temp, double _n = 2e6);
+	std::vector<double> equilibriateNaturalPopulation(std::string params_file, double tsb0, double temp, double _n = 2e6);
 
 	Tensor<double> simulate_multi(Population &pop, std::vector<double> hvec, int nyears, double tsb0, double temp, bool re_init);
 	std::vector<double> max_avg_utils(std::vector<int> dims, std::vector<double> data);

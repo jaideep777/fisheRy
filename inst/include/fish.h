@@ -177,7 +177,7 @@ class Fish{
 	std::vector<double> trait_variances = {0, 0, 0, 0, 0, 0};
 	std::vector<std::string> trait_names = {"alpha1", "gsi", "pmrn_intercept", "pmrn_slope", "pmrn_width", "s0"};
 
-	Fish(double tb = 0);
+	// Fish(double tb = 0);
 	
 	/// Construct a fish and initialize parameters using a parameters file
 	Fish(std::string params_file); 

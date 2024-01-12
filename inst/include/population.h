@@ -21,38 +21,40 @@ class PopulationParams {
 //	double Bhalf = 3.65e8*10; ///5000;	// Half saturation constant of recruitment
 
 //	double s0 = 0.1126797; //0.11;          // Egg survival propbability
-	int recruitmentAge = 3;
+	int recruitmentAge; // = 3;
 
 	// management / fishing selectivity
-	double sf = 0.1222;	// steepness of selectivity curve
-	double lf50 = 45; //61.4806;  // threshold fish length
+	double sf; // = 0.1222;	// steepness of selectivity curve
+	double lf50; // = 45; //61.4806;  // threshold fish length
 
 	// environmental stochasticity
-	double sigmaf = 0.4858775;
+	double sigmaf; // = 0.4858775;
 
 	// effort dynamics and employment
-	double q = 2.83e-6;		// scaling parameter relating to catchability and density
-	double dsea = 0.054;	// Required Person-years per vessel day
-	double dmax = 30000e20;	// max available person-years
-	double dshr = 0.000004;	// FTE/kg
-	double b = 0.75;		// density dependence
+	double q; // = 2.83e-6;		// scaling parameter relating to catchability and density
+	double dsea; // = 0.054;	// Required Person-years per vessel day
+	double dmax; // = 30000e20;	// max available person-years
+	double dshr; // = 0.000004;	// FTE/kg
+	double b; // = 0.75;		// density dependence
 
 	// revenue and profit 
-	double price_sea = 13.13;		// landing price NOK/kg
-	double price_shore = 17.0;		// selling price NOK/kg
+	double price_sea; // = 13.13;		// landing price NOK/kg
+	double price_shore; // = 17.0;		// selling price NOK/kg
 
-	double salary_sea = 1078000;			// employment cost sea NOK/FTE
-	double salary_shore = 348000;			// employment cost shore NOK/FTE
-	double fixed_costs_sea = 351123000;	// fixed costs sea NOK (= average per unit * #units)
-	double fixed_costs_shore = 1032468000;	// fixed costs shore NOK
-	double variable_costs_sea = 65000; 		// variable costs NOK/vessel day
-	double scale_catch = 0.356; //0.53; 		// percentage of total codfish catch that is cod
-	
+	double salary_sea; // = 1078000;			// employment cost sea NOK/FTE
+	double salary_shore; // = 348000;			// employment cost shore NOK/FTE
+	double fixed_costs_sea; // = 351123000;	// fixed costs sea NOK (= average per unit * #units)
+	double fixed_costs_shore; // = 1032468000;	// fixed costs shore NOK
+	double variable_costs_sea; // = 65000; 		// variable costs NOK/vessel day
+	double scale_catch; // = 0.356; //0.53; 		// percentage of total codfish catch that is cod
+
+	// Fraction of harvest from spawning grounds
+	double f_harvest_spg; // = 0.2;
+
 	double h = 0;
 
 	double n = 5e6;	// superfish size
 
-	double f_harvest_spg = 0.2;
 
 	// ***
 	// calculated variables
@@ -69,6 +71,9 @@ class PopulationParams {
 	//    mort_fishing_mature = -log(1-h);
 	//    mort_fishing_immature = -log(1-h);
 	//}
+
+	void initFromFile(std::string params_file, bool verbose=false);
+	void print();
 };
 
 
@@ -127,6 +132,7 @@ class Population{
 	
 	public:
 	Population(Fish f);
+	int readParams(std::string filename, bool verbose=false);
 	
 	void set_superFishSize(double _n);
 
