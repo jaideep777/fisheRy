@@ -1,6 +1,0 @@
-<map id="Tensor::avg_dim" name="Tensor::avg_dim">
-<area shape="rect" id="node2" href="$classTensor.html#a447f65c9ada7c9357091fba66ad73d10" title="Tensor::accumulate" alt="" coords="172,31,309,57"/>
-<area shape="rect" id="node3" href="$classTensor.html#a862952dc137707abdccd06cf9cd5855b" title="Tensor::plane" alt="" coords="389,5,491,32"/>
-<area shape="rect" id="node5" href="$classTensor.html#abbfd4d8d3390394254f1d42fcb845bd2" title="Tensor::accumulate_dim" alt="" coords="357,56,523,83"/>
-<area shape="rect" id="node4" href="$classTensor.html#a90a6b28226bcd1be7090fd2f8782d0b1" title="Tensor::index" alt="" coords="571,5,672,32"/>
-</map>

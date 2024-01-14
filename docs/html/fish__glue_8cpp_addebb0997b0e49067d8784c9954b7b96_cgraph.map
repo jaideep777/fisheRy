@@ -1,42 +1,47 @@
 <map id="RCPP_MODULE" name="RCPP_MODULE">
-<area shape="rect" id="node2" href="$classSimulator.html#a1e385d56b6ae6694463f127b5f1d98d5" title="Simulator::setNaturalPopulation" alt="" coords="177,169,384,196"/>
-<area shape="rect" id="node3" href="$classSimulator.html#a3dfce52c0bb26ec7ff2632b1eca50240" title="Simulator::equilibriateNatural\lPopulation" alt="" coords="186,221,375,262"/>
-<area shape="rect" id="node21" href="$classSimulator.html#aa6e6cfd73fd8d3200e7f515b473e88f2" title="Simulator::simulate_r" alt="" coords="465,417,610,444"/>
-<area shape="rect" id="node23" href="$classSimulator.html#a1a5454ee4736819d709398b225d7876d" title="Simulator::simulate\l_multi_r" alt="" coords="213,286,348,327"/>
-<area shape="rect" id="node26" href="$classSimulator.html#addbc3da16a6f9c352eefbdc423419bca" title="Simulator::max_avg\l_utils" alt="" coords="211,469,350,510"/>
-<area shape="rect" id="node34" href="$classSimulator.html#a1b66b7260ff50758884d1f7361a1b988" title="Simulator::stakeholder\l_satisfaction" alt="" coords="205,599,357,641"/>
-<area shape="rect" id="node38" href="$classSimulator.html#af1b0a9562ecf0ad8f98d61576efba28b" title="Simulator::simulate\l_multi_2d_r" alt="" coords="213,351,348,393"/>
-<area shape="rect" id="node40" href="$classSimulator.html#a32eeba843e7526dceb75a2c6aebe240e" title="Simulator::max_avg\l_utils_2d" alt="" coords="211,534,350,575"/>
-<area shape="rect" id="node41" href="$classSimulator.html#aac842e5498b4c9731910ce9a93fa555d" title="Simulator::stakeholder\l_satisfaction_2d" alt="" coords="205,665,357,706"/>
-<area shape="rect" id="node4" href="$classPopulation.html#ae8a6455aa45e65bf8bd41312f9caa328" title="Population::set_superFishSize" alt="" coords="691,132,889,159"/>
-<area shape="rect" id="node5" href="$classPopulation.html#aa7eba257f23cbc12aa3673ce012fb2cb" title="Population::noFishingEquilibriate" alt="" coords="432,249,643,276"/>
-<area shape="rect" id="node6" href="$classPopulation.html#a20696fa511c914e7c8837acb2a254b33" title="Population::set_harvestProp" alt="" coords="697,335,883,361"/>
-<area shape="rect" id="node7" href="$classPopulation.html#a012ef586a78b4e7c2082634b316072d0" title="Population::init" alt="" coords="736,183,844,209"/>
-<area shape="rect" id="node11" href="$classPopulation.html#a81c19d1c80cfb1d54d3872ecdefd0872" title="Population::update" alt="" coords="725,233,855,260"/>
-<area shape="rect" id="node8" href="$classFish.html#adf85bf269f1651352506e371ffd2cecc" title="Initializes the fish, i.e., initializes parameters and sets the initial state (age = 1..." alt="" coords="995,31,1067,57"/>
-<area shape="rect" id="node9" href="$namespacefish.html#a0ab1c4842d702a0a40bd04f26793ce12" title="Compute the nonlinear growth increment , as follows . " alt="" coords="1202,5,1305,32"/>
-<area shape="rect" id="node10" href="$namespacefish.html#a1d06e0358aca1be4446ed148b7ce3d84" title="Compute the new length after growth assuming no allocation to reproduction . " alt="" coords="1185,56,1322,83"/>
-<area shape="rect" id="node12" href="$classPopulation.html#ae942ef70cc9f4dfc40b5d843baf40b1e" title="Population::calcTSB" alt="" coords="960,335,1101,361"/>
-<area shape="rect" id="node13" href="$classPopulation.html#af15e7ba23b161c710d4013204b542cb6" title="Population::calcSSB" alt="" coords="959,81,1102,108"/>
-<area shape="rect" id="node14" href="$classFish.html#aaa3e67187a587efc7a99485b4a6ee248" title="Fish::set_traits" alt="" coords="976,132,1085,159"/>
-<area shape="rect" id="node15" href="$classPopulation.html#a42c4b04852bdda937e50f82952106af1" title="Population::fishableBiomass" alt="" coords="937,436,1124,463"/>
-<area shape="rect" id="node16" href="$classPopulation.html#ac8ed845bbda25c937a2fd76b3788e987" title="Population::selectivity" alt="" coords="1178,385,1329,412"/>
-<area shape="rect" id="node17" href="$classPopulation.html#ad1840de2f00982c35d48b91a1d27ae13" title="Population::effort" alt="" coords="970,233,1091,260"/>
-<area shape="rect" id="node18" href="$namespacepn.html#ad42003887dcc42a4758c69775f83a8d9" title="pn::zero" alt="" coords="996,183,1065,209"/>
-<area shape="rect" id="node20" href="$classPopulation.html#ac62fc3480d60b055cd1886649809c6a6" title="Population::nfish" alt="" coords="971,284,1090,311"/>
-<area shape="rect" id="node19" href="$structpn_1_1BrentRes.html#a4fa42a440c4b9dc765ea7f0d7fd3a412" title="pn::BrentRes::BrentRes" alt="" coords="1172,183,1335,209"/>
-<area shape="rect" id="node22" href="$classPopulation.html#a343a346cae1413da400c042868c15859" title="Population::set_minSizeLimit" alt="" coords="695,436,885,463"/>
-<area shape="rect" id="node24" href="$classSimulator.html#a7540919b97662be7deacba9194c0ed60" title="Simulator::simulate\l_multi" alt="" coords="470,183,605,225"/>
-<area shape="rect" id="node25" href="$simulator_8cpp.html#a2a2aec343c151304395503fd8b1d6a78" title="tensor2array" alt="" coords="490,300,585,327"/>
-<area shape="rect" id="node27" href="$classTensor.html#a6c8465a488ce260e6e05f1a3ceb8ab26" title="Tensor::avg_dim" alt="" coords="478,548,597,575"/>
-<area shape="rect" id="node32" href="$classTensor.html#a3986d7a50faef0249a8d2da5b1f67a89" title="Tensor::transform" alt="" coords="475,497,600,524"/>
-<area shape="rect" id="node28" href="$classTensor.html#a447f65c9ada7c9357091fba66ad73d10" title="Tensor::accumulate" alt="" coords="721,639,859,665"/>
-<area shape="rect" id="node29" href="$classTensor.html#a862952dc137707abdccd06cf9cd5855b" title="Tensor::plane" alt="" coords="980,563,1081,589"/>
-<area shape="rect" id="node31" href="$classTensor.html#abbfd4d8d3390394254f1d42fcb845bd2" title="Tensor::accumulate_dim" alt="" coords="948,639,1113,665"/>
-<area shape="rect" id="node30" href="$classTensor.html#a90a6b28226bcd1be7090fd2f8782d0b1" title="Tensor::index" alt="" coords="1203,563,1304,589"/>
-<area shape="rect" id="node33" href="$classTensor.html#a1a9aea97717d687b7d501842efb546d4" title="Tensor::transform_dim" alt="" coords="713,588,867,615"/>
-<area shape="rect" id="node35" href="$classTensor.html#ae4622cf6280102eb5103cfe4c88c1ad8" title="Tensor::repeat_inner" alt="" coords="467,649,608,676"/>
-<area shape="rect" id="node36" href="$classTensor.html#aedee003837348391c5f8d0bc788bf20f" title="Tensor::repeat_outer" alt="" coords="466,700,609,727"/>
-<area shape="rect" id="node37" href="$classTensor.html#abf7346c2dbd5e6b195cfe9b66e5049e8" title="Tensor::max_dim" alt="" coords="476,751,599,777"/>
-<area shape="rect" id="node39" href="$classSimulator.html#ab21d1c6b0af00931f9a8fa5e0b6d417f" title="Simulator::simulate\l_multi_2d" alt="" coords="470,351,605,393"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,523,125,549"/>
+<area shape="rect" id="node2" href="$classSimulator.html#ad02f472064f23f03ae474cb4904d2c56" title=" " alt="" coords="181,158,396,199"/>
+<area shape="rect" id="node23" href="$classSimulator.html#addbc3da16a6f9c352eefbdc423419bca" title=" " alt="" coords="212,613,365,654"/>
+<area shape="rect" id="node29" href="$classSimulator.html#a32eeba843e7526dceb75a2c6aebe240e" title=" " alt="" coords="212,547,365,589"/>
+<area shape="rect" id="node30" href="$classSimulator.html#a1e385d56b6ae6694463f127b5f1d98d5" title=" " alt="" coords="173,431,404,457"/>
+<area shape="rect" id="node31" href="$classSimulator.html#af1b0a9562ecf0ad8f98d61576efba28b" title=" " alt="" coords="213,482,364,523"/>
+<area shape="rect" id="node36" href="$classSimulator.html#a1a5454ee4736819d709398b225d7876d" title=" " alt="" coords="213,314,364,355"/>
+<area shape="rect" id="node38" href="$classSimulator.html#aa6e6cfd73fd8d3200e7f515b473e88f2" title=" " alt="" coords="488,384,651,411"/>
+<area shape="rect" id="node39" href="$classSimulator.html#a1b66b7260ff50758884d1f7361a1b988" title=" " alt="" coords="204,678,373,719"/>
+<area shape="rect" id="node44" href="$classSimulator.html#aac842e5498b4c9731910ce9a93fa555d" title=" " alt="" coords="204,743,373,785"/>
+<area shape="rect" id="node45" href="$classSimulator.html#a27a15b20249b51c6a8ed65560b3b1e91" title=" " alt="" coords="204,809,373,850"/>
+<area shape="rect" id="node3" href="$classPopulation.html#aa7eba257f23cbc12aa3673ce012fb2cb" title=" " alt="" coords="452,283,687,309"/>
+<area shape="rect" id="node18" href="$classPopulation.html#aeb1d470183d21899c25151c6fe15a4dc" title=" " alt="" coords="481,49,658,76"/>
+<area shape="rect" id="node21" href="$classPopulation.html#ae8a6455aa45e65bf8bd41312f9caa328" title=" " alt="" coords="739,119,954,145"/>
+<area shape="rect" id="node22" href="$classPopulation.html#aadec56893118cacf7774f7f9e2aac18f" title=" " alt="" coords="461,165,678,192"/>
+<area shape="rect" id="node4" href="$classPopulation.html#a012ef586a78b4e7c2082634b316072d0" title=" " alt="" coords="787,173,907,200"/>
+<area shape="rect" id="node8" href="$classPopulation.html#a20696fa511c914e7c8837acb2a254b33" title=" " alt="" coords="745,376,949,403"/>
+<area shape="rect" id="node9" href="$classPopulation.html#a81c19d1c80cfb1d54d3872ecdefd0872" title=" " alt="" coords="775,224,919,251"/>
+<area shape="rect" id="node5" href="$classFish.html#adf85bf269f1651352506e371ffd2cecc" title="Initializes the fish, i.e., initializes parameters and sets the initial state (age = 1,..." alt="" coords="1076,56,1152,83"/>
+<area shape="rect" id="node6" href="$namespacefish.html#a0ab1c4842d702a0a40bd04f26793ce12" title="Compute the nonlinear growth increment , as follows." alt="" coords="1296,31,1409,57"/>
+<area shape="rect" id="node7" href="$namespacefish.html#a1d06e0358aca1be4446ed148b7ce3d84" title="Compute the new length after growth assuming no allocation to reproduction." alt="" coords="1275,81,1430,108"/>
+<area shape="rect" id="node10" href="$classPopulation.html#af15e7ba23b161c710d4013204b542cb6" title=" " alt="" coords="1039,477,1189,504"/>
+<area shape="rect" id="node11" href="$classPopulation.html#ae942ef70cc9f4dfc40b5d843baf40b1e" title=" " alt="" coords="1039,325,1189,352"/>
+<area shape="rect" id="node12" href="$classPopulation.html#ad1840de2f00982c35d48b91a1d27ae13" title=" " alt="" coords="1047,275,1181,301"/>
+<area shape="rect" id="node13" href="$classPopulation.html#ac8ed845bbda25c937a2fd76b3788e987" title=" " alt="" coords="1269,325,1436,352"/>
+<area shape="rect" id="node14" href="$classPopulation.html#a42c4b04852bdda937e50f82952106af1" title=" " alt="" coords="1011,427,1217,453"/>
+<area shape="rect" id="node15" href="$classPopulation.html#a1118025c1079ababec03f80a14837c5c" title=" " alt="" coords="1007,107,1221,149"/>
+<area shape="rect" id="node16" href="$classPopulation.html#ac62fc3480d60b055cd1886649809c6a6" title=" " alt="" coords="1049,173,1179,200"/>
+<area shape="rect" id="node17" href="$classFish.html#aaa3e67187a587efc7a99485b4a6ee248" title=" " alt="" coords="1056,224,1172,251"/>
+<area shape="rect" id="node19" href="$classPopulationParams.html#a32de4f0d5a47821e5986225f7551e082" title=" " alt="" coords="735,20,959,47"/>
+<area shape="rect" id="node20" href="$classio_1_1Initializer.html#a6c174190ba99677aac35c5c7e92b69b8" title=" " alt="" coords="1041,5,1187,32"/>
+<area shape="rect" id="node24" href="$classTensor.html#a6c8465a488ce260e6e05f1a3ceb8ab26" title=" " alt="" coords="505,584,633,611"/>
+<area shape="rect" id="node25" href="$classTensor.html#a3986d7a50faef0249a8d2da5b1f67a89" title=" " alt="" coords="501,635,637,661"/>
+<area shape="rect" id="node26" href="$classTensor.html#a862952dc137707abdccd06cf9cd5855b" title=" " alt="" coords="793,680,901,707"/>
+<area shape="rect" id="node28" href="$classTensor.html#a1a9aea97717d687b7d501842efb546d4" title=" " alt="" coords="763,731,931,757"/>
+<area shape="rect" id="node27" href="$classTensor.html#a90a6b28226bcd1be7090fd2f8782d0b1" title=" " alt="" coords="1060,680,1168,707"/>
+<area shape="rect" id="node32" href="$classSimulator.html#ab21d1c6b0af00931f9a8fa5e0b6d417f" title=" " alt="" coords="494,478,645,519"/>
+<area shape="rect" id="node35" href="$simulator_8cpp.html#a2a2aec343c151304395503fd8b1d6a78" title=" " alt="" coords="517,333,622,360"/>
+<area shape="rect" id="node33" href="$classPopulation.html#a343a346cae1413da400c042868c15859" title=" " alt="" coords="741,477,952,504"/>
+<area shape="rect" id="node34" href="$classPopulation.html#a59c8a171470f0cca4453940e07c3c1df" title=" " alt="" coords="763,629,931,656"/>
+<area shape="rect" id="node37" href="$classSimulator.html#a7540919b97662be7deacba9194c0ed60" title=" " alt="" coords="494,217,645,258"/>
+<area shape="rect" id="node40" href="$classTensor.html#a447f65c9ada7c9357091fba66ad73d10" title=" " alt="" coords="773,828,921,855"/>
+<area shape="rect" id="node41" href="$classTensor.html#abf7346c2dbd5e6b195cfe9b66e5049e8" title=" " alt="" coords="503,736,636,763"/>
+<area shape="rect" id="node42" href="$classTensor.html#ae4622cf6280102eb5103cfe4c88c1ad8" title=" " alt="" coords="492,787,647,813"/>
+<area shape="rect" id="node43" href="$classTensor.html#aedee003837348391c5f8d0bc788bf20f" title=" " alt="" coords="492,837,647,864"/>
 </map>

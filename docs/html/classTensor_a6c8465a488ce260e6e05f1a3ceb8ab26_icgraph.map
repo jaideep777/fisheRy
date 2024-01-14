@@ -1,7 +1,8 @@
 <map id="Tensor::avg_dim" name="Tensor::avg_dim">
-<area shape="rect" id="node2" href="$classSimulator.html#addbc3da16a6f9c352eefbdc423419bca" title="Simulator::max_avg\l_utils" alt="" coords="179,5,317,47"/>
-<area shape="rect" id="node4" href="$classSimulator.html#a1b66b7260ff50758884d1f7361a1b988" title="Simulator::stakeholder\l_satisfaction" alt="" coords="172,71,324,112"/>
-<area shape="rect" id="node5" href="$classSimulator.html#a32eeba843e7526dceb75a2c6aebe240e" title="Simulator::max_avg\l_utils_2d" alt="" coords="179,136,317,177"/>
-<area shape="rect" id="node6" href="$classSimulator.html#aac842e5498b4c9731910ce9a93fa555d" title="Simulator::stakeholder\l_satisfaction_2d" alt="" coords="172,201,324,243"/>
-<area shape="rect" id="node3" href="$fish__glue_8cpp.html#addebb0997b0e49067d8784c9954b7b96" title="RCPP_MODULE" alt="" coords="372,111,496,138"/>
+<area shape="rect" id="node1" title=" " alt="" coords="391,111,519,138"/>
+<area shape="rect" id="node2" href="$classSimulator.html#addbc3da16a6f9c352eefbdc423419bca" title=" " alt="" coords="181,5,335,47"/>
+<area shape="rect" id="node4" href="$classSimulator.html#a32eeba843e7526dceb75a2c6aebe240e" title=" " alt="" coords="181,71,335,112"/>
+<area shape="rect" id="node5" href="$classSimulator.html#a1b66b7260ff50758884d1f7361a1b988" title=" " alt="" coords="173,136,343,177"/>
+<area shape="rect" id="node6" href="$classSimulator.html#aac842e5498b4c9731910ce9a93fa555d" title=" " alt="" coords="173,201,343,243"/>
+<area shape="rect" id="node3" href="$fish__glue_8cpp.html#addebb0997b0e49067d8784c9954b7b96" title=" " alt="" coords="5,111,125,138"/>
 </map>

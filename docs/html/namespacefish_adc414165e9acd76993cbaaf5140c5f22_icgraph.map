@@ -1,4 +1,5 @@
 <map id="fish::length_adult" name="fish::length_adult">
-<area shape="rect" id="node2" href="$classFish.html#abe4b5c9e5d1f6d3c56cc6be997db71cd" title="Implement growth, i.e., set new length and effective GSI after 1 year of growth. " alt="" coords="175,5,257,32"/>
-<area shape="rect" id="node3" href="$fish__glue_8cpp.html#a7b6a9b6d94c71377c935b2cfbffdfabc" title="RCPP_MODULE" alt="" coords="305,31,429,57"/>
+<area shape="rect" id="node1" title="Compute the new length after growth for adults, assuming allocation to reproduction." alt="" coords="308,31,443,57"/>
+<area shape="rect" id="node2" href="$classFish.html#abe4b5c9e5d1f6d3c56cc6be997db71cd" title="Implement growth, i.e., set new length and effective GSI after 1 year of growth." alt="" coords="173,5,260,32"/>
+<area shape="rect" id="node3" href="$fish__glue_8cpp.html#a7b6a9b6d94c71377c935b2cfbffdfabc" title=" " alt="" coords="5,31,125,57"/>
 </map>

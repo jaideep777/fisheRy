@@ -1,17 +1,18 @@
 <map id="fish::length_juvenile" name="fish::length_juvenile">
-<area shape="rect" id="node2" href="$namespacefish.html#adc414165e9acd76993cbaaf5140c5f22" title="Compute the new length after growth for adults, assuming allocation to reproduction ..." alt="" coords="191,32,312,58"/>
-<area shape="rect" id="node3" href="$classFish.html#abe4b5c9e5d1f6d3c56cc6be997db71cd" title="Implement growth, i.e., set new length and effective GSI after 1 year of growth. " alt="" coords="384,82,467,109"/>
-<area shape="rect" id="node4" href="$fish__glue_8cpp.html#a7b6a9b6d94c71377c935b2cfbffdfabc" title="RCPP_MODULE" alt="" coords="582,29,706,56"/>
-<area shape="rect" id="node5" href="$classFish.html#adf85bf269f1651352506e371ffd2cecc" title="Initializes the fish, i.e., initializes parameters and sets the initial state (age = 1..." alt="" coords="215,166,287,193"/>
-<area shape="rect" id="node6" href="$classPopulation.html#a012ef586a78b4e7c2082634b316072d0" title="Population::init" alt="" coords="371,196,479,222"/>
-<area shape="rect" id="node16" href="$classPopulation.html#a81c19d1c80cfb1d54d3872ecdefd0872" title="Population::update" alt="" coords="360,250,491,277"/>
-<area shape="rect" id="node7" href="$fish__glue_8cpp.html#ab96ae82277aa9004dc603b77512c7265" title="RCPP_MODULE" alt="" coords="830,182,954,209"/>
-<area shape="rect" id="node8" href="$classPopulation.html#aa7eba257f23cbc12aa3673ce012fb2cb" title="Population::noFishingEquilibriate" alt="" coords="539,197,749,224"/>
-<area shape="rect" id="node11" href="$classSimulator.html#a7540919b97662be7deacba9194c0ed60" title="Simulator::simulate\l_multi" alt="" coords="577,131,711,172"/>
-<area shape="rect" id="node13" href="$classSimulator.html#ab21d1c6b0af00931f9a8fa5e0b6d417f" title="Simulator::simulate\l_multi_2d" alt="" coords="577,248,711,290"/>
-<area shape="rect" id="node15" href="$classSimulator.html#aa6e6cfd73fd8d3200e7f515b473e88f2" title="Simulator::simulate_r" alt="" coords="571,365,717,392"/>
-<area shape="rect" id="node9" href="$classSimulator.html#a3dfce52c0bb26ec7ff2632b1eca50240" title="Simulator::equilibriateNatural\lPopulation" alt="" coords="797,234,987,275"/>
-<area shape="rect" id="node10" href="$fish__glue_8cpp.html#addebb0997b0e49067d8784c9954b7b96" title="RCPP_MODULE" alt="" coords="1035,274,1159,301"/>
-<area shape="rect" id="node12" href="$classSimulator.html#a1a5454ee4736819d709398b225d7876d" title="Simulator::simulate\l_multi_r" alt="" coords="825,116,959,158"/>
-<area shape="rect" id="node14" href="$classSimulator.html#af1b0a9562ecf0ad8f98d61576efba28b" title="Simulator::simulate\l_multi_2d_r" alt="" coords="825,299,959,340"/>
+<area shape="rect" id="node1" title="Compute the new length after growth assuming no allocation to reproduction." alt="" coords="1093,48,1248,75"/>
+<area shape="rect" id="node2" href="$classFish.html#abe4b5c9e5d1f6d3c56cc6be997db71cd" title="Implement growth, i.e., set new length and effective GSI after 1 year of growth." alt="" coords="747,23,834,49"/>
+<area shape="rect" id="node3" href="$fish__glue_8cpp.html#a7b6a9b6d94c71377c935b2cfbffdfabc" title=" " alt="" coords="493,20,613,47"/>
+<area shape="rect" id="node4" href="$classFish.html#adf85bf269f1651352506e371ffd2cecc" title="Initializes the fish, i.e., initializes parameters and sets the initial state (age = 1,..." alt="" coords="940,153,1016,180"/>
+<area shape="rect" id="node16" href="$namespacefish.html#adc414165e9acd76993cbaaf5140c5f22" title="Compute the new length after growth for adults, assuming allocation to reproduction." alt="" coords="911,73,1045,100"/>
+<area shape="rect" id="node5" href="$classPopulation.html#a012ef586a78b4e7c2082634b316072d0" title=" " alt="" coords="731,187,851,213"/>
+<area shape="rect" id="node15" href="$classPopulation.html#a81c19d1c80cfb1d54d3872ecdefd0872" title=" " alt="" coords="719,237,863,264"/>
+<area shape="rect" id="node6" href="$classPopulation.html#aa7eba257f23cbc12aa3673ce012fb2cb" title=" " alt="" coords="436,188,671,215"/>
+<area shape="rect" id="node9" href="$fish__glue_8cpp.html#ab96ae82277aa9004dc603b77512c7265" title=" " alt="" coords="221,239,341,265"/>
+<area shape="rect" id="node10" href="$classSimulator.html#a7540919b97662be7deacba9194c0ed60" title=" " alt="" coords="478,122,629,163"/>
+<area shape="rect" id="node12" href="$classSimulator.html#ab21d1c6b0af00931f9a8fa5e0b6d417f" title=" " alt="" coords="478,290,629,331"/>
+<area shape="rect" id="node14" href="$classSimulator.html#aa6e6cfd73fd8d3200e7f515b473e88f2" title=" " alt="" coords="472,356,635,383"/>
+<area shape="rect" id="node7" href="$classSimulator.html#ad02f472064f23f03ae474cb4904d2c56" title=" " alt="" coords="173,173,388,214"/>
+<area shape="rect" id="node8" href="$fish__glue_8cpp.html#addebb0997b0e49067d8784c9954b7b96" title=" " alt="" coords="5,239,125,265"/>
+<area shape="rect" id="node11" href="$classSimulator.html#a1a5454ee4736819d709398b225d7876d" title=" " alt="" coords="205,107,356,149"/>
+<area shape="rect" id="node13" href="$classSimulator.html#af1b0a9562ecf0ad8f98d61576efba28b" title=" " alt="" coords="205,290,356,331"/>
 </map>

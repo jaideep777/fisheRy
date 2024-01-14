@@ -1,4 +1,5 @@
 <map id="Fish::init" name="Fish::init">
-<area shape="rect" id="node2" href="$namespacefish.html#a0ab1c4842d702a0a40bd04f26793ce12" title="Compute the nonlinear growth increment , as follows . " alt="" coords="143,5,245,32"/>
-<area shape="rect" id="node3" href="$namespacefish.html#a1d06e0358aca1be4446ed148b7ce3d84" title="Compute the new length after growth assuming no allocation to reproduction . " alt="" coords="125,56,263,83"/>
+<area shape="rect" id="node1" title="Initializes the fish, i.e., initializes parameters and sets the initial state (age = 1,..." alt="" coords="5,31,81,57"/>
+<area shape="rect" id="node2" href="$namespacefish.html#a0ab1c4842d702a0a40bd04f26793ce12" title="Compute the nonlinear growth increment , as follows." alt="" coords="150,5,263,32"/>
+<area shape="rect" id="node3" href="$namespacefish.html#a1d06e0358aca1be4446ed148b7ce3d84" title="Compute the new length after growth assuming no allocation to reproduction." alt="" coords="129,56,284,83"/>
 </map>

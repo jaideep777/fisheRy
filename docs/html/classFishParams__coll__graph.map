@@ -1,4 +1,10 @@
 <map id="FishParams" name="FishParams">
-<area shape="rect" id="node3" title="STL class. " alt="" coords="181,204,261,231"/>
-<area shape="rect" id="node4" title="STL class. " alt="" coords="5,197,132,238"/>
+<area shape="rect" id="node1" title=" " alt="" coords="748,189,844,216"/>
+<area shape="rect" id="node2" title=" " alt="" coords="366,89,529,130"/>
+<area shape="rect" id="node3" title=" " alt="" coords="193,161,280,188"/>
+<area shape="rect" id="node5" title=" " alt="" coords="366,154,529,195"/>
+<area shape="rect" id="node6" title=" " alt="" coords="366,219,529,261"/>
+<area shape="rect" id="node7" title=" " alt="" coords="366,285,529,326"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,154,144,195"/>
+<area shape="rect" id="node8" title=" " alt="" coords="365,351,530,377"/>
 </map>

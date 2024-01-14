@@ -8,10 +8,10 @@
 <meta name="description" content="fisheRy">
 <title>Simulating multiple populations at once • fisheRy</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Simulating multiple populations at once">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Simulating multiple populations at once">
 <meta property="og:description" content="fisheRy">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -93,6 +93,11 @@
        
       Calculating JSS
     </a>
+    <a class="dropdown-item" href="../articles/jss_calcs_hxL_evol.html">
+      <span class="fa fa-fish"></span>
+       
+      Calculating 2D JSS with evolution
+    </a>
   </div>
 </li>
 <li class="nav-item">
@@ -133,7 +138,7 @@
 
 
 <div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Simulating multiple populations at once</h1>
                         <h4 data-toc-skip class="author">Jaideep
 Joshi</h4>
@@ -147,10 +152,10 @@ Joshi</h4>
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">re_simulate</span> <span class="op">=</span> <span class="cn">T</span>
-
-<span class="co"># if one of the files doesnt exist, re-run the simulations</span>
-<span class="va">re_simulate</span> <span class="op">=</span> <span class="va">re_simulate</span> <span class="op">|</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="st">"res_ibm_scan_T.Rdata"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">re_simulate</span> <span class="op">=</span> <span class="cn">F</span></span>
+<span></span>
+<span><span class="co"># if one of the files doesnt exist, re-run the simulations</span></span>
+<span><span class="va">re_simulate</span> <span class="op">=</span> <span class="va">re_simulate</span> <span class="op">|</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html" class="external-link">file.exists</a></span><span class="op">(</span><span class="st">"outputs/res_ibm_scan_T.Rdata"</span><span class="op">)</span></span></code></pre></div>
 <p>We can use the fishery simulator to simulate multiple populations
 (i.e., populations with different control parameters) at once. Suppose
 we want to look at fishery properties as a function of the harvest
@@ -159,35 +164,39 @@ proportion.</p>
 <h3 id="preparation">Preparation<a class="anchor" aria-label="anchor" href="#preparation"></a>
 </h3>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">params_file</span> <span class="op">=</span> <span class="st">"../params/cod_params.ini"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">params_file</span> <span class="op">=</span> <span class="st">"../params/cod_params.ini"</span></span></code></pre></div>
 <p>As usual, we begin with creating a prototype fish</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Create a prototype fish as usual</span>
-<span class="va">fish</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Fish</span>, <span class="va">params_file</span><span class="op">)</span>
-
-<span class="co"># Create a simulator</span>
-<span class="va">sim</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Simulator</span>, <span class="va">fish</span><span class="op">)</span>
-
-<span class="va">sim</span><span class="op">$</span><span class="fu">equilibriateNaturalPopulation</span><span class="op">(</span><span class="fl">1.93e3</span>, <span class="fl">5.61</span>, <span class="fl">2e6</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##  [1]  3.306157e+09  0.000000e+00  0.000000e+00 -4.925584e+08  0.000000e+00</span>
-<span class="co">##  [6]  0.000000e+00 -1.249998e+08 -3.675586e+08  3.308932e+09  1.274555e+00</span>
-<span class="co">## [11]  5.822393e+08  1.420000e+08  6.580000e+02  7.755859e-01  1.325454e-02</span>
-<span class="co">## [16]  1.693070e+02  1.473857e+02  6.288879e-01  1.824441e-01  0.000000e+00</span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Create a prototype fish as usual</span></span>
+<span><span class="va">fish</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Fish</span>, <span class="va">params_file</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Create a simulator</span></span>
+<span><span class="va">sim</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Simulator</span>, <span class="va">fish</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sim</span><span class="op">$</span><span class="fu">equilibriateNaturalPopulation</span><span class="op">(</span><span class="va">params_file</span>, <span class="fl">1.93e3</span>, <span class="fl">5.61</span>, <span class="fl">2e6</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##  [1]  1.858764e+09  0.000000e+00  0.000000e+00 -4.925584e+08  0.000000e+00</span></span>
+<span><span class="co">##  [6]  0.000000e+00 -1.249998e+08 -3.675586e+08  3.916669e+09  5.275322e+00</span></span>
+<span><span class="co">## [11]  2.175764e+09  5.820000e+08  2.666000e+03  7.558073e-01  8.797709e-02</span></span>
+<span><span class="co">## [16]  1.359179e+02  9.588538e+01  5.681386e-01  6.069578e-02  0.000000e+00</span></span>
+<span><span class="co">## [21]  0.000000e+00</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="create-a-population-to-simulate">Create a population to simulate<a class="anchor" aria-label="anchor" href="#create-a-population-to-simulate"></a>
 </h3>
 <p>Then we create a population that will be reused by the simulator.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pop</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Population</span>, <span class="va">fish</span><span class="op">)</span>
-<span class="va">pop</span><span class="op">$</span><span class="fu">set_superFishSize</span><span class="op">(</span><span class="fl">5e6</span><span class="op">)</span>
-<span class="va">pop</span><span class="op">$</span><span class="va">verbose</span> <span class="op">=</span> <span class="cn">F</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">pop</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Population</span>, <span class="va">fish</span><span class="op">)</span></span>
+<span><span class="va">pop</span><span class="op">$</span><span class="fu">readParams</span><span class="op">(</span><span class="va">params_file</span>, <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 0</span></span></code></pre>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pop</span><span class="op">$</span><span class="fu">set_superFishSize</span><span class="op">(</span><span class="fl">5e6</span><span class="op">)</span></span>
+<span><span class="va">pop</span><span class="op">$</span><span class="va">verbose</span> <span class="op">=</span> <span class="cn">F</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="plotting-utility">Plotting utility<a class="anchor" aria-label="anchor" href="#plotting-utility"></a>
 </h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"../R/plot_scan.R"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"../R/plot_scan.R"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="simulate">Simulate<a class="anchor" aria-label="anchor" href="#simulate"></a>
@@ -198,81 +207,85 @@ Here, we simulate 20 populations with harvesting rates specified by the
 returns an array if dimensions <code>{nsteps, length(hvec), 4}</code>.
 The last dimension is four because four utilities are returned: {ssb,
 yield, employment, profit}.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">nsteps</span> <span class="op">=</span> <span class="fl">200</span>
-<span class="va">hvec</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.99</span>, length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
-<span class="va">lminvec</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">45</span>, <span class="fl">200</span>, length.out <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-<span class="va">Tvec</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">8</span>, length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
-
-<span class="kw">if</span><span class="op">(</span><span class="va">re_simulate</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">res_ibm_full</span> <span class="op">=</span> <span class="va">sim</span><span class="op">$</span><span class="fu">simulate_multi_2d</span><span class="op">(</span><span class="va">pop</span>, <span class="va">Tvec</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">45</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.44</span><span class="op">)</span>, <span class="va">nsteps</span>, <span class="fl">1.93e3</span>, <span class="cn">T</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">res_ibm_full</span>, file<span class="op">=</span><span class="st">"res_ibm_scan_T.Rdata"</span><span class="op">)</span>
-<span class="op">}</span> <span class="kw">else</span><span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"res_ibm_scan_T.Rdata"</span><span class="op">)</span>
-<span class="op">}</span>
-
-<span class="va">lf</span> <span class="op">=</span> <span class="fl">45</span>
-<span class="va">arr</span> <span class="op">=</span> <span class="va">res_ibm_full</span> 
-<span class="va">names</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="va">colnames</span>
-<span class="va">dat_ibm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>ncol<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">names</span><span class="op">)</span>, nrow<span class="op">=</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dat_ibm</span><span class="op">)</span> <span class="op">=</span> <span class="va">names</span>
-<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">Tvec</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">v_ibm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colMeans</a></span><span class="op">(</span><span class="va">arr</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">200</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="va">i</span>,<span class="op">]</span><span class="op">)</span>
-  <span class="va">dat_ibm</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dat_ibm</span><span class="op">)</span><span class="op">+</span><span class="fl">1</span>,<span class="op">]</span> <span class="op">=</span> <span class="va">v_ibm</span>
-<span class="op">}</span>
-
-<span class="fu">plot_scan</span><span class="op">(</span><span class="va">dat_ibm</span>, xname <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="st">"Temperature ("</span><span class="op">^</span><span class="va">o</span><span class="op">*</span><span class="st">"C)"</span><span class="op">)</span>, xvec <span class="op">=</span> <span class="va">Tvec</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">nsteps</span> <span class="op">=</span> <span class="fl">200</span></span>
+<span><span class="va">hvec</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.99</span>, length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span><span class="va">lminvec</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">45</span>, <span class="fl">200</span>, length.out <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">Tvec</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">8</span>, length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">if</span><span class="op">(</span><span class="va">re_simulate</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">res_ibm_full</span> <span class="op">=</span> <span class="va">sim</span><span class="op">$</span><span class="fu">simulate_multi_2d</span><span class="op">(</span><span class="va">pop</span>, <span class="va">Tvec</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">45</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.44</span><span class="op">)</span>, <span class="va">nsteps</span>, <span class="fl">1.93e3</span>, <span class="cn">T</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">res_ibm_full</span>, file<span class="op">=</span><span class="st">"outputs/res_ibm_scan_T.Rdata"</span><span class="op">)</span></span>
+<span><span class="op">}</span> <span class="kw">else</span><span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"outputs/res_ibm_scan_T.Rdata"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">lf</span> <span class="op">=</span> <span class="fl">45</span></span>
+<span><span class="va">arr</span> <span class="op">=</span> <span class="va">res_ibm_full</span> </span>
+<span><span class="va">names</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="va">colnames</span></span>
+<span><span class="va">dat_ibm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>ncol<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">names</span><span class="op">)</span>, nrow<span class="op">=</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dat_ibm</span><span class="op">)</span> <span class="op">=</span> <span class="va">names</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">Tvec</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">v_ibm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colMeans</a></span><span class="op">(</span><span class="va">arr</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">200</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="va">i</span>,<span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">dat_ibm</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dat_ibm</span><span class="op">)</span><span class="op">+</span><span class="fl">1</span>,<span class="op">]</span> <span class="op">=</span> <span class="va">v_ibm</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu">plot_scan</span><span class="op">(</span><span class="va">dat_ibm</span>, xname <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="st">"Temperature ("</span><span class="op">^</span><span class="va">o</span><span class="op">*</span><span class="st">"C)"</span><span class="op">)</span>, xvec <span class="op">=</span> <span class="va">Tvec</span><span class="op">)</span></span></code></pre></div>
 <p><img src="compare_hscans_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 </div>
 <div class="section level3">
-<h3 id="effect-of-harvest-proportion-new-model">Effect of harvest proportion (new model)<a class="anchor" aria-label="anchor" href="#effect-of-harvest-proportion-new-model"></a>
+<h3 id="effect-of-harvest-proportion-bioenergetic-model">Effect of harvest proportion (bioenergetic model)<a class="anchor" aria-label="anchor" href="#effect-of-harvest-proportion-bioenergetic-model"></a>
 </h3>
 <p>Generate reference</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">dat_ref</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>ncol<span class="op">=</span><span class="fl">7</span>, nrow<span class="op">=</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dat_ref</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ssb"</span>, <span class="st">"tsb"</span>, <span class="st">"yield"</span>, <span class="st">"employment.sea"</span>, <span class="st">"employment.shore"</span>, <span class="st">"profit.sea"</span>, <span class="st">"profit.shore"</span><span class="op">)</span>
-<span class="kw">for</span> <span class="op">(</span><span class="va">ih</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">hvec</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">res</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/simulate.html" class="external-link">simulate</a></span><span class="op">(</span><span class="va">hvec</span><span class="op">[</span><span class="va">ih</span><span class="op">]</span>, <span class="va">lf</span>, <span class="cn">F</span><span class="op">)</span>
-  <span class="va">v</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colMeans</a></span><span class="op">(</span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">summaries</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="va">SSB</span>, <span class="va">TSB</span>, <span class="va">Y</span>, <span class="va">D.sea</span>, <span class="va">D.shr</span>, <span class="va">P.sea</span>, <span class="va">P.shr</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">200</span>,<span class="op">]</span><span class="op">)</span>
-  <span class="va">dat_ref</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dat_ref</span><span class="op">)</span><span class="op">+</span><span class="fl">1</span>,<span class="op">]</span> <span class="op">=</span> <span class="va">v</span>
-<span class="op">}</span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fish</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Fish</span>, <span class="st">"../params/cod_params.ini"</span><span class="op">)</span>
-<span class="va">sim</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Simulator</span>, <span class="va">fish</span><span class="op">)</span>
-<span class="va">sim</span><span class="op">$</span><span class="fu">equilibriateNaturalPopulation</span><span class="op">(</span><span class="fl">1.93e3</span>, <span class="fl">5.61</span>, <span class="fl">2e6</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##  [1]  2.926447e+09  0.000000e+00  0.000000e+00 -4.925584e+08  0.000000e+00</span>
-<span class="co">##  [6]  0.000000e+00 -1.249998e+08 -3.675586e+08  3.042178e+09  1.886227e+00</span>
-<span class="co">## [11]  8.464860e+08  1.000000e+08  8.310000e+02  7.968857e-01  2.177760e-02</span>
-<span class="co">## [16]  1.731212e+02  1.492023e+02  5.947209e-01  1.218130e-01  0.000000e+00</span></code></pre>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dat_ref</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>ncol<span class="op">=</span><span class="fl">7</span>, nrow<span class="op">=</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dat_ref</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ssb"</span>, <span class="st">"tsb"</span>, <span class="st">"yield"</span>, <span class="st">"employment.sea"</span>, <span class="st">"employment.shore"</span>, <span class="st">"profit.sea"</span>, <span class="st">"profit.shore"</span><span class="op">)</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">ih</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">hvec</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">res</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/simulate.html" class="external-link">simulate</a></span><span class="op">(</span><span class="va">hvec</span><span class="op">[</span><span class="va">ih</span><span class="op">]</span>, <span class="va">lf</span>, <span class="cn">F</span><span class="op">)</span></span>
+<span>  <span class="va">v</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colMeans</a></span><span class="op">(</span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">summaries</span> <span class="op">%&gt;%</span> <span class="fu">select</span><span class="op">(</span><span class="va">SSB</span>, <span class="va">TSB</span>, <span class="va">Y</span>, <span class="va">D.sea</span>, <span class="va">D.shr</span>, <span class="va">P.sea</span>, <span class="va">P.shr</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">200</span>,<span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">dat_ref</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dat_ref</span><span class="op">)</span><span class="op">+</span><span class="fl">1</span>,<span class="op">]</span> <span class="op">=</span> <span class="va">v</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pop</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Population</span>, <span class="va">fish</span><span class="op">)</span>
-<span class="co"># pop$par$dsea = 0.02</span>
-<span class="va">pop</span><span class="op">$</span><span class="fu">set_superFishSize</span><span class="op">(</span><span class="fl">5e6</span><span class="op">)</span>
-<span class="va">pop</span><span class="op">$</span><span class="va">verbose</span> <span class="op">=</span> <span class="cn">F</span>
-
-<span class="va">nsteps</span> <span class="op">=</span> <span class="fl">200</span>
-<span class="va">hvec</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.99</span>, length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
-<span class="va">lminvec</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">45</span>, <span class="fl">200</span>, length.out <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-<span class="va">Tvec</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">8</span>, length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
-
-<span class="kw">if</span><span class="op">(</span><span class="va">re_simulate</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">res_ibm_full</span> <span class="op">=</span> <span class="va">sim</span><span class="op">$</span><span class="fu">simulate_multi_2d</span><span class="op">(</span><span class="va">pop</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.61</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">45</span><span class="op">)</span>, <span class="va">hvec</span>, <span class="va">nsteps</span>, <span class="fl">1.93e3</span>, <span class="cn">T</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">res_ibm_full</span>, file<span class="op">=</span><span class="st">"res_ibm_scan_h.Rdata"</span><span class="op">)</span>
-<span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> 
-  <span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"res_ibm_scan_h.Rdata"</span><span class="op">)</span>
-<span class="op">}</span>
-
-<span class="va">lf</span> <span class="op">=</span> <span class="fl">45</span>
-<span class="va">arr</span> <span class="op">=</span> <span class="va">res_ibm_full</span> 
-<span class="va">names</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="va">colnames</span>
-<span class="va">dat_ibm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>ncol<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">names</span><span class="op">)</span>, nrow<span class="op">=</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dat_ibm</span><span class="op">)</span> <span class="op">=</span> <span class="va">names</span>
-<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">Tvec</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">v_ibm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colMeans</a></span><span class="op">(</span><span class="va">arr</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">200</span>, <span class="va">i</span>, <span class="fl">1</span>, <span class="fl">1</span>,<span class="op">]</span><span class="op">)</span>
-  <span class="va">dat_ibm</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dat_ibm</span><span class="op">)</span><span class="op">+</span><span class="fl">1</span>,<span class="op">]</span> <span class="op">=</span> <span class="va">v_ibm</span>
-<span class="op">}</span>
-
-<span class="fu">plot_scan</span><span class="op">(</span><span class="va">dat_ibm</span>, xname <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="st">"Harvest proportion"</span><span class="op">)</span>, xvec <span class="op">=</span> <span class="va">hvec</span><span class="op">)</span> <span class="co">#, dat_ref=dat_ref)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">fish</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Fish</span>, <span class="st">"../params/cod_params.ini"</span><span class="op">)</span></span>
+<span><span class="va">sim</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Simulator</span>, <span class="va">fish</span><span class="op">)</span></span>
+<span><span class="va">sim</span><span class="op">$</span><span class="fu">equilibriateNaturalPopulation</span><span class="op">(</span><span class="va">params_file</span>, <span class="fl">1.93e3</span>, <span class="fl">5.61</span>, <span class="fl">2e6</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##  [1]  1.808478e+09  0.000000e+00  0.000000e+00 -4.925584e+08  0.000000e+00</span></span>
+<span><span class="co">##  [6]  0.000000e+00 -1.249998e+08 -3.675586e+08  4.031636e+09  5.510012e+00</span></span>
+<span><span class="co">## [11]  2.258625e+09  5.540000e+08  2.500000e+03  7.491963e-01  9.395668e-02</span></span>
+<span><span class="co">## [16]  1.513237e+02  9.646581e+01  5.873854e-01  6.292230e-02  0.000000e+00</span></span>
+<span><span class="co">## [21]  0.000000e+00</span></span></code></pre>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pop</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Population</span>, <span class="va">fish</span><span class="op">)</span></span>
+<span><span class="va">pop</span><span class="op">$</span><span class="fu">readParams</span><span class="op">(</span><span class="va">params_file</span>, <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 0</span></span></code></pre>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># pop$par$dsea = 0.02</span></span>
+<span><span class="va">pop</span><span class="op">$</span><span class="fu">set_superFishSize</span><span class="op">(</span><span class="fl">5e6</span><span class="op">)</span></span>
+<span><span class="va">pop</span><span class="op">$</span><span class="va">verbose</span> <span class="op">=</span> <span class="cn">F</span></span>
+<span></span>
+<span><span class="va">nsteps</span> <span class="op">=</span> <span class="fl">200</span></span>
+<span><span class="va">hvec</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.99</span>, length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span><span class="va">lminvec</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">45</span>, <span class="fl">200</span>, length.out <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">Tvec</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">8</span>, length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">if</span><span class="op">(</span><span class="va">re_simulate</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">res_ibm_full</span> <span class="op">=</span> <span class="va">sim</span><span class="op">$</span><span class="fu">simulate_multi_2d</span><span class="op">(</span><span class="va">pop</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.61</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">45</span><span class="op">)</span>, <span class="va">hvec</span>, <span class="va">nsteps</span>, <span class="fl">1.93e3</span>, <span class="cn">T</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">res_ibm_full</span>, file<span class="op">=</span><span class="st">"outputs/res_ibm_scan_h.Rdata"</span><span class="op">)</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"outputs/res_ibm_scan_h.Rdata"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">lf</span> <span class="op">=</span> <span class="fl">45</span></span>
+<span><span class="va">arr</span> <span class="op">=</span> <span class="va">res_ibm_full</span> </span>
+<span><span class="va">names</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="va">colnames</span></span>
+<span><span class="va">dat_ibm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>ncol<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">names</span><span class="op">)</span>, nrow<span class="op">=</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dat_ibm</span><span class="op">)</span> <span class="op">=</span> <span class="va">names</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">Tvec</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">v_ibm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colMeans</a></span><span class="op">(</span><span class="va">arr</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">200</span>, <span class="va">i</span>, <span class="fl">1</span>, <span class="fl">1</span>,<span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">dat_ibm</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dat_ibm</span><span class="op">)</span><span class="op">+</span><span class="fl">1</span>,<span class="op">]</span> <span class="op">=</span> <span class="va">v_ibm</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu">plot_scan</span><span class="op">(</span><span class="va">dat_ibm</span>, xname <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="st">"Harvest proportion"</span><span class="op">)</span>, xvec <span class="op">=</span> <span class="va">hvec</span>, dat_ref<span class="op">=</span><span class="va">dat_ref</span><span class="op">)</span></span></code></pre></div>
 <p><img src="compare_hscans_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
 <div class="section level3">
@@ -280,46 +293,51 @@ yield, employment, profit}.</p>
 </h3>
 <p>We also look at the predictions of the Dankel et al model
 implementation, and compare it with their results.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fish</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Fish</span>, <span class="st">"../params/cod_params_dankel22.ini"</span><span class="op">)</span>
-
-<span class="va">sim</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Simulator</span>, <span class="va">fish</span><span class="op">)</span>
-
-<span class="va">sim</span><span class="op">$</span><span class="fu">equilibriateNaturalPopulation</span><span class="op">(</span><span class="fl">1.93e3</span>, <span class="fl">5.61</span>, <span class="fl">2e6</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##  [1]  1.487533e+10  0.000000e+00  0.000000e+00 -4.925584e+08  0.000000e+00</span>
-<span class="co">##  [6]  0.000000e+00 -1.249998e+08 -3.675586e+08  1.769984e+10  2.177072e+01</span>
-<span class="co">## [11]  7.756002e+09  9.240000e+08  6.904000e+03  0.000000e+00  2.394962e-02</span>
-<span class="co">## [16]  1.626982e+02  1.174201e+02  4.371944e-01  1.320012e-01  0.000000e+00</span></code></pre>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pop</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Population</span>, <span class="va">fish</span><span class="op">)</span>
-<span class="va">pop</span><span class="op">$</span><span class="va">par</span><span class="op">$</span><span class="va">recruitmentAge</span> <span class="op">=</span> <span class="fl">1</span>
-<span class="va">pop</span><span class="op">$</span><span class="va">par</span><span class="op">$</span><span class="va">dmax</span> <span class="op">=</span> <span class="fl">30000</span>
-<span class="va">pop</span><span class="op">$</span><span class="fu">set_superFishSize</span><span class="op">(</span><span class="fl">5e6</span><span class="op">)</span>
-<span class="va">pop</span><span class="op">$</span><span class="va">verbose</span> <span class="op">=</span> <span class="cn">F</span>
-
-<span class="va">nsteps</span> <span class="op">=</span> <span class="fl">200</span>
-<span class="va">hvec</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.99</span>, length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
-<span class="va">lminvec</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">45</span>, <span class="fl">200</span>, length.out <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
-<span class="va">Tvec</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">8</span>, length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
-
-<span class="kw">if</span><span class="op">(</span><span class="va">re_simulate</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">res_ibm_full</span> <span class="op">=</span> <span class="va">sim</span><span class="op">$</span><span class="fu">simulate_multi_2d</span><span class="op">(</span><span class="va">pop</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.61</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">45</span><span class="op">)</span>, <span class="va">hvec</span>, <span class="va">nsteps</span>, <span class="fl">1.93e3</span>, <span class="cn">T</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">res_ibm_full</span>, file<span class="op">=</span><span class="st">"res_ibm_scan_h_Dankel22.Rdata"</span><span class="op">)</span>
-<span class="op">}</span> <span class="kw">else</span> <span class="op">{</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"res_ibm_scan_h_Dankel22.Rdata"</span><span class="op">)</span>
-<span class="op">}</span>
-
-<span class="va">lf</span> <span class="op">=</span> <span class="fl">45</span>
-<span class="va">arr</span> <span class="op">=</span> <span class="va">res_ibm_full</span> 
-<span class="va">names</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="va">colnames</span>
-<span class="va">dat_ibm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>ncol<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">names</span><span class="op">)</span>, nrow<span class="op">=</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dat_ibm</span><span class="op">)</span> <span class="op">=</span> <span class="va">names</span>
-<span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">Tvec</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">v_ibm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colMeans</a></span><span class="op">(</span><span class="va">arr</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">200</span>, <span class="va">i</span>, <span class="fl">1</span>, <span class="fl">1</span>,<span class="op">]</span><span class="op">)</span>
-  <span class="va">dat_ibm</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dat_ibm</span><span class="op">)</span><span class="op">+</span><span class="fl">1</span>,<span class="op">]</span> <span class="op">=</span> <span class="va">v_ibm</span>
-<span class="op">}</span>
-
-<span class="fu">plot_scan</span><span class="op">(</span><span class="va">dat_ibm</span>, xname <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="st">"Harvest proportion"</span><span class="op">)</span>, xvec <span class="op">=</span> <span class="va">hvec</span>, dat_ref<span class="op">=</span><span class="va">dat_ref</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fish</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Fish</span>, <span class="st">"../params/cod_params_dankel22.ini"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sim</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Simulator</span>, <span class="va">fish</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sim</span><span class="op">$</span><span class="fu">equilibriateNaturalPopulation</span><span class="op">(</span><span class="va">params_file</span>, <span class="fl">1.93e3</span>, <span class="fl">5.61</span>, <span class="fl">2e6</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##  [1]   1.514111e+10   0.000000e+00   0.000000e+00  -4.925584e+08   0.000000e+00</span></span>
+<span><span class="co">##  [6]   0.000000e+00  -1.249998e+08  -3.675586e+08   1.793933e+10   2.177072e+01</span></span>
+<span><span class="co">## [11]   7.759264e+09   9.660000e+08   6.962000e+03  4.189677e-309   2.353910e-02</span></span>
+<span><span class="co">## [16]   1.626982e+02   1.180520e+02   4.409691e-01   1.305412e-01   0.000000e+00</span></span>
+<span><span class="co">## [21]   0.000000e+00</span></span></code></pre>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pop</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Population</span>, <span class="va">fish</span><span class="op">)</span></span>
+<span><span class="va">pop</span><span class="op">$</span><span class="fu">readParams</span><span class="op">(</span><span class="va">params_file</span>, <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 0</span></span></code></pre>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pop</span><span class="op">$</span><span class="va">par</span><span class="op">$</span><span class="va">f_harvest_spg</span> <span class="op">=</span> <span class="fl">0</span></span>
+<span><span class="va">pop</span><span class="op">$</span><span class="va">par</span><span class="op">$</span><span class="va">recruitmentAge</span> <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="va">pop</span><span class="op">$</span><span class="va">par</span><span class="op">$</span><span class="va">dmax</span> <span class="op">=</span> <span class="fl">30000</span></span>
+<span><span class="va">pop</span><span class="op">$</span><span class="fu">set_superFishSize</span><span class="op">(</span><span class="fl">5e6</span><span class="op">)</span></span>
+<span><span class="va">pop</span><span class="op">$</span><span class="va">verbose</span> <span class="op">=</span> <span class="cn">F</span></span>
+<span></span>
+<span><span class="va">nsteps</span> <span class="op">=</span> <span class="fl">200</span></span>
+<span><span class="va">hvec</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.99</span>, length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span><span class="va">lminvec</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">45</span>, <span class="fl">200</span>, length.out <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">Tvec</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">8</span>, length.out <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span>
+<span></span>
+<span><span class="kw">if</span><span class="op">(</span><span class="va">re_simulate</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">res_ibm_full</span> <span class="op">=</span> <span class="va">sim</span><span class="op">$</span><span class="fu">simulate_multi_2d</span><span class="op">(</span><span class="va">pop</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.61</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">45</span><span class="op">)</span>, <span class="va">hvec</span>, <span class="va">nsteps</span>, <span class="fl">1.93e3</span>, <span class="cn">T</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/save.html" class="external-link">save</a></span><span class="op">(</span><span class="va">res_ibm_full</span>, file<span class="op">=</span><span class="st">"outputs/res_ibm_scan_h_Dankel22.Rdata"</span><span class="op">)</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/load.html" class="external-link">load</a></span><span class="op">(</span><span class="st">"outputs/res_ibm_scan_h_Dankel22.Rdata"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">lf</span> <span class="op">=</span> <span class="fl">45</span></span>
+<span><span class="va">arr</span> <span class="op">=</span> <span class="va">res_ibm_full</span> </span>
+<span><span class="va">names</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="va">colnames</span></span>
+<span><span class="va">dat_ibm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>ncol<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">names</span><span class="op">)</span>, nrow<span class="op">=</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">dat_ibm</span><span class="op">)</span> <span class="op">=</span> <span class="va">names</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">Tvec</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>  <span class="va">v_ibm</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colMeans</a></span><span class="op">(</span><span class="va">arr</span><span class="op">[</span><span class="fl">101</span><span class="op">:</span><span class="fl">200</span>, <span class="va">i</span>, <span class="fl">1</span>, <span class="fl">1</span>,<span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">dat_ibm</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dat_ibm</span><span class="op">)</span><span class="op">+</span><span class="fl">1</span>,<span class="op">]</span> <span class="op">=</span> <span class="va">v_ibm</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu">plot_scan</span><span class="op">(</span><span class="va">dat_ibm</span>, xname <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html" class="external-link">expression</a></span><span class="op">(</span><span class="st">"Harvest proportion"</span><span class="op">)</span>, xvec <span class="op">=</span> <span class="va">hvec</span>, dat_ref<span class="op">=</span><span class="va">dat_ref</span><span class="op">)</span></span></code></pre></div>
 <p><img src="compare_hscans_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
 <!-- ### Simulate with old mortality model -->
 <!-- ```{r} -->
@@ -401,21 +419,20 @@ implementation, and compare it with their results.</p>
 <!-- plot_hscan(res_ibm_full) -->
 <!-- ``` -->
 </div>
-  </main>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by <a href="https://jaideep777.github.io" class="external-link">Jaideep
-Joshi</a>.</p>
+<p>Developed by <a href="https://jaideep777.github.io" class="external-link">Jaideep Joshi</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
     </footer>

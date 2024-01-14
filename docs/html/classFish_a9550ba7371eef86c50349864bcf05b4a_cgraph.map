@@ -1,3 +1,5 @@
 <map id="Fish::produceRecruits" name="Fish::produceRecruits">
-<area shape="rect" id="node2" href="$namespacefish.html#a55881de836369d1af447b740b433e50e" title="Calculate the number of eggs produced per year by a fish of given weight, . " alt="" coords="204,5,308,32"/>
+<area shape="rect" id="node1" title="Calculate the number of surviving recruits produced based on egg production and offspring survival un..." alt="" coords="5,5,165,32"/>
+<area shape="rect" id="node2" href="$namespacefish.html#a55881de836369d1af447b740b433e50e" title="Calculate the number of eggs produced per year by a fish of given weight,." alt="" coords="213,5,328,32"/>
+<area shape="rect" id="node3" href="$namespacefish.html#a7f532daff6b69774cc75d40ed18aad31" title="Calculate effective GSI, given the initial and final body lengths." alt="" coords="376,5,449,32"/>
 </map>

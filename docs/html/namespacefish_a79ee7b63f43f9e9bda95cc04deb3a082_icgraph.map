@@ -1,4 +1,5 @@
 <map id="fish::maturation_steepness" name="fish::maturation_steepness">
-<area shape="rect" id="node2" href="$classFishParams.html#a9f2eb8f9cba3f7cc9b1d187e28a0e566" title="FishParams::init" alt="" coords="235,5,353,32"/>
-<area shape="rect" id="node3" href="$fish__glue_8cpp.html#a7b6a9b6d94c71377c935b2cfbffdfabc" title="RCPP_MODULE" alt="" coords="232,56,356,83"/>
+<area shape="rect" id="node1" title="Calculate the steepness of the probabilistic maturation reaction norm (PMRN)" alt="" coords="179,31,377,57"/>
+<area shape="rect" id="node2" href="$classFishParams.html#a9f2eb8f9cba3f7cc9b1d187e28a0e566" title=" " alt="" coords="5,5,131,32"/>
+<area shape="rect" id="node3" href="$fish__glue_8cpp.html#a7b6a9b6d94c71377c935b2cfbffdfabc" title=" " alt="" coords="8,56,128,83"/>
 </map>

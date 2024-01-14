@@ -1,28 +1,32 @@
 <map id="RCPP_MODULE" name="RCPP_MODULE">
-<area shape="rect" id="node2" href="$classPopulation.html#ae8a6455aa45e65bf8bd41312f9caa328" title="Population::set_superFishSize" alt="" coords="183,31,382,57"/>
-<area shape="rect" id="node3" href="$classPopulation.html#a20696fa511c914e7c8837acb2a254b33" title="Population::set_harvestProp" alt="" coords="436,81,623,108"/>
-<area shape="rect" id="node4" href="$classPopulation.html#a343a346cae1413da400c042868c15859" title="Population::set_minSizeLimit" alt="" coords="187,487,378,513"/>
-<area shape="rect" id="node5" href="$classPopulation.html#ac8ed845bbda25c937a2fd76b3788e987" title="Population::selectivity" alt="" coords="911,259,1062,285"/>
-<area shape="rect" id="node6" href="$classPopulation.html#a012ef586a78b4e7c2082634b316072d0" title="Population::init" alt="" coords="475,132,583,159"/>
-<area shape="rect" id="node10" href="$classPopulation.html#a81c19d1c80cfb1d54d3872ecdefd0872" title="Population::update" alt="" coords="464,284,595,311"/>
-<area shape="rect" id="node12" href="$classPopulation.html#af15e7ba23b161c710d4013204b542cb6" title="Population::calcSSB" alt="" coords="693,385,835,412"/>
-<area shape="rect" id="node14" href="$classPopulation.html#a42c4b04852bdda937e50f82952106af1" title="Population::fishableBiomass" alt="" coords="671,81,857,108"/>
-<area shape="rect" id="node18" href="$classPopulation.html#ac62fc3480d60b055cd1886649809c6a6" title="Population::nfish" alt="" coords="705,487,823,513"/>
-<area shape="rect" id="node19" href="$classPopulation.html#aa7eba257f23cbc12aa3673ce012fb2cb" title="Population::noFishingEquilibriate" alt="" coords="177,183,388,209"/>
-<area shape="rect" id="node20" href="$classPopulation.html#a62f07e15a6d75f0e37e6e24e6a2eaec2" title="Population::get_state" alt="" coords="210,537,355,564"/>
-<area shape="rect" id="node21" href="$classPopulation.html#a29fa674d9ce3986f71b07f11d2374fde" title="Population::get_traits" alt="" coords="210,588,355,615"/>
-<area shape="rect" id="node23" href="$classPopulation.html#af069291adb3fb7b451a36cf0a179398b" title="Population::summarize" alt="" coords="452,664,607,691"/>
-<area shape="rect" id="node24" href="$classPopulation.html#a345497aa32fe22f73153a59f469c6a19" title="Population::print_summary" alt="" coords="194,639,371,665"/>
-<area shape="rect" id="node25" href="$classPopulation.html#a2cbbf4e1d4fdfe6fc3f67b96a5aa698d" title="Population::readEnvironmentFile" alt="" coords="177,740,388,767"/>
-<area shape="rect" id="node26" href="$classPopulation.html#a59c8a171470f0cca4453940e07c3c1df" title="Population::updateEnv" alt="" coords="206,791,359,817"/>
-<area shape="rect" id="node27" href="$fish__glue_8cpp.html#a98419b0e357e28499fdbf638fbe73e50" title="RCPP_EXPOSED_CLASS" alt="" coords="191,841,374,868"/>
-<area shape="rect" id="node7" href="$classFish.html#adf85bf269f1651352506e371ffd2cecc" title="Initializes the fish, i.e., initializes parameters and sets the initial state (age = 1..." alt="" coords="728,31,800,57"/>
-<area shape="rect" id="node8" href="$namespacefish.html#a0ab1c4842d702a0a40bd04f26793ce12" title="Compute the nonlinear growth increment , as follows . " alt="" coords="935,5,1038,32"/>
-<area shape="rect" id="node9" href="$namespacefish.html#a1d06e0358aca1be4446ed148b7ce3d84" title="Compute the new length after growth assuming no allocation to reproduction . " alt="" coords="918,56,1055,83"/>
-<area shape="rect" id="node11" href="$classPopulation.html#ae942ef70cc9f4dfc40b5d843baf40b1e" title="Population::calcTSB" alt="" coords="693,132,835,159"/>
-<area shape="rect" id="node13" href="$classFish.html#aaa3e67187a587efc7a99485b4a6ee248" title="Fish::set_traits" alt="" coords="709,183,819,209"/>
-<area shape="rect" id="node15" href="$classPopulation.html#ad1840de2f00982c35d48b91a1d27ae13" title="Population::effort" alt="" coords="703,284,825,311"/>
-<area shape="rect" id="node16" href="$namespacepn.html#ad42003887dcc42a4758c69775f83a8d9" title="pn::zero" alt="" coords="729,335,799,361"/>
-<area shape="rect" id="node17" href="$structpn_1_1BrentRes.html#a4fa42a440c4b9dc765ea7f0d7fd3a412" title="pn::BrentRes::BrentRes" alt="" coords="905,335,1068,361"/>
-<area shape="rect" id="node22" href="$classFish.html#ada02edec02f9bed880911ea21b6d1a60" title="Fish::get_traits" alt="" coords="475,588,584,615"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,528,125,555"/>
+<area shape="rect" id="node2" href="$classPopulation.html#af15e7ba23b161c710d4013204b542cb6" title=" " alt="" coords="760,98,911,124"/>
+<area shape="rect" id="node3" href="$classPopulation.html#a42c4b04852bdda937e50f82952106af1" title=" " alt="" coords="732,250,939,276"/>
+<area shape="rect" id="node4" href="$classPopulation.html#ac8ed845bbda25c937a2fd76b3788e987" title=" " alt="" coords="991,300,1157,327"/>
+<area shape="rect" id="node5" href="$classPopulation.html#a62f07e15a6d75f0e37e6e24e6a2eaec2" title=" " alt="" coords="211,554,371,580"/>
+<area shape="rect" id="node6" href="$classPopulation.html#a29fa674d9ce3986f71b07f11d2374fde" title=" " alt="" coords="210,604,371,631"/>
+<area shape="rect" id="node8" href="$classPopulation.html#a012ef586a78b4e7c2082634b316072d0" title=" " alt="" coords="508,402,628,428"/>
+<area shape="rect" id="node12" href="$classPopulationParams.html#a32de4f0d5a47821e5986225f7551e082" title=" " alt="" coords="456,680,680,707"/>
+<area shape="rect" id="node14" href="$classPopulation.html#ac62fc3480d60b055cd1886649809c6a6" title=" " alt="" coords="770,570,901,596"/>
+<area shape="rect" id="node15" href="$classPopulation.html#aa7eba257f23cbc12aa3673ce012fb2cb" title=" " alt="" coords="173,351,408,378"/>
+<area shape="rect" id="node16" href="$classPopulation.html#a20696fa511c914e7c8837acb2a254b33" title=" " alt="" coords="466,452,670,479"/>
+<area shape="rect" id="node17" href="$classPopulation.html#a81c19d1c80cfb1d54d3872ecdefd0872" title=" " alt="" coords="496,351,640,378"/>
+<area shape="rect" id="node22" href="$classPopulationParams.html#a0c1aba939d8f42c06b873c3b853dcf19" title=" " alt="" coords="201,756,380,783"/>
+<area shape="rect" id="node23" href="$classPopulation.html#a345497aa32fe22f73153a59f469c6a19" title=" " alt="" coords="469,148,667,175"/>
+<area shape="rect" id="node24" href="$classPopulation.html#af069291adb3fb7b451a36cf0a179398b" title=" " alt="" coords="749,47,921,74"/>
+<area shape="rect" id="node25" href="$classPopulation.html#a2cbbf4e1d4fdfe6fc3f67b96a5aa698d" title=" " alt="" coords="174,807,407,834"/>
+<area shape="rect" id="node26" href="$classPopulation.html#aeb1d470183d21899c25151c6fe15a4dc" title=" " alt="" coords="202,706,379,732"/>
+<area shape="rect" id="node27" href="$classPopulation.html#a343a346cae1413da400c042868c15859" title=" " alt="" coords="185,858,396,884"/>
+<area shape="rect" id="node28" href="$classPopulation.html#ae8a6455aa45e65bf8bd41312f9caa328" title=" " alt="" coords="183,908,398,935"/>
+<area shape="rect" id="node29" href="$classPopulation.html#aadec56893118cacf7774f7f9e2aac18f" title=" " alt="" coords="182,959,399,986"/>
+<area shape="rect" id="node30" href="$classPopulation.html#a59c8a171470f0cca4453940e07c3c1df" title=" " alt="" coords="207,1010,375,1036"/>
+<area shape="rect" id="node7" href="$classFish.html#ada02edec02f9bed880911ea21b6d1a60" title=" " alt="" coords="509,604,627,631"/>
+<area shape="rect" id="node9" href="$classFish.html#adf85bf269f1651352506e371ffd2cecc" title="Initializes the fish, i.e., initializes parameters and sets the initial state (age = 1,..." alt="" coords="797,519,873,546"/>
+<area shape="rect" id="node10" href="$namespacefish.html#a0ab1c4842d702a0a40bd04f26793ce12" title="Compute the nonlinear growth increment , as follows." alt="" coords="1017,544,1131,571"/>
+<area shape="rect" id="node11" href="$namespacefish.html#a1d06e0358aca1be4446ed148b7ce3d84" title="Compute the new length after growth assuming no allocation to reproduction." alt="" coords="997,494,1151,520"/>
+<area shape="rect" id="node13" href="$classio_1_1Initializer.html#a6c174190ba99677aac35c5c7e92b69b8" title=" " alt="" coords="762,680,909,707"/>
+<area shape="rect" id="node18" href="$classPopulation.html#ae942ef70cc9f4dfc40b5d843baf40b1e" title=" " alt="" coords="760,199,911,226"/>
+<area shape="rect" id="node19" href="$classPopulation.html#ad1840de2f00982c35d48b91a1d27ae13" title=" " alt="" coords="768,300,903,327"/>
+<area shape="rect" id="node20" href="$classPopulation.html#a1118025c1079ababec03f80a14837c5c" title=" " alt="" coords="728,352,943,393"/>
+<area shape="rect" id="node21" href="$classFish.html#aaa3e67187a587efc7a99485b4a6ee248" title=" " alt="" coords="777,418,893,444"/>
 </map>

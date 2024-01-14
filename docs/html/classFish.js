@@ -1,6 +1,5 @@
 var classFish =
 [
-    [ "Fish", "classFish.html#a6e44b925e372b9a14403dc73ad50cead", null ],
     [ "Fish", "classFish.html#a775cba53fd090f3db6d99d5a21fccd9e", null ],
     [ "get_state", "classFish.html#aa5c5cb34e7f19c6a4ca93858adf3e16a", null ],
     [ "get_traits", "classFish.html#ada02edec02f9bed880911ea21b6d1a60", null ],

@@ -1,5 +1,6 @@
 <map id="Population::init" name="Population::init">
-<area shape="rect" id="node2" href="$classFish.html#adf85bf269f1651352506e371ffd2cecc" title="Initializes the fish, i.e., initializes parameters and sets the initial state (age = 1..." alt="" coords="161,31,233,57"/>
-<area shape="rect" id="node3" href="$namespacefish.html#a0ab1c4842d702a0a40bd04f26793ce12" title="Compute the nonlinear growth increment , as follows . " alt="" coords="299,5,401,32"/>
-<area shape="rect" id="node4" href="$namespacefish.html#a1d06e0358aca1be4446ed148b7ce3d84" title="Compute the new length after growth assuming no allocation to reproduction . " alt="" coords="281,56,419,83"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,31,125,57"/>
+<area shape="rect" id="node2" href="$classFish.html#adf85bf269f1651352506e371ffd2cecc" title="Initializes the fish, i.e., initializes parameters and sets the initial state (age = 1,..." alt="" coords="173,31,249,57"/>
+<area shape="rect" id="node3" href="$namespacefish.html#a0ab1c4842d702a0a40bd04f26793ce12" title="Compute the nonlinear growth increment , as follows." alt="" coords="318,5,431,32"/>
+<area shape="rect" id="node4" href="$namespacefish.html#a1d06e0358aca1be4446ed148b7ce3d84" title="Compute the new length after growth assuming no allocation to reproduction." alt="" coords="297,56,452,83"/>
 </map>

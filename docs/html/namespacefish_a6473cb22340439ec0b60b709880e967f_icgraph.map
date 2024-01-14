@@ -1,5 +1,5 @@
 <map id="fish::natural_mortality" name="fish::natural_mortality">
-<area shape="rect" id="node2" href="$namespacefish.html#a8145736f4c8af31563881d90bf61cbf0" title="Calculate survival probability over a time interval dt (years) &#160;where &#160;is the instantaneous natural_m..." alt="" coords="205,5,367,32"/>
-<area shape="rect" id="node3" href="$fish__glue_8cpp.html#a7b6a9b6d94c71377c935b2cfbffdfabc" title="RCPP_MODULE" alt="" coords="420,56,544,83"/>
-<area shape="rect" id="node4" href="$classFish.html#ad814087dbccdd9e4268a6c87db801536" title="Calculate the instantaneous matural mortality rate. " alt="" coords="200,107,372,133"/>
+<area shape="rect" id="node1" title="Calculate the instantaneous natural mortality." alt="" coords="404,5,571,32"/>
+<area shape="rect" id="node2" href="$fish__glue_8cpp.html#a7b6a9b6d94c71377c935b2cfbffdfabc" title=" " alt="" coords="5,5,125,32"/>
+<area shape="rect" id="node3" href="$namespacefish.html#a8145736f4c8af31563881d90bf61cbf0" title="Calculate survival probability over a time interval dt (years)" alt="" coords="173,31,356,57"/>
 </map>

@@ -1,9 +1,8 @@
 <map id="Tensor::accumulate" name="Tensor::accumulate">
-<area shape="rect" id="node2" href="$classTensor.html#abf7346c2dbd5e6b195cfe9b66e5049e8" title="Tensor::max_dim" alt="" coords="191,35,313,62"/>
-<area shape="rect" id="node3" href="$classSimulator.html#a1b66b7260ff50758884d1f7361a1b988" title="Simulator::stakeholder\l_satisfaction" alt="" coords="361,5,513,47"/>
-<area shape="rect" id="node5" href="$classSimulator.html#aac842e5498b4c9731910ce9a93fa555d" title="Simulator::stakeholder\l_satisfaction_2d" alt="" coords="361,71,513,112"/>
-<area shape="rect" id="node6" href="$classTensor.html#a6c8465a488ce260e6e05f1a3ceb8ab26" title="Tensor::avg_dim" alt="" coords="193,137,311,163"/>
-<area shape="rect" id="node4" href="$fish__glue_8cpp.html#addebb0997b0e49067d8784c9954b7b96" title="RCPP_MODULE" alt="" coords="561,111,685,138"/>
-<area shape="rect" id="node7" href="$classSimulator.html#addbc3da16a6f9c352eefbdc423419bca" title="Simulator::max_avg\l_utils" alt="" coords="368,136,507,177"/>
-<area shape="rect" id="node8" href="$classSimulator.html#a32eeba843e7526dceb75a2c6aebe240e" title="Simulator::max_avg\l_utils_2d" alt="" coords="368,201,507,243"/>
+<area shape="rect" id="node1" title=" " alt="" coords="572,78,720,105"/>
+<area shape="rect" id="node2" href="$classTensor.html#abf7346c2dbd5e6b195cfe9b66e5049e8" title=" " alt="" coords="391,53,524,79"/>
+<area shape="rect" id="node3" href="$classSimulator.html#a1b66b7260ff50758884d1f7361a1b988" title=" " alt="" coords="173,5,343,47"/>
+<area shape="rect" id="node5" href="$classSimulator.html#aac842e5498b4c9731910ce9a93fa555d" title=" " alt="" coords="173,71,343,112"/>
+<area shape="rect" id="node6" href="$classSimulator.html#a27a15b20249b51c6a8ed65560b3b1e91" title=" " alt="" coords="173,136,343,177"/>
+<area shape="rect" id="node4" href="$fish__glue_8cpp.html#addebb0997b0e49067d8784c9954b7b96" title=" " alt="" coords="5,78,125,105"/>
 </map>

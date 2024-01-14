@@ -1,16 +1,16 @@
-pandoc: 2.17.1.1
-pkgdown: 2.0.2
+pandoc: 2.19.2
+pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   compare_hscans: compare_hscans.html
   evolving_unfished_population: evolving_unfished_population.html
   fished_population: fished_population.html
   jss_calcs_h: jss_calcs_h.html
-  test_page: test_page.html
+  jss_calcs_hxL_evol: jss_calcs_hxL_evol.html
   theory_bio: theory_bio.html
   theory_eco: theory_eco.html
   unfished_population: unfished_population.html
-last_built: 2023-02-12T21:35Z
+last_built: 2024-01-14T10:18Z
 urls:
   reference: https://jaideep777.github.io/fisheRy/reference
   article: https://jaideep777.github.io/fisheRy/articles

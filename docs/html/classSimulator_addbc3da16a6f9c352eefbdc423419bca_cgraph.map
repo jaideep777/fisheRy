@@ -1,9 +1,8 @@
 <map id="Simulator::max_avg_utils" name="Simulator::max_avg_utils">
-<area shape="rect" id="node2" href="$classTensor.html#a6c8465a488ce260e6e05f1a3ceb8ab26" title="Tensor::avg_dim" alt="" coords="195,5,314,32"/>
-<area shape="rect" id="node7" href="$classTensor.html#a3986d7a50faef0249a8d2da5b1f67a89" title="Tensor::transform" alt="" coords="192,56,317,83"/>
-<area shape="rect" id="node3" href="$classTensor.html#a447f65c9ada7c9357091fba66ad73d10" title="Tensor::accumulate" alt="" coords="373,5,511,32"/>
-<area shape="rect" id="node4" href="$classTensor.html#a862952dc137707abdccd06cf9cd5855b" title="Tensor::plane" alt="" coords="599,56,700,83"/>
-<area shape="rect" id="node6" href="$classTensor.html#abbfd4d8d3390394254f1d42fcb845bd2" title="Tensor::accumulate_dim" alt="" coords="567,5,732,32"/>
-<area shape="rect" id="node5" href="$classTensor.html#a90a6b28226bcd1be7090fd2f8782d0b1" title="Tensor::index" alt="" coords="780,56,881,83"/>
-<area shape="rect" id="node8" href="$classTensor.html#a1a9aea97717d687b7d501842efb546d4" title="Tensor::transform_dim" alt="" coords="365,107,519,133"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,23,159,65"/>
+<area shape="rect" id="node2" href="$classTensor.html#a6c8465a488ce260e6e05f1a3ceb8ab26" title=" " alt="" coords="211,5,339,32"/>
+<area shape="rect" id="node3" href="$classTensor.html#a3986d7a50faef0249a8d2da5b1f67a89" title=" " alt="" coords="207,56,343,83"/>
+<area shape="rect" id="node4" href="$classTensor.html#a862952dc137707abdccd06cf9cd5855b" title=" " alt="" coords="421,31,529,57"/>
+<area shape="rect" id="node6" href="$classTensor.html#a1a9aea97717d687b7d501842efb546d4" title=" " alt="" coords="391,81,559,108"/>
+<area shape="rect" id="node5" href="$classTensor.html#a90a6b28226bcd1be7090fd2f8782d0b1" title=" " alt="" coords="607,31,715,57"/>
 </map>

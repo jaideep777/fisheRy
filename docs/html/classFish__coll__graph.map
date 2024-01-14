@@ -1,5 +1,12 @@
 <map id="Fish" name="Fish">
-<area shape="rect" id="node2" href="$classFishParams.html" title="FishParams" alt="" coords="728,265,820,291"/>
-<area shape="rect" id="node4" title="STL class. " alt="" coords="181,258,261,285"/>
-<area shape="rect" id="node5" title="STL class. " alt="" coords="5,251,132,292"/>
+<area shape="rect" id="node1" title=" " alt="" coords="968,385,1015,411"/>
+<area shape="rect" id="node2" href="$classFishParams.html" title=" " alt="" coords="798,221,894,247"/>
+<area shape="rect" id="node3" title=" " alt="" coords="397,179,559,220"/>
+<area shape="rect" id="node4" title=" " alt="" coords="193,214,280,241"/>
+<area shape="rect" id="node6" title=" " alt="" coords="397,244,559,285"/>
+<area shape="rect" id="node7" title=" " alt="" coords="397,309,559,351"/>
+<area shape="rect" id="node8" title=" " alt="" coords="397,5,559,47"/>
+<area shape="rect" id="node10" title=" " alt="" coords="587,427,773,454"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,207,144,248"/>
+<area shape="rect" id="node9" title=" " alt="" coords="395,375,561,402"/>
 </map>

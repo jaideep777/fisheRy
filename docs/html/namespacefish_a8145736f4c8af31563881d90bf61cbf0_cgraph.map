@@ -1,3 +1,4 @@
 <map id="fish::survival_probability" name="fish::survival_probability">
-<area shape="rect" id="node2" href="$namespacefish.html#a6473cb22340439ec0b60b709880e967f" title="Calculate the instantaneous natural mortality . " alt="" coords="216,5,363,32"/>
+<area shape="rect" id="node1" title="Calculate survival probability over a time interval dt (years)" alt="" coords="5,5,188,32"/>
+<area shape="rect" id="node2" href="$namespacefish.html#a6473cb22340439ec0b60b709880e967f" title="Calculate the instantaneous natural mortality." alt="" coords="236,5,403,32"/>
 </map>

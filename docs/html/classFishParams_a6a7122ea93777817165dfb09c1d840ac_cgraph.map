@@ -1,7 +1,8 @@
 <map id="FishParams::initFromFile" name="FishParams::initFromFile">
-<area shape="rect" id="node2" href="$classio_1_1Initializer.html#a6c174190ba99677aac35c5c7e92b69b8" title="io::Initializer::parse" alt="" coords="221,5,353,32"/>
-<area shape="rect" id="node3" href="$namespacefish.html#a7f532daff6b69774cc75d40ed18aad31" title="Calculate effective GSI, given the initial and final body lengths. . " alt="" coords="253,56,321,83"/>
-<area shape="rect" id="node4" href="$classio_1_1Initializer.html#a098a8511a950a4449925c8315af36bdb" title="io::Initializer::get" alt="" coords="228,107,347,133"/>
-<area shape="rect" id="node5" href="$classio_1_1Initializer.html#a06fe79d6d19f76180836e03e3ad6b7fb" title="io::Initializer::get\l_value" alt="" coords="401,99,520,141"/>
-<area shape="rect" id="node6" href="$classio_1_1Initializer.html#a310526fc5b0c2c257bee66d6f48fa4ae" title="io::Initializer::get\l_section" alt="" coords="568,99,687,141"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,63,185,90"/>
+<area shape="rect" id="node2" href="$classio_1_1Initializer.html#a098a8511a950a4449925c8315af36bdb" title=" " alt="" coords="241,13,373,39"/>
+<area shape="rect" id="node5" href="$namespacefish.html#a7f532daff6b69774cc75d40ed18aad31" title="Calculate effective GSI, given the initial and final body lengths." alt="" coords="270,63,343,90"/>
+<area shape="rect" id="node6" href="$classio_1_1Initializer.html#a6c174190ba99677aac35c5c7e92b69b8" title=" " alt="" coords="233,114,380,141"/>
+<area shape="rect" id="node3" href="$classio_1_1Initializer.html#a06fe79d6d19f76180836e03e3ad6b7fb" title=" " alt="" coords="428,5,560,47"/>
+<area shape="rect" id="node4" href="$classio_1_1Initializer.html#a310526fc5b0c2c257bee66d6f48fa4ae" title=" " alt="" coords="608,5,740,47"/>
 </map>

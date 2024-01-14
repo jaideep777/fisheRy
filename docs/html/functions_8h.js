@@ -2,6 +2,7 @@ var functions_8h =
 [
     [ "dl_power", "functions_8h.html#a0ab1c4842d702a0a40bd04f26793ce12", null ],
     [ "fecundity", "functions_8h.html#a55881de836369d1af447b740b433e50e", null ],
+    [ "fishing_selectivity", "functions_8h.html#a2bbec07a0ac11c50ef8d89ed5017b4cf", null ],
     [ "gsi", "functions_8h.html#a7f532daff6b69774cc75d40ed18aad31", null ],
     [ "length_adult", "functions_8h.html#adc414165e9acd76993cbaaf5140c5f22", null ],
     [ "length_juvenile", "functions_8h.html#a1d06e0358aca1be4446ed148b7ce3d84", null ],

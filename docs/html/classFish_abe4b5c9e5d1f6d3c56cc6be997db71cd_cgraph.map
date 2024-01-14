@@ -1,6 +1,7 @@
 <map id="Fish::grow" name="Fish::grow">
-<area shape="rect" id="node2" href="$namespacefish.html#a0ab1c4842d702a0a40bd04f26793ce12" title="Compute the nonlinear growth increment , as follows . " alt="" coords="145,5,248,32"/>
-<area shape="rect" id="node3" href="$namespacefish.html#adc414165e9acd76993cbaaf5140c5f22" title="Compute the new length after growth for adults, assuming allocation to reproduction ..." alt="" coords="136,56,257,83"/>
-<area shape="rect" id="node4" href="$namespacefish.html#a1d06e0358aca1be4446ed148b7ce3d84" title="Compute the new length after growth assuming no allocation to reproduction . " alt="" coords="305,81,443,108"/>
-<area shape="rect" id="node5" href="$namespacefish.html#a7f532daff6b69774cc75d40ed18aad31" title="Calculate effective GSI, given the initial and final body lengths. . " alt="" coords="163,157,231,184"/>
+<area shape="rect" id="node1" title="Implement growth, i.e., set new length and effective GSI after 1 year of growth." alt="" coords="5,81,92,108"/>
+<area shape="rect" id="node2" href="$namespacefish.html#a0ab1c4842d702a0a40bd04f26793ce12" title="Compute the nonlinear growth increment , as follows." alt="" coords="151,5,264,32"/>
+<area shape="rect" id="node3" href="$namespacefish.html#a7f532daff6b69774cc75d40ed18aad31" title="Calculate effective GSI, given the initial and final body lengths." alt="" coords="363,81,437,108"/>
+<area shape="rect" id="node4" href="$namespacefish.html#adc414165e9acd76993cbaaf5140c5f22" title="Compute the new length after growth for adults, assuming allocation to reproduction." alt="" coords="140,107,275,133"/>
+<area shape="rect" id="node5" href="$namespacefish.html#a1d06e0358aca1be4446ed148b7ce3d84" title="Compute the new length after growth assuming no allocation to reproduction." alt="" coords="323,144,477,171"/>
 </map>

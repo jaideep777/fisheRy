@@ -1,6 +1,10 @@
 <map id="fish::gsi" name="fish::gsi">
-<area shape="rect" id="node2" href="$classFish.html#abe4b5c9e5d1f6d3c56cc6be997db71cd" title="Implement growth, i.e., set new length and effective GSI after 1 year of growth. " alt="" coords="164,5,247,32"/>
-<area shape="rect" id="node3" href="$fish__glue_8cpp.html#a7b6a9b6d94c71377c935b2cfbffdfabc" title="RCPP_MODULE" alt="" coords="337,81,461,108"/>
-<area shape="rect" id="node4" href="$classFishParams.html#a6a7122ea93777817165dfb09c1d840ac" title="FishParams::initFromFile" alt="" coords="121,107,289,133"/>
-<area shape="rect" id="node5" href="$classFishParams.html#aa0812994bb72e90dfa8c4fadc3039f57" title="FishParams::print" alt="" coords="143,157,268,184"/>
+<area shape="rect" id="node1" title="Calculate effective GSI, given the initial and final body lengths." alt="" coords="584,164,657,191"/>
+<area shape="rect" id="node2" href="$namespacefish.html#a55881de836369d1af447b740b433e50e" title="Calculate the number of eggs produced per year by a fish of given weight,." alt="" coords="411,37,526,64"/>
+<area shape="rect" id="node4" href="$fish__glue_8cpp.html#a7b6a9b6d94c71377c935b2cfbffdfabc" title=" " alt="" coords="5,139,125,165"/>
+<area shape="rect" id="node5" href="$classFish.html#abe4b5c9e5d1f6d3c56cc6be997db71cd" title="Implement growth, i.e., set new length and effective GSI after 1 year of growth." alt="" coords="220,189,307,216"/>
+<area shape="rect" id="node6" href="$classFishParams.html#a6a7122ea93777817165dfb09c1d840ac" title=" " alt="" coords="173,139,353,165"/>
+<area shape="rect" id="node7" href="$namespacefish.html#adc414165e9acd76993cbaaf5140c5f22" title="Compute the new length after growth for adults, assuming allocation to reproduction." alt="" coords="401,240,536,267"/>
+<area shape="rect" id="node8" href="$classFishParams.html#aa0812994bb72e90dfa8c4fadc3039f57" title=" " alt="" coords="401,291,536,317"/>
+<area shape="rect" id="node3" href="$classFish.html#a9550ba7371eef86c50349864bcf05b4a" title="Calculate the number of surviving recruits produced based on egg production and offspring survival un..." alt="" coords="183,37,343,64"/>
 </map>

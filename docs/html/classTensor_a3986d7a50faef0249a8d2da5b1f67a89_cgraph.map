@@ -1,5 +1,6 @@
 <map id="Tensor::transform" name="Tensor::transform">
-<area shape="rect" id="node2" href="$classTensor.html#a862952dc137707abdccd06cf9cd5855b" title="Tensor::plane" alt="" coords="205,5,306,32"/>
-<area shape="rect" id="node4" href="$classTensor.html#a1a9aea97717d687b7d501842efb546d4" title="Tensor::transform_dim" alt="" coords="179,56,332,83"/>
-<area shape="rect" id="node3" href="$classTensor.html#a90a6b28226bcd1be7090fd2f8782d0b1" title="Tensor::index" alt="" coords="380,5,481,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,31,141,57"/>
+<area shape="rect" id="node2" href="$classTensor.html#a862952dc137707abdccd06cf9cd5855b" title=" " alt="" coords="219,5,327,32"/>
+<area shape="rect" id="node4" href="$classTensor.html#a1a9aea97717d687b7d501842efb546d4" title=" " alt="" coords="189,56,357,83"/>
+<area shape="rect" id="node3" href="$classTensor.html#a90a6b28226bcd1be7090fd2f8782d0b1" title=" " alt="" coords="405,5,513,32"/>
 </map>

@@ -1,10 +1,13 @@
 var classPopulationParams =
 [
+    [ "initFromFile", "classPopulationParams.html#a32de4f0d5a47821e5986225f7551e082", null ],
+    [ "print", "classPopulationParams.html#a0c1aba939d8f42c06b873c3b853dcf19", null ],
     [ "a_thresh", "classPopulationParams.html#a46be5a275459f9dfbf66fbe179dc8cc0", null ],
     [ "b", "classPopulationParams.html#af94b14d65917d94171ccdfe63d4c59bd", null ],
     [ "dmax", "classPopulationParams.html#a00bf9f4b14ef775713d677bd42196f48", null ],
     [ "dsea", "classPopulationParams.html#a4abc2271dbd6feba514041603afa3f74", null ],
     [ "dshr", "classPopulationParams.html#a8b25fb3e9d34b4444e4497c8fc50e067", null ],
+    [ "f_harvest_spg", "classPopulationParams.html#ab177aedcb00ca6b00448dcb12c56acf2", null ],
     [ "fixed_costs_sea", "classPopulationParams.html#af2f8a6129b953195214d7246afec9439", null ],
     [ "fixed_costs_shore", "classPopulationParams.html#a5a7729850cb0fddac19ee98e5d7dd1b7", null ],
     [ "h", "classPopulationParams.html#ab76e7183a819c22986799b4e1ba4c4cb", null ],

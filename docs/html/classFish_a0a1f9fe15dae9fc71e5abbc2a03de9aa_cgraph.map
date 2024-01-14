@@ -1,3 +1,4 @@
 <map id="Fish::set_length" name="Fish::set_length">
-<area shape="rect" id="node2" href="$namespacefish.html#a8eda92863da99cec25dc0a2f09571998" title="Compute weight of fish (grams) given length (cm), . " alt="" coords="168,5,285,32"/>
+<area shape="rect" id="node1" title="Set fish length and other variables that scale directly with length." alt="" coords="5,5,128,32"/>
+<area shape="rect" id="node2" href="$namespacefish.html#a8eda92863da99cec25dc0a2f09571998" title="Compute weight of fish (grams) given length (cm),." alt="" coords="176,5,305,32"/>
 </map>

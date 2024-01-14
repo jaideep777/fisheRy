@@ -1,5 +1,11 @@
 <map id="io::Initializer::parse" name="io::Initializer::parse">
-<area shape="rect" id="node2" href="$classio_1_1Initializer.html#ae0f4fbd39e7e1641612b39fb775d2400" title="io::Initializer::parse" alt="" coords="203,5,335,32"/>
-<area shape="rect" id="node3" href="$classFishParams.html#a6a7122ea93777817165dfb09c1d840ac" title="FishParams::initFromFile" alt="" coords="185,56,353,83"/>
-<area shape="rect" id="node4" href="$fish__glue_8cpp.html#a7b6a9b6d94c71377c935b2cfbffdfabc" title="RCPP_MODULE" alt="" coords="401,56,525,83"/>
+<area shape="rect" id="node1" title=" " alt="" coords="933,56,1080,83"/>
+<area shape="rect" id="node2" href="$classFishParams.html#a6a7122ea93777817165dfb09c1d840ac" title=" " alt="" coords="683,5,863,32"/>
+<area shape="rect" id="node4" href="$classPopulationParams.html#a32de4f0d5a47821e5986225f7551e082" title=" " alt="" coords="661,56,885,83"/>
+<area shape="rect" id="node9" href="$classio_1_1Initializer.html#ae0f4fbd39e7e1641612b39fb775d2400" title=" " alt="" coords="700,107,847,133"/>
+<area shape="rect" id="node3" href="$fish__glue_8cpp.html#a7b6a9b6d94c71377c935b2cfbffdfabc" title=" " alt="" coords="465,5,585,32"/>
+<area shape="rect" id="node5" href="$fish__glue_8cpp.html#ab96ae82277aa9004dc603b77512c7265" title=" " alt="" coords="221,56,341,83"/>
+<area shape="rect" id="node6" href="$classPopulation.html#aeb1d470183d21899c25151c6fe15a4dc" title=" " alt="" coords="436,107,613,133"/>
+<area shape="rect" id="node7" href="$classSimulator.html#ad02f472064f23f03ae474cb4904d2c56" title=" " alt="" coords="173,107,388,149"/>
+<area shape="rect" id="node8" href="$fish__glue_8cpp.html#addebb0997b0e49067d8784c9954b7b96" title=" " alt="" coords="5,115,125,141"/>
 </map>

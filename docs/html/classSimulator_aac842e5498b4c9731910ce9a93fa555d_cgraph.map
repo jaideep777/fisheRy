@@ -1,12 +1,12 @@
 <map id="Simulator::stakeholder_satisfaction_2d" name="Simulator::stakeholder_satisfaction_2d">
-<area shape="rect" id="node2" href="$classTensor.html#a6c8465a488ce260e6e05f1a3ceb8ab26" title="Tensor::avg_dim" alt="" coords="217,5,336,32"/>
-<area shape="rect" id="node3" href="$classTensor.html#a447f65c9ada7c9357091fba66ad73d10" title="Tensor::accumulate" alt="" coords="404,81,541,108"/>
-<area shape="rect" id="node7" href="$classTensor.html#a3986d7a50faef0249a8d2da5b1f67a89" title="Tensor::transform" alt="" coords="214,259,339,285"/>
-<area shape="rect" id="node9" href="$classTensor.html#ae4622cf6280102eb5103cfe4c88c1ad8" title="Tensor::repeat_inner" alt="" coords="206,157,347,184"/>
-<area shape="rect" id="node10" href="$classTensor.html#aedee003837348391c5f8d0bc788bf20f" title="Tensor::repeat_outer" alt="" coords="205,208,348,235"/>
-<area shape="rect" id="node11" href="$classTensor.html#abf7346c2dbd5e6b195cfe9b66e5049e8" title="Tensor::max_dim" alt="" coords="215,107,338,133"/>
-<area shape="rect" id="node4" href="$classTensor.html#a862952dc137707abdccd06cf9cd5855b" title="Tensor::plane" alt="" coords="629,195,731,221"/>
-<area shape="rect" id="node6" href="$classTensor.html#abbfd4d8d3390394254f1d42fcb845bd2" title="Tensor::accumulate_dim" alt="" coords="597,81,763,108"/>
-<area shape="rect" id="node5" href="$classTensor.html#a90a6b28226bcd1be7090fd2f8782d0b1" title="Tensor::index" alt="" coords="811,195,912,221"/>
-<area shape="rect" id="node8" href="$classTensor.html#a1a9aea97717d687b7d501842efb546d4" title="Tensor::transform_dim" alt="" coords="396,208,549,235"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,100,175,141"/>
+<area shape="rect" id="node2" href="$classTensor.html#a447f65c9ada7c9357091fba66ad73d10" title=" " alt="" coords="435,31,583,58"/>
+<area shape="rect" id="node3" href="$classTensor.html#a6c8465a488ce260e6e05f1a3ceb8ab26" title=" " alt="" coords="236,31,364,58"/>
+<area shape="rect" id="node4" href="$classTensor.html#abf7346c2dbd5e6b195cfe9b66e5049e8" title=" " alt="" coords="233,82,367,109"/>
+<area shape="rect" id="node5" href="$classTensor.html#ae4622cf6280102eb5103cfe4c88c1ad8" title=" " alt="" coords="223,133,377,159"/>
+<area shape="rect" id="node6" href="$classTensor.html#aedee003837348391c5f8d0bc788bf20f" title=" " alt="" coords="223,183,377,210"/>
+<area shape="rect" id="node7" href="$classTensor.html#a3986d7a50faef0249a8d2da5b1f67a89" title=" " alt="" coords="232,234,368,261"/>
+<area shape="rect" id="node8" href="$classTensor.html#a862952dc137707abdccd06cf9cd5855b" title=" " alt="" coords="455,209,563,235"/>
+<area shape="rect" id="node10" href="$classTensor.html#a1a9aea97717d687b7d501842efb546d4" title=" " alt="" coords="425,259,593,286"/>
+<area shape="rect" id="node9" href="$classTensor.html#a90a6b28226bcd1be7090fd2f8782d0b1" title=" " alt="" coords="641,209,749,235"/>
 </map>

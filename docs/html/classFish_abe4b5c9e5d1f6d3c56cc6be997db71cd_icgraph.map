@@ -1,3 +1,4 @@
 <map id="Fish::grow" name="Fish::grow">
-<area shape="rect" id="node2" href="$fish__glue_8cpp.html#a7b6a9b6d94c71377c935b2cfbffdfabc" title="RCPP_MODULE" alt="" coords="136,5,260,32"/>
+<area shape="rect" id="node1" title="Implement growth, i.e., set new length and effective GSI after 1 year of growth." alt="" coords="173,5,260,32"/>
+<area shape="rect" id="node2" href="$fish__glue_8cpp.html#a7b6a9b6d94c71377c935b2cfbffdfabc" title=" " alt="" coords="5,5,125,32"/>
 </map>

@@ -1,11 +1,12 @@
 <map id="Population::set_harvestProp" name="Population::set_harvestProp">
-<area shape="rect" id="node2" href="$fish__glue_8cpp.html#ab96ae82277aa9004dc603b77512c7265" title="RCPP_MODULE" alt="" coords="531,5,655,32"/>
-<area shape="rect" id="node3" href="$classPopulation.html#aa7eba257f23cbc12aa3673ce012fb2cb" title="Population::noFishingEquilibriate" alt="" coords="240,64,451,91"/>
-<area shape="rect" id="node6" href="$classSimulator.html#a7540919b97662be7deacba9194c0ed60" title="Simulator::simulate\l_multi" alt="" coords="278,122,413,163"/>
-<area shape="rect" id="node8" href="$classSimulator.html#ab21d1c6b0af00931f9a8fa5e0b6d417f" title="Simulator::simulate\l_multi_2d" alt="" coords="278,187,413,229"/>
-<area shape="rect" id="node10" href="$classSimulator.html#aa6e6cfd73fd8d3200e7f515b473e88f2" title="Simulator::simulate_r" alt="" coords="273,253,418,280"/>
-<area shape="rect" id="node4" href="$classSimulator.html#a3dfce52c0bb26ec7ff2632b1eca50240" title="Simulator::equilibriateNatural\lPopulation" alt="" coords="499,57,688,98"/>
-<area shape="rect" id="node5" href="$fish__glue_8cpp.html#addebb0997b0e49067d8784c9954b7b96" title="RCPP_MODULE" alt="" coords="736,163,860,189"/>
-<area shape="rect" id="node7" href="$classSimulator.html#a1a5454ee4736819d709398b225d7876d" title="Simulator::simulate\l_multi_r" alt="" coords="526,122,661,163"/>
-<area shape="rect" id="node9" href="$classSimulator.html#af1b0a9562ecf0ad8f98d61576efba28b" title="Simulator::simulate\l_multi_2d_r" alt="" coords="526,187,661,229"/>
+<area shape="rect" id="node1" title=" " alt="" coords="719,130,923,157"/>
+<area shape="rect" id="node2" href="$classPopulation.html#aa7eba257f23cbc12aa3673ce012fb2cb" title=" " alt="" coords="436,21,671,47"/>
+<area shape="rect" id="node5" href="$fish__glue_8cpp.html#ab96ae82277aa9004dc603b77512c7265" title=" " alt="" coords="221,71,341,98"/>
+<area shape="rect" id="node6" href="$classSimulator.html#a7540919b97662be7deacba9194c0ed60" title=" " alt="" coords="478,123,629,164"/>
+<area shape="rect" id="node8" href="$classSimulator.html#ab21d1c6b0af00931f9a8fa5e0b6d417f" title=" " alt="" coords="478,188,629,229"/>
+<area shape="rect" id="node10" href="$classSimulator.html#aa6e6cfd73fd8d3200e7f515b473e88f2" title=" " alt="" coords="472,254,635,281"/>
+<area shape="rect" id="node3" href="$classSimulator.html#ad02f472064f23f03ae474cb4904d2c56" title=" " alt="" coords="173,5,388,47"/>
+<area shape="rect" id="node4" href="$fish__glue_8cpp.html#addebb0997b0e49067d8784c9954b7b96" title=" " alt="" coords="5,163,125,190"/>
+<area shape="rect" id="node7" href="$classSimulator.html#a1a5454ee4736819d709398b225d7876d" title=" " alt="" coords="205,123,356,164"/>
+<area shape="rect" id="node9" href="$classSimulator.html#af1b0a9562ecf0ad8f98d61576efba28b" title=" " alt="" coords="205,188,356,229"/>
 </map>

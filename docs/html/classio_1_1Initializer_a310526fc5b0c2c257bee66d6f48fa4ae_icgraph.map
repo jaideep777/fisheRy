@@ -1,7 +1,8 @@
 <map id="io::Initializer::get_section" name="io::Initializer::get_section">
-<area shape="rect" id="node2" href="$classio_1_1Initializer.html#a06fe79d6d19f76180836e03e3ad6b7fb" title="io::Initializer::get\l_value" alt="" coords="172,27,291,69"/>
-<area shape="rect" id="node3" href="$classio_1_1Initializer.html#a098a8511a950a4449925c8315af36bdb" title="io::Initializer::get" alt="" coords="339,5,457,32"/>
-<area shape="rect" id="node6" href="$classio_1_1Initializer.html#a92f49c1ad4e16a85f3f0f12201cb9707" title="io::Initializer::get\l_vector" alt="" coords="339,57,457,98"/>
-<area shape="rect" id="node4" href="$classFishParams.html#a6a7122ea93777817165dfb09c1d840ac" title="FishParams::initFromFile" alt="" coords="505,5,673,32"/>
-<area shape="rect" id="node5" href="$fish__glue_8cpp.html#a7b6a9b6d94c71377c935b2cfbffdfabc" title="RCPP_MODULE" alt="" coords="721,5,845,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="761,27,893,69"/>
+<area shape="rect" id="node2" href="$classio_1_1Initializer.html#a06fe79d6d19f76180836e03e3ad6b7fb" title=" " alt="" coords="581,27,713,69"/>
+<area shape="rect" id="node3" href="$classio_1_1Initializer.html#a098a8511a950a4449925c8315af36bdb" title=" " alt="" coords="401,5,533,32"/>
+<area shape="rect" id="node6" href="$classio_1_1Initializer.html#a92f49c1ad4e16a85f3f0f12201cb9707" title=" " alt="" coords="401,57,533,98"/>
+<area shape="rect" id="node4" href="$classFishParams.html#a6a7122ea93777817165dfb09c1d840ac" title=" " alt="" coords="173,5,353,32"/>
+<area shape="rect" id="node5" href="$fish__glue_8cpp.html#a7b6a9b6d94c71377c935b2cfbffdfabc" title=" " alt="" coords="5,5,125,32"/>
 </map>

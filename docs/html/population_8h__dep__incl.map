@@ -1,8 +1,9 @@
 <map id="inst/include/population.h" name="inst/include/population.h">
-<area shape="rect" id="node2" href="$fish__glue_8cpp.html" title="src/fish_glue.cpp" alt="" coords="5,155,127,181"/>
-<area shape="rect" id="node3" href="$population_8cpp.html" title="src/population.cpp" alt="" coords="42,80,170,107"/>
-<area shape="rect" id="node4" href="$fisheRy_8h.html" title="inst/include/fisheRy.h" alt="" coords="375,80,523,107"/>
-<area shape="rect" id="node6" href="$simulator_8h.html" title="inst/include/simulator.h" alt="" coords="195,80,351,107"/>
-<area shape="rect" id="node5" href="$RcppExports_8cpp.html" title="src/RcppExports.cpp" alt="" coords="376,155,521,181"/>
-<area shape="rect" id="node7" href="$simulator_8cpp.html" title="src/simulator.cpp" alt="" coords="211,155,334,181"/>
+<area shape="rect" id="node1" title=" " alt="" coords="111,5,294,32"/>
+<area shape="rect" id="node2" href="$fish__glue_8cpp.html" title=" " alt="" coords="5,155,136,181"/>
+<area shape="rect" id="node3" href="$population_8cpp.html" title=" " alt="" coords="41,80,183,107"/>
+<area shape="rect" id="node4" href="$fisheRy_8h.html" title=" " alt="" coords="407,80,567,107"/>
+<area shape="rect" id="node6" href="$simulator_8h.html" title=" " alt="" coords="207,80,382,107"/>
+<area shape="rect" id="node5" href="$RcppExports_8cpp.html" title=" " alt="" coords="410,155,563,181"/>
+<area shape="rect" id="node7" href="$simulator_8cpp.html" title=" " alt="" coords="227,155,362,181"/>
 </map>

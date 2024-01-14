@@ -1,0 +1,4 @@
+<map id="fish::fecundity" name="fish::fecundity">
+<area shape="rect" id="node1" title="Calculate the number of eggs produced per year by a fish of given weight,." alt="" coords="5,5,120,32"/>
+<area shape="rect" id="node2" href="$namespacefish.html#a7f532daff6b69774cc75d40ed18aad31" title="Calculate effective GSI, given the initial and final body lengths." alt="" coords="168,5,241,32"/>
+</map>

@@ -1,7 +1,8 @@
 <map id="Population::set_minSizeLimit" name="Population::set_minSizeLimit">
-<area shape="rect" id="node2" href="$fish__glue_8cpp.html#ab96ae82277aa9004dc603b77512c7265" title="RCPP_MODULE" alt="" coords="249,5,373,32"/>
-<area shape="rect" id="node3" href="$classSimulator.html#ab21d1c6b0af00931f9a8fa5e0b6d417f" title="Simulator::simulate\l_multi_2d" alt="" coords="244,57,379,98"/>
-<area shape="rect" id="node6" href="$classSimulator.html#aa6e6cfd73fd8d3200e7f515b473e88f2" title="Simulator::simulate_r" alt="" coords="427,123,572,149"/>
-<area shape="rect" id="node4" href="$classSimulator.html#af1b0a9562ecf0ad8f98d61576efba28b" title="Simulator::simulate\l_multi_2d_r" alt="" coords="432,57,567,98"/>
-<area shape="rect" id="node5" href="$fish__glue_8cpp.html#addebb0997b0e49067d8784c9954b7b96" title="RCPP_MODULE" alt="" coords="620,93,744,120"/>
+<area shape="rect" id="node1" title=" " alt="" coords="583,64,793,91"/>
+<area shape="rect" id="node2" href="$fish__glue_8cpp.html#ab96ae82277aa9004dc603b77512c7265" title=" " alt="" coords="399,5,519,32"/>
+<area shape="rect" id="node3" href="$classSimulator.html#ab21d1c6b0af00931f9a8fa5e0b6d417f" title=" " alt="" coords="384,57,535,98"/>
+<area shape="rect" id="node6" href="$classSimulator.html#aa6e6cfd73fd8d3200e7f515b473e88f2" title=" " alt="" coords="173,123,336,149"/>
+<area shape="rect" id="node4" href="$classSimulator.html#af1b0a9562ecf0ad8f98d61576efba28b" title=" " alt="" coords="179,57,330,98"/>
+<area shape="rect" id="node5" href="$fish__glue_8cpp.html#addebb0997b0e49067d8784c9954b7b96" title=" " alt="" coords="5,93,125,120"/>
 </map>

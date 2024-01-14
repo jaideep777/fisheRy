@@ -1,3 +1,5 @@
 <map id="fish::length_adult" name="fish::length_adult">
-<area shape="rect" id="node2" href="$namespacefish.html#a1d06e0358aca1be4446ed148b7ce3d84" title="Compute the new length after growth assuming no allocation to reproduction . " alt="" coords="175,5,312,32"/>
+<area shape="rect" id="node1" title="Compute the new length after growth for adults, assuming allocation to reproduction." alt="" coords="5,31,140,57"/>
+<area shape="rect" id="node2" href="$namespacefish.html#a7f532daff6b69774cc75d40ed18aad31" title="Calculate effective GSI, given the initial and final body lengths." alt="" coords="229,5,302,32"/>
+<area shape="rect" id="node3" href="$namespacefish.html#a1d06e0358aca1be4446ed148b7ce3d84" title="Compute the new length after growth assuming no allocation to reproduction." alt="" coords="188,56,343,83"/>
 </map>
