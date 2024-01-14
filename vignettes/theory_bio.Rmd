@@ -50,7 +50,7 @@ $$
 \Delta l_p = \gamma_{1}\alpha_{1}\alpha_{2}^{- \gamma_{1}} e^{(\beta_1\Delta B +\beta_2 \Delta T)},
 $$
 where $\alpha_{1}$ is the mean weight-specific energy-acquisition rate, 
-$\alpha_{2}$ is the allometric coefficient of the length-weight relationship, and $\Delta B = B - \bar B$ and $\Delta T = T - \bar T$ are the anomalies of total stock biomass (TSB) and temperature, respectively. Setting $\beta_1 = \beta_2 = 0$ removes the growth dependence on temperature and TSB.
+$\alpha_{2}$ is the allometric coefficient of the length-weight relationship, and $\Delta B = B - \bar B$ and $\Delta T = T - \bar T$ are the anomalies of total stock biomass (TSB) and temperature, respectively. Setting $\beta_1 = \beta_2 = 0$ removes the temperature and density effects on growth.
 
 In the absence of reproductive investment, i.e., for juvenile fish, the new length is therefore 
 
@@ -284,26 +284,62 @@ dat_full %>% mutate(ssb_class = ave(ssb, cut(ssb, breaks = 30))) %>% group_by(ag
 
 ## Mortality
 
-The juvenile and adult instantaneous natural
-mortality rate depends on length $l_a$ and temperature $T$, and is given by the following equation:
+We define the mortality rate of juvenile fish at reference temperature $T_\text{ref}$ as
 
 $$
-M(a,l_a) = \left( \mu_0 + \alpha_{3}\left( \frac{l_{a}}{l_{\text{ref}}} \right)^{\gamma_{3}} \right)\left(\frac{T}{T_\text{ref}}\right)^{c_T},
+M_\text{ref} = \mu_0 + \alpha_{3}\left( \frac{l_{a}}{l_{\text{ref}}} \right)^{\gamma_{3}} + \alpha_{4}\left(\alpha_1^2-\alpha_{1,\text{ref}}^2\right) +  \alpha_{5}\left(g_a-g_{a,\text{ref}}\right)
 $$
 
-where symbols have the following meanings
+where parameters have the following meanings
 
 Parameter                   Description
 --------------------------- --------------------------------------------
 $\mu_0$                     Length independent intrinsic mortality rate
-$\gamma_{3}$                allometric exponent of relationship between instantaneous natural mortality rate and body length
-$\alpha_{3}$                instantaneous natural mortality rate at reference length
-$l_{\text{ref}}$            reference length for natural mortality
-$T_{\text{ref}}$            reference temperature for natural mortality
-$c_T$                       exponent of the temperature dependence of mortality
+$\gamma_{3}$                Allometric exponent of relationship between instantaneous natural mortality rate and body length
+$\alpha_{3}$                Instantaneous natural mortality rate at reference length
+$l_{\text{ref}}$            Reference length for natural mortality
+$\alpha_{4}$                Coefficient of growth-dependent mortality rate
+$\alpha_{1,\text{ref}}$     Reference length of growth-dependent mortality
+$\alpha_{5}$                Coefficient of GSI-dependent mortality rate
+$g_{a,\text{ref}}$          Reference GSI for GSI-dependent mortality
+
+The term $\alpha_4 \alpha_1^2$ represents the additional mortality associated with greater energy acquisition rates (encoding a growth-mortality tradeoff), resulting, for e.g., from greater predation during foraging. Likewise, the term $\alpha_5 g_a$ represents additional mortality related to overinvesting in reproduction, encoding a reproduction-mortality tradeoff. Also, note that these terms essentially guide evolution of life-history strategies, and disappear if traits are fixed at their reference values. 
+
+Then, the juvenile and adult instantaneous natural
+mortality rate is given by the following equation:
+
+$$
+M(a,l_a) = \left\{ 
+\begin{matrix}          
+  M_\text{ref}\left(\frac{T}{T_\text{ref}}\right)^{c_T}, & \mathrm{\text{if juvenile}}, \\   
+  \left(\mu_s\left(\frac{l_0}{l_a}\right) + M_\text{ref} \right)\left(\frac{T}{T_\text{ref}}\right)^{c_T}, &  \mathrm{\text{if mature}} \\
+\end{matrix} 
+\right.\ 
+$$
+
+where the coefficient $\mu_s$ relates to the additional mortality experienced by mature fish in the spawing grounds, and symbols have the following meanings
+
+<!-- QUESTION: Shouldn't we weigh the spawing and feeding grounds terms by the relative time spent in feeding and spawing grounds? -->
+
+Parameter                   Description
+--------------------------- --------------------------------------------
+$T_{\text{ref}}$            Reference temperature for natural mortality
+$c_T$                       Exponent of the temperature dependence of mortality
+$\mu_s$                     Mortality rate experienced by mature individuals in the spawning grounds
+$l_0$                       Body length at age 0
+
 
 ```{r fig.height=5, fig.width=6}
-dat_full %>% ggplot(aes(y=mort, x=length, col=temp))+geom_point(alpha=0.5)+geom_jitter()+labs(x="Length", y=expression("Inst. natural mortality rate (yr"^"-1"*")"), col="Temp")+theme_classic(base_size = 20)+scale_color_viridis_c()+scale_y_log10()+scale_x_log10()
+dat_full %>% 
+  ggplot(aes(y=mort, x=length, col=temp))+
+  geom_point(alpha=0.5)+
+  geom_jitter()+
+  labs(x="Length", y=expression("Inst. natural mortality rate (yr"^"-1"*")"), col="Temp", )+
+  theme_classic(base_size = 20)+
+  scale_color_viridis_c()+
+  scale_y_log10()+
+  scale_x_log10()+
+  facet_grid(cols=vars(isMature), labeller = as_labeller(c(`0`="Immature", `1`="Mature")))
 ```
 
 Instantaneous fishing mortality rate depends on the harvest proportion $h$ and fishing selectivity $\sigma$, and acts on top of natural mortality. Thus, for a given harvest proportion $h$ and minimum size limit $L_{50}$, fishing mortality rate is given by 

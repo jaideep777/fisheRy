@@ -45,6 +45,9 @@ re: clean all
 
 superclean: clean testclean
 
+website:
+	# R -e "Sys.setenv(RSTUDIO_PANDOC='/usr/lib/rstudio/resources/app/bin/quarto/bin/tools'); print(Sys.getenv('RSTUDIO_PANDOC')); pkgdown::clean_site(); pkgdown::init_site(); pkgdown::build_home(); pkgdown::build_articles(); pkgdown::build_tutorials(); pkgdown::build_news()"
+	doxygen	doxygen/Doxyfile
 
 ## TESTING SUITE ##
 

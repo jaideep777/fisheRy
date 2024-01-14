@@ -1,9 +1,8 @@
 ---
 title: 'Fisheries model theory: socioeconomic model'
 author: "Jaideep Joshi"
-date: "28 March 2022"
+date: "13 Jan 2024"
 output:
-  word_document: default
   html_document: default
 editor_options:
   chunk_output_type: inline
@@ -90,6 +89,37 @@ The realized fishing mortality corresponding to this effort can then be calculat
 
 $$
 F_\text{real} = \text{root}( E(F) = E_\text{real}).
+$$
+
+### Spawing and feeding grounds fisheries
+
+We assume that a fraction $f_s$ of the total harvest comes from spawning grounds. Furthermore, if $h_s$ is the harvest proportion in the spawning grounds, then
+
+$$
+f_s = \frac{h_s S}{h B}
+$$
+
+where $S$ is the fishable spawning stock biomass (biomass that can be harvested from the spawning grounds), whereas $B$ is the total fishable biomass. Thus,
+
+$$
+h_s = \frac{f_s h B}{S}
+$$
+If the harvest proportion in the feeding grounds is $h_f$, then the total harvest from feeding grounds is 
+
+$$
+h_f B = h B - h_s S,
+$$
+
+giving 
+
+$$
+h_f = h- h_s S/B
+$$
+
+We use $h_s$ and $h_f$ to compute $N_\text{rel,f}$ and $N_\text{rel,s}$ in the feeding and spawning grounds respectively, and calculate the total required effort as 
+
+$$
+E = E_f + E_s
 $$
 
 ## Yield

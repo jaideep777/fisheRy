@@ -155,7 +155,8 @@ class Population{
 
 	double selectivity(double len);
 	double fishableBiomass();
-
+	double fishableSpawningBiomass();
+	
 	//double calcRealizedFishingMortality();
 	double effort(double Nr, double F, double temp);
 

@@ -1,7 +1,7 @@
 ---
 title: "Simulating a fish population without fishing"
 author: "Jaideep Joshi"
-date: "28 March 2022"
+date: "13 Jan 2024"
 output: html_document
 editor_options:
   chunk_output_type: inline
@@ -49,6 +49,7 @@ The constructor for the population requires a Fish object as an argument. This f
 
 ```{r}
 pop = new(Population, fish)  
+pop$readParams(params_file, F)
 ```
 
 ### Setting population parameters
@@ -132,6 +133,7 @@ fish = new(Fish, params_file)
 fish$par$s0 = 0.059
 
 pop = new(Population, fish)  
+pop$readParams(params_file, F)
 pop$par$n = 1e6  # Each superfish contains so many fish
 pop$init(1000, 1.93e3, 5.61)  # initialize the population with 1000 agents (superfish)
 

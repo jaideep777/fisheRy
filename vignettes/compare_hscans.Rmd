@@ -19,10 +19,10 @@ source("../tests/ref/simulator.7.R")
 ```
 
 ```{r}
-re_simulate = T
+re_simulate = F
 
 # if one of the files doesnt exist, re-run the simulations
-re_simulate = re_simulate | !file.exists("res_ibm_scan_T.Rdata")
+re_simulate = re_simulate | !file.exists("outputs/res_ibm_scan_T.Rdata")
 ```
 
 We can use the fishery simulator to simulate multiple populations (i.e., populations with different control parameters) at once. Suppose we want to look at fishery properties as a function of the harvest proportion. 
@@ -42,7 +42,7 @@ fish = new(Fish, params_file)
 # Create a simulator
 sim = new(Simulator, fish)
 
-sim$equilibriateNaturalPopulation(1.93e3, 5.61, 2e6)
+sim$equilibriateNaturalPopulation(params_file, 1.93e3, 5.61, 2e6)
 ```
 
 
@@ -52,6 +52,7 @@ Then we create a population that will be reused by the simulator.
 
 ```{r}
 pop = new(Population, fish)
+pop$readParams(params_file, F)
 pop$set_superFishSize(5e6)
 pop$verbose = F
 ```
@@ -76,9 +77,9 @@ Tvec = seq(4, 8, length.out = 20)
 
 if(re_simulate){
   res_ibm_full = sim$simulate_multi_2d(pop, Tvec, c(45), c(0.44), nsteps, 1.93e3, T)
-  save(res_ibm_full, file="res_ibm_scan_T.Rdata")
+  save(res_ibm_full, file="outputs/res_ibm_scan_T.Rdata")
 } else{
-  load("res_ibm_scan_T.Rdata")
+  load("outputs/res_ibm_scan_T.Rdata")
 }
 
 lf = 45
@@ -94,7 +95,7 @@ for (i in 1:length(Tvec)){
 plot_scan(dat_ibm, xname = expression("Temperature ("^o*"C)"), xvec = Tvec)
 ```
 
-### Effect of harvest proportion (new model)
+### Effect of harvest proportion (bioenergetic model)
 
 
 Generate reference 
@@ -112,9 +113,10 @@ for (ih in 1:length(hvec)){
 ```{r fig.height=9}
 fish = new(Fish, "../params/cod_params.ini")
 sim = new(Simulator, fish)
-sim$equilibriateNaturalPopulation(1.93e3, 5.61, 2e6)
+sim$equilibriateNaturalPopulation(params_file, 1.93e3, 5.61, 2e6)
 
 pop = new(Population, fish)
+pop$readParams(params_file, F)
 # pop$par$dsea = 0.02
 pop$set_superFishSize(5e6)
 pop$verbose = F
@@ -126,9 +128,9 @@ Tvec = seq(4, 8, length.out = 20)
 
 if(re_simulate){
   res_ibm_full = sim$simulate_multi_2d(pop, c(5.61), c(45), hvec, nsteps, 1.93e3, T)
-  save(res_ibm_full, file="res_ibm_scan_h.Rdata")
+  save(res_ibm_full, file="outputs/res_ibm_scan_h.Rdata")
 } else { 
-  load("res_ibm_scan_h.Rdata")
+  load("outputs/res_ibm_scan_h.Rdata")
 }
 
 lf = 45
@@ -153,9 +155,11 @@ fish = new(Fish, "../params/cod_params_dankel22.ini")
 
 sim = new(Simulator, fish)
 
-sim$equilibriateNaturalPopulation(1.93e3, 5.61, 2e6)
+sim$equilibriateNaturalPopulation(params_file, 1.93e3, 5.61, 2e6)
 
 pop = new(Population, fish)
+pop$readParams(params_file, F)
+pop$par$f_harvest_spg = 0
 pop$par$recruitmentAge = 1
 pop$par$dmax = 30000
 pop$set_superFishSize(5e6)
@@ -168,9 +172,9 @@ Tvec = seq(4, 8, length.out = 20)
 
 if(re_simulate){
   res_ibm_full = sim$simulate_multi_2d(pop, c(5.61), c(45), hvec, nsteps, 1.93e3, T)
-  save(res_ibm_full, file="res_ibm_scan_h_Dankel22.Rdata")
+  save(res_ibm_full, file="outputs/res_ibm_scan_h_Dankel22.Rdata")
 } else {
-  load("res_ibm_scan_h_Dankel22.Rdata")
+  load("outputs/res_ibm_scan_h_Dankel22.Rdata")
 }
 
 lf = 45

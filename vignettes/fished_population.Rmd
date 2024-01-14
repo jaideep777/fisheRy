@@ -2,9 +2,7 @@
 title: "Simulating a fish population with fishing"
 author: "Jaideep Joshi"
 date: "28 March 2022"
-output:
-  pdf_document: default
-  html_document: default
+output: html_document
 editor_options:
   chunk_output_type: inline
 ---
@@ -39,7 +37,8 @@ fish$init(1.93e3, 5.61)
 fish$par$print()
 fish$get_state()
 
-pop = new(Population, fish)  
+pop = new(Population, fish)
+pop$readParams(params_file, F)
 pop$par$n = 2e6  # Each superfish contains so many fish
 
 ```

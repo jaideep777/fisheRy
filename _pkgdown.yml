@@ -58,6 +58,9 @@ navbar:
         - text: Calculating JSS
           icon: fa-fish
           href: articles/jss_calcs_h.html
+        - text: Calculating 2D JSS with evolution
+          icon: fa-fish
+          href: articles/jss_calcs_hxL_evol.html
     api:
       text: API
       icon: fa-code fa-lg

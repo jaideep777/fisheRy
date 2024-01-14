@@ -1,10 +1,8 @@
 ---
-title: "Safe operating spaces 2D"
+title: "Safe operating spaces 2D (with Evolution)"
 author: "Jaideep Joshi"
 date: "28 March 2022"
-output:
-  pdf_document: default
-  html_document: default
+output: html_document
 editor_options:
   chunk_output_type: inline
 ---
@@ -21,9 +19,7 @@ source("../tests/ref/simulator.7.R")
 ```
 
 ```{r}
-
 nsteps_jss=100
-
 re_simulate_global = F
 ```
 
@@ -37,7 +33,7 @@ params_file = "../params/cod_params.ini"
 # Create a prototype fish as usual
 fish = new(Fish, params_file)
 sim = new(Simulator, fish)
-sim$equilibriateNaturalPopulation(1.93e3, 5.61, 5e6)
+sim$equilibriateNaturalPopulation(params_file, 1.93e3, 5.61, 5e6)
 
 fish$trait_variances = c(1, 1, 1, 1, 1, 0)*(0.05)^2
 ```
@@ -99,6 +95,7 @@ $h = 0.41$, $L50 = 45$, $T = 5.6$.
 
 ```{r fig.height=9}
 pop_sq = new(Population, fish)
+pop_sq$readParams(params_file, F)
 pop_sq$set_superFishSize(2e6)
 
 h_sq = 0.0
@@ -145,7 +142,7 @@ hvec = seq(0, 0.8, length.out = 20)
 lfvec = seq(10, 100, length.out = 20)
 tvec = c(5.61)
 
-saved_filename = paste0("res_ibm_hxL_T",tvec[1],"_evol_n",nsteps_jss,".Rdata")
+saved_filename = paste0("outputs/res_ibm_hxL_T",tvec[1],"_evol_n",nsteps_jss,".Rdata")
 re_simulate = re_simulate_global | !file.exists(saved_filename)
 
 if (re_simulate){ 

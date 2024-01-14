@@ -99,7 +99,7 @@ int Population::readEnvironmentFile(std::string filename){
 	std::string line;
 	getline(fin, line);
 	
-	// read CO2 file
+	// read env file
 	while (fin.peek() != EOF){
 		std::getline(fin, line);
 	
@@ -265,6 +265,12 @@ double Population::fishableBiomass(){
 	return B_fishable;
 }
 
+double Population::fishableSpawningBiomass(){
+	double B_fishable = 0;
+	for (auto& f : fishes) if (f.age > 1 && f.isMature) B_fishable += par.n * f.weight * selectivity(f.length);
+	return B_fishable;
+}
+
 
 double Population::effort(double Nr, double F, double temp){
 //	double M = proto_fish.par.mam[proto_fish.par.amax];
@@ -398,11 +404,12 @@ std::vector<double> Population::update(double temp){
 	// Calculate mortality rate in spawning-grounds (h1) and open sea (h2)
 	double h1, h2;
 	double B = fishableBiomass();
-	h1 = par.f_harvest_spg * par.h * B / (ssb+1);
+	double S = fishableSpawningBiomass();
+	h1 = par.f_harvest_spg * par.h * B / (S+1);
 	h1 = fmin(fmax(h1, 0), 0.3);
-	h2 = (par.h * B - h1 * ssb) / B;
+	h2 = par.h - h1 * S / B;
 	h2 = fmin(fmax(h2, 0), 1);
-	if (h2 == 0) h1 = fmin(par.h * B / (ssb+1), 1);
+	if (h2 == 0) h1 = fmin(par.h * B / (S+1), 1);
 	if (verbose) cout << "h1/h2 = " << h1 << " / " << h2 << endl;
 
 //	// calculate realized mortality rate
@@ -488,6 +495,7 @@ std::vector<double> Population::update(double temp){
 	//}
 	}
 
+	// FIXME: Why difference between yield calculated in 2 diff ways?
 	if (verbose) cout << "year = " << current_year 
 	                  << " | TSB(MT) = " << tsb/1e9 << ", SSB(MT) = " << ssb/1.0e9 
 					  << ", recruits = " << nrecruits_real << "/" << std::accumulate(nrecruits_vec.begin(), nrecruits_vec.end(), 0.0) 
@@ -499,6 +507,7 @@ std::vector<double> Population::update(double temp){
 					  << "%), r0_avg = " << r0_avg 
 					  << ", % harvest = " << yield/tsb 
 					  << ", dg/dr = " << factor_dg << "/" << factor_dr
+					  << ", yield = " << yield << "/" << par.h*B
 					  << "\n";
 	++current_year;
 	return {ssb, yield, emp_sea+emp_shore, profit_sea+profit_shr, emp_sea, emp_shore, profit_sea, profit_shr, tsb, r0_avg, nrecruits_real, nfish_ra, static_cast<double>(nfish()), factor_dg, factor_dr, lmax, length90, survival_mean, maturity, Nrel_sea, Nrel_spg};	

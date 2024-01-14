@@ -38,7 +38,8 @@ Now, let's simulate the bioenergetic model with evolution.
 fish = new(Fish, params_file)
 fish$trait_variances = c(1, 1, 1, 1, 1, 0)*(0.05)^2
 
-pop = new(Population, fish)  
+pop = new(Population, fish)
+pop$readParams(params_file, F)
 pop$par$n = 4e6  # Each superfish contains so many fish
 pop$par$f_harvest_spg = 0.23
 pop$par$simulate_bio_only = T
@@ -46,7 +47,7 @@ pop$set_harvestProp(0)
 pop$init(1000, 1.93e3, 5.61)  # initialize the population with 1000 agents (superfish)
 
 pop$verbose = T
-nsteps = 10000             # Let's simulate for 200 years
+nsteps = 1000             # Let's simulate for 200 years
 nfish = numeric(nsteps)  # Let's keep track of the number of superfish
 nfish[1]=1000            # Since we initialized the population with 1000 superfish
 
@@ -139,6 +140,7 @@ fish = new(Fish, params_file)
 fish$trait_variances = c(1, 1, 1, 1, 1, 0)*(0.05)^2
 
 pop = new(Population, fish)  
+pop$readParams(params_file, F)
 pop$par$n = 4e6  # Each superfish contains so many fish
 pop$par$f_harvest_spg = 0.23
 pop$par$simulate_bio_only = T
@@ -252,6 +254,7 @@ fish = new(Fish, params_file)
 fish$trait_variances = c(1, 1, 1, 1, 1, 0)*(0.05)^2
 
 pop = new(Population, fish)  
+pop$readParams(params_file, F)
 pop$par$n = 4e6  # Each superfish contains so many fish
 pop$par$f_harvest_spg = 0.23
 pop$par$simulate_bio_only = T

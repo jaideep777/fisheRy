@@ -158,7 +158,8 @@ class Fish{
 	FishParams par;   ///< Parameters object that holds all necessary fish parameters
 	
 	// state variables
-	int age = 1;		       ///< Current age in years
+	// TODO: age and length should be made private with getter/setters
+	int age = 1;		       ///< Current age in years 
 	double length;             ///< Current length in cm
 	double gsi_effective = 0;  ///< Effective GSI (saved from previous growth calculation)
 

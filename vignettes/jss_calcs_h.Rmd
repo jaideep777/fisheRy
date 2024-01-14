@@ -19,10 +19,10 @@ source("../tests/ref/simulator.7.R")
 ```
 
 ```{r}
-re_simulate = T
+re_simulate = F
 
 # if one of the files doesnt exist, re-run the simulations
-re_simulate = re_simulate | !file.exists("res_ibm_jss_h.Rdata")
+re_simulate = re_simulate | !file.exists("outputs/res_ibm_jss_h.Rdata")
 ```
 
 ```{r}
@@ -47,7 +47,7 @@ Then we create a simulator and run the equivalent unfished population to equilib
 
 ```{r}
 sim = new(Simulator, fish)
-sim$equilibriateNaturalPopulation(1.93e3, 5.61, 5e6)
+sim$equilibriateNaturalPopulation(params_file, 1.93e3, 5.61, 5e6)
 ```
 
 ```{r}
@@ -85,6 +85,7 @@ We can also plot biological and socioeconomic parameters as a function of time.
 
 ```{r}
 pop_sq = new(Population, fish)
+pop_sq$readParams(params_file, F)
 pop_sq$set_superFishSize(5e6)
 
 h_sq = 0.05
@@ -103,7 +104,7 @@ nsteps = 50
 h = 0.2
 lf = 45
 
-pop1 = pop_sq ## NO! This creates a shallow copy, so pop_sq will also be modified.
+pop1 = pop_sq ## NOTE:: This creates a shallow copy, so pop_sq will also be modified.
 res_ibm = sim$simulate(pop1, lf, h, nsteps, 1.93e3, 5.61, F)
 
 plot_timeseries(res_ibm, pop1, h, nsteps)
@@ -135,6 +136,7 @@ source("../R/plot_scan.R")
 
 # Recreate status quo population because the earlier one was modified 
 pop_sq = new(Population, fish)
+pop_sq$readParams(params_file, F)
 pop_sq$set_superFishSize(5e6)
 h_sq = 0.41
 lf_sq = 45
@@ -145,13 +147,13 @@ res_ibm_sq = sim$simulate(pop_sq, lf_sq, h_sq, nsteps_sq, 1.93e3, t_sq, T)
 
 nsteps=50
 hvec = seq(0., 0.99, length.out=25)
-pop = pop_sq
+pop = pop_sq # Remember, this just creates a reference to pop_sq
 if (re_simulate){
   pop$set_superFishSize(5e6)
   res_ibm_full = sim$simulate_multi_2d(pop, c(5.6), lf, hvec, nsteps, 1.93e3, F)
-  save(res_ibm_full, file = "res_ibm_jss_h.Rdata")
+  save(res_ibm_full, file = "outputs/res_ibm_jss_h.Rdata")
 } else{
-  load("res_ibm_jss_h.Rdata")
+  load("outputs/res_ibm_jss_h.Rdata")
 }
 
 arr = res_ibm_full 
