@@ -351,15 +351,19 @@ $$
 where $\sigma(l_a)$ is the fishing selectivity,
 
 $$
-\sigma(l_a) = \frac{1}{1+e^{-s(l_a-L_{50})}},
+\sigma(l_a) = \frac{F_1}{1+e^{-F_2(l_a-L_{50})}} - \frac{F_6}{1+e^{-F_4(l_a-F_5)}},
 $$
 
 where $s$ is the Slope of the fishing selectivity curve.
 
 ```{r}
-tibble(length = seq(0,200,length.out=100)) %>% mutate(mort = 1/(1+exp(-0.1222*(length-45)))) %>% ggplot(aes(y=mort, x=length))+geom_line(col="red", size=2)+labs(x="Length", y="Fishing selectivity", col="Temp")+theme_classic(base_size = 20)
+tibble(length = seq(0,200,length.out=100)) %>%
+  mutate(mort = 0.6901/(1+exp(-0.06517*(length-68.81))) - 0.4381674/(1+exp(-0.4151*(length-112.8))) ) %>% 
+  ggplot(aes(y=mort, x=length))+geom_line(col="red", size=2)+labs(x="Length", y="Fishing selectivity", col="Temp")+theme_classic(base_size = 20)
 
-dat_full %>% mutate(sel = 1/(1+exp(-0.1222*(length-45)))) %>% ggplot(aes(y=mort-log(1-0.4)*sel, x=length, col=temp))+geom_point(alpha=0.5)+geom_jitter()+labs(x="Length", y=expression("Inst. total mortality rate (yr"^"-1"*")"), col="Temp")+theme_classic(base_size = 20)+scale_color_viridis_c()+scale_y_log10()+scale_x_log10()
+dat_full %>% 
+  mutate(sel = 0.6901/(1+exp(-0.06517*(length-68.81))) - 0.4381674/(1+exp(-0.4151*(length-112.8))) ) %>% 
+  ggplot(aes(y=mort-log(1-0.4)*sel, x=length, col=temp))+geom_point(alpha=0.5)+geom_jitter()+labs(x="Length", y=expression("Inst. total mortality rate (yr"^"-1"*")"), col="Temp")+theme_classic(base_size = 20)+scale_color_viridis_c()+scale_y_log10()+scale_x_log10()
 ```
 
 ### Survival probability

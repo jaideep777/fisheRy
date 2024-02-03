@@ -24,8 +24,14 @@ class PopulationParams {
 	int recruitmentAge; // = 3;
 
 	// management / fishing selectivity
-	double sf; // = 0.1222;	// steepness of selectivity curve
-	double lf50; // = 45; //61.4806;  // threshold fish length
+	// double sf; // = 0.1222;	// steepness of selectivity curve
+	// double lf50; // = 45; //61.4806;  // threshold fish length
+	double F1;
+	double F2;
+	double F3;
+	double F4;
+	double F5;
+	double F6;
 
 	// environmental stochasticity
 	double sigmaf; // = 0.4858775;
@@ -40,6 +46,7 @@ class PopulationParams {
 	// revenue and profit 
 	double price_sea; // = 13.13;		// landing price NOK/kg
 	double price_shore; // = 17.0;		// selling price NOK/kg
+	double fee_ratio;                            // fees as proportion of landed value
 
 	double salary_sea; // = 1078000;			// employment cost sea NOK/FTE
 	double salary_shore; // = 348000;			// employment cost shore NOK/FTE
@@ -47,7 +54,6 @@ class PopulationParams {
 	double fixed_costs_shore; // = 1032468000;	// fixed costs shore NOK
 	double variable_costs_sea; // = 65000; 		// variable costs NOK/vessel day
 	double scale_catch; // = 0.356; //0.53; 		// percentage of total codfish catch that is cod
-
 	// Fraction of harvest from spawning grounds
 	double f_harvest_spg; // = 0.2;
 

@@ -20,6 +20,7 @@ fish = new(Fish, params_file)
 #### Initial run to remove initial condition transient ####
 
 pop = new(Population, fish)  
+pop$readParams(params_file, F)
 pop$par$n = 1e6  # Each superfish contains so many fish
 pop$par$f_harvest_spg = 0.30
 pop$set_harvestProp(0)

@@ -19,8 +19,14 @@ void PopulationParams::initFromFile(std::string params_file, bool verbose){
 	READ_PAR(recruitmentAge);
 
 	// management / fishing selectivity
-	READ_PAR(sf);
-	READ_PAR(lf50);
+	// READ_PAR(sf);
+	// READ_PAR(lf50);
+	READ_PAR(F1);
+	READ_PAR(F2);
+	READ_PAR(F3);
+	READ_PAR(F4);
+	READ_PAR(F5);
+	READ_PAR(F6);
 
 	// environmental stochasticity
 	READ_PAR(sigmaf);
@@ -35,6 +41,8 @@ void PopulationParams::initFromFile(std::string params_file, bool verbose){
 	// revenue and profit 
 	READ_PAR(price_sea);
 	READ_PAR(price_shore);
+	READ_PAR(fee_ratio);
+
 	READ_PAR(salary_sea);
 	READ_PAR(salary_shore);
 	READ_PAR(fixed_costs_sea);
@@ -57,8 +65,14 @@ void PopulationParams::print(){
 	PRINT_PAR(recruitmentAge);
 
 	// management / fishing selectivity
-	PRINT_PAR(sf);
-	PRINT_PAR(lf50);
+	// PRINT_PAR(sf);
+	// PRINT_PAR(lf50);
+	PRINT_PAR(F1);
+	PRINT_PAR(F2);
+	PRINT_PAR(F3);
+	PRINT_PAR(F4);
+	PRINT_PAR(F5);
+	PRINT_PAR(F6);
 
 	// environmental stochasticity
 	PRINT_PAR(sigmaf);
@@ -73,6 +87,8 @@ void PopulationParams::print(){
 	// revenue and profit 
 	PRINT_PAR(price_sea);
 	PRINT_PAR(price_shore);
+	PRINT_PAR(fee_ratio);
+
 	PRINT_PAR(salary_sea);
 	PRINT_PAR(salary_shore);
 	PRINT_PAR(fixed_costs_sea);
@@ -182,7 +198,8 @@ void Population::set_harvestProp(double _h){
 
 
 void Population::set_minSizeLimit(double _lf50){
-	par.lf50 = _lf50;
+	// par.lf50 = _lf50;
+	par.F3 = _lf50;
 //	calc_athresh();
 }
 
@@ -250,7 +267,10 @@ int Population::nfish(){
 }
 
 double Population::selectivity(double len){
-	return 1/(1+exp(-par.sf*(len-par.lf50))); 
+	// return par.F1/(1+exp(-par.F2*(len-par.F3))); 
+	return 
+	  par.F1/(1+exp(-par.F2*(len-par.F3))) 
+	- par.F6/(1+exp(-par.F4*(len-par.F5)));
 }
 
 
@@ -490,7 +510,7 @@ std::vector<double> Population::update(double temp){
 	double profit_sea = 0, profit_shr = 0;
 	if (!par.simulate_bio_only){
 	//if (par.h > 0){
-		profit_sea = yield*par.price_sea - par.scale_catch*(D_sea_req*par.salary_sea + E_req*par.variable_costs_sea + par.fixed_costs_sea);
+		profit_sea = yield*par.price_sea*(1-par.fee_ratio) - par.scale_catch*(D_sea_req*par.salary_sea + E_req*par.variable_costs_sea + par.fixed_costs_sea);
 		profit_shr = yield*(par.price_shore - par.price_sea) - yield*par.dshr * par.salary_shore - par.scale_catch*par.fixed_costs_shore;
 	//}
 	}

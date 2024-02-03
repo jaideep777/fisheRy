@@ -105,7 +105,7 @@ RCPP_MODULE(population_module){
 		.field("n", &PopulationParams::n)
 		.field("rmax", &PopulationParams::rmax)
 		.field_readonly("h", &PopulationParams::h)
-		.field_readonly("lf50", &PopulationParams::lf50)
+		.field_readonly("lf50", &PopulationParams::F3)
 //		.field("mort_fishing_mature", &PopulationParams::mort_fishing_mature) 
 //		.field("mort_fishing_immature", &PopulationParams::mort_fishing_immature) 
 		.field("f_harvest_spg", &PopulationParams::f_harvest_spg)

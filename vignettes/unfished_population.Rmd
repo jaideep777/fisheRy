@@ -24,7 +24,7 @@ A population is a collection of fish. Therefore to create a population, we first
 Here, we create a fish and set some parameters:
 
 ```{r}
-params_file = "../params/cod_params.ini"
+params_file = "../params/cod_params_dankel22.ini"
 ```
 
 Let us set parameters that allow us to reproduce the Dankel et al XXXX model.
@@ -127,6 +127,11 @@ matplot(cbind(dat$ssb/1e9, res$summaries$SSB[1:200]/1e9), ylab="SSB (MT)", xlab=
 ### Bioenergetic model
 
 Now, let's simulate the bioenergetic model and compare the results with the model of Dankel et al.
+
+```{r}
+params_file = "../params/cod_params.ini"
+```
+
 
 ```{r fig.height=9}
 fish = new(Fish, params_file)

@@ -129,7 +129,7 @@ Tensor<double> Simulator::simulate_multi_2d(Population pop, vector<double> Tvec,
 					noFishingPop.set_minSizeLimit(lminvec[il]);
 					double K_fishable = noFishingPop.fishableBiomass();
 					double K_ssb      = noFishingPop.calcSSB();
-					cout << "h = " << hvec[ih] << ", L50 = " << noFishingPop.par.lf50 << ", T = " << Tvec[it] << ", n = " << pop.par.n << " | K_fishable = " << K_fishable << ", K_ssb = " << K_ssb << endl;
+					cout << "h = " << hvec[ih] << ", L50 = " << noFishingPop.par.F3 << ", T = " << Tvec[it] << ", n = " << pop.par.n << " | K_fishable = " << K_fishable << ", K_ssb = " << K_ssb << endl;
 
 					pop.K_fishableBiomass = K_fishable;
 					pop.K_ssb = K_ssb;
