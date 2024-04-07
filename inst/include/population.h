@@ -54,8 +54,9 @@ class PopulationParams {
 	double fixed_costs_shore; // = 1032468000;	// fixed costs shore NOK
 	double variable_costs_sea; // = 65000; 		// variable costs NOK/vessel day
 	double scale_catch; // = 0.356; //0.53; 		// percentage of total codfish catch that is cod
-	// Fraction of harvest from spawning grounds
-	double f_harvest_spg; // = 0.2;
+	
+	double F_spf; // Fishing mortality rate in the spawning grounds
+	double f_spf_before; // percent of spawning grounds fishing that happens before spawning
 
 	double h = 0;
 

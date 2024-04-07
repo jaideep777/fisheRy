@@ -51,7 +51,8 @@ void PopulationParams::initFromFile(std::string params_file, bool verbose){
 	READ_PAR(scale_catch);
 
 	// Fraction of harvest from spawning grounds
-	READ_PAR(f_harvest_spg);
+	READ_PAR(F_spf); 
+	READ_PAR(f_spf_before);
 
 	// READ_PAR(h);
 
@@ -96,8 +97,9 @@ void PopulationParams::print(){
 	PRINT_PAR(variable_costs_sea);
 	PRINT_PAR(scale_catch);
 
-	// Fraction of harvest from spawning grounds
-	PRINT_PAR(f_harvest_spg);
+	// Spawning grounds fishery
+	PRINT_PAR(F_spf); 
+	PRINT_PAR(f_spf_before);
 
 	#undef PRINT_PAR
 }
@@ -422,15 +424,9 @@ std::vector<double> Population::update(double temp){
 //	if (par.use_old_model_effort) summarize(); // population summary for calculation of Nrel
 	
 	// Calculate mortality rate in spawning-grounds (h1) and open sea (h2)
-	double h1, h2;
+	double h1=0, h2=par.h;
 	double B = fishableBiomass();
 	double S = fishableSpawningBiomass();
-	h1 = par.f_harvest_spg * par.h * B / (S+1);
-	h1 = fmin(fmax(h1, 0), 0.3);
-	h2 = par.h - h1 * S / B;
-	h2 = fmin(fmax(h2, 0), 1);
-	if (h2 == 0) h1 = fmin(par.h * B / (S+1), 1);
-	if (verbose) cout << "h1/h2 = " << h1 << " / " << h2 << endl;
 
 //	// calculate realized mortality rate
 	// double F_req = par.mort_fishing_mature; //, M = proto_fish.par.mam[proto_fish.par.amax];

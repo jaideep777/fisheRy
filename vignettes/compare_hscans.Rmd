@@ -103,7 +103,7 @@ sim$equilibriateNaturalPopulation(params_file, 1.93e3, 5.61, 2e6)
 
 pop = new(Population, fish)
 pop$readParams(params_file, F)
-pop$par$f_harvest_spg = 0
+pop$par$F_spf = 0
 pop$par$recruitmentAge = 1
 pop$par$dmax = 30000
 pop$set_superFishSize(5e6)
