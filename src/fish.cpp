@@ -103,7 +103,7 @@ double Fish::naturalMortalityRate(double temp){
 		}
 		else if (par.mortality_model == MortalityModel::Bioenergetic){
 			//return fish::natural_mortality(length, temp, par.M0, par.gamma3, par.alpha3, par.Lref, par.Tref, par.cT);
-			return (par.Mspawning*double(isMature)*(par.L0/length) + 
+			return (par.Mspawning*double(isMature) + 
 			        par.M0 + 
 					par.alpha3 * pow(length / par.Lref, par.gamma3) + 
 					par.alpha4*(par.alpha1*par.alpha1 - par.alpha1_ref*par.alpha1_ref) + 
