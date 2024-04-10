@@ -121,6 +121,29 @@ image(x=as.numeric(rownames(dist)), y = as.numeric(colnames(dist)), z=log(1+3*lo
 res = simulate(0, 45, F)
 matplot(cbind(dat$ssb/1e9, res$summaries$SSB[1:200]/1e9), ylab="SSB (MT)", xlab="Year", col=c("cyan", "black"), lty=1, type=c("p","l"), pch=1)
 
+par(mfrow=c(2,2), mar=c(4,4,1,1), oma=c(1,1,1,1))
+plot(dat$ssb_spawning~dat$ssb_spawning_ref)
+abline(0,1, col="red")
+plot(dat$ssb_after_spawning~dat$ssb_after_spawning_ref)
+abline(0,1, col="red")
+plot(dat$ssbn~dat$ssbn_ref)
+abline(0,1, col="red")
+plot(dat$yield_spf~dat$yield_spf_ref)
+abline(0,1, col="red")
+
+par(mfrow=c(2,2), mar=c(4,4,1,1), oma=c(1,1,1,1))
+plot(dat$ssb~dat$ssb_spawning)
+abline(0,1, col="red")
+plot(dat$ssb_spawning~dat$ssb_after_spawning)
+abline(0,1, col="red")
+plot(dat$ssb_after_spawning~dat$ssbn)
+abline(0,1, col="red")
+plot(I(dat$ssb-dat$ssbn)~dat$yield_spf)
+abline(0,1, col="red")
+# plot(dat$ssbn~dat$yield_spf)
+# abline(0,1, col="red")
+
+
 ```
 
 
@@ -143,7 +166,7 @@ pop$par$n = 1e6  # Each superfish contains so many fish
 pop$init(1000, 1.93e3, 5.61)  # initialize the population with 1000 agents (superfish)
 
 pop$verbose = T
-nsteps = 200             # Let's simulate for 200 years
+nsteps = 50             # Let's simulate for 200 years
 nfish = numeric(nsteps)  # Let's keep track of the number of superfish
 nfish[1]=1000            # Since we initialized the population with 1000 superfish
 cnames = pop$colnames

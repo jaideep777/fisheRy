@@ -116,7 +116,8 @@ class Population{
 	     "profit.sea", "profit.shore", "tsb", 
 	     "r0", "nrecruits", "nfish_ra", "nsuperfish",
 	     "factor_dg", "factor_dr", "max_length", "length90", 
-	     "survival_mean", "maturity", "Nrel_sea", "Nrel_spg"};
+	     "survival_mean", "maturity", "Nrel_sea", "Nrel_spg", 
+		 "ssb_spawning", "ssb_spawning_ref", "ssb_after_spawning", "ssb_after_spawning_ref", "ssbn", "ssbn_ref", "yield_spf", "yield_spf_ref"};
 
 	public:
 	// SeaEnvironment

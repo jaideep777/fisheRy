@@ -366,9 +366,10 @@ std::vector<double> Population::update(double temp){
 	}
 
 	// ** for analysis
-	double maturity = 0, nspawners = 0;
-	for (auto& f : fishes) if (f.isAlive && f.isMature) {maturity += 1; nspawners += par.n;}
+	double maturity = 0;
+	for (auto& f : fishes) if (f.isAlive && f.isMature) {maturity += 1;}
 	maturity /= fishes.size();
+
 	double nfish_ra = 0;
 	for (auto& f : fishes) if (f.isAlive && f.age == par.recruitmentAge) nfish_ra += par.n;
 	// **
@@ -405,7 +406,29 @@ std::vector<double> Population::update(double temp){
 	// 3. Reproduction 
 	// implement spawning for remaining fish
 	double ssb = calcSSB();
-//	double nrecruits = par.r0*ssb / (1 + ssb/par.Bhalf); // * exp(rnorm(-par.sigmaf*par.sigmaf/2, par.sigmaf));
+	double ssb0 = ssb;
+	cout << "ssb0 = " << ssb0 << endl;
+
+	// 3a. pre-spawning part of the SPF
+	double yield_spf = 0;
+	double ssb_spawning = 0;
+	double h_spf = 1-exp(-par.F_spf*1);
+	double p_survival_spf_before = 1 - par.f_spf_before*h_spf;
+	for (int k=0; k<fishes.size(); ++k) {
+		auto &f = fishes[k];
+		if (f.isAlive && f.isMature){ // only alive and mature fish are exposed to SPF
+			f.isAlive = f.isAlive && (runif() <= p_survival_spf_before);
+
+			if (f.isAlive) ssb_spawning += par.n * f.weight; // surviving individuals contribute to SSB
+			if (!f.isAlive) yield_spf += par.n * f.weight;   // dying individuals contribute to yield
+		}
+	}
+	double ssb_spawning_ref = ssb0*p_survival_spf_before;
+	cout << "ssb spawning = " << ssb_spawning << " / " << ssb_spawning_ref << endl;
+
+	// 3b. Spawning
+	// double nrecruits = par.r0*ssb / (1 + ssb/par.Bhalf); // * exp(rnorm(-par.sigmaf*par.sigmaf/2, par.sigmaf));
+	double nspawners = 0;
 	nrecruits_vec.resize(fishes.size());
 	std::fill(nrecruits_vec.begin(), nrecruits_vec.end(), 0.0);
 	double nrecruits_total = 0;
@@ -413,11 +436,19 @@ std::vector<double> Population::update(double temp){
 	for (int k=0; k<fishes.size(); ++k) {
 		auto &f = fishes[k];
 		// nrecruits += par.r0*n*f.weight/(1+ssb/par.Bhalf);
-		if (f.isAlive && f.isMature){
-			double nrecruits_fish = f.produceRecruits(ssb, temp) * par.n;
+		if (f.isAlive && f.isMature){  // fish survies the spawning-grounds fishery until actual spawning time
+			// count as spawner (for analysis only)
+			nspawners += par.n; 
+
+			// Recruitment
+			double nrecruits_fish = f.produceRecruits(ssb_spawning, temp) * par.n;
 			nrecruits_vec[k] = nrecruits_fish;
 			nrecruits_total     += nrecruits_fish; // * (1/(1+ssb/f.par.Bhalf));
 			nrecruits_potential += f.produceRecruits(  0, temp) * par.n;
+
+			// Mortality due to spawning
+			double p_survival_spawning = exp(-f.par.Mspawning);
+			f.isAlive = f.isAlive && (runif() <= p_survival_spawning);
 		}
 	}
 	//nrecruits *= exp(rnorm(-par.sigmaf*par.sigmaf/2, par.sigmaf));
@@ -425,19 +456,22 @@ std::vector<double> Population::update(double temp){
 //	for (auto& nn : nrecruits_vec) nn = nn*nrecruits_real/(nrecruits_total+1e-20); 
 
 	// ** for analysis
-	double r0_avg = (ssb>0)? (nrecruits_real * (1 + ssb/proto_fish.par.Bhalf) / ssb) : -999;
+	double r0_avg = (ssb_spawning>0)? (nrecruits_real * (1 + ssb_spawning/proto_fish.par.Bhalf) / ssb_spawning) : -999;
 	double factor_dr = nrecruits_real / (nrecruits_potential+1e-12);
 	double nrecruits_per_fish = nrecruits_real/nspawners;
+	double ssb_after_spawning = calcSSB();
+	cout << "n_recruits = " << nrecruits_real << endl;
 	// **
 
 	// Generate recruits (in a separate vector)
-	// cout << "nrecruits_vec: ";
-	// for (auto nn : nrecruits_vec) cout << nn << " ";
-	// cout << "\n";
-	std::discrete_distribution<size_t> fitness_dist(nrecruits_vec.begin(), nrecruits_vec.end());
 	int nr = nrecruits_real/par.n;
-	if (nr <= 0) nr = 1;
+	if (nr <= 0){
+		nr = 1;
+		nrecruits_vec = vector<double>(fishes.size(),1);
+	}
+	std::discrete_distribution<size_t> fitness_dist(nrecruits_vec.begin(), nrecruits_vec.end());
 	++proto_fish.t_birth;
+	cout << "n_recruits (actual) = " << nr << endl;
 
 	vector<Fish> recruits;
 	recruits.reserve(nr);
@@ -453,6 +487,24 @@ std::vector<double> Population::update(double temp){
 		recruits.push_back(proto_fish);
 	}
 
+	double ssb_after_spawning_ref = ssb0*exp(-proto_fish.par.Mspawning)*(1-par.f_spf_before*h_spf);
+	cout << "ssb after spawning = " << ssb_after_spawning << " / " << ssb_after_spawning_ref << endl;
+
+	// 3b. post-spawning part of the SPF
+	double p_survival_spf_after = (1-h_spf)/(1 - par.f_spf_before*h_spf);
+	for (int k=0; k<fishes.size(); ++k) {
+		auto &f = fishes[k];
+		if (f.isAlive && f.isMature){ // only mature fish are exposed to SPF
+			f.isAlive = f.isAlive && (runif() <= p_survival_spf_after);
+
+			if (!f.isAlive) yield_spf += par.n * f.weight;
+		}
+	}
+
+	double ssbn = calcSSB();
+
+	double yield_spf_ref = ssb0*h_spf*(par.f_spf_before + (1-par.f_spf_before)*exp(-proto_fish.par.Mspawning));
+	double ssbn_ref = ssb0*(1-h_spf)*exp(-proto_fish.par.Mspawning);
 
 	// 4. Mortality 
 //	if (par.use_old_model_effort) summarize(); // population summary for calculation of Nrel
@@ -560,7 +612,9 @@ std::vector<double> Population::update(double temp){
 					  << ", yield = " << yield << "/" << par.h*B
 					  << "\n";
 	++current_year;
-	return {ssb, yield, emp_sea+emp_shore, profit_sea+profit_shr, emp_sea, emp_shore, profit_sea, profit_shr, tsb, r0_avg, nrecruits_real, nfish_ra, static_cast<double>(nfish()), factor_dg, factor_dr, lmax, length90, survival_mean, maturity, Nrel_sea, Nrel_spg};	
+	return {ssb, yield, emp_sea+emp_shore, profit_sea+profit_shr, emp_sea, emp_shore, profit_sea, profit_shr, tsb, r0_avg, nrecruits_real, nfish_ra, static_cast<double>(nfish()), factor_dg, factor_dr, lmax, length90, survival_mean, maturity, Nrel_sea, Nrel_spg,
+		    ssb_spawning, ssb_spawning_ref, ssb_after_spawning, ssb_after_spawning_ref, ssbn, ssbn_ref, yield_spf, yield_spf_ref
+			};	
 }
 
 

@@ -13,10 +13,11 @@ int main(){
 
 	Population pop(f);
 	pop.verbose = true;
+	pop.readParams(params_file, true);
 	// pop.noFishingEquilibriate(1.93e3, 5.61);
 
 	pop.init(1000, 1.93e3, 5.61);
-	for (int t=0; t<10; ++t){
+	for (int t=0; t<30; ++t){
 		pop.update();
 	}
 
