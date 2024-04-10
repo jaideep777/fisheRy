@@ -177,8 +177,16 @@ void Population::set_superFishSize(double _n){
 
 void Population::set_harvestProp(double _h){
 	par.h = _h;
-	par.mort_fishing_mature = -log(1-_h);
-	par.mort_fishing_immature = -log(1-_h);
+	par.F_fgf = -log(1-_h);
+	par.mort_fishing_mature = par.F_fgf;
+	par.mort_fishing_immature = par.F_fgf;
+}
+
+void Population::set_fishingMortality(double _F_fgf){
+	par.F_fgf = _F_fgf;
+	par.h = 1-exp(-_F_fgf);
+	par.mort_fishing_mature = par.F_fgf;
+	par.mort_fishing_immature = par.F_fgf;
 }
 
 
@@ -291,6 +299,32 @@ double Population::fishableSpawningBiomass(){
 	double B_fishable = 0;
 	for (auto& f : fishes) if (f.age > 1 && f.isMature) B_fishable += par.n * f.weight * selectivity(f.length);
 	return B_fishable;
+}
+
+vector<double> Population::fishingMortByAge(){
+	vector<double> fa_sum(proto_fish.par.amax, 0); 
+	vector<double> fa_n(proto_fish.par.amax, 0); 
+	for (auto& f : fishes){
+		fa_sum[f.age] += selectivity(f.length)*par.F_fgf + double(f.isMature)*par.F_spf;
+		fa_n[f.age] += 1;
+	} 
+	for (int i=0; i<fa_sum.size(); ++i) fa_sum[i] /= fa_n[i];
+	return fa_sum;
+}
+
+vector<double> Population::naturalMortByAge(double temp){
+	vector<double> ma_sum(proto_fish.par.amax, 0); 
+	vector<double> ma_n(proto_fish.par.amax, 0); 
+	for (auto& f : fishes){
+		ma_sum[f.age] += f.naturalMortalityRate(temp);
+		ma_n[f.age] += 1;
+	} 
+	for (int i=0; i<ma_sum.size(); ++i) ma_sum[i] /= ma_n[i];
+	return ma_sum;
+}
+
+double Population::effort1(double Nr, double F, double M){
+	return pow(Nr, 1-par.b) * F * (exp(-(F+M)*(1-par.b))-1) / (par.q*(F+M)*(par.b-1)); 
 }
 
 

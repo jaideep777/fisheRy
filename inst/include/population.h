@@ -59,6 +59,7 @@ class PopulationParams {
 	double f_spf_before; // percent of spawning grounds fishing that happens before spawning
 
 	double h = 0;
+	double F_fgf = 0;
 
 	double n = 5e6;	// superfish size
 
@@ -150,6 +151,7 @@ class Population{
 	void calc_athresh(double tsb0, double temp);
 
 	void set_harvestProp(double _h);
+	void set_fishingMortality(double _F_fgf);
 	void set_minSizeLimit(double _lf50);
 	void set_traitVariances(std::vector<double>var);
 	void init(int n, double tsb, double temp);	// initialize population with n individuals
@@ -163,9 +165,13 @@ class Population{
 	double selectivity(double len);
 	double fishableBiomass();
 	double fishableSpawningBiomass();
-	
+
+	std::vector<double> fishingMortByAge();
+	std::vector<double> naturalMortByAge(double temp);
+
 	//double calcRealizedFishingMortality();
 	double effort(double Nr, double F, double temp);
+	double effort1(double Nr, double F, double M);
 
 	std::vector<double> update(double temp = 5.6);
 
