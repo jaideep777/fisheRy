@@ -121,52 +121,68 @@ image(x=as.numeric(rownames(dist)), y = as.numeric(colnames(dist)), z=log(1+3*lo
 res = simulate(0, 45, F)
 matplot(cbind(dat$ssb/1e9, res$summaries$SSB[1:200]/1e9), ylab="SSB (MT)", xlab="Year", col=c("cyan", "black"), lty=1, type=c("p","l"), pch=1)
 
-par(mfrow=c(2,2), mar=c(4,4,1,1), oma=c(1,1,1,1))
-plot(dat$ssb_spawning~dat$ssb_spawning_ref)
-abline(0,1, col="red")
-plot(dat$ssb_after_spawning~dat$ssb_after_spawning_ref)
-abline(0,1, col="red")
-plot(dat$ssbn~dat$ssbn_ref)
-abline(0,1, col="red")
-plot(dat$yield_spf~dat$yield_spf_ref)
-abline(0,1, col="red")
-
-par(mfrow=c(2,2), mar=c(4,4,1,1), oma=c(1,1,1,1))
-plot(dat$ssb~dat$ssb_spawning)
-abline(0,1, col="red")
-plot(dat$ssb_spawning~dat$ssb_after_spawning)
-abline(0,1, col="red")
-plot(dat$ssb_after_spawning~dat$ssbn)
-abline(0,1, col="red")
-plot(I(dat$ssb-dat$ssbn)~dat$yield_spf)
-abline(0,1, col="red")
-# plot(dat$ssbn~dat$yield_spf)
-# abline(0,1, col="red")
-
-
 ```
 
-
-### Bioenergetic model
-
-Now, let's simulate the bioenergetic model and compare the results with the model of Dankel et al.
+#### Let us validate the SSB numbers at various stages of the year
 
 ```{r}
-params_file = "../params/cod_params.ini"
+validate_ssb = function(dat, F_spf, f_spf_before){
+  # par(mfrow=c(2,2), mar=c(4,4,1,1), oma=c(1,1,1,1))
+  # plot(dat$ssb_spawning~dat$ssb_spawning_ref)
+  # abline(0,1, col="red")
+  # plot(dat$ssb_after_spawning~dat$ssb_after_spawning_ref)
+  # abline(0,1, col="red")
+  # plot(dat$ssbn~dat$ssbn_ref)
+  # abline(0,1, col="red")
+  # plot(dat$yield_spf~dat$yield_spf_ref)
+  # abline(0,1, col="red")
+
+  h_spf = 1-exp(-F_spf*1)
+  p_survival_spf_before = 1 - f_spf_before*h_spf
+  p_survival_spawning = exp(-fish$par$Mspawning)
+  p_survival_spf_after = (1-h_spf)/(1 - f_spf_before*h_spf)
+  p_yield_spf = h_spf*(f_spf_before + (1-f_spf_before)*exp(-fish$par$Mspawning))
+  
+  to_seabed_spawning = dat$ssb_spawning-dat$ssb_after_spawning
+  
+  par(mfrow=c(3,2), mar=c(4,4,1,1), oma=c(1,1,1,1))
+  plot(dat$ssb~dat$ssb_spawning)
+  abline(0,1, col="grey")
+  abline(0,1/p_survival_spf_before, col="red")
+  plot(dat$ssb_spawning~dat$ssb_after_spawning)
+  abline(0,1, col="grey")
+  abline(0,1/p_survival_spawning, col="red")
+  plot(dat$ssb_after_spawning~dat$ssbn)
+  abline(0,1, col="grey")
+  abline(0,1/p_survival_spf_after, col="red")
+  plot(I(dat$ssb-dat$ssbn)~I(dat$yield_spf + to_seabed_spawning))
+  abline(0,1, col="red")
+  
+  plot(I(dat$tsb_before_mort - dat$tsb_after_mort)~I(dat$yield+dat$to_sea_bed))
+  abline(0,1, col="red")
+}
 ```
 
+```{r}
+validate_ssb(dat, pop$par$F_spf, pop$par$f_spf_before)
+```
 
-```{r fig.height=9}
+### Simulate the same model with SPF
+
+```{r}
 fish = new(Fish, params_file)
 fish$par$s0 = 0.059
 
 pop = new(Population, fish)  
 pop$readParams(params_file, F)
 pop$par$n = 1e6  # Each superfish contains so many fish
+pop$par$F_spf = 1.0
+
+
 pop$init(1000, 1.93e3, 5.61)  # initialize the population with 1000 agents (superfish)
 
 pop$verbose = T
-nsteps = 50             # Let's simulate for 200 years
+nsteps = 200             # Let's simulate for 200 years
 nfish = numeric(nsteps)  # Let's keep track of the number of superfish
 nfish[1]=1000            # Since we initialized the population with 1000 superfish
 cnames = pop$colnames
@@ -188,7 +204,97 @@ image(x=as.numeric(rownames(dist)), y = as.numeric(colnames(dist)), z=log(1+3*lo
 res = simulate(0, 45, F)
 matplot(cbind(dat$ssb/1e9, res$summaries$SSB[1:200]/1e9), ylab="SSB (MT)", xlab="Year", col=c("cyan", "black"), lty=1, type=c("p","l"), pch=1)
 
+validate_ssb(dat, pop$par$F_spf, pop$par$f_spf_before)
 ```
+
+### Bioenergetic model
+
+Now, let's simulate the bioenergetic model and compare the results with the model of Dankel et al.
+
+```{r}
+library(fisheRy)
+params_file = "../params/cod_params.ini"
+
+fish = new(Fish, params_file)
+fish$par$s0 = 0.059
+
+pop = new(Population, fish)  
+pop$readParams(params_file, F)
+pop$par$n = 1e6  # Each superfish contains so many fish
+pop$init(1000, 1.93e3, 5.61)  # initialize the population with 1000 agents (superfish)
+
+pop$verbose = T
+nsteps = 200             # Let's simulate for 200 years
+nfish = numeric(nsteps)  # Let's keep track of the number of superfish
+nfish[1]=1000            # Since we initialized the population with 1000 superfish
+cnames = pop$colnames
+dat = data.frame(matrix(ncol=length(cnames), nrow=0))
+colnames(dat) = cnames
+for (i in 1:nsteps){
+  v = pop$update(5.61)       # Update all fish over 1 year 
+  dat[i,] = v    # some book-keeping
+  nfish[i] = pop$nfish()
+}
+
+d = pop$get_state()
+dist = table(d$age, d$length)
+
+par(mfrow = c(3,1), mar=c(5,5,1,1), oma=c(1,1,1,1), cex.lab=1.5, cex.axis=1.5)
+plot(nfish~seq(1,nsteps,1), ylab="No. of superfish", xlab="Year")
+image(x=as.numeric(rownames(dist)), y = as.numeric(colnames(dist)), z=log(1+3*log(dist)), col=scales::viridis_pal()(100), xlab="Age", ylab="Length")
+
+res = simulate(0, 45, F)
+matplot(cbind(dat$ssb/1e9, res$summaries$SSB[1:200]/1e9), ylab="SSB (MT)", xlab="Year", col=c("cyan", "black"), lty=1, type=c("p","l"), pch=1)
+
+validate_ssb(dat, pop$par$F_spf, pop$par$f_spf_before)
+```
+
+
+### Bioenergetic model (with spawning mortality and spf)
+
+Now, let's simulate the bioenergetic model and compare the results with the model of Dankel et al.
+
+```{r}
+library(fisheRy)
+params_file = "../params/cod_params.ini"
+
+fish = new(Fish, params_file)
+fish$par$s0 = 0.059
+fish$par$Mspawning = 1
+
+pop = new(Population, fish)  
+pop$readParams(params_file, F)
+pop$par$n = 1e6  # Each superfish contains so many fish
+pop$init(1000, 1.93e3, 5.61)  # initialize the population with 1000 agents (superfish)
+pop$par$F_spf = 1.0
+
+pop$verbose = T
+nsteps = 200             # Let's simulate for 200 years
+nfish = numeric(nsteps)  # Let's keep track of the number of superfish
+nfish[1]=1000            # Since we initialized the population with 1000 superfish
+cnames = pop$colnames
+dat = data.frame(matrix(ncol=length(cnames), nrow=0))
+colnames(dat) = cnames
+for (i in 1:nsteps){
+  v = pop$update(5.61)       # Update all fish over 1 year 
+  dat[i,] = v    # some book-keeping
+  nfish[i] = pop$nfish()
+}
+
+d = pop$get_state()
+dist = table(d$age, d$length)
+
+par(mfrow = c(3,1), mar=c(5,5,1,1), oma=c(1,1,1,1), cex.lab=1.5, cex.axis=1.5)
+plot(nfish~seq(1,nsteps,1), ylab="No. of superfish", xlab="Year")
+image(x=as.numeric(rownames(dist)), y = as.numeric(colnames(dist)), z=log(1+3*log(dist)), col=scales::viridis_pal()(100), xlab="Age", ylab="Length")
+
+res = simulate(0, 45, F)
+matplot(cbind(dat$ssb/1e9, res$summaries$SSB[1:200]/1e9), ylab="SSB (MT)", xlab="Year", col=c("cyan", "black"), lty=1, type=c("p","l"), pch=1)
+
+validate_ssb(dat, pop$par$F_spf, pop$par$f_spf_before)
+```
+
+
 
 <!-- ### Quickly simulating an unfished population to equilibrium -->
 

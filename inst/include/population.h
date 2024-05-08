@@ -117,7 +117,8 @@ class Population{
 	     "r0", "nrecruits", "nfish_ra", "nsuperfish",
 	     "factor_dg", "factor_dr", "max_length", "length90", 
 	     "survival_mean", "maturity", "Nrel_sea", "Nrel_spg", 
-		 "ssb_spawning", "ssb_spawning_ref", "ssb_after_spawning", "ssb_after_spawning_ref", "ssbn", "ssbn_ref", "yield_spf", "yield_spf_ref"};
+		 "ssb_spawning", "ssb_spawning_ref", "ssb_after_spawning", "ssb_after_spawning_ref", "ssbn", "ssbn_ref", "yield_spf", "yield_spf_ref",
+		 "tsb_before_mort", "tsb_after_mort", "to_sea_bed"};
 
 	public:
 	// SeaEnvironment
@@ -159,8 +160,8 @@ class Population{
 
 	std::vector<double> noFishingEquilibriate(double tsb0, double temp);	
 
-	double calcSSB();
-	double calcTSB();
+	double calcSSB(double min_age = 0);
+	double calcTSB(double min_age = 0);
 	std::vector<double> calcSB();
 
 	double selectivity(double len);

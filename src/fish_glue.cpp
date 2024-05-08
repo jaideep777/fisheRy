@@ -42,6 +42,7 @@ RCPP_MODULE(fish_module) {
 		.field("recruitment_model_name", &FishParams::recruitment_model_name)
 		.field("r0", &FishParams::r0)
 		.field("M0", &FishParams::M0)
+		.field("Mspawning", &FishParams::Mspawning)
 
 		.field("alpha1", &FishParams::alpha1)
 		.field("gsi", &FishParams::gsi)
@@ -109,6 +110,7 @@ RCPP_MODULE(population_module){
 //		.field("mort_fishing_mature", &PopulationParams::mort_fishing_mature) 
 //		.field("mort_fishing_immature", &PopulationParams::mort_fishing_immature) 
 		.field("F_spf", &PopulationParams::F_spf)
+		.field("f_spf_before", &PopulationParams::f_spf_before)
 		.field("dsea", &PopulationParams::dsea)
 		.field("dmax", &PopulationParams::dmax)
 		.field("recruitmentAge", &PopulationParams::recruitmentAge)

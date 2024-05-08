@@ -248,15 +248,15 @@ vector<double> Population::noFishingEquilibriate(double tsb0, double temp){
 }
 
 
-double Population::calcSSB(){
+double Population::calcSSB(double min_age){
 	double ssb = 0;
-	for (auto& f : fishes) if (f.isAlive && f.isMature &&  f.age >= par.recruitmentAge) ssb += par.n * f.weight;
+	for (auto& f : fishes) if (f.isAlive && f.isMature && f.age >= min_age) ssb += par.n * f.weight;
 	return ssb;
 }
 
-double Population::calcTSB(){
+double Population::calcTSB(double min_age){
 	double tsb = 0;
-	for (auto& f : fishes) if (f.isAlive && f.age >= par.recruitmentAge) tsb += par.n * f.weight;
+	for (auto& f : fishes) if (f.isAlive && f.age >= min_age) tsb += par.n * f.weight;
 	return tsb;
 }
 
@@ -302,24 +302,28 @@ double Population::fishableSpawningBiomass(){
 }
 
 vector<double> Population::fishingMortByAge(){
-	vector<double> fa_sum(proto_fish.par.amax, 0); 
-	vector<double> fa_n(proto_fish.par.amax, 0); 
+	vector<double> fa_sum(proto_fish.par.amax+2, 0); 
+	vector<double> fa_n(proto_fish.par.amax+2, 0); 
 	for (auto& f : fishes){
-		fa_sum[f.age] += selectivity(f.length)*par.F_fgf + double(f.isMature)*par.F_spf;
-		fa_n[f.age] += 1;
+		if (f.isAlive){
+			fa_sum[f.age] += selectivity(f.length)*par.F_fgf;
+			fa_n[f.age] += 1;
+		}
 	} 
-	for (int i=0; i<fa_sum.size(); ++i) fa_sum[i] /= fa_n[i];
+	for (int i=0; i<fa_sum.size(); ++i) fa_sum[i] /= (fa_n[i]+1e-12);
 	return fa_sum;
 }
 
 vector<double> Population::naturalMortByAge(double temp){
-	vector<double> ma_sum(proto_fish.par.amax, 0); 
-	vector<double> ma_n(proto_fish.par.amax, 0); 
+	vector<double> ma_sum(proto_fish.par.amax+2, 0); 
+	vector<double> ma_n(proto_fish.par.amax+2, 0); 
 	for (auto& f : fishes){
-		ma_sum[f.age] += f.naturalMortalityRate(temp);
-		ma_n[f.age] += 1;
+		if (f.isAlive){
+			ma_sum[f.age] += f.naturalMortalityRate(temp);
+			ma_n[f.age] += 1;
+		}
 	} 
-	for (int i=0; i<ma_sum.size(); ++i) ma_sum[i] /= ma_n[i];
+	for (int i=0; i<ma_sum.size(); ++i) ma_sum[i] /= (ma_n[i]+1e-12);
 	return ma_sum;
 }
 
@@ -338,7 +342,7 @@ double Population::effort(double Nr, double F, double temp){
 		}
 	} 
 	double M = sum_wimi / sum_wi;  // Mass-weighted average mortality of fishable population
-	//cout << ": Nrel/F/M = " << Nr << " / " << F << " / " << M << "\n";
+	cout << ": Nrel/F/M = " << Nr << " / " << F << " / " << M << "\n";
 	return pow(Nr, 1-par.b) * F * (exp(-(F+M)*(1-par.b))-1) / (par.q*(F+M)*(par.b-1)); 
 }
 
@@ -405,6 +409,7 @@ std::vector<double> Population::update(double temp){
 
 	// 3. Reproduction 
 	// implement spawning for remaining fish
+	// FIXME: Check carefully where SSB should include fish below recruitment age and where not...
 	double ssb = calcSSB();
 	double ssb0 = ssb;
 	cout << "ssb0 = " << ssb0 << endl;
@@ -460,21 +465,19 @@ std::vector<double> Population::update(double temp){
 	double factor_dr = nrecruits_real / (nrecruits_potential+1e-12);
 	double nrecruits_per_fish = nrecruits_real/nspawners;
 	double ssb_after_spawning = calcSSB();
-	cout << "n_recruits = " << nrecruits_real << endl;
+	cout << "n_spawners / n_recruits = " << nspawners << " / " << nrecruits_real << endl;
 	// **
 
 	// Generate recruits (in a separate vector)
 	int nr = nrecruits_real/par.n;
-	if (nr <= 0){
-		nr = 1;
-		nrecruits_vec = vector<double>(fishes.size(),1);
-	}
+	if (nr <= 0) nr = 1;
 	std::discrete_distribution<size_t> fitness_dist(nrecruits_vec.begin(), nrecruits_vec.end());
 	++proto_fish.t_birth;
 	cout << "n_recruits (actual) = " << nr << endl;
 
 	vector<Fish> recruits;
 	recruits.reserve(nr);
+
 	for (int i=0; i<nr; ++i){
 		vector<double> mother_traits = fishes[fitness_dist(generator)].get_traits();
 		vector<double> father_traits = fishes[fitness_dist(generator)].get_traits();
@@ -557,21 +560,31 @@ std::vector<double> Population::update(double temp){
 		}
 	}
 
-	// implement mortality over the year and calculate yield
-	double yield = 0;
-	double survival_mean = 0;
+	// implement natural+fishing mortality in feeding grounds over the rest of the year, and calculate yield
+	double tsb_before_mort = calcTSB();
+	double yield = 0, to_sea_bed = 0;
+	double survival_mean = 0, n_survival_mean = 0;
 	for (auto& f : fishes){
-		double fishing_mort_rate = selectivity(f.length)*F_real_sea + double(f.isMature)*F_real_spg; //(f.isMature)? par.mort_fishing_mature : par.mort_fishing_immature;
-		double mortality_rate = f.naturalMortalityRate(temp) + fishing_mort_rate; // post-spawning mortality rate is same for mature and immature individuals
-		double survival_prob = exp(-mortality_rate*1.0);	// mortality during post-spawining, over full year.
-		survival_mean += survival_prob;
+		if (f.isAlive){
+			double fishing_mort_rate = selectivity(f.length)*F_real_sea; //(f.isMature)? par.mort_fishing_mature : par.mort_fishing_immature;
+			double natural_mort_rate = f.naturalMortalityRate(temp);
+			double mortality_rate = natural_mort_rate + fishing_mort_rate; // post-spawning mortality rate is same for mature and immature individuals
+			double survival_prob = exp(-mortality_rate*1.0);	// mortality in feeding grounds (post-spawning), over full year.
+			survival_mean += survival_prob;
+			n_survival_mean += 1;
 
-		f.isAlive = f.isAlive && ((rand() / double(RAND_MAX)) <= survival_prob);	// set the fish to die probabilistically, if not dead already.
-		
-		if (!f.isAlive && f.age >= par.recruitmentAge) yield += fishing_mort_rate/mortality_rate * par.n*f.weight;
+			f.isAlive = f.isAlive && ((rand() / double(RAND_MAX)) <= survival_prob);	// set the fish to die probabilistically, if not dead already.
+			
+			if (!f.isAlive){
+				yield += fishing_mort_rate/mortality_rate * par.n*f.weight;
+				to_sea_bed += natural_mort_rate/mortality_rate * par.n*f.weight;
+			}
+		}
 	} 
-	survival_mean /= fishes.size();
-	
+	survival_mean /= n_survival_mean;
+
+	double tsb_after_mort = calcTSB();
+
 	// remove dead fish from population
 	fishes.erase(std::remove_if(fishes.begin(), fishes.end(), [](Fish &f){return !f.isAlive;}), fishes.end());
 	int nfish_after_mort = fishes.size();
@@ -613,7 +626,8 @@ std::vector<double> Population::update(double temp){
 					  << "\n";
 	++current_year;
 	return {ssb, yield, emp_sea+emp_shore, profit_sea+profit_shr, emp_sea, emp_shore, profit_sea, profit_shr, tsb, r0_avg, nrecruits_real, nfish_ra, static_cast<double>(nfish()), factor_dg, factor_dr, lmax, length90, survival_mean, maturity, Nrel_sea, Nrel_spg,
-		    ssb_spawning, ssb_spawning_ref, ssb_after_spawning, ssb_after_spawning_ref, ssbn, ssbn_ref, yield_spf, yield_spf_ref
+		    ssb_spawning, ssb_spawning_ref, ssb_after_spawning, ssb_after_spawning_ref, ssbn, ssbn_ref, yield_spf, yield_spf_ref,
+			tsb_before_mort, tsb_after_mort, to_sea_bed
 			};	
 }
 

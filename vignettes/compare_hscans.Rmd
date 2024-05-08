@@ -54,7 +54,7 @@ Then we create a population that will be reused by the simulator.
 pop = new(Population, fish)
 pop$readParams(params_file, F)
 pop$set_superFishSize(5e6)
-pop$verbose = F
+pop$verbose = T
 ```
 
 
