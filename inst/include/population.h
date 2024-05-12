@@ -116,9 +116,11 @@ class Population{
 	     "profit.sea", "profit.shore", "tsb", 
 	     "r0", "nrecruits", "nfish_ra", "nsuperfish",
 	     "factor_dg", "factor_dr", "max_length", "length90", 
-	     "survival_mean", "maturity", "Nrel_sea", "Nrel_spg", 
+	     "survival_mean", "maturity", "Nrel",
 		 "ssb_spawning", "ssb_spawning_ref", "ssb_after_spawning", "ssb_after_spawning_ref", "ssbn", "ssbn_ref", "yield_spf", "yield_spf_ref",
-		 "tsb_before_mort", "tsb_after_mort", "to_sea_bed"};
+		 "tsb_before_mort", "tsb_after_mort", "to_sea_bed",
+		 "F_5_10", "M_5_10", "h_5_10"
+		 };
 
 	public:
 	// SeaEnvironment
@@ -150,7 +152,7 @@ class Population{
 	void updateEnv(double t);
 
 	// OLD MODEL EFFORT DYNAMICS
-	void calc_athresh(double tsb0, double temp);
+	// void calc_athresh(double tsb0, double temp);
 
 	void set_harvestProp(double _h);
 	void set_fishingMortality(double _F_fgf);
@@ -166,7 +168,7 @@ class Population{
 
 	double selectivity(double len);
 	double fishableBiomass();
-	double fishableSpawningBiomass();
+	// double fishableSpawningBiomass();
 
 	std::vector<double> fishingMortByAge();
 	std::vector<double> naturalMortByAge(double temp);

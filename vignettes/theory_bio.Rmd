@@ -332,14 +332,14 @@ $l_0$                       Body length at age 0
 ```{r fig.height=5, fig.width=6}
 dat_full %>% 
   ggplot(aes(y=mort, x=length, col=temp))+
-  geom_point(alpha=0.5)+
+  geom_point(aes(shape=factor(isMature)), alpha=0.5)+
   geom_jitter()+
   labs(x="Length", y=expression("Inst. natural mortality rate (yr"^"-1"*")"), col="Temp", )+
   theme_classic(base_size = 20)+
   scale_color_viridis_c()+
   scale_y_log10()+
-  scale_x_log10()+
-  facet_grid(cols=vars(isMature), labeller = as_labeller(c(`0`="Immature", `1`="Mature")))
+  scale_x_log10()#+
+  #facet_grid(cols=vars(isMature), labeller = as_labeller(c(`0`="Immature", `1`="Mature")))
 ```
 
 Instantaneous fishing mortality rate depends on the harvest proportion $h$ and fishing selectivity $\sigma$, and acts on top of natural mortality. Thus, for a given harvest proportion $h$ and minimum size limit $L_{50}$, fishing mortality rate is given by 
