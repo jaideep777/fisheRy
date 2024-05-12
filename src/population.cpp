@@ -344,7 +344,6 @@ double Population::effort(double Nr, double F, double temp){
 		}
 	} 
 	double M = sum_wimi / sum_wi;  // Mass-weighted average mortality of fishable population
-	cout << ": Nrel/F/M = " << Nr << " / " << F << " / " << M << "\n";
 	return pow(Nr, 1-par.b) * F * (exp(-(F+M)*(1-par.b))-1) / (par.q*(F+M)*(par.b-1)); 
 }
 
@@ -429,7 +428,7 @@ std::vector<double> Population::update(double temp){
 	// FIXME: Check carefully where SSB should include fish below recruitment age and where not...
 	double ssb = calcSSB();
 	double ssb0 = ssb;
-	cout << "ssb0 = " << ssb0 << endl;
+	if (verbose) cout << "ssb0 = " << ssb0 << endl;
 
 	// 3a. pre-spawning part of the SPF
 	double yield_spf = 0;
@@ -446,7 +445,7 @@ std::vector<double> Population::update(double temp){
 		}
 	}
 	double ssb_spawning_ref = ssb0*p_survival_spf_before;
-	cout << "ssb spawning = " << ssb_spawning << " / " << ssb_spawning_ref << endl;
+	if (verbose) cout << "ssb spawning = " << ssb_spawning << " / " << ssb_spawning_ref << endl;
 
 	// 3b. Spawning
 	// double nrecruits = par.r0*ssb / (1 + ssb/par.Bhalf); // * exp(rnorm(-par.sigmaf*par.sigmaf/2, par.sigmaf));
@@ -482,7 +481,7 @@ std::vector<double> Population::update(double temp){
 	double factor_dr = nrecruits_real / (nrecruits_potential+1e-12);
 	double nrecruits_per_fish = nrecruits_real/nspawners;
 	double ssb_after_spawning = calcSSB();
-	cout << "n_spawners / n_recruits = " << nspawners << " / " << nrecruits_real << endl;
+	if (verbose) cout << "n_spawners / n_recruits = " << nspawners << " / " << nrecruits_real << endl;
 	// **
 
 	// Generate recruits (in a separate vector)
@@ -490,7 +489,7 @@ std::vector<double> Population::update(double temp){
 	if (nr <= 0) nr = 1;
 	std::discrete_distribution<size_t> fitness_dist(nrecruits_vec.begin(), nrecruits_vec.end());
 	++proto_fish.t_birth;
-	cout << "n_recruits (actual) = " << nr << endl;
+	if (verbose) cout << "n_recruits (actual) = " << nr << endl;
 
 	vector<Fish> recruits;
 	recruits.reserve(nr);
@@ -508,7 +507,7 @@ std::vector<double> Population::update(double temp){
 	}
 
 	double ssb_after_spawning_ref = ssb0*exp(-proto_fish.par.Mspawning)*(1-par.f_spf_before*h_spf);
-	cout << "ssb after spawning = " << ssb_after_spawning << " / " << ssb_after_spawning_ref << endl;
+	if (verbose) cout << "ssb after spawning = " << ssb_after_spawning << " / " << ssb_after_spawning_ref << endl;
 
 	// 3b. post-spawning part of the SPF
 	double p_survival_spf_after = (1-h_spf)/(1 - par.f_spf_before*h_spf);
@@ -540,7 +539,6 @@ std::vector<double> Population::update(double temp){
 			Nrel = (K_fishableBiomass > 0)? fishableBiomass() / K_fishableBiomass : 1e-20;
 			
 			E_req = (Nrel < 1e-10)? 0 : effort1(Nrel, F_5_10, M_5_10); //pow(Nrel, 1-par.b) * F * (exp(-(F+M)*(1-par.b))-1) / (par.q*(F+M)*(par.b-1));
-			cout << ": Nrel/F_5_10/M_5_10 = " << Nrel << " / " << F_5_10 << " / " << M_5_10 << "\n";
 			D_sea_req  = par.dsea * E_req;
 			D_sea_real = D_sea_req / (1 + D_sea_req/par.dmax);
 			

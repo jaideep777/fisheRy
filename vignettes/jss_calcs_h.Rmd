@@ -19,7 +19,7 @@ source("../tests/ref/simulator.7.R")
 ```
 
 ```{r}
-re_simulate = F
+re_simulate = T
 
 # if one of the files doesnt exist, re-run the simulations
 re_simulate = re_simulate | !file.exists("outputs/res_ibm_jss_h.Rdata")
