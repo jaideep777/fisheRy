@@ -3,7 +3,6 @@ title: "Simulating a fish population with trait evolution"
 author: "Jaideep Joshi"
 date: "28 March 2022"
 output:
-  pdf_document: default
   html_document: default
 editor_options:
   chunk_output_type: inline
@@ -41,7 +40,7 @@ fish$trait_variances = c(1, 1, 1, 1, 1, 0)*(0.05)^2
 pop = new(Population, fish)
 pop$readParams(params_file, F)
 pop$par$n = 4e6  # Each superfish contains so many fish
-pop$par$f_harvest_spg = 0.23
+pop$par$F_spf = -log(1-0.23)
 pop$par$simulate_bio_only = T
 pop$set_harvestProp(0)
 pop$init(1000, 1.93e3, 5.61)  # initialize the population with 1000 agents (superfish)
@@ -142,7 +141,7 @@ fish$trait_variances = c(1, 1, 1, 1, 1, 0)*(0.05)^2
 pop = new(Population, fish)  
 pop$readParams(params_file, F)
 pop$par$n = 4e6  # Each superfish contains so many fish
-pop$par$f_harvest_spg = 0.23
+pop$par$F_spf = -log(1-0.23)
 pop$par$simulate_bio_only = T
 pop$set_harvestProp(0)
 pop$init(1000, 1.93e3, 5.61)  # initialize the population with 1000 agents (superfish)
@@ -256,7 +255,7 @@ fish$trait_variances = c(1, 1, 1, 1, 1, 0)*(0.05)^2
 pop = new(Population, fish)  
 pop$readParams(params_file, F)
 pop$par$n = 4e6  # Each superfish contains so many fish
-pop$par$f_harvest_spg = 0.23
+pop$par$F_spf = -log(1-0.23)
 pop$par$simulate_bio_only = T
 pop$set_harvestProp(0)
 pop$init(1000, 1.93e3, 5.61)  # initialize the population with 1000 agents (superfish)

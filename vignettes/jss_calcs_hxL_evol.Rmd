@@ -20,7 +20,7 @@ source("../tests/ref/simulator.7.R")
 
 ```{r}
 nsteps_jss=100
-re_simulate_global = F
+re_simulate_global = T
 ```
 
 ```{r}
