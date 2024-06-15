@@ -109,41 +109,41 @@ inline double gsi(double body_length, double init_body_length, double pow_dl, do
 }
 
 
-// [[Rcpp::export]]
-/// @brief Calculate the instantaneous natural mortality
-/// \f[M(a,l_a) = \left( \mu_0 + \alpha_{3}\left( \frac{l_{a}}{l_{\text{ref}}} \right)^{\gamma_{3}} \right)\left(\frac{T}{T_\text{ref}}\right)^{c_T}\f] 
-/// @param temp Temperature (deg C)
-/// @param M0 baseline (size-independent) mortality rate
-/// @param body_length_ref Reference body length at unit size-dependent mortality rate
-/// @param Tref Reference temperature at which mortality rate is measured
-/// @param cT Exponent of the temperature dependence of mortality
-inline double natural_mortality(double body_length, double temp, double M0, double gamma_3, double alpha_3, double body_length_ref, double Tref, double cT){
-	return (M0 + alpha_3 * pow(body_length / body_length_ref, gamma_3)) * pow(temp/Tref, cT);
-}
+// // [[Rcpp::export]]
+// /// @brief Calculate the instantaneous natural mortality
+// /// \f[M(a,l_a) = \left( \mu_0 + \alpha_{3}\left( \frac{l_{a}}{l_{\text{ref}}} \right)^{\gamma_{3}} \right)\left(\frac{T}{T_\text{ref}}\right)^{c_T}\f] 
+// /// @param temp Temperature (deg C)
+// /// @param M0 baseline (size-independent) mortality rate
+// /// @param body_length_ref Reference body length at unit size-dependent mortality rate
+// /// @param Tref Reference temperature at which mortality rate is measured
+// /// @param cT Exponent of the temperature dependence of mortality
+// inline double natural_mortality(double body_length, double temp, double M0, double gamma_3, double alpha_3, double body_length_ref, double Tref, double cT){
+// 	return (M0 + alpha_3 * pow(body_length / body_length_ref, gamma_3)) * pow(temp/Tref, cT);
+// }
 
-// [[Rcpp::export]]
-/// @brief Calculate fishing selectivity
-/// @param len   Length og fish
-/// @param sf    Slope of the selectivity curve
-/// @param lf50  Midpoint of the selectivity curve
-/// @return      Selectivity
-inline double fishing_selectivity(double len, double sf, double lf50){
-	return 1/(1+exp(-sf*(len-lf50)));
-}
+// // [[Rcpp::export]]
+// /// @brief Calculate fishing selectivity
+// /// @param len   Length of the fish [cm]
+// /// @param sf    Slope of the selectivity curve
+// /// @param lf50  Midpoint of the selectivity curve [cm]
+// /// @return      Selectivity
+// inline double fishing_selectivity(double len, double sf, double lf50){
+// 	return 1/(1+exp(-sf*(len-lf50)));
+// }
 
 
-// [[Rcpp::export]]
-/// @brief Calculate survival probability over a time interval dt (years) 
-/// \f[s(a,l_a) = e^{- (M(a,l_a) + F)}\f]
-/// where \f$M(a, l_a)\f$ is the instantaneous natural_mortality() rate 
-///
-/// For parameter definitions see also natural_mortality()
-/// @param fishing_mortality Instantaneous fishing mortality rate \f$F\f$
-/// @param dt Interval over which mortality is applied (years)
-inline double survival_probability(double body_length, double temp, double M0, double gamma_3, double alpha_3, double body_length_ref, double Tref, double cT, double fishing_mortality, double dt = 1){
-	double total_mortality = natural_mortality(body_length, temp, M0, gamma_3, alpha_3, body_length_ref, Tref, cT) + fishing_mortality;
-	return exp(-total_mortality * dt);
-}
+// // [[Rcpp::export]]
+// /// @brief Calculate survival probability over a time interval dt (years) 
+// /// \f[s(a,l_a) = e^{- (M(a,l_a) + F)}\f]
+// /// where \f$M(a, l_a)\f$ is the instantaneous natural_mortality() rate 
+// ///
+// /// For parameter definitions see also natural_mortality()
+// /// @param fishing_mortality Instantaneous fishing mortality rate \f$F\f$
+// /// @param dt Interval over which mortality is applied (years)
+// inline double survival_probability(double body_length, double temp, double M0, double gamma_3, double alpha_3, double body_length_ref, double Tref, double cT, double fishing_mortality, double dt = 1){
+// 	double total_mortality = natural_mortality(body_length, temp, M0, gamma_3, alpha_3, body_length_ref, Tref, cT) + fishing_mortality;
+// 	return exp(-total_mortality * dt);
+// }
 
 
 } // namespace fish

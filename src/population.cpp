@@ -287,16 +287,16 @@ double Population::calcTSB(double min_age){
 	return tsb;
 }
 
-vector<double> Population::calcSB(){
-	double tsb = 0, ssb = 0;
-	for (auto& f : fishes){
-		if (f.isAlive && f.age >= par.recruitmentAge){
-			tsb += par.n * f.weight;
-			if (f.isMature) ssb += par.n * f.weight;
-		} 
-	} 
-	return {ssb, tsb};
-}
+// vector<double> Population::calcSB(){
+// 	double tsb = 0, ssb = 0;
+// 	for (auto& f : fishes){
+// 		if (f.isAlive && f.age >= par.recruitmentAge){
+// 			tsb += par.n * f.weight;
+// 			if (f.isMature) ssb += par.n * f.weight;
+// 		} 
+// 	} 
+// 	return {ssb, tsb};
+// }
 
 
 int Population::nfish(){
@@ -310,6 +310,10 @@ int Population::nfish(){
 // 	- par.F6/(1+exp(-par.F4*(len-par.F5)));
 // }
 
+/// Formula:
+/// \f[
+/// F_\text{ref} = \frac{F_1}{1 + \exp(-F_2 \cdot (l - F_3))} - \frac{F_6}{1 + \exp(-F_4 \cdot (l - F_5))}
+/// \f]
 double Population::fishingMortalityRef(double len){
 	// return par.F1/(1+exp(-par.F2*(len-par.F3))); 
 	return 
@@ -322,7 +326,12 @@ double Population::fishingMortalityRef(double len){
 //}
 
 
-/// Fishable biomass is the biomass of all fish above the minimum size limit
+/// @brief Calculate fishable biomass, i.e., biomass of all fish above the minimum size limit
+///
+/// Formula:
+/// \f[
+/// B_{\text{fishable}} = \sum_{i=1}^{N} n \cdot w_i \cdot \mathbb{1}(L_i \geq l_{\text{min}} \ \text{and} \ \text{alive})
+/// \f]
 double Population::fishableBiomass(){
 	double B_fishable = 0;
 	// for (auto& f : fishes) if (f.age > 1) B_fishable += par.n * f.weight * selectivity(f.length);
@@ -338,6 +347,18 @@ double Population::fishableBiomass(){
 // 	return B_fishable;
 // }
 
+
+/// This function computes the average reference fishing mortality rate for each age group within the fish population
+/// 
+/// The calculation proceeds by summing up the reference fishing mortality rate 
+/// and counting the number of fish in each age group. The average for
+/// each age is then computed by dividing the sum by the count.
+/// 
+/// \f[
+///   F_\text{ref}(a) = \frac{1}{N_a} \sum_{i} F_\text{ref}(l_a) \mathbb{1}[\text{age}=a]
+/// \f]
+/// 
+/// If no fish are present in a particular age group, the average is set to a missing value indicator.
 std::vector<double> Population::fishingMortRefByAge(){
 	vector<double> fa_sum(proto_fish.par.amax+2, 0); 
 	vector<double> fa_n(proto_fish.par.amax+2, 0); 
@@ -354,6 +375,17 @@ std::vector<double> Population::fishingMortRefByAge(){
 	return fa_sum;
 }
 
+/// This function computes the average maturity for each age group within the fish population,
+/// considering both non-spawning and spawning-related mortality rates if applicable.
+/// 
+/// The calculation proceeds by summing up the maturity and counting the number of fish in each age group. The average for
+/// each age is then computed by dividing the sum by the count.
+/// 
+/// \f[
+///   M(a) = \frac{1}{N_a} \sum_{i} \mathbb{1}[\text{Mature}] \mathbb{1}[\text{age}=a]
+/// \f]
+/// 
+/// If no fish are present in a particular age group, the average is set to a missing value indicator.
 std::vector<double> Population::maturityByAge(){
 	vector<double> m_sum(proto_fish.par.amax+2, 0); 
 	vector<double> m_n(proto_fish.par.amax+2, 0); 
@@ -370,6 +402,20 @@ std::vector<double> Population::maturityByAge(){
 	return m_sum;
 }
 
+/// This function computes the average natural mortality rate for each age group within the fish population,
+/// considering both non-spawning and spawning-related mortality rates if applicable.
+/// 
+/// The calculation proceeds by summing up the natural mortality rates (adjusted for spawning mortality if
+/// the fish is mature) and counting the number of fish in each age group. The average mortality rate for
+/// each age is then computed by dividing the sum by the count.
+/// 
+/// \f[
+///   \mu(a) = \frac{1}{N_a} \sum_{i} \left( \mu_i(T) + \mathbb{1}[\text{Mature}] \cdot M_\text{spawning} \right) \mathbb{1}[\text{age}=a]
+/// \f]
+/// 
+/// If no fish are present in a particular age group, the average is set to a missing value indicator.
+/// 
+/// @see Fish::naturalMortalityRate, fishes
 vector<double> Population::naturalMortByAge(double temp){
 	vector<double> ma_sum(proto_fish.par.amax+2, 0); 
 	vector<double> ma_n(proto_fish.par.amax+2, 0); 
@@ -401,7 +447,12 @@ double Population::avgOverAges(const std::vector<double> &Qa, int amin, int amax
 }
 
 
-
+/// Formula:
+/// \f[
+/// \text{rate} = \frac{N_r^{1-b} \cdot F \cdot \left(\exp\left(-(F+M) \cdot (1-b)\right) - 1\right)}{q \cdot (F+M) \cdot (b-1)}
+/// \f]
+///
+/// If \f$ |F+M| < 1 \times 10^{-10} \f$, i.e., both F and M are zero, the function returns 0.
 double Population::effort1(double Nr, double F, double M){
 	if (fabs(F+M) < 1e-10) return 0;
 	else return pow(Nr, 1-par.b) * F * (exp(-(F+M)*(1-par.b))-1) / (par.q*(F+M)*(par.b-1)); 
@@ -433,7 +484,64 @@ inline double rnorm(double mu=0, double sd=1){
 	return mu + sd*x;
 }
 
-
+/// This function simulates the annual dynamics of a fish population, including maturation, growth, reproduction, 
+/// mortality (both natural and fishing-induced), and population metrics.
+///
+/// Detailed Steps:
+/// 0. Update Fishing and Natural Mortality Rates:
+///    - Calculate age-specific average fishing mortality rate (Fref_a), including spawning grounds fishery.
+///    - Calculate age-specific average natural mortality rate (Mort_a), including spawning grounds fishery.
+///    - Calculate age-specific average maturity (Mat_a).
+///    - Average these quantities over ages 5-10 to get Fref_5_10, Mort_5_10, and Mat_5_10.
+///    - Calculate chi, a factor that scales Fref_5_10 to give the actual fishing mortality rate, such that the overall fishing mortality rate adds up to Fc, the control parameter.
+///      \f[
+///      \chi = 
+///      \begin{cases} 
+///      0 & \text{if } F_\text{ref,5-10} = 0 \\
+///      \frac{F_c \cdot (1 - \rho \cdot M_\text{5-10})}{F_\text{ref,5-10}} & \text{otherwise}
+///      \end{cases}
+///      \f]
+///
+/// 1. Maturation:
+///    - Update the maturity status of each fish in the population based on temperature effects.
+///    - Calculate metrics for analysis: proportion of mature fish (maturity) and number of fish reaching recruitment age (nfish_ra).
+///
+/// 2. Growth:
+///    - Calculate the total spawning biomass (TSB) of the population.
+///    - Update the length (growth) of each fish in the population based on TSB and temperature.
+///    - Calculate metrics for analysis: average density-inhibition factor (factor_dg), maximum length (lmax), and 90th percentile length (length90).
+///
+/// 3. Reproduction and Spawning Grounds Fishery:
+///    - Calculate the initial spawning stock biomass (SSB) of the population.
+///    - Implement pre-spawning mortality for mature fish exposed to spawning grounds fishery (SPF).
+///    - Calculate metrics for analysis: actual and reference spawning stock biomass (ssb_spawning and ssb_spawning_ref).
+///    - Calculate spawning mortality and recruitment of fish, adjusting for survival and potential recruits.
+///    - Generate recruits (offspring) from spawning events, considering genetic traits and environmental variability.
+///    - Implement post-spawning mortality for mature fish exposed to SPF.
+///    - Calculate metrics for analysis: actual and reference SSB after spawning (ssb_after_spawning and ssb_after_spawning_ref).
+///
+/// 4. Mortality:
+///    - Calculate fishing effort requirements and actual efforts based on fishable biomass and mortality rates.
+///    - Implement natural and fishing-induced mortality for all fish in the population.
+///    - Calculate yield (harvested biomass) and mortality metrics for analysis.
+///
+/// 5. Age Advancement:
+///    - Increment the age of all surviving fish in the population.
+///
+/// 6. Recruitment:
+///    - Add newly recruited fish (offspring) to the population.
+///
+/// 7. Calculate Employment and Profit:
+///    - Calculate employment (sea and shore) and profit (sea and shore) based on yield, costs, and prices.
+///
+/// 8. Print and Return:
+///    - Print annual summary statistics and return a vector containing various population metrics and dynamics.
+///    - Metrics include: SSB, yield, employment, profit, biological metrics (mortality rates, lengths, survival probabilities, etc.).
+///
+/// @see Fish::updateMaturity, Fish::grow, Fish::produceRecruits, calcTSB, calcSSB, effort1, fishingMortalityRef
+///
+/// @todo Confirm placement of mortality rate update and spawning stock calculations with domain experts.
+///
 std::vector<double> Population::update(double temp){
 	for (auto& f : fishes) assert(f.isAlive);
 	int nfish_start = fishes.size();

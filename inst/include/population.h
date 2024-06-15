@@ -176,13 +176,26 @@ class Population{
 	double calcTSB(double min_age = 0);
 	std::vector<double> calcSB();
 
-	// double selectivity(double len);
+	/// @brief Fishing mortality rate as a function of length under status quo conditions, used as a selectivity function
+	/// @param len 
+	/// @return Reference fishing mortality
 	double fishingMortalityRef(double len);
-	double fishableBiomass();
-	// double fishableSpawningBiomass();
 
+	/// @brief Fishable biomass in the population
+	/// @return fishable biomass [kg]
+	double fishableBiomass();
+
+	/// @brief Calculate average fishing mortality rate for each age class, including spawning grounds fishery
+	/// @return A vector containing the average fishing mortality rate for each age group, indexed by age
 	std::vector<double> fishingMortRefByAge();
+
+	/// @brief Calculate average maturity for each age class
+	/// @return A vector containing the average maturity rate for each age group, indexed by age
 	std::vector<double> maturityByAge();
+
+	/// @brief Calculate average natural mortality rate for each age class, including spawning mortality
+	/// @param temp The current temperature affecting natural mortality rates.
+	/// @return A vector containing the average natural mortality rate for each age group, indexed by age
 	std::vector<double> naturalMortByAge(double temp);
 
 	/// @brief Average an age-dependent quantity Q over the given age range, excluding missing values
@@ -193,10 +206,16 @@ class Population{
 	/// @return averaged quantity 
 	double avgOverAges(const std::vector<double>& Qa, int amin, int amax, double missing_value = -1e20);
 
-	//double calcRealizedFishingMortality();
-	// double effort(double Nr, double F, double temp);
+	/// @brief Calculates the fishing effort
+	/// @param F Fishing mortality.
+	/// @param M Natural mortality.
+	/// @param Nr Population size as a fraction of carrying capacity
+	/// @return Fishing effort [vessel-days/year].
 	double effort1(double Nr, double F, double M);
 
+	/// @brief Updates the population dynamics for one time step.
+	/// @param temp The current temperature affecting fish biology and dynamics.
+	/// @return A vector containing various population metrics and dynamics for analysis.
 	std::vector<double> update(double temp = 5.6);
 
 	int nfish();
