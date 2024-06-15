@@ -33,14 +33,18 @@ void Fish::init(double tsb, double temp){
 	/// - Initialization sets age to 1. In Dankel et al model, this will also set length.
 	set_age(1);
 	
-	/// - In Joshi et al model, length at age 1 is explicitly calculated using length, temperature, and TSB, at birth.
+	/// - In Joshi et al model, length at age 1 needs to be explicitly calculated
+	//  - According to email communication with Mikko (dated 26/2/2024):
+	//     At the time of the survey from where the data originated, the youngest cohort are about 1/2 year old. 
+	//     If we break year at the survey time, then they have integer age of 1 year.
+	//     Therefore, the parameter par.L0 is the length of age 1 individuals
 	if (par.growth_model == GrowthModel::Bioenergetic){
-		// calc length at age 1
-		double tsb_ano = tsb - par.tsbmean;
-		double temp_ano = temp - par.Tmean;
-		double dl = fish::dl_power(tsb_ano, temp_ano, par.gamma1, par.gamma2, par.alpha1, par.alpha2, par.beta1, par.beta2);
-		double l1 = fish::length_juvenile(par.L0, dl, par.gamma1, par.gamma2);
-
+		// // calc length at age 1
+		// double tsb_ano = tsb - par.tsbmean;
+		// double temp_ano = temp - par.Tmean;
+		// double dl = fish::dl_power(tsb_ano, temp_ano, par.gamma1, par.gamma2, par.alpha1, par.alpha2, par.beta1, par.beta2);
+		// double l1 = fish::length_juvenile(par.L0, dl, par.gamma1, par.gamma2);
+		double l1 = par.L0;
 		set_length(l1);
 	}
 }

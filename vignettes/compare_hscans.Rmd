@@ -33,7 +33,9 @@ We can use the fishery simulator to simulate multiple populations (i.e., populat
 params_file = "../params/cod_params_dankel22.ini"
 ```
 
-As usual, we begin with creating a prototype fish 
+As usual, we begin with creating a prototype fish.
+
+Then, we create a simulator with this prototype, which will simulate a given population under different conditions.
 
 ```{r}
 # Create a prototype fish as usual
@@ -42,7 +44,7 @@ fish = new(Fish, params_file)
 # Create a simulator
 sim = new(Simulator, fish)
 
-sim$equilibriateNaturalPopulation(params_file, 1.93e3, 5.61, 2e6)
+sim$equilibriateNaturalPopulation(params_file, 5.61, 2e6)
 ```
 
 
@@ -99,15 +101,17 @@ fish = new(Fish, params_file)
 
 sim = new(Simulator, fish)
 
-sim$equilibriateNaturalPopulation(params_file, 1.93e3, 5.61, 2e6)
+sim$equilibriateNaturalPopulation(params_file, 5.61, 2e6)
 
 pop = new(Population, fish)
 pop$readParams(params_file, F)
-pop$par$F_spf = 0
+# pop$par$F_spf = 0
 pop$par$recruitmentAge = 1
 pop$par$dmax = 30000
 pop$set_superFishSize(5e6)
 pop$verbose = F
+pop$init(1000, 5.61)
+pop$noFishingEquilibriate(5.61)
 
 nsteps = 200
 hvec = seq(0.01, 0.99, length.out = 20)
@@ -115,7 +119,7 @@ lminvec = seq(45, 200, length.out = 3)
 Tvec = seq(4, 8, length.out = 20)
 
 if(re_simulate){
-  res_ibm_full = sim$simulate_multi_2d(pop, c(5.61), c(45), hvec, nsteps, 1.93e3, T)
+  res_ibm_full = sim$simulate_multi_2d(pop, c(5.61), c(45), hvec, nsteps, 1.93e3, F)
   save(res_ibm_full, file="outputs/res_ibm_scan_h_Dankel22.Rdata")
 } else {
   load("outputs/res_ibm_scan_h_Dankel22.Rdata")

@@ -21,6 +21,38 @@ source("../tests/ref/simulator.7.R")
 
 Given the fisheries management parameters, i.e., the minimum size limit and the harvest proportion, the socioeconomic model calculates fishing mortality, the corresponding yield, and other socioeconomic outcomes such as employment and profit. 
 
+## Set up a population
+
+```{r}
+params_file = "../params/cod_params.ini"
+
+fish = new(Fish, params_file)
+
+pop = new(Population, fish)
+pop$readParams(params_file, F)
+pop$par$n = 2e6  # Each superfish contains so many fish
+
+state_nf = pop$noFishingEquilibriate(5.61)
+ssb_nf = state_nf[1]
+```
+
+## Computations of Fref etc
+
+```{r}
+Fref_vec = pop$fishingMortRefByAge()
+Mort_vec = pop$naturalMortByAge(5.61)
+Mat_vec = pop$maturityByAge()
+
+cbind(Fref_vec, Mort_vec, Mat_vec)[5:10,]
+
+F_5_10 = pop$avgOverAges(Fref_vec, 5, 10, -1e20)
+M_5_10 = pop$avgOverAges(Mort_vec, 5, 10, -1e20)
+Ma_5_10 = pop$avgOverAges(Mat_vec, 5, 10, -1e20)
+
+cbind(F_5_10, M_5_10, Ma_5_10)
+
+```
+
 ## Fishing Mortality
 
 For a given harvesting rate $h$ and minimum size limit $L_{50}$, fishing mortality rate is given by 

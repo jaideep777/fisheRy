@@ -24,14 +24,20 @@ class PopulationParams {
 	int recruitmentAge; // = 3;
 
 	// management / fishing selectivity
-	// double sf; // = 0.1222;	// steepness of selectivity curve
-	// double lf50; // = 45; //61.4806;  // threshold fish length
+	double lmin_sq;  // status quo minimum size limit, for which the selectivity curve is calibrated
+	double F3_sq;    // F3 for status quo fishery
+	double F5_sq;    // F5 for status quo fishery
+
+	double lmin;
 	double F1;
 	double F2;
 	double F3;
 	double F4;
 	double F5;
 	double F6;
+
+	// double sf; // = 0.1222;	// steepness of selectivity curve
+	// double lf50; // = 45; //61.4806;  // threshold fish length
 
 	// environmental stochasticity
 	double sigmaf; // = 0.4858775;
@@ -55,19 +61,21 @@ class PopulationParams {
 	double variable_costs_sea; // = 65000; 		// variable costs NOK/vessel day
 	double scale_catch; // = 0.356; //0.53; 		// percentage of total codfish catch that is cod
 	
-	double F_spf; // Fishing mortality rate in the spawning grounds
+	double rho;   // ratio of spawning grounds F to total (control) F 
 	double f_spf_before; // percent of spawning grounds fishing that happens before spawning
 
 	double h = 0;
-	double F_fgf = 0;
+	double Fc = 0;
 
 	double n = 5e6;	// superfish size
 
 
 	// ***
 	// calculated variables
-	double mort_fishing_mature = 0; 
-	double mort_fishing_immature = 0; 
+	// double mort_fishing_mature = 0; 
+	// double mort_fishing_immature = 0; 
+	// double F_spf; // Fishing mortality rate in the spawning grounds
+	// double F_fgf; // Fishing mortality rate in the feeding grounds
 
 	// OLD EFFORT DYNAMICS
 //	bool use_old_model_effort = false;
@@ -108,6 +116,8 @@ class Population{
 	std::normal_distribution<double> normal_dist;
 	std::vector<double> nrecruits_vec;
 
+	double std_missing_value = -1e20;
+
 	public:
 	// names of variables returned by Population::upodate()
 	std::vector<std::string> colnames = 
@@ -119,7 +129,7 @@ class Population{
 	     "survival_mean", "maturity", "Nrel",
 		 "ssb_spawning", "ssb_spawning_ref", "ssb_after_spawning", "ssb_after_spawning_ref", "ssbn", "ssbn_ref", "yield_spf", "yield_spf_ref",
 		 "tsb_before_mort", "tsb_after_mort", "to_sea_bed",
-		 "F_5_10", "M_5_10", "h_5_10"
+		 "chi", "Fref_5_10", "Mort_5_10", "Mat_5_10", "F_spf"
 		 };
 
 	public:
@@ -155,26 +165,36 @@ class Population{
 	// void calc_athresh(double tsb0, double temp);
 
 	void set_harvestProp(double _h);
-	void set_fishingMortality(double _F_fgf);
+	// void set_fishingMortality(double _F_fgf);
 	void set_minSizeLimit(double _lf50);
 	void set_traitVariances(std::vector<double>var);
-	void init(int n, double tsb, double temp);	// initialize population with n individuals
+	void init(int n, double temp);	// initialize population with n individuals
 
-	std::vector<double> noFishingEquilibriate(double tsb0, double temp);	
+	std::vector<double> noFishingEquilibriate(double temp);	
 
 	double calcSSB(double min_age = 0);
 	double calcTSB(double min_age = 0);
 	std::vector<double> calcSB();
 
-	double selectivity(double len);
+	// double selectivity(double len);
+	double fishingMortalityRef(double len);
 	double fishableBiomass();
 	// double fishableSpawningBiomass();
 
-	std::vector<double> fishingMortByAge();
+	std::vector<double> fishingMortRefByAge();
+	std::vector<double> maturityByAge();
 	std::vector<double> naturalMortByAge(double temp);
 
+	/// @brief Average an age-dependent quantity Q over the given age range, excluding missing values
+	/// @param Qa     vector containing the age-dependent quantity Q. The vector is indexed by age, so Q[0] will be a garbage value
+	/// @param amin   minimum age (inclusive)
+	/// @param amax   maximum age (inclusive)
+	/// @param missing_value  value in Qa to ignore while averaging
+	/// @return averaged quantity 
+	double avgOverAges(const std::vector<double>& Qa, int amin, int amax, double missing_value = -1e20);
+
 	//double calcRealizedFishingMortality();
-	double effort(double Nr, double F, double temp);
+	// double effort(double Nr, double F, double temp);
 	double effort1(double Nr, double F, double M);
 
 	std::vector<double> update(double temp = 5.6);

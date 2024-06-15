@@ -22,26 +22,36 @@ source("../tests/ref/simulator.7.R")
 params_file = "../params/cod_params.ini"
 ```
 
+## Initialize a population
+
 To simulate a fished population, we start with creating a fish and constructing a population from it, as usual.
 
 ```{r }
 fish = new(Fish, params_file)
-# fish$par$Bhalf = 3.65e8
-# 
-# fish$par$growth_model_name = "Dankel22"
-# fish$par$maturation_model_name = "Dankel22"
-# fish$par$mortality_model_name = "Dankel22"
-# fish$par$recruitment_model_name = "BevertonHoltDirect"
-
-fish$init(1.93e3, 5.61)
-fish$par$print()
-fish$get_state()
 
 pop = new(Population, fish)
 pop$readParams(params_file, F)
 pop$par$n = 2e6  # Each superfish contains so many fish
 
 ```
+
+For simulating fishing, it is important for the population to start with a realistic state distribution. Therfore, we "spin-up" the population under no-fishing conditions. 
+
+```{r}
+state_nf = pop$noFishingEquilibriate(5.61)
+ssb_nf = state_nf[1]
+```
+
+Let's see how the population state looks after no-fishing equilibrium.
+
+```{r}
+d = pop$get_state()
+dist = table(d$age, d$length)
+
+image(x=as.numeric(rownames(dist)), y = as.numeric(colnames(dist)), z=log(1+3*log(dist)), col=scales::viridis_pal()(100), xlab="Age", ylab="Length")
+
+```
+
 
 ### Set fishing parameters
 
@@ -53,7 +63,8 @@ Once we have created a population, we can set the fishing parameters:
 The most important step is to set the `simulate_bio_only` flag, because simulating the socioeconomic dynamics requires additional steps, which we will show in another vignette.
 
 ```{r}
-pop$set_harvestProp(0.3)   # Harvest 
+h = 0.3
+pop$set_harvestProp(h)   # Harvest 
 pop$set_minSizeLimit(45) # Only fish above 45 cm length can be harvested
 ```
 
@@ -61,18 +72,22 @@ pop$set_minSizeLimit(45) # Only fish above 45 cm length can be harvested
 pop$par$simulate_bio_only = T # VERY IMPORTANT
 ```
 
-### Initialise and simulate the population
+### Simulate the population
 
-We again simulate a population by continuously `update`ing it. Each update performs 1 year of simulation, implementing the processes of maturation, growth, mortality, and reproduction for each fish in the population.
+Now we are ready to simulate the population with fishing by continuously `update`ing it. Each update performs 1 year of simulation, implementing the processes of maturation, growth, mortality, and reproduction for each fish in the population.
+
+Let's confirm that the parameters we have set are registered:
+```{r}
+pop$par$print()
+```
 
 This time, we also provide a dynamic temperature timeseries to the population, wherein the first 100 years have a fixed temperature of 5.61 degC, and in the next 100 years, temperature increases linearly to 8 degC.
 
 ```{r fig.height=9}
-pop$init(1000, 1.93e3, 5.61)  # initialize the population with 1000 agents (superfish)
 pop$verbose = T
 nsteps = 200             # Let's simulate for 200 years
 nfish = numeric(nsteps)  # Let's keep track of the number of superfish
-nfish[1]=1000            # Since we initialized the population with 1000 superfish
+nfish[1]=pop$nfish()            
 cnames = pop$colnames
 dat = data.frame(matrix(ncol=length(cnames), nrow=0))
 colnames(dat) = cnames
@@ -86,12 +101,6 @@ for (i in 1:nsteps){
   nfish[i] = pop$nfish()
 }
 
-# for (i in (nsteps/2+1):nsteps){
-#   v = pop$update(temp[i])       # Update all fish over 1 year 
-#   dat[i,] = v    # some book-keeping
-#   nfish[i] = pop$nfish()
-# }
-
 d = pop$get_state()
 dist = table(d$age, d$length)
 
@@ -100,7 +109,8 @@ plot(temp~seq(1,nsteps))
 plot(nfish~seq(1,nsteps,1), ylab="No. of superfish", xlab="Year")
 image(x=as.numeric(rownames(dist)), y = as.numeric(colnames(dist)), z=log(1+3*log(dist)), col=scales::viridis_pal()(100), xlab="Age", ylab="Length")
 
-res = simulate(0.3, 45, F)
+res = simulate(h, 45, F)
 matplot(cbind(dat$ssb/1e9, res$summaries$SSB[1:nsteps]/1e9), ylab="SSB (MT)", xlab="Year", col=c("cyan", "black"), lty=1, type=c("o","l"), pch=1)
+abline(h=ssb_nf/1e9, col="grey") 
 
 ```

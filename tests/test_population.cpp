@@ -21,7 +21,7 @@ int main(){
 	// pop.noFishingEquilibriate(1.93e3, 5.61);
 	// pop.set_harvestProp(0.1);
 
-	pop.init(1000, 1.93e3, 5.61);
+	pop.init(1000, 5.61);
 	
 	for (int t=0; t<200; ++t){
 		pop.update(5.61);
