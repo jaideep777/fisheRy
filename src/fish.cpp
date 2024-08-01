@@ -19,6 +19,16 @@ Fish::Fish(string params_file){
 	//par.print();
 }
 
+
+void Fish::setMortalityParams(double _Mref, double _M0, double _b){
+	par.Mref = _Mref;
+	par.M0 = _M0;
+	par.b = _b;
+	par.alpha3 = _Mref;
+	par.gamma3 = -_b;
+}
+
+
 void Fish::init(double tsb, double temp){
 	par.init();
 	

@@ -178,7 +178,8 @@ class Fish{
 	// Fish(double tb = 0);
 	
 	/// Construct a fish and initialize parameters using a parameters file
-	Fish(std::string params_file); 
+	Fish(std::string params_file);
+	void setMortalityParams(double _Mref, double _M0, double _b);
 
 	/// @brief Set fish age and other variables that scale directly with age
 	void set_age(int _a);      

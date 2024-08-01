@@ -321,10 +321,11 @@ double Population::fishingMortalityRef(double len){
 	- par.F6/(1+exp(-par.F4*(len-par.F5)));
 }
 
-//double Population::calcRealizedFishingMortality(){
-//	
-//}
 
+/// Currently, a fish is fishable simply if it is larger than the minimum size limit
+bool Population::isFishable(const Fish &f){
+	return f.length >= par.lmin;
+}
 
 /// @brief Calculate fishable biomass, i.e., biomass of all fish above the minimum size limit
 ///
@@ -336,17 +337,10 @@ double Population::fishableBiomass(){
 	double B_fishable = 0;
 	// for (auto& f : fishes) if (f.age > 1) B_fishable += par.n * f.weight * selectivity(f.length);
 	for (auto& f : fishes){
-		if (f.isAlive && f.length >= par.lmin) B_fishable += par.n * f.weight;
+		if (f.isAlive && isFishable(f)) B_fishable += par.n * f.weight;
 	}
 	return B_fishable;
 }
-
-// double Population::fishableSpawningBiomass(){
-// 	double B_fishable = 0;
-// 	for (auto& f : fishes) if (f.age > 1 && f.isMature) B_fishable += par.n * f.weight * selectivity(f.length);
-// 	return B_fishable;
-// }
-
 
 /// This function computes the average reference fishing mortality rate for each age group within the fish population
 /// 
@@ -430,6 +424,70 @@ vector<double> Population::naturalMortByAge(double temp){
 		else ma_sum[i] = std_missing_value; // should be treated as missing value in averages
 	}
 	return ma_sum;
+}
+
+
+/// This function computes the average per capita natural mortality rate over the fishable population.
+/// 
+/// \f[
+///   \mu = \frac{1}{N} \sum_{i} \left( \mu_i(T) + \mathbb{1}[\text{Mature}] \cdot M_\text{spawning} \right) \mathbb{1}[\text{fishbale}]
+/// \f]
+/// 
+/// If no fishable fish are present, the average is set to 0.
+/// 
+/// @see Fish::naturalMortalityRate, fishes
+double Population::naturalMortFishable(double temp){
+	double mu = 0, n = 0;
+	for (auto& f : fishes){
+		if (f.isAlive && isFishable(f)){
+			mu += f.naturalMortalityRate(temp) + double(f.isMature)*f.par.Mspawning;
+			n += 1;
+		}
+	} 
+	if (n == 0) return 0;
+	else return mu/n;
+}
+
+/// This function computes the average per capita reference fishing mortality rate over the fishable population.
+/// 
+/// \f[
+///   \mu = \frac{1}{N} \sum_{i} F_\text{ref}(l_a) \mathbb{1}[\text{fishable}]
+/// \f]
+/// 
+/// If no fishable fish are present, the average is set to 0.
+/// 
+/// @see Fish::naturalMortalityRate, fishes
+double Population::fishingMortRefFishable(){
+	double mu = 0, n = 0;
+	for (auto& f : fishes){
+		if (f.isAlive && isFishable(f)){
+			mu += fishingMortalityRef(f.length);
+			n += 1;
+		}
+	} 
+	if (n == 0) return 0;
+	else return mu/n;
+}
+
+/// This function computes the average maturity rate the fishable population.
+/// 
+/// \f[
+///   \mu = \frac{1}{N} \sum_{i} M(l_a) \mathbb{1}[\text{fishable}]
+/// \f]
+/// 
+/// If no fishable fish are present, the average is set to 0.
+/// 
+/// @see Fish::maturity, fishes
+double Population::maturityFishable(){
+	double ma = 0, n = 0;
+	for (auto& f : fishes){
+		if (f.isAlive && isFishable(f)){
+			ma += (f.isMature)? 1:0;
+			n += 1;
+		}
+	} 
+	if (n == 0) return 0;
+	else return ma/n;
 }
 
 
@@ -549,18 +607,23 @@ std::vector<double> Population::update(double temp){
 	// 0. Update F_5_10 and M_5_10 at start of the year
 	// FIXME: Confirm the placement of this chunk with Mikko. Should this be done after decision to mature?
 	// ~~~~~~~~~~~~
-	vector<double> Fref_a = fishingMortRefByAge(); // calculate age-specific average fishing mortality rate, including spawning grounds fishery
-	vector<double> Mort_a = naturalMortByAge(temp); // calculate age-specific average natural mortality rate, including spawning mortality
-	vector<double> Mat_a  = maturityByAge(); // calculate age-specific average natural mortality rate, including spawning mortality
+	// vector<double> Fref_a = fishingMortRefByAge(); // calculate age-specific average fishing mortality rate, including spawning grounds fishery
+	// vector<double> Mort_a = naturalMortByAge(temp); // calculate age-specific average natural mortality rate, including spawning mortality
+	// vector<double> Mat_a  = maturityByAge(); // calculate age-specific average natural mortality rate, including spawning mortality
 
-	// average the maturity, ref fishing, and natural mortality rates over ages 5-10
-	double Fref_5_10 = avgOverAges(Fref_a, 5, 10, std_missing_value);
-	double Mort_5_10 = avgOverAges(Mort_a, 5, 10, std_missing_value);
-	double Mat_5_10  = avgOverAges(Mat_a,  5, 10, std_missing_value);
-	double chi = (Fref_5_10 == 0)? 0 : par.Fc*(1-par.rho*Mat_5_10)/Fref_5_10; // FIXME: this implies that chi will be very high for a young population just entering age 5, which is purely a population artefact!
+	// // average the maturity, ref fishing, and natural mortality rates over ages 5-10
+	// double Fref_5_10 = avgOverAges(Fref_a, 5, 10, std_missing_value);
+	// double Mort_5_10 = avgOverAges(Mort_a, 5, 10, std_missing_value);
+	// double Mat_5_10  = avgOverAges(Mat_a,  5, 10, std_missing_value);
+
+	double Fref_ref = fishingMortRefFishable();
+	double Mort_ref = naturalMortFishable(temp);
+	double Mat_ref = maturityFishable();
+
+	double chi = (Fref_ref == 0)? 0 : par.Fc*(1-par.rho*Mat_ref)/Fref_ref; // FIXME: this implies that chi will be very high for a young population just entering age 5, which is purely a population artefact!
 
 	double F_spf = par.rho * par.Fc;
-	double F_fgf = chi * Fref_5_10;
+	double F_fgf = chi * Fref_ref;
 	// ~~~~~~~~~~~~
 
 	// 1. Maturation
@@ -579,7 +642,7 @@ std::vector<double> Population::update(double temp){
 	// ** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// 2. Growth
-	double tsb = calcTSB();
+	double tsb = calcTSB(par.recruitmentAge);
 	for (auto& f: fishes){
 		f.grow(tsb/1e6, temp); // convert tsb to kT
 	}
@@ -610,7 +673,7 @@ std::vector<double> Population::update(double temp){
 	// 3. Reproduction and Spawning grounds fishery
 	// implement spawning for remaining fish
 	// FIXME: Check carefully where SSB should include fish below recruitment age and where not...
-	double ssb = calcSSB();
+	double ssb = calcSSB(par.recruitmentAge);
 	double ssb0 = ssb;
 	if (verbose) cout << "ssb0 = " << ssb0 << endl;
 
@@ -664,7 +727,7 @@ std::vector<double> Population::update(double temp){
 	double r0_avg = (ssb_spawning>0)? (nrecruits_real * (1 + ssb_spawning/proto_fish.par.Bhalf) / ssb_spawning) : -999;
 	double factor_dr = nrecruits_real / (nrecruits_potential+1e-12);
 	double nrecruits_per_fish = nrecruits_real/nspawners;
-	double ssb_after_spawning = calcSSB();
+	double ssb_after_spawning = calcSSB(par.recruitmentAge);
 	if (verbose) cout << "n_spawners / n_recruits = " << nspawners << " / " << nrecruits_real << endl;
 	// **
 
@@ -704,7 +767,7 @@ std::vector<double> Population::update(double temp){
 		}
 	}
 
-	double ssbn = calcSSB();
+	double ssbn = calcSSB(par.recruitmentAge);
 
 	double yield_spf_ref = ssb0*h_spf*(par.f_spf_before + (1-par.f_spf_before)*exp(-proto_fish.par.Mspawning));
 	double ssbn_ref = ssb0*(1-h_spf)*exp(-proto_fish.par.Mspawning);
@@ -724,7 +787,7 @@ std::vector<double> Population::update(double temp){
 			
 			// Effort covers spawning and feeding grounds, so 
 			//   we use the total control fishing mortality rate and the total natural mortality rate
-			E_req = (Nrel < 1e-10)? 0 : effort1(Nrel, F_real, Mort_5_10); 
+			E_req = (Nrel < 1e-10)? 0 : effort1(Nrel, F_real, Mort_ref); 
 			//pow(Nrel, 1-par.b) * F * (exp(-(F+M)*(1-par.b))-1) / (par.q*(F+M)*(par.b-1));
 			D_sea_req  = par.dsea * E_req;
 			D_sea_real = D_sea_req / (1 + D_sea_req/par.dmax);
@@ -737,7 +800,7 @@ std::vector<double> Population::update(double temp){
 	}
 
 	// implement natural+fishing mortality in feeding grounds over the rest of the year, and calculate yield
-	double tsb_before_mort = calcTSB();
+	double tsb_before_mort = calcTSB(par.recruitmentAge);
 	double yield = 0, to_sea_bed = 0;
 	double survival_mean = 0, n_survival_mean = 0;
 	for (auto& f : fishes){
@@ -759,7 +822,7 @@ std::vector<double> Population::update(double temp){
 	} 
 	survival_mean /= n_survival_mean;
 
-	double tsb_after_mort = calcTSB();
+	double tsb_after_mort = calcTSB(par.recruitmentAge);
 
 	// remove dead fish from population
 	fishes.erase(std::remove_if(fishes.begin(), fishes.end(), [](Fish &f){return !f.isAlive;}), fishes.end());
@@ -786,7 +849,6 @@ std::vector<double> Population::update(double temp){
 	//}
 	}
 
-	// FIXME: Why difference between yield calculated in 2 diff ways?
 	if (verbose) cout << "year = " << current_year 
 	                  << " | TSB(MT) = " << tsb/1e9 << ", SSB(MT) = " << ssb/1.0e9 
 					  << ", recruits = " << nrecruits_real << "/" << std::accumulate(nrecruits_vec.begin(), nrecruits_vec.end(), 0.0) 
@@ -800,11 +862,12 @@ std::vector<double> Population::update(double temp){
 					  << ", dg/dr = " << factor_dg << "/" << factor_dr
 					  << ", yield = " << yield 
 					  << "\n";
+					  
 	++current_year;
 	return {ssb, yield, emp_sea+emp_shore, profit_sea+profit_shr, emp_sea, emp_shore, profit_sea, profit_shr, tsb, r0_avg, nrecruits_real, nfish_ra, static_cast<double>(nfish()), factor_dg, factor_dr, lmax, length90, survival_mean, maturity, Nrel, 
 		    ssb_spawning, ssb_spawning_ref, ssb_after_spawning, ssb_after_spawning_ref, ssbn, ssbn_ref, yield_spf, yield_spf_ref,
 			tsb_before_mort, tsb_after_mort, to_sea_bed, 
-			chi, Fref_5_10, Mort_5_10, Mat_5_10, F_spf
+			chi, Fref_ref, Mort_ref, Mat_ref, F_spf
 			};	
 }
 
@@ -839,8 +902,8 @@ void Population::print_summary(){
 	cout << "K_fishable   = " << K_fishableBiomass << '\n';
 	cout << "K_ssb        = " << K_ssb << '\n';
 	cout << "nfish        = " << fishes.size() << '\n';
-	cout << "SSB          = " << calcSSB() << '\n';
-	cout << "TSB          = " << calcTSB() << '\n';
+	cout << "SSB          = " << calcSSB(par.recruitmentAge) << '\n';
+	cout << "TSB          = " << calcTSB(par.recruitmentAge) << '\n';
 	cout << "B_fishable   = " << fishableBiomass() << '\n';
 
 	summarize();

@@ -114,7 +114,6 @@ for (ih in 1:length(hvec)){
 
 ```{r fig.height=9}
 fish = new(Fish, "../params/cod_params.ini")
-fish$par$s0 = 0.2
 sim = new(Simulator, fish)
 sim$equilibriateNaturalPopulation(params_file, 5.61, 2e6)
 
