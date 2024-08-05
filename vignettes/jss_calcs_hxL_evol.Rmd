@@ -33,7 +33,7 @@ params_file = "../params/cod_params.ini"
 # Create a prototype fish as usual
 fish = new(Fish, params_file)
 sim = new(Simulator, fish)
-sim$equilibriateNaturalPopulation(params_file, 1.93e3, 5.61, 5e6)
+sim$equilibriateNaturalPopulation(params_file, 5.61, 5e6)
 
 fish$trait_variances = c(1, 1, 1, 1, 1, 0)*(0.05)^2
 ```
@@ -97,12 +97,14 @@ $h = 0.41$, $L50 = 45$, $T = 5.6$.
 pop_sq = new(Population, fish)
 pop_sq$readParams(params_file, F)
 pop_sq$set_superFishSize(2e6)
+pop_sq$init(1000, 5.61)
+pop_sq$noFishingEquilibriate(5.61)
 
-h_sq = 0.0
+h_sq = 0.05
 lf_sq = 45
-t_sq = 5.61
-nsteps_sq = 100
-res_ibm_sq = sim$simulate(pop_sq, lf_sq, h_sq, nsteps_sq, 1.93e3, t_sq, T)
+t_sq = 5.6
+nsteps_sq = 500
+res_ibm_sq = sim$simulate(pop_sq, lf_sq, h_sq, nsteps_sq, 1.93e3, t_sq, F)
 
 plot_timeseries(res_ibm_sq, pop_sq, h_sq, nsteps_sq)
 
@@ -129,7 +131,7 @@ plot_traits_now(pop_sq$get_traits())
 Thus, we can plot the two populations together. At the end of this plot, is our status-quo population which we will use as a starting point for JSS simulations.
 
 ```{r}
-plot(c(res_ibm_sq$ssb, res_ibm$ssb)~seq(1,250), type="l", col="cyan3")
+plot(c(res_ibm_sq$ssb, res_ibm$ssb)~seq(1,nsteps_sq+nsteps), type="l", col="cyan3")
 abline(v = 500)
 ```
 
@@ -146,7 +148,7 @@ saved_filename = paste0("outputs/res_ibm_hxL_T",tvec[1],"_evol_n",nsteps_jss,".R
 re_simulate = re_simulate_global | !file.exists(saved_filename)
 
 if (re_simulate){ 
-  pop_sq$set_superFishSize(4e6)
+  pop_sq$set_superFishSize(2e6)
   res_ibm_full = sim$simulate_multi_2d(pop_sq, tvec, lfvec, hvec, nsteps_jss, 1.93e3, F)
   save(res_ibm_full, file = saved_filename)
 } else{

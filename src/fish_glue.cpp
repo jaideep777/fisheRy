@@ -22,9 +22,9 @@ RCPP_MODULE(fish_module) {
 	function("weight_fish", &fish::weight_fish);
 	function("fecundity", &fish::fecundity);
 	function("gsi", &fish::gsi);
-	function("natural_mortality", &fish::natural_mortality);
-	function("survival_probability", &fish::survival_probability);
-	function("fishing_selectivity", &fish::fishing_selectivity);
+	// function("natural_mortality", &fish::natural_mortality);
+	// function("survival_probability", &fish::survival_probability);
+	// function("fishing_selectivity", &fish::fishing_selectivity);
 	
 	class_ <FishParams>("FishParams")
 		.constructor()
@@ -63,6 +63,8 @@ RCPP_MODULE(fish_module) {
 		.field_readonly("t_birth", &Fish::t_birth)
 		.field("par", &Fish::par)
 		.field("trait_variances", &Fish::trait_variances)
+
+		.method("setMortalityParams", &Fish::setMortalityParams)
 
 		.method("print", &Fish::print)
 		.method("print_line", &Fish::print_line)

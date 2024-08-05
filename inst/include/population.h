@@ -17,7 +17,7 @@ class PopulationParams {
 	
 	// reproduction
 	//double r0 = 21.77072;		// recruitment rate per kg SSB 
-	double rmax = 1e10;
+	double rmax = 1e12;
 //	double Bhalf = 3.65e8*10; ///5000;	// Half saturation constant of recruitment
 
 //	double s0 = 0.1126797; //0.11;          // Egg survival propbability
@@ -95,7 +95,9 @@ class PopulationParams {
 
 // TODO: Enable systematic storing and operating population distributions
 class PopulationSummary{
-	std::vector<double> vage, vfreq, vlen, vmat;
+	public:
+	// std::vector<double> vage, vfreq, vlen, vmat;
+	std::vector<double> n_a, w_a, mat_a, nc_a, wc_a;
 };
 
 
@@ -118,7 +120,19 @@ class Population{
 
 	double std_missing_value = -1e20;
 
+	template<class Func>
+	std::vector<double> aggregateByAge(Func get_property){
+		int amax = proto_fish.par.amax+2;
+		std::vector<double> val(amax, 0);
+		for (auto& f : fishes){
+			val[f.age] += get_property(f);
+		}
+		return val;
+	}
+
 	public:
+	PopulationSummary pop_summary;
+
 	// names of variables returned by Population::upodate()
 	std::vector<std::string> colnames = 
 	    {"ssb", "yield", "employment", "profit",
@@ -129,7 +143,7 @@ class Population{
 	     "survival_mean", "maturity", "Nrel",
 		 "ssb_spawning", "ssb_spawning_ref", "ssb_after_spawning", "ssb_after_spawning_ref", "ssbn", "ssbn_ref", "yield_spf", "yield_spf_ref",
 		 "tsb_before_mort", "tsb_after_mort", "to_sea_bed",
-		 "chi", "Fref_5_10", "Mort_5_10", "Mat_5_10", "F_spf"
+		 "chi", "Fref_ref", "Mort_ref", "Mat_ref", "F_spf"
 		 };
 
 	public:
@@ -139,7 +153,8 @@ class Population{
 	std::vector<SeaEnvironment> v_env;
 
 	bool verbose = false;          ///< Should population summary be printed at every update?
-	
+	std::string output_file = "";
+
 	public:
 	double K_fishableBiomass = 0;  ///< Fishable biomass under zero fishing pressure. This is set by the simulator
 	double K_ssb = 0;              ///< Spawning stock biomass under zero fishing pressure. This is set by the simulator
@@ -176,27 +191,64 @@ class Population{
 	double calcTSB(double min_age = 0);
 	std::vector<double> calcSB();
 
-	// double selectivity(double len);
+	/// @brief Fishing mortality rate as a function of length under status quo conditions, used as a selectivity function
+	/// @param len 
+	/// @return Reference fishing mortality
 	double fishingMortalityRef(double len);
-	double fishableBiomass();
-	// double fishableSpawningBiomass();
 
+	/// @brief  Is this fish fishable?
+	/// @param f fish to test
+	/// @return true if fishable, false otherwise
+	bool isFishable(const Fish &f);
+
+	/// @brief Fishable biomass in the population
+	/// @return fishable biomass [kg]
+	double fishableBiomass();
+
+	/// @brief Calculate average fishing mortality rate for each age class, including spawning grounds fishery
+	/// @return A vector containing the average fishing mortality rate for each age group, indexed by age
 	std::vector<double> fishingMortRefByAge();
+
+	/// @brief Calculate average maturity for each age class
+	/// @return A vector containing the average maturity rate for each age group, indexed by age
 	std::vector<double> maturityByAge();
+
+	/// @brief Calculate average natural mortality rate for each age class, including spawning mortality
+	/// @param temp The current temperature affecting natural mortality rates.
+	/// @return A vector containing the average natural mortality rate for each age group, indexed by age
 	std::vector<double> naturalMortByAge(double temp);
+
+	/// @brief Calculate average natural mortality rate over all fishable individuals
+	/// @param temp The current temperature affecting natural mortality rates.
+	/// @return average natural mortality rate
+	double naturalMortFishable(double temp);
+
+	/// @brief Calculate average reference fishing mortality rate over all fishable individuals
+	/// @return Average reference fishing mortality rate
+	double fishingMortRefFishable();
+
+	/// @brief Calculate average maturity over fishable population
+	/// @return A vector containing the average maturity rate for each age group, indexed by age
+	double maturityFishable();
 
 	/// @brief Average an age-dependent quantity Q over the given age range, excluding missing values
 	/// @param Qa     vector containing the age-dependent quantity Q. The vector is indexed by age, so Q[0] will be a garbage value
 	/// @param amin   minimum age (inclusive)
 	/// @param amax   maximum age (inclusive)
 	/// @param missing_value  value in Qa to ignore while averaging
-	/// @return averaged quantity 
+	/// @return averaged quantity
 	double avgOverAges(const std::vector<double>& Qa, int amin, int amax, double missing_value = -1e20);
 
-	//double calcRealizedFishingMortality();
-	// double effort(double Nr, double F, double temp);
+	/// @brief Calculates the fishing effort
+	/// @param F Fishing mortality.
+	/// @param M Natural mortality.
+	/// @param Nr Population size as a fraction of carrying capacity
+	/// @return Fishing effort [vessel-days/year].
 	double effort1(double Nr, double F, double M);
 
+	/// @brief Updates the population dynamics for one time step.
+	/// @param temp The current temperature affecting fish biology and dynamics.
+	/// @return A vector containing various population metrics and dynamics for analysis.
 	std::vector<double> update(double temp = 5.6);
 
 	int nfish();

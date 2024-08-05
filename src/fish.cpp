@@ -19,12 +19,14 @@ Fish::Fish(string params_file){
 	//par.print();
 }
 
-//Fish::Fish(double xb, double tb){
-	//set_age(
-	//set_length(xb);
-	//t_birth = tb;
-	//age = 0;
-//}
+
+void Fish::setMortalityParams(double _Mref, double _M0, double _b){
+	par.Mref = _Mref;
+	par.M0 = _M0;
+	par.b = _b;
+	par.alpha3 = _Mref;
+	par.gamma3 = -_b;
+}
 
 
 void Fish::init(double tsb, double temp){
@@ -34,10 +36,10 @@ void Fish::init(double tsb, double temp){
 	set_age(1);
 	
 	/// - In Joshi et al model, length at age 1 needs to be explicitly calculated
-	//  - According to email communication with Mikko (dated 26/2/2024):
-	//     At the time of the survey from where the data originated, the youngest cohort are about 1/2 year old. 
-	//     If we break year at the survey time, then they have integer age of 1 year.
-	//     Therefore, the parameter par.L0 is the length of age 1 individuals
+	/// - According to email communication with Mikko (dated 26/2/2024):
+	///     At the time of the survey from where the data originated, the youngest cohort are about 1/2 year old. 
+	///     If we break year at the survey time, then they have integer age of 1 year.
+	///     Therefore, the parameter par.L0 is the length of age 1 individuals
 	if (par.growth_model == GrowthModel::Bioenergetic){
 		// // calc length at age 1
 		// double tsb_ano = tsb - par.tsbmean;
@@ -96,6 +98,16 @@ vector<double> Fish::get_traits(){
 }
 
 
+/// Formulas:
+/// For the `Bioenergetic` model:
+/// \f[
+/// \text{rate} = \left( M_0 + 
+///                      \alpha_3 \left( \frac{L}{L_{\text{ref}}} \right)^{\gamma_3} + 
+///                      \alpha_4 \left( \alpha_1^2 - \alpha_{1,\text{ref}}^2 \right) + 
+///                      \alpha_5 \left( \text{GSI} - \text{GSI}_{\text{ref}} \right) 
+///                    \right) \left( \frac{T}{T_{\text{ref}}} \right)^{c_T}
+/// \f]
+/// @throws std::runtime_error If an invalid mortality model is specified.
 double Fish::naturalMortalityRate(double temp){
 	double rate;
 	if (age > par.amax) return 1e20; // FIXME: use inf
@@ -202,6 +214,36 @@ void Fish::grow(double tsb, double temp){
 /// The number of surviving eggs is then calculated by applying two survival probabilities:
 /// - \f$s_0\f$ is the survival probability of offspring until recruitment
 /// - \f$1/(1+S/B_{1/2})\f$ is the probability of survival during recruitment. This is modelled as a Beverton-Holt function.
+///
+/// Formulas:
+///
+/// For the `BevertonHoltDirect` model:
+/// \f[
+/// \text{recruits} = r_0 \cdot w \cdot \frac{1}{1 + \frac{\text{ssb}}{B_{\text{half}}}}
+/// \f]
+///
+/// For the `RickerDirect` model:
+/// \f[
+/// \text{recruits} = r_0 \cdot w \cdot \exp(\beta_4 \cdot (T - T_{\text{ref}})) \cdot 2^{-\frac{\text{ssb}}{B_{\text{half}}}}
+/// \f]
+///
+/// For the `BevertonHoltBioenergetic` model:
+/// \f[
+/// \text{eggs} = \text{fecundity}(w, \delta, \text{gsi}_{\text{effective}})
+/// \f]
+/// \f[
+/// \text{recruits} = \text{eggs} \cdot s_0 \cdot \frac{1}{1 + \frac{\text{ssb}}{B_{\text{half}}}}
+/// \f]
+///
+/// For the `RickerBioenergetic` model:
+/// \f[
+/// \text{eggs} = \text{fecundity}(w, \delta, \text{gsi}_{\text{effective}})
+/// \f]
+/// \f[
+/// \text{recruits} = \text{eggs} \cdot s_0 \cdot \exp(\beta_4 \cdot (T - T_{\text{ref}})) \cdot 2^{-\frac{\text{ssb}}{B_{\text{half}}}}
+/// \f]
+///
+/// @throws std::runtime_error If an invalid recruitment model is specified.
 double Fish::produceRecruits(double ssb, double temp){
 	double temp_ano = temp - par.Tref;
 	if (par.recruitment_model == RecruitmentModel::BevertonHoltDirect){
