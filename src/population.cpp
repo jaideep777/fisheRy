@@ -602,6 +602,7 @@ inline double rnorm(double mu=0, double sd=1){
 ///
 std::vector<double> Population::update(double temp){
 	for (auto& f : fishes) assert(f.isAlive);
+	for (auto& f : fishes) assert(!f.isCaught);
 	int nfish_start = fishes.size();
 
 	// 0. Update F_5_10 and M_5_10 at start of the year
@@ -641,7 +642,24 @@ std::vector<double> Population::update(double temp){
 	for (auto& f : fishes) if (f.isAlive && f.age == par.recruitmentAge) nfish_ra += par.n;
 	// ** ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+	// Calc by-age metrics
+	pop_summary.n_a = aggregateByAge([this](const Fish &f){
+			return (f.isAlive)? par.n : 0;
+		});
+
+	pop_summary.w_a = aggregateByAge([this](const Fish &f){
+			return (f.isAlive)? par.n*f.weight : 0;
+		});
+	for (int i=0; i<pop_summary.w_a.size(); ++i) pop_summary.w_a[i] /= (pop_summary.n_a[i]+1e-20);
+
+	pop_summary.mat_a = aggregateByAge([this](const Fish &f){
+			return (f.isAlive && f.isMature)? par.n : 0;
+		});
+	for (int i=0; i<pop_summary.mat_a.size(); ++i) pop_summary.mat_a[i] /= (pop_summary.n_a[i]+1e-20);
+
+
 	// 2. Growth
+	double ssb = calcSSB(par.recruitmentAge);
 	double tsb = calcTSB(par.recruitmentAge);
 	for (auto& f: fishes){
 		f.grow(tsb/1e6, temp); // convert tsb to kT
@@ -673,7 +691,6 @@ std::vector<double> Population::update(double temp){
 	// 3. Reproduction and Spawning grounds fishery
 	// implement spawning for remaining fish
 	// FIXME: Check carefully where SSB should include fish below recruitment age and where not...
-	double ssb = calcSSB(par.recruitmentAge);
 	double ssb0 = ssb;
 	if (verbose) cout << "ssb0 = " << ssb0 << endl;
 
@@ -689,6 +706,7 @@ std::vector<double> Population::update(double temp){
 
 			if (f.isAlive) ssb_spawning += par.n * f.weight; // surviving individuals contribute to SSB
 			if (!f.isAlive) yield_spf += par.n * f.weight;   // dying individuals contribute to yield
+			if (!f.isAlive) f.isCaught = true;               // mark fish as caught
 		}
 	}
 	double ssb_spawning_ref = ssb0*p_survival_spf_before;
@@ -756,7 +774,7 @@ std::vector<double> Population::update(double temp){
 	double ssb_after_spawning_ref = ssb0*exp(-proto_fish.par.Mspawning)*(1-par.f_spf_before*h_spf);
 	if (verbose) cout << "ssb after spawning = " << ssb_after_spawning << " / " << ssb_after_spawning_ref << endl;
 
-	// 3b. post-spawning part of the SPF
+	// 3c. post-spawning part of the SPF
 	double p_survival_spf_after = (1-h_spf)/(1 - par.f_spf_before*h_spf);
 	for (int k=0; k<fishes.size(); ++k) {
 		auto &f = fishes[k];
@@ -764,6 +782,8 @@ std::vector<double> Population::update(double temp){
 			f.isAlive = f.isAlive && (runif() <= p_survival_spf_after);
 
 			if (!f.isAlive) yield_spf += par.n * f.weight;
+			if (!f.isAlive) f.isCaught = true;               // mark fish as caught
+
 		}
 	}
 
@@ -815,14 +835,27 @@ std::vector<double> Population::update(double temp){
 			f.isAlive = f.isAlive && ((rand() / double(RAND_MAX)) <= survival_prob);	// set the fish to die probabilistically, if not dead already.
 			
 			if (!f.isAlive){
-				yield += fishing_mort_rate/mortality_rate * par.n*f.weight;
-				to_sea_bed += natural_mort_rate/mortality_rate * par.n*f.weight;
+				f.isCaught = runif() < fishing_mort_rate/mortality_rate; // check if fish is caught or goes to sea bed!
+				
+				if (f.isCaught) yield += par.n*f.weight; // if caught, add to yield
+				else to_sea_bed += par.n*f.weight;       // else, goes to sea bed
 			}
 		}
 	} 
 	survival_mean /= n_survival_mean;
 
 	double tsb_after_mort = calcTSB(par.recruitmentAge);
+
+	// Calc by-age metrics in catch
+	pop_summary.nc_a = aggregateByAge([this](const Fish &f){
+			return (!f.isAlive && f.isCaught)? par.n : 0;
+		});
+
+	pop_summary.wc_a = aggregateByAge([this](const Fish &f){
+			return (!f.isAlive && f.isCaught)? par.n*f.weight : 0;
+		});
+	for (int i=0; i<pop_summary.wc_a.size(); ++i) pop_summary.wc_a[i] /= (pop_summary.nc_a[i]+1e-20);
+
 
 	// remove dead fish from population
 	fishes.erase(std::remove_if(fishes.begin(), fishes.end(), [](Fish &f){return !f.isAlive;}), fishes.end());

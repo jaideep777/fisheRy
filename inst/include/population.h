@@ -95,7 +95,9 @@ class PopulationParams {
 
 // TODO: Enable systematic storing and operating population distributions
 class PopulationSummary{
-	std::vector<double> vage, vfreq, vlen, vmat;
+	public:
+	// std::vector<double> vage, vfreq, vlen, vmat;
+	std::vector<double> n_a, w_a, mat_a, nc_a, wc_a;
 };
 
 
@@ -118,7 +120,19 @@ class Population{
 
 	double std_missing_value = -1e20;
 
+	template<class Func>
+	std::vector<double> aggregateByAge(Func get_property){
+		int amax = proto_fish.par.amax+2;
+		std::vector<double> val(amax, 0);
+		for (auto& f : fishes){
+			val[f.age] += get_property(f);
+		}
+		return val;
+	}
+
 	public:
+	PopulationSummary pop_summary;
+
 	// names of variables returned by Population::upodate()
 	std::vector<std::string> colnames = 
 	    {"ssb", "yield", "employment", "profit",
@@ -139,7 +153,8 @@ class Population{
 	std::vector<SeaEnvironment> v_env;
 
 	bool verbose = false;          ///< Should population summary be printed at every update?
-	
+	std::string output_file = "";
+
 	public:
 	double K_fishableBiomass = 0;  ///< Fishable biomass under zero fishing pressure. This is set by the simulator
 	double K_ssb = 0;              ///< Spawning stock biomass under zero fishing pressure. This is set by the simulator

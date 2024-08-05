@@ -32,7 +32,7 @@ class Simulator{
 	std::vector<double> stakeholder_satisfaction_2d_t(std::vector<int> dims, std::vector<double> data);
 
 #ifndef NATIVE_CPP
-	Rcpp::DataFrame simulate_r(Population &pop, double lf, double h, int nyears, double tsb0, double temp, bool re_init);
+	Rcpp::DataFrame simulate_r(Population &pop, double lf, double h, int nyears, double tsb0, double temp, bool re_init, std::string output_file);
 	Rcpp::NumericVector simulate_multi_2d_r(Population pop, std::vector<double> Tvec, std::vector<double> lminvec, std::vector<double> hvec, int nyears, double tsb0, bool re_init);
 #endif
 

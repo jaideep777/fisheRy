@@ -168,6 +168,7 @@ class Fish{
 
 	bool isMature = false;     ///< Flag indicating whether the fish is mature
 	bool isAlive = true;       ///< Flag indicating whether the fish is alive
+	bool isCaught = false;      ///< Flag indicating whether the fish was caught during fishing or died of natural mortality (to be used in conjunction with !isAlive)
 
 	double t_birth;            ///< Year of birth (not used)
 

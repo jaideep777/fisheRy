@@ -166,10 +166,27 @@ vector<double> Simulator::stakeholder_satisfaction_2d_t(vector<int> dims, vector
 // ************ R stuff *****************
 #ifndef NATIVE_CPP
 
-Rcpp::DataFrame Simulator::simulate_r(Population &pop, double lf, double h, int nyears, double tsb0, double temp, bool re_init){
+Rcpp::DataFrame Simulator::simulate_r(Population &pop, double lf, double h, int nyears, double tsb0, double temp, bool re_init, std::string output_file){
+	bool writestate = (output_file != "");
+
+	ofstream fout;
+	if (writestate){
+		fout.open(output_file.c_str());
+		fout << "Year" << ',' 
+		     << "age" << ',' 
+			 << "N" << ',' 
+			 << "weight" << ',' 
+			 << "mat" << ',' 
+			 << "catch_N" << ',' 
+			 << "catch_weight"
+			 << '\n';
+
+	}
+
 	noFishingPop.set_harvestProp(h);
 	noFishingPop.set_minSizeLimit(lf);
 	double K = noFishingPop.fishableBiomass();
+	cout << "h/lf = " << h << " / " << lf << " | K = " << K << endl;
 
 	pop.K_fishableBiomass = K;
 	pop.set_harvestProp(h);
@@ -189,13 +206,31 @@ Rcpp::DataFrame Simulator::simulate_r(Population &pop, double lf, double h, int 
 		for (int col=0; col<state_now.size(); ++col){
 			columns[col].push_back(state_now[col]);
 		}
+
+		// write age-wise summaries to file
+		if (writestate){
+			for (int a=0; a < pop.pop_summary.n_a.size(); ++a){
+				fout << i << ',' 
+					 << a << ',' 
+					 << pop.pop_summary.n_a[a] << ',' 
+					 << pop.pop_summary.w_a[a] << ',' 
+					 << pop.pop_summary.mat_a[a] << ',' 
+					 << pop.pop_summary.nc_a[a] << ',' 
+					 << pop.pop_summary.wc_a[a]
+					 << '\n';
+			}
+		}
+
 	}
 
+	// put summarized population state in dataframe
 	for (int i=0; i<columns.size(); ++i){	
 		if (verbose) cout << "Adding columns[" << i << "] = " << colnames[i] << endl; 
 		df.push_back(columns[i], colnames[i]);
 	}
-	
+
+	if (writestate) fout.close();
+
 	return df;
 }
 
