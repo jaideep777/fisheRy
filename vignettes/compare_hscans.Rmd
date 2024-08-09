@@ -35,31 +35,33 @@ params_file = "../params/cod_params_dankel22.ini"
 
 As usual, we begin with creating a prototype fish.
 
-Then, we create a simulator with this prototype, which will simulate a given population under different conditions.
 
 ```{r}
 # Create a prototype fish as usual
 fish = new(Fish, params_file)
-
-# Create a simulator
-sim = new(Simulator, fish)
-
-sim$equilibriateNaturalPopulation(params_file, 5.61, 2e6)
 ```
-
 
 ### Create a population to simulate
 
-Then we create a population that will be reused by the simulator.
+Then we create a population an spin it up under no-fishing conditions.
 
 ```{r}
 pop = new(Population, fish)
 pop$readParams(params_file, F)
 pop$set_superFishSize(5e6)
 pop$verbose = T
+pop$noFishingEquilibriate(5.61)
 ```
 
+### Create a simulator
 
+Then, we create a simulator with this prototype population, which will simulate a populations under various conditions.
+
+```{r}
+sim = new(Simulator, fish)
+
+sim$equilibriateNaturalPopulation(params_file, 5.61, 2e6)
+```
 
 ### Plotting utility
 
@@ -99,10 +101,6 @@ We look at the predictions of the Dankel et al model implementation, and compare
 ```{r fig.height=9}
 fish = new(Fish, params_file)
 
-sim = new(Simulator, fish)
-
-sim$equilibriateNaturalPopulation(params_file, 5.61, 2e6)
-
 pop = new(Population, fish)
 pop$readParams(params_file, F)
 # pop$par$F_spf = 0
@@ -112,6 +110,9 @@ pop$set_superFishSize(5e6)
 pop$verbose = F
 pop$init(1000, 5.61)
 pop$noFishingEquilibriate(5.61)
+
+sim = new(Simulator, fish)
+sim$equilibriateNaturalPopulation(params_file, 5.61, 2e6)
 
 nsteps = 200
 hvec = seq(0.01, 0.99, length.out = 20)

@@ -35,6 +35,8 @@ pop$par$n = 2e6  # Each superfish contains so many fish
 
 ```
 
+## Perform Spinup
+
 For simulating fishing, it is important for the population to start with a realistic state distribution. Therfore, we "spin-up" the population under no-fishing conditions. 
 
 ```{r}
@@ -72,7 +74,7 @@ pop$set_minSizeLimit(45) # Only fish above 45 cm length can be harvested
 pop$par$simulate_bio_only = T # VERY IMPORTANT
 ```
 
-### Simulate the population
+## Simulate the population
 
 Now we are ready to simulate the population with fishing by continuously `update`ing it. Each update performs 1 year of simulation, implementing the processes of maturation, growth, mortality, and reproduction for each fish in the population.
 

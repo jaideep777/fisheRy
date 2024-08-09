@@ -1,0 +1,191 @@
+---
+title: "Simulating multiple populations at once"
+author: "Jaideep Joshi"
+date: "28 March 2022"
+output: html_document
+editor_options:
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include = F, echo = F}
+library(fisheRy)
+library(tidyverse)
+source("../tests/ref/parameters.cod.R")
+source("../tests/ref/simulator.7.R")
+```
+
+```{r}
+re_simulate = T
+
+# if one of the files doesnt exist, re-run the simulations
+re_simulate = re_simulate | !file.exists("outputs/res_ibm_scan_lmin.Rdata")
+```
+
+We can use the fishery simulator to simulate multiple populations (i.e., populations with different control parameters) at once. Suppose we want to look at fishery properties as a function of the harvest proportion. 
+
+### Preparation
+
+```{r}
+params_file = "../params/cod_params_dankel22.ini"
+```
+
+As usual, we begin with creating a prototype fish.
+
+Then, we create a simulator with this prototype, which will simulate a given population under different conditions.
+
+```{r}
+# Create a prototype fish as usual
+fish = new(Fish, params_file)
+```
+
+
+### Create a population to simulate
+
+Then we create a population that will be reused by the simulator.
+
+```{r}
+pop = new(Population, fish)
+pop$readParams(params_file, F)
+pop$set_superFishSize(5e6)
+pop$verbose = T
+pop$noFishingEquilibriate(5.61)
+```
+
+
+
+### Create a simulator
+
+```{r}
+sim = new(Simulator, fish)
+
+sim$equilibriateNaturalPopulation(params_file, 5.61, 2e6)
+```
+
+### Plotting utility
+
+```{r}
+source("../R/plot_scan.R")
+```
+
+### Simulate
+
+We can now simulate populations with different harvesting rates. Here, we simulate 20 populations with harvesting rates specified by the `hvec` vector. The `simulate_multi` function returns an array if dimensions `{nsteps, length(hvec), 4}`. The last dimension is four because four utilities are returned: {ssb, yield, employment, profit}.
+
+```{r fig.height=9}
+nsteps = 200
+hvec = seq(0, 0.99, length.out = 20)
+lminvec = seq(10, 100, length.out = 20)
+Tvec = seq(4, 8, length.out = 20)
+lf = 45
+h_sq = 0.3
+```
+
+
+### Effect of Min size limit (Dankel et al. model)
+
+Generate reference 
+
+```{r}
+dat_ref = data.frame(matrix(ncol=7, nrow=0))
+colnames(dat_ref) = c("ssb", "tsb", "yield", "employment.sea", "employment.shore", "profit.sea", "profit.shore")
+for (il in 1:length(lminvec)){
+  res = simulate(h_sq, lminvec[il], F)
+  v = colMeans((res$summaries %>% select(SSB, TSB, Y, D.sea, D.shr, P.sea, P.shr))[101:200,])
+  dat_ref[nrow(dat_ref)+1,] = v
+}
+```
+
+We look at the predictions of the Dankel et al model implementation, and compare it with their results. 
+
+```{r fig.height=9}
+fish = new(Fish, params_file)
+
+pop = new(Population, fish)
+pop$readParams(params_file, F)
+# pop$par$F_spf = 0
+pop$par$recruitmentAge = 1
+pop$par$dmax = 30000
+pop$set_superFishSize(5e6)
+pop$verbose = F
+pop$init(1000, 5.61)
+pop$noFishingEquilibriate(5.61)
+
+sim = new(Simulator, fish)
+
+sim$equilibriateNaturalPopulation(params_file, 5.61, 2e6)
+
+nsteps = 200
+hvec = seq(0.01, 0.99, length.out = 20)
+lminvec = seq(10, 100, length.out = 20)
+Tvec = seq(4, 8, length.out = 20)
+
+if(re_simulate){
+  res_ibm_full = sim$simulate_multi_2d(pop, c(5.61), lminvec, h_sq, nsteps, 1.93e3, F)
+  save(res_ibm_full, file="outputs/res_ibm_scan_lmin_Dankel22.Rdata")
+} else {
+  load("outputs/res_ibm_scan_lmin_Dankel22.Rdata")
+}
+
+arr = res_ibm_full 
+names = pop$colnames
+dat_ibm = data.frame(matrix(ncol=length(names), nrow=0))
+colnames(dat_ibm) = names
+for (i in 1:length(lminvec)){
+  v_ibm = colMeans(arr[101:200, 1, i, 1,])
+  dat_ibm[nrow(dat_ibm)+1,] = v_ibm
+}
+
+plot_scan(dat_ibm, xname = expression("Min size limit"), xvec = lminvec, dat_ref=dat_ref)
+```
+
+
+### Effect of Min size limit (Bioenergetic model)
+
+```{r fig.height=9}
+params_file = "../params/cod_params.ini"
+
+fish = new(Fish, params_file)
+
+pop = new(Population, fish)
+pop$readParams(params_file, F)
+# pop$par$F_spf = 0
+pop$par$recruitmentAge = 1
+pop$par$dmax = 30000
+pop$set_superFishSize(5e6)
+pop$verbose = F
+pop$init(1000, 5.61)
+pop$noFishingEquilibriate(5.61)
+
+sim = new(Simulator, fish)
+
+sim$equilibriateNaturalPopulation(params_file, 5.61, 2e6)
+
+nsteps = 200
+hvec = seq(0.01, 0.99, length.out = 20)
+lminvec = seq(10, 100, length.out = 20)
+Tvec = seq(4, 8, length.out = 20)
+
+if(re_simulate){
+  res_ibm_full = sim$simulate_multi_2d(pop, c(5.61), lminvec, h_sq, nsteps, 1.93e3, F)
+  save(res_ibm_full, file="outputs/res_ibm_scan_lmin.Rdata")
+} else {
+  load("outputs/res_ibm_scan_lmin.Rdata")
+}
+
+arr = res_ibm_full 
+names = pop$colnames
+dat_ibm = data.frame(matrix(ncol=length(names), nrow=0))
+colnames(dat_ibm) = names
+for (i in 1:length(lminvec)){
+  v_ibm = colMeans(arr[101:200, 1, i, 1,])
+  dat_ibm[nrow(dat_ibm)+1,] = v_ibm
+}
+
+plot_scan(dat_ibm, xname = expression("Min size limit"), xvec = lminvec, dat_ref=dat_ref)
+
+dat_ibm %>% with(plot(chi~lminvec))
+```

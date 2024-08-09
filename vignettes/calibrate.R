@@ -5,6 +5,8 @@ library(here)
 source(here("tests/ref/parameters.cod.R"))
 source(here("tests/ref/simulator.7.R"))
 
+#### Read observations data #-------------------
+
 datraw = read.csv(here("data/environmental.csv"))
 dat = datraw %>% filter(year >= 2010 & year <= 2020)
 
@@ -12,8 +14,6 @@ read_age_dist = function(file){
   read.csv(file, header=T) %>% 
     filter(Year_age >= 2010 & Year_age <= 2020) %>% 
     pivot_longer(-Year_age) %>% 
-    group_by(name) %>% 
-    summarize(value = mean(value)) %>% 
     filter(grepl("X", name)) %>% 
     mutate(name = strsplit(name, "X")) %>% 
     unnest_wider(name, names_sep = "_") %>% 
@@ -50,95 +50,9 @@ age_dist_obs = N_v_age_obs %>%
   full_join(cW_v_age_obs)
   
 
-plot_timeseries = function(res_ibm, d, h, lf, max_nx=100){
-  res = simulate(h, lf, F)
-  
-  table(d$age)
-  par(mfrow = c(3,4), mar=c(4,4,1,1))
-  
-  nyears = nrow(res_ibm)
-  dat_t = (nyears-nrow(dat)+1) : nyears
-  nsteps = min(nrow(res_ibm), max_nx)
-  dat_i = (nrow(res_ibm)-nsteps+1) : nrow(res_ibm)
-  
-  res_ibm = res_ibm[dat_i,]
-  
-  cols = c("darkgreen", "darkgoldenrod1", "dodgerblue3", "coral1")
-  
-  ssb.max = max(c(res_ibm$ssb/1e9, res$summaries$SSB/1e9, dat$ssb*1e3/1e9), na.rm = T)
-  plot(y=res_ibm$ssb/1e9, x=dat_i, ylab="SSB (MT)", xlab="Year", col="cyan3", type="l", ylim=c(0,ssb.max))
-  points(y=res$summaries$SSB/1e9, x=res$summaries$year, type="l")
-  points(y=dat$ssb*1e3/1e9, x=dat_t, col=cols[1], type="o", lwd=0.4, pch=20)
-  
-  tsb.max = max(c(res_ibm$tsb/1e9, res$summaries$TSB/1e9, dat$totb*1e3/1e9), na.rm=T)
-  plot(y=res_ibm$tsb/1e9, x=dat_i, ylab="TSB (MT)", xlab="Year", col="cyan3", type="l", ylim=c(0,tsb.max))
-  points(y=res$summaries$TSB/1e9, x=res$summaries$year, type="l")
-  points(y=dat$totb*1e3/1e9, x=dat_t, col=cols[2], type="o", lwd=0.4, pch=20)
-  
-  yield.max = max(c(res_ibm$yield/1e9, res$summaries$Y/1e9))
-  plot(y=res_ibm$yield/1e9, x=dat_i, ylab="Yield (MT)", xlab="Year", col="cyan3", type="l", ylim=c(0,yield.max))
-  points(y=res$summaries$Y/1e9, x=res$summaries$year, type="l")
-  points(y=dat$catch*1e3/1e9, x=dat_t, col=cols[3], type="o", lwd=0.4, pch=20)
-  
-  nr.max = max(c(res_ibm$nfish_ra/1e6), dat$recr*1e3/1e6, na.rm=T)
-  plot(y=res_ibm$nfish_ra/1e6, x=dat_i, ylab="Recruits (Mn)", xlab="Year", col="cyan3", type="l", ylim=c(0,nr.max))
-  points(y=dat$recr*1e3/1e6, x=dat_t, col=cols[4], type="o", lwd=0.4, pch=20)
-  
-  d = pop$get_state()
-  d1 = d %>% group_by(age) %>% summarize(mat = length(which(isMature))/length(isMature))
-  plot(mat, type="l")
-  points(d1$mat~I(d1$age-1), type="o", col="cyan3", xlab = "age") # Decrement age to get the right maturation prob (see note above)
-  
-  dist = table(d$age, d$length)
-  image(x=as.numeric(rownames(dist)), y = as.numeric(colnames(dist)), z=log(1+3*log(dist)), col=scales::viridis_pal()(100), xlab="Age", ylab="Length", xlim=c(0,15))
-  
-  dist_age = table(d$age) %>% enframe() %>%
-    mutate(age=as.numeric(name),
-           value = value * pop$par$n) 
-  
-  dists_combined = dist_age %>% 
-    left_join(age_dist_obs) %>% 
-    filter(age >= 3) %>% 
-    drop_na()
-  
-  dists_combined %>% 
-    # mutate(value=value/sum(value, na.rm=T),
-    #        value_obs=value_obs/sum(value_obs, na.rm=T)) %>%
-    with(matplot(x=age, y=cbind(value, value_obs),type=c("l","o"), lty=1, pch=20, col=c("cyan3", "coral"), log="y", ylab="Frequency", xlab="Age"))
-  
-  emd_pred_obs = emdist::emd(
-    A=cbind(dists_combined$value, dists_combined$age), 
-    B=cbind(dists_combined$value_obs, dists_combined$age)
-  )
-  
-  plot_calib(res_ibm, dat, nsteps)
-  
-}
+#### Function to simulate population given parameters vector #-------------------
 
-plot_calib = function(res_ibm, dat, nsteps){
-  obs = numeric(4)
-  obs[1] = mean((dat$ssb*1e3/1e9), na.rm=T)  # MT
-  obs[2] = mean((dat$totb*1e3/1e9), na.rm=T) # MT
-  obs[3] = mean((dat$catch*1e3/1e9), na.rm=T) # MT
-  obs[4] = mean((dat$recr*1e3/1e9), na.rm=T) # recruits in billions
-  
-  pred = numeric(4)
-  ids = (nsteps-nrow(dat)+1):nsteps
-  pred[1] = mean((res_ibm$ssb[ids]/1e9), na.rm=T)
-  pred[2] = mean((res_ibm$tsb[ids]/1e9), na.rm=T)
-  pred[3] = mean((res_ibm$yield[ids]/1e9), na.rm=T)
-  pred[4] = mean((res_ibm$nfish_ra[ids]/1e9), na.rm=T)
-  
-  # par(mfrow=c(1,2), mar=c(4,4,4,1), oma=c(1,1,1,1))
-  cols = c("darkgreen", "darkgoldenrod1", "dodgerblue3", "coral1")
-  plot(obs~pred, ylim=c(0, max(c(obs,pred))), xlim=c(0, max(c(obs,pred))), col=cols, pch=20, cex=2, cex.lab=1.2, ylab="Observed", xlab="Predicted")
-  abline(0,1, col="grey")
-  plot(1,NA, cex=0.01, xlab = "", ylab = "", axes = F, ylim=c(0,1))
-  legend(x = 0.6, y = 0.9, legend = c("Spawning stock biomass", "Total stock biomass", "Yield", "Recruitment"), col = cols, pch=20, cex=1.1)
-}
-
-
-simulate_pop = function(pop, par, nsup = 1e6, verbose=F, nymax=50, params_file, out_file = ""){
+simulate_pop = function(par, nsup = 1e6, verbose=F, nsteps=500, nymax=50, params_file, out_file = ""){
   fish = new(Fish, params_file)
   fish$par$s0 = par[1] #0.07
   if (length(par) > 1){
@@ -156,7 +70,6 @@ simulate_pop = function(pop, par, nsup = 1e6, verbose=F, nymax=50, params_file, 
   sim$setNaturalPopulation(pop)
   # sim$equilibriateNaturalPopulation(params_file, 5.61, nsup)
 
-  nsteps = 500
   h = 0.22
   lf = 45
   
@@ -166,106 +79,87 @@ simulate_pop = function(pop, par, nsup = 1e6, verbose=F, nymax=50, params_file, 
   list(d=pop$get_state(), res_ibm=res_ibm)
 }
 
-error_fun = function(par, nsup = 10e6, bplot=F, nymax=50){
+#### Error function using sum-sqaured Earth-mover distances ###-------------------
+
+error_fun_emd = function(par, nsteps = 200, nsup = 5e6, bplot=F, nymax=50){
   
   cat("par = ", par, "\n")
 
+  l = simulate_pop(par = par, 
+               params_file= here("params/cod_params.ini"), 
+               nsup=nsup, 
+               nsteps=nsteps,
+               verbose=F, 
+               out_file = here("fishery_output/age_dists_pred.csv"))
+  
+  age_dists_pred = readr::read_csv(here("fishery_output/age_dists_pred.csv"), progress = F, show_col_types = FALSE)
 
-  obs = numeric(4)
-  obs[1] = mean((dat$ssb*1e3/1e9), na.rm=T)  # MT
-  obs[2] = mean((dat$totb*1e3/1e9), na.rm=T) # MT
-  obs[3] = mean((dat$catch*1e3/1e9), na.rm=T) # MT
-  obs[4] = mean((dat$recr*1e3/1e9), na.rm=T) # recruits in billions
+  dists_pred_obs = 
+    suppressMessages(
+      age_dists_pred %>% filter(Year > max(Year)-50) %>%
+      pivot_longer(-c(age, Year)) %>%
+      # Filter out non-existent age classes in avergaed quantities, but retain everything in summed quantities (N and catch_N)
+      filter(case_when(
+        (name == "N" | name == "catch_N") ~ value > -Inf,
+        .default = value > 0
+      )) %>%
+      filter(age > 0 & age < 20) %>%
+      group_by(age, name) %>%
+      summarize(value = mean(value)) %>%
+      ungroup() %>% 
+      pivot_wider() %>%
+      mutate(N = log10(N),
+             catch_N = log10(catch_N)) %>%
+      pivot_longer(-age, values_to="pred") %>%
+      full_join(age_dist_obs %>%
+                  mutate(N = log10(N),
+                         catch_N = log10(catch_N)) %>%
+                  pivot_longer(-c(age, Year_age), values_to="obs")) %>%
+      drop_na() %>%
+      filter(!is.infinite(obs)) %>%
+      filter(!is.infinite(pred)) %>%
+      ungroup()
+    )
   
-  pred = numeric(4)
-  ids = (nsteps-nrow(dat)+1):nsteps
-  pred[1] = mean((res_ibm$ssb[ids]/1e9), na.rm=T)
-  pred[2] = mean((res_ibm$tsb[ids]/1e9), na.rm=T)
-  pred[3] = mean((res_ibm$yield[ids]/1e9), na.rm=T)
-  pred[4] = mean((res_ibm$nfish_ra[ids]/1e9), na.rm=T)
-  
-  weights = c(1,0,1,1)
-  err_partial = weights * log(pred/obs)^2
-  err = sum(err_partial)
-  
-  nrep=5
-  ids1 = (nsteps-nrow(dat)*nrep+1):nsteps
-  pred1 = (res_ibm[ids1,] %>% select(ssb, tsb, yield, nfish_ra))/1e9
-  obs1 = (dat %>% select(ssb, totb, catch, recr))[rep(seq(1,nrow(dat)),nrep),]*1e3/1e9
-  
-  err1 = sum((pred1-obs1)^2)
-  
-  cat("par = ", par, " | ", obs, " / ", pred, " | ", err_partial, " | ", err, " |", err1, "\n")
-  
-  if (bplot) {
-    plot_timeseries(res_ibm, pop, h, nymax)
-  }
-  
-  err
+  df_emd = tibble(name = unique(dists_pred_obs$name)) %>%
+    mutate(emd = purrr::map_dbl(
+      .x = name,
+      .f = ~emdist::emd2d(
+              A=dists_pred_obs %>% filter(name == .x) %>% select(age, Year_age, pred) %>% pivot_wider(names_from=Year_age, values_from = pred) %>% select(-age) %>% as.matrix(),
+              B=dists_pred_obs %>% filter(name == .x) %>% select(age, Year_age, obs)  %>% pivot_wider(names_from=Year_age, values_from = obs)  %>% select(-age) %>% as.matrix()
+            )
+        )
+      )
+
+  sum(df_emd$emd^2)
 }
 
+#### Test and calibrate ## -----------------------
+error_fun_emd(par = c(0.02, 0.0275, 0.06, 1), 
+              nsup = 5e6, nsteps=200)
 
-error_fun_emd = function(par, nsup = 10e6, bplot=F, nymax=50){
-  
-  cat("par = ", par, "\n")
-  fish = new(Fish, params_file)
-  fish$par$s0 = par[1] #0.07
-  if (length(par) > 1){
-    fish$setMortalityParams(par[2], par[3], par[4])
-  }
-  
-  #fish$par$pmrn_lp50 = par[2] #118.122779*1.15
-  # fish$par$M0 = par[2] #118.122779*1.15
-  
-  sim = new(Simulator, fish)
-  
-  sim$equilibriateNaturalPopulation(params_file, 5.61, nsup)
-  
-  pop = new(Population, fish)
-  pop$readParams(params_file, F)
-  pop$set_superFishSize(nsup)
-  pop$verbose = F
-  pop$init(1000, 5.61)
-  pop$noFishingEquilibriate(5.61)
-  
-  nsteps = 500
-  h = 0.22
-  lf = 45
-  
-  pop$verbose = F
-  res_ibm = sim$simulate(pop, lf, h, nsteps, 1.93e3, 5.61, F)
-  
-  d = pop$get_state()
-  
-  dist = table(d$age, d$length)
-  
-  dist_age = table(d$age) %>% enframe() %>%
-    mutate(age=as.numeric(name),
-           value = value * pop$par$n) 
-  
-  dists_combined = dist_age %>% 
-    left_join(age_dist_obs) %>% 
-    filter(age >= 3) %>% 
-    drop_na()
-  
-  emd_pred_obs = emdist::emd(
-    A=cbind(dists_combined$value, dists_combined$age), 
-    B=cbind(dists_combined$value_obs, dists_combined$age)
-  )
-  
-  if (bplot) {
-    plot_timeseries(res_ibm, pop, h, nymax)
-  }
-  
-  emd_pred_obs
-}
+opt = optim(par = c(0.02, 0.06, 0.16, 2.45),
+            fn = error_fun_emd, 
+            nsup = 5e6, nsteps=200,
+            control=list(parscale=c(0.02,0.05,0.1,2), 
+                         maxit=500)) #, method = "Brent", lower=0.00000001, upper=0.2)
+print(opt)
+par_opt = opt$par
 
+##### Run and plot @@@ ---------------------------
 
-l = simulate_pop(par = c(0.02, 0.0275, 0.06, 1), params_file= here("params/cod_params.ini"), nsup=1e6, verbose=F, out_file = here("fishery_output/age_dists_pred.csv"))
+# par_opt = c(0.02, 0.0275, 0.06, 1)
+par_opt = c(0.01924969, 0.03239047, 0.07911014, 0.9809538)
+l = simulate_pop(par = par_opt, 
+                 params_file= here("params/cod_params.ini"), 
+                 nsup=1e6, 
+                 nsteps=200,
+                 verbose=F, 
+                 out_file = here("fishery_output/age_dists_pred.csv"))
 
 age_dists_pred = readr::read_csv(here("fishery_output/age_dists_pred.csv")) 
 
-pa = age_dists_pred %>% filter(Year > 450) %>% 
+pa = age_dists_pred %>% filter(Year > max(Year)-50) %>% 
   pivot_longer(-c(age, Year)) %>% 
   # Filter out non-existent age classes in avergaed quantities, but retain everything in summed quantities (N and catch_N)
   filter(case_when(
@@ -282,16 +176,18 @@ pa = age_dists_pred %>% filter(Year > 450) %>%
   full_join(age_dist_obs %>% 
               mutate(N = log10(N),
                      catch_N = log10(catch_N)) %>% 
-              pivot_longer(-age, values_to="obs")) %>% 
+              pivot_longer(-c(age, Year_age), values_to="obs")) %>% 
+  drop_na() %>% 
   ggplot(aes(x=age)) +
+  geom_point(aes(y=obs, col="obs"), alpha=0.5)+
   geom_line(aes(y=pred, col="pred"), linewidth=1)+
-  geom_point(aes(y=obs, col="obs"), shape=1, size=2, stroke=1)+
-  facet_wrap(~name, scales="free_y", strip.position = "left")+
-  scale_color_manual(values = c(obs="black", pred="cyan3"))+
+  facet_wrap(~name, scales="free_y", strip.position = "left", nrow=1)+
+  scale_color_manual(values = c(obs="seagreen", pred="black"))+
   theme_bw()+
   theme(strip.placement = "outside",
         strip.background = element_blank())+
   labs(y="")
+pa
 
 p1 = l$d %>% 
   group_by(age) %>%
@@ -305,7 +201,7 @@ p1 = l$d %>%
   ggplot(aes(x=age)) +
   geom_line(aes(y=pred, col="pred"), linewidth=1)+
   geom_point(aes(y=obs, col="obs"), shape=1, size=2, stroke=1)+
-  facet_wrap(~name, scales="free_y", strip.position = "left")+
+  facet_wrap(~name, scales="free_y", strip.position = "left", nrow=1)+
   scale_color_manual(values = c(obs="black", pred="cyan3"))+
   theme_bw()+
   theme(strip.placement = "outside",
@@ -338,6 +234,32 @@ p2 = l$res_ibm %>%
   expand_limits(y=0, x=0)+
   theme_bw()
 
+p2all = l$res_ibm %>% 
+  mutate(recruits = nfish_ra) %>% 
+  select(ssb, tsb, yield, recruits) %>% 
+  tail(nrow(dat)) %>% 
+  mutate(year = dat$year) %>% 
+  # colMeans() %>% 
+  pivot_longer(-year, values_to="pred") %>% 
+  mutate(pred = pred/1e9) %>% 
+  left_join(
+    dat %>% select(year, ssb, totb, catch, recr) %>% 
+      rename(tsb=totb, yield=catch, recruits=recr) %>% 
+      pivot_longer(-year, values_to="obs") %>% 
+      mutate(obs= obs*1000/1e9)
+  ) %>% 
+  ggplot(aes(y=obs, x=pred, col=name))+
+  geom_point(size=2)+
+  scale_colour_manual(values = 
+                        c(ssb="darkgreen", 
+                          tsb="darkgoldenrod1",
+                          yield="dodgerblue3", 
+                          recruits="coral1")
+  )+
+  geom_abline(slope=1, intercept = 0, col="grey")+
+  expand_limits(y=0, x=0)+
+  theme_bw()
+
 p3 = l$res_ibm %>% select(ssb:profit) %>% 
   mutate(ssb=ssb/1e9, 
          yield=yield/1e9,
@@ -347,7 +269,7 @@ p3 = l$res_ibm %>% select(ssb:profit) %>%
   pivot_longer(-Year) %>% 
   ggplot(aes(y=value, x=Year, col=name))+
   geom_line()+
-  facet_wrap(~name, scales="free_y", nrow=1)+
+  facet_wrap(~name, scales="free_y", strip.position="left", nrow=1)+
   scale_colour_manual(values = 
                         c(ssb="darkgreen", 
                           tsb="darkgoldenrod1",
@@ -357,30 +279,14 @@ p3 = l$res_ibm %>% select(ssb:profit) %>%
                           profit = "purple")
   )+
   scale_x_continuous(n.breaks = 3)+
-  theme_bw()
+  theme_bw()+
+  theme(strip.placement = "outside",
+      strip.background = element_blank())+
+  labs(y="")
 
   
 library(patchwork)
-p3/pa/p2 + plot_layout(guides="collect", widths = c(4,1), heights=c(1,2,1))
-
-
-# dist_age = table(l$d$age) %>% enframe() %>%
-#   mutate(age=as.numeric(name),
-#          value = value * pop$par$n) 
-# 
-# dists_combined = dist_age %>% 
-#   left_join(age_dist_obs) %>% 
-#   filter(age >= 3) %>% 
-#   drop_na()
-# 
-# dists_combined %>% 
-#   # mutate(value=value/sum(value, na.rm=T),
-#   #        value_obs=value_obs/sum(value_obs, na.rm=T)) %>%
-#   with(matplot(x=age, y=cbind(value, N),type=c("l","o"), lty=1, pch=20, col=c("cyan3", "coral"), log="y", ylab="Frequency", xlab="Age"))
-# 
-# 
-# plot_timeseries(l$res_ibm, l$d, h=0.22, lf=45)
-# 
-# par = c(0.02, 0.025, 0.1, 1)
-# error_fun_emd(par, ns=1e6, bplot=T)
-
+cairo_pdf(here::here("figures/calibration.pdf"), width = 10, height=5)
+q1 = p3+p2all + plot_layout(guides="collect", widths=c(5.5,1))
+pa/q1 + plot_layout(widths=c(4,1))
+dev.off()
