@@ -1,0 +1,206 @@
+---
+title: "Effort control: fishing until quota is filled"
+author: "Jaideep Joshi"
+date: "28 March 2022"
+output: html_document
+editor_options:
+  chunk_output_type: inline
+---
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include = F, echo = F}
+library(fisheRy)
+library(tidyverse)
+source("../tests/ref/parameters.cod.R")
+source("../tests/ref/simulator.7.R")
+```
+
+
+```{r}
+params_file = "../params/cod_params.ini"
+```
+
+## Initialize a population
+
+To simulate a fished population, we start with creating a fish and constructing a population from it, as usual.
+
+```{r }
+fish = new(Fish, params_file)
+
+pop = new(Population, fish)
+pop$readParams(params_file, F)
+pop$par$n = 2e6  # Each superfish contains so many fish
+
+```
+
+## Perform Spinup
+
+For simulating fishing, it is important for the population to start with a realistic state distribution. Therfore, we "spin-up" the population under no-fishing conditions. 
+
+```{r}
+state_nf = pop$noFishingEquilibriate(5.61)
+ssb_nf = state_nf[1]
+```
+
+Let's see how the population state looks after no-fishing equilibrium.
+
+```{r}
+d = pop$get_state()
+dist = table(d$age, d$length)
+
+image(x=as.numeric(rownames(dist)), y = as.numeric(colnames(dist)), z=log(1+3*log(dist)), col=scales::viridis_pal()(100), xlab="Age", ylab="Length")
+
+```
+
+
+### Set fishing parameters
+
+Set a harvest proportion that will determine the fishing quota.
+
+```{r}
+h = 0.3
+```
+
+## Mock fish the population to calculate fishing mortality rate (linear model)
+
+Using the linear control model
+
+```{r}
+fleet = new(Fleet)
+fleet$control_model = "linear"
+
+out = fleet$harvest_dry_run(pop, h, 5.61)
+
+df = as.data.frame(matrix(data = out, ncol=6, byrow = T))
+colnames(df) = c("fish_age",
+                 "B",
+								"B_sampled",
+								"yield",
+								"yield_expected",
+								"chi")
+
+df %>% 
+  mutate(fish = 1:n()) %>% 
+  mutate(yield_err_pc = (yield-yield_expected)/yield_expected*100) %>%
+  select(-B) %>% 
+  pivot_longer(-fish) %>% 
+  ggplot(aes(x=fish, y=value))+
+  geom_line()+
+  facet_wrap(~name, scales="free_y")
+
+table(df$chi)
+
+```
+
+## Mock fish the population to calculate fishing mortality rate
+
+Using the default (exponential) control model
+
+```{r}
+fleet = new(Fleet)
+
+out = fleet$harvest_dry_run(pop, h, 5.61)
+
+df = as.data.frame(matrix(data = out, ncol=6, byrow = T))
+colnames(df) = c("fish_age",
+                 "B",
+								"B_sampled",
+								"yield",
+								"yield_expected",
+								"chi")
+
+df %>% 
+  mutate(fish = 1:n()) %>% 
+  mutate(yield_err_pc = (yield-yield_expected)/yield_expected*100) %>%
+  select(-B) %>% 
+  pivot_longer(-fish) %>% 
+  ggplot(aes(x=fish, y=value))+
+  geom_line()+
+  facet_wrap(~name, scales="free_y")
+
+```
+
+
+## Mock fish the population to calculate fishing mortality rate
+
+Using the quadratic control model (2 updates to chi are required)
+
+```{r}
+fleet = new(Fleet)
+fleet$control_model = "quadratic"
+
+out = fleet$harvest_dry_run(pop, h, 5.61)
+
+df = as.data.frame(matrix(data = out, ncol=6, byrow = T))
+colnames(df) = c("fish_age",
+                 "B",
+								"B_sampled",
+								"yield",
+								"yield_expected",
+								"chi")
+
+df %>% 
+  mutate(fish = 1:n()) %>% 
+  mutate(yield_err_pc = (yield-yield_expected)/yield_expected*100) %>%
+  select(-B) %>% 
+  pivot_longer(-fish) %>% 
+  ggplot(aes(x=fish, y=value))+
+  geom_line()+
+  facet_wrap(~name, scales="free_y")
+
+```
+
+## Calculate error characteristics with exponential model
+
+```{r}
+pc_error = function(i, mode){
+  fleet = new(Fleet)
+  fleet$control_model = mode
+  
+  out = fleet$harvest_dry_run(pop, h, 5.61)
+  
+  df = as.data.frame(matrix(data = out, ncol=6, byrow = T))
+  colnames(df) = c("fish_age",
+                   "B",
+  								"B_sampled",
+  								"yield",
+  								"yield_expected",
+  								"chi")
+  
+  df %>% 
+    mutate(yield_err_pc = (yield-yield_expected)/yield_expected*100) %>% 
+    pull(yield_err_pc) %>% 
+    tail(1)
+}
+```
+
+### Try exponential model
+
+$Y/B_s = 1-e^{-k \chi}$
+
+```{r}
+hist(sapply(X = 1:500, pc_error, mode="exp"), main="exponential model", breaks=20)
+```
+
+### Try linear model
+
+$Y/B_s = k \chi$
+
+
+```{r}
+hist(sapply(X = 1:500, pc_error, mode="linear"), main="linear model", breaks=20)
+```
+
+
+### Try quadratic model
+
+$Y/B_s = \alpha \chi+ \beta \chi^2$
+
+This requires 2 updates to chi
+
+```{r}
+hist(sapply(X = 1:500, pc_error, mode="quadratic"), main="quadratic model", breaks=20)
+```

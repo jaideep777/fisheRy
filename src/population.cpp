@@ -512,7 +512,7 @@ double Population::avgOverAges(const std::vector<double> &Qa, int amin, int amax
 ///
 /// If \f$ |F+M| < 1 \times 10^{-10} \f$, i.e., both F and M are zero, the function returns 0.
 double Population::effort1(double Nr, double F, double M){
-	if (fabs(F+M) < 1e-10) return 0;
+	if (fabs(F+M) < 1e-20) return 0;
 	else return pow(Nr, 1-par.b) * F * (exp(-(F+M)*(1-par.b))-1) / (par.q*(F+M)*(par.b-1)); 
 }
 
@@ -807,7 +807,7 @@ std::vector<double> Population::update(double temp){
 			
 			// Effort covers spawning and feeding grounds, so 
 			//   we use the total control fishing mortality rate and the total natural mortality rate
-			E_req = (Nrel < 1e-10)? 0 : effort1(Nrel, F_real, Mort_ref); 
+			E_req = (Nrel < 1e-20)? 0 : effort1(Nrel, F_real, Mort_ref); 
 			//pow(Nrel, 1-par.b) * F * (exp(-(F+M)*(1-par.b))-1) / (par.q*(F+M)*(par.b-1));
 			D_sea_req  = par.dsea * E_req;
 			D_sea_real = D_sea_req / (1 + D_sea_req/par.dmax);

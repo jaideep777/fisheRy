@@ -78,7 +78,7 @@ We can now simulate populations with different harvesting rates. Here, we simula
 ```{r fig.height=9}
 nsteps = 200
 hvec = seq(0, 0.99, length.out = 20)
-lminvec = seq(10, 100, length.out = 20)
+lminvec = seq(10, 180, length.out = 20)
 Tvec = seq(4, 8, length.out = 20)
 lf = 45
 h_sq = 0.3
@@ -92,7 +92,7 @@ Generate reference
 ```{r}
 dat_ref = data.frame(matrix(ncol=7, nrow=0))
 colnames(dat_ref) = c("ssb", "tsb", "yield", "employment.sea", "employment.shore", "profit.sea", "profit.shore")
-for (il in 1:length(lminvec)){
+for (il in 1:17){
   res = simulate(h_sq, lminvec[il], F)
   v = colMeans((res$summaries %>% select(SSB, TSB, Y, D.sea, D.shr, P.sea, P.shr))[101:200,])
   dat_ref[nrow(dat_ref)+1,] = v
@@ -120,7 +120,7 @@ sim$equilibriateNaturalPopulation(params_file, 5.61, 2e6)
 
 nsteps = 200
 hvec = seq(0.01, 0.99, length.out = 20)
-lminvec = seq(10, 100, length.out = 20)
+lminvec = seq(10, 180, length.out = 20)
 Tvec = seq(4, 8, length.out = 20)
 
 if(re_simulate){
@@ -166,7 +166,7 @@ sim$equilibriateNaturalPopulation(params_file, 5.61, 2e6)
 
 nsteps = 200
 hvec = seq(0.01, 0.99, length.out = 20)
-lminvec = seq(10, 100, length.out = 20)
+lminvec = seq(10, 180, length.out = 20)
 Tvec = seq(4, 8, length.out = 20)
 
 if(re_simulate){

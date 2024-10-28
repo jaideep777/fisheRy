@@ -1,0 +1,263 @@
+#include "fleet.h"
+#include <cmath>
+#include <algorithm>
+
+inline double runif(double rmin=0, double rmax=1){
+	double r = double(rand())/RAND_MAX; 
+	return rmin + (rmax-rmin)*r;
+}
+
+struct linregresult{
+	double slope = 0;
+	double intercept = 0;
+};
+
+inline linregresult linreg(const std::vector<double> &x, const std::vector<double> &y){
+    double xMean = std::accumulate(x.begin(), x.end(), 0.0) / x.size();
+    double yMean = std::accumulate(y.begin(), y.end(), 0.0) / y.size();
+
+    // Calculate the numerator and denominator for the slope (m) using transform and accumulate
+    double numerator = std::inner_product(
+        x.begin(), x.end(), y.begin(), 0.0,
+        std::plus<>(),
+        [xMean, yMean](double xi, double yi) { return (xi - xMean) * (yi - yMean); }
+    );
+
+    double denominator = std::accumulate(
+        x.begin(), x.end(), 0.0,
+        [xMean](double acc, double xi) { return acc + (xi - xMean) * (xi - xMean); }
+    );
+
+    linregresult res;
+	res.slope = numerator / denominator;
+    res.intercept = yMean - res.slope * xMean;
+    
+    return res;
+}
+
+inline linregresult linreg0(const std::vector<double>& x, const std::vector<double>& y) {
+    // Calculate the numerator and denominator for the slope (m)
+    double numerator = std::inner_product(x.begin(), x.end(), y.begin(), 0.0);
+    double denominator = std::accumulate(
+        x.begin(), x.end(), 0.0,
+        [](double acc, double xi) { return acc + (xi * xi); }
+    );
+
+    linregresult res;
+    res.slope = numerator / denominator;
+	res.intercept = 0;
+	
+	// std::cout << "linreg0: \n"; 
+	// std::cout << "  x = "; for (auto xx : x) std::cout << xx << " "; std::cout << '\n';
+	// std::cout << "  y = "; for (auto yy : y) std::cout << yy << " "; std::cout << '\n';
+	// std::cout << "  res: slope/int = " << res.slope << " / " << res.intercept << '\n';
+
+	return res;
+}
+
+inline double linreg_predict(double x_new, const linregresult& res){
+	return res.intercept + res.slope * x_new;
+}
+
+inline double linreg_predict_inverse(double y_new, const linregresult& res){
+	return (y_new - res.intercept)/res.slope;
+}
+
+
+Fleet::Fleet() : g(rd()){
+}
+
+std::vector<double> Fleet::harvest_dry_run(Population pop, double h, double temp){
+	return harvest(pop, h, temp);
+}
+
+std::vector<double> Fleet::harvest(Population& pop, double h, double temp){
+	double yield = 0, to_sea_bed = 0;
+	double survival_mean = 0, n_survival_mean = 0;
+	int count = 0, n_alive = 0;
+
+	for (auto& f : pop.fishes) n_alive += f.isAlive? 1:0;
+	
+	shuffle(pop.fishes.begin(), pop.fishes.end(), g);
+
+	double B = pop.fishableBiomass();
+	double quota = B*h; // Should this be fishable biomass at start of season or after SPF?
+	double B_sampled = 0;
+	double yield_expected;
+
+	std::vector<double> progress;
+	std::vector<double> chi_in_windows(1, 0), yield_in_windows(1, 0), bs_in_windows(1, 0);
+	double yield_prev = 0, bs_prev = 0;
+	int window_width = std::ceil(0.1*n_alive);
+	int windows_sampled = 0;
+	for (auto& f : pop.fishes){
+		if (f.isAlive){
+			B_sampled += pop.isFishable(f)? f.weight*pop.par.n : 0;
+			yield_expected = (B_sampled/B) * quota;
+
+			double fishing_mort_rate = chi*pop.fishingMortalityRef(f.length); //*(F_real/(F_req+1e-20)); // the factor F_real/F_req is needed if effort limitation is used
+			double natural_mort_rate = f.naturalMortalityRate(temp); // This does not (should not) include spawning-related mortality
+			double mortality_rate = natural_mort_rate + fishing_mort_rate; // post-spawning mortality rate is same for mature and immature individuals
+			double survival_prob = exp(-mortality_rate*1.0);	// mortality in feeding grounds (post-spawning), over full year.
+			survival_mean += survival_prob;
+			n_survival_mean += 1;
+
+			f.isAlive = f.isAlive && ((rand() / double(RAND_MAX)) <= survival_prob);	// set the fish to die probabilistically, if not dead already.
+			
+			if (!f.isAlive){
+				f.isCaught = runif() < fishing_mort_rate/mortality_rate; // check if fish is caught or goes to sea bed!
+				
+				if (f.isCaught) yield += pop.par.n*f.weight; // if caught, add to yield
+				else to_sea_bed += pop.par.n*f.weight;       // else, goes to sea bed
+			}
+
+			++count;
+
+			if (count >= window_width){ 
+				count = 0;
+				++windows_sampled;
+
+				// get parameters and outcomes realized during this window
+				double chi_window = chi;
+				double yield_window = yield - yield_prev;
+				double bs_window = B_sampled - bs_prev;
+
+				// push them into history
+				yield_in_windows.push_back(yield_window);
+				chi_in_windows.push_back(chi_window);
+				bs_in_windows.push_back(bs_window);
+
+				// update cumulative yield and bs 
+				yield_prev = yield;
+				bs_prev = B_sampled;
+
+				// 1. Continual multiplicative adjustment  
+				// chi = chi * std::clamp((yield_expected+1)/(yield+1), 1/k, k);
+
+				// 2. Continual additive adjustment  
+				// chi = chi + k*1e-9*(yield_expected-yield);
+
+				// // 3. Only n corrections in chi (up to O(n))
+				// if (windows_sampled == 1){
+				// 	// 3a. calibrate yield model (y = Bs * f(X))
+				// 	double kchi;
+				// 	if (control_model == "exp"){
+				// 		// exponential model: y = Bs (1-e^-kX) --> -log(1-y/Bs) = kx
+				// 		kchi = -log(1 - (yield_in_windows[1]/bs_in_windows[1])) / chi_in_windows[1];
+				// 	}
+				// 	else if (control_model == "linear" || control_model == "quadratic"){
+				// 		// linear model: y = Bs k X
+				// 		kchi = (yield_in_windows[1]/bs_in_windows[1]) / chi_in_windows[1];
+				// 	}
+
+				// 	// 3b. remainder biomass and yield
+				// 	double bs_remainder = B - B_sampled;
+				// 	double yield_remainder = quota - yield;
+
+				// 	// 3c. project yield
+				// 	if (control_model == "exp"){
+				// 		// exponential model: y = Bs (1-e^-kX)
+				// 		// std::cout << "using exp model" << std::endl;
+				// 		chi = -log(1 - (yield_remainder/bs_remainder)) / kchi;
+				// 	}
+				// 	else if (control_model == "linear" || control_model == "quadratic"){
+				// 		// linear model: y = Bs k X
+				// 		// std::cout << "using linear model" << std::endl;
+				// 		chi = (yield_remainder/bs_remainder) / kchi;
+				// 	}
+
+				// 	//chi = chi_in_windows[1]*(bs_in_windows[1]/yield_in_windows[1])*(quota-yield_in_windows[1])/(B-bs_in_windows[1]);
+				// }
+				// else if (windows_sampled == 2){
+				// 	// 3a. calibrate yield model 
+				// 	double alpha, beta;
+				// 	if (control_model == "quadratic"){
+				// 		// quadratic model: (y/Bs =  X a + X^2 b)
+				// 		double a1 = chi_in_windows[1]; // X   = coeff of alpha
+				// 		double b1 = a1*a1;             // X^2 = coeff of beta
+				// 		double c1 = yield_in_windows[1]/bs_in_windows[1];
+				// 		double a2 = chi_in_windows[2];
+				// 		double b2 = a2*a2;
+				// 		double c2 = yield_in_windows[2]/bs_in_windows[2];
+
+				// 		alpha =  (c1*b2 - b1*c1)/(a1*b2 - b1*a2);
+				// 		beta  = -(c1*a2 - a1*c2)/(a1*b2 - b1*a2);
+				// 	}
+
+				// 	// 3b. remainder biomass and yield
+				// 	double bs_remainder = B - B_sampled;
+				// 	double yield_remainder = quota - yield;
+
+				// 	// 3c. project yield
+				// 	if (control_model == "quadratic"){
+				// 		// quadratic model: (y/Bs =  X a + X^2 b) <--- solve for X
+				// 		chi = (-alpha + sqrt(alpha*alpha + 4*beta*yield_remainder/bs_remainder)) / (2*beta);
+				// 	}
+				// }
+				// else{
+				// 	// no further adjustments
+				// }
+				// 3. Only n corrections in chi (up to O(n))
+
+				// if (windows_sampled == 1){
+				// 3a. calibrate yield model (y = Bs * f(X))
+				linregresult res;
+				std::vector<double> y(yield_in_windows.size());
+				if (control_model == "exp"){
+					// exponential model: y = Bs (1-e^-kX) --> -log(1-y/Bs) = kX
+					std::transform(yield_in_windows.begin(), yield_in_windows.end(),
+									bs_in_windows.begin(), y.begin(),
+									[](double yield, double bs) {
+										return (bs == 0)? 0 : -log(1 - (yield / bs));
+									});
+
+					res = linreg0(chi_in_windows, y);
+				}
+				else if (control_model == "linear"){
+					// linear model: y = Bs (k X) --> y/Bs = kX
+					std::transform(yield_in_windows.begin(), yield_in_windows.end(),
+									bs_in_windows.begin(), y.begin(),
+									[](double yield, double bs) {
+										return (bs == 0)? 0 : yield / bs;
+									});
+
+					res = linreg0(chi_in_windows, y);
+				}
+
+				// 3b. remainder biomass and yield (new values to predict)
+				double bs_remainder = B - B_sampled;
+				double yield_remainder = quota - yield;
+
+				// 3c. project yield
+				if (control_model == "exp"){
+					// exponential model: y = Bs (1-e^-kX)
+					// std::cout << "using exp model" << std::endl;
+					chi = linreg_predict_inverse(-log(1 - (yield_remainder/bs_remainder)), res);
+				}
+				else if (control_model == "linear"){
+					// linear model: y = Bs k X
+					// std::cout << "using linear model" << std::endl;
+					chi = linreg_predict_inverse((yield_remainder/bs_remainder), res);
+				}
+				// }
+
+				//chi = chi_in_windows[1]*(bs_in_windows[1]/yield_in_windows[1])*(quota-yield_in_windows[1])/(B-bs_in_windows[1]);
+
+				chi = std::clamp(chi, 1e-6, 200.0);
+
+			}
+
+			progress.insert(progress.end(), 
+							{
+								f.age,
+								B,
+								B_sampled,
+								yield,
+								yield_expected,
+								chi
+							});
+		}
+	} 
+	survival_mean /= n_survival_mean;
+	return progress;
+}

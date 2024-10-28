@@ -14,11 +14,13 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 
 RcppExport SEXP _rcpp_module_boot_fish_module();
 RcppExport SEXP _rcpp_module_boot_population_module();
+RcppExport SEXP _rcpp_module_boot_fleet_module();
 RcppExport SEXP _rcpp_module_boot_simulator_module();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_rcpp_module_boot_fish_module", (DL_FUNC) &_rcpp_module_boot_fish_module, 0},
     {"_rcpp_module_boot_population_module", (DL_FUNC) &_rcpp_module_boot_population_module, 0},
+    {"_rcpp_module_boot_fleet_module", (DL_FUNC) &_rcpp_module_boot_fleet_module, 0},
     {"_rcpp_module_boot_simulator_module", (DL_FUNC) &_rcpp_module_boot_simulator_module, 0},
     {NULL, NULL, 0}
 };

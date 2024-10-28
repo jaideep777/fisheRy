@@ -89,7 +89,8 @@ RCPP_MODULE(fish_module) {
 
 	;
 }	
-	
+
+
 #include "population.h"
 
 RCPP_EXPOSED_CLASS(PopulationParams);
@@ -178,6 +179,19 @@ RCPP_MODULE(population_module){
 
 		.method("readEnvironmentFile", &Population::readEnvironmentFile)
 		.method("updateEnv", &Population::updateEnv)
+	;
+}
+
+#include "fleet.h"
+
+RCPP_EXPOSED_CLASS(Fleet);
+
+RCPP_MODULE(fleet_module){
+	class_ <Fleet>("Fleet")
+	.constructor()
+	.field("k", &Fleet::k)
+	.field("control_model", &Fleet::control_model)
+	.method("harvest_dry_run", &Fleet::harvest_dry_run)
 	;
 }
 

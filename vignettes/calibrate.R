@@ -287,6 +287,8 @@ p3 = l$res_ibm %>% select(ssb:profit) %>%
   
 library(patchwork)
 cairo_pdf(here::here("figures/calibration.pdf"), width = 10, height=5)
-q1 = p3+p2all + plot_layout(guides="collect", widths=c(5.5,1))
-pa/q1 + plot_layout(widths=c(4,1))
+q1 = p3+p2all + plot_layout(widths=c(5.5,1))
+print(
+pa/q1 + plot_layout(widths=c(5,1))
+)
 dev.off()
