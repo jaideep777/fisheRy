@@ -71,6 +71,52 @@ std::vector<double> Fleet::harvest_dry_run(Population pop, double h, double temp
 	return harvest(pop, h, temp);
 }
 
+
+void Fleet::update_chi(const std::vector<double>& chi_in_windows, 
+                       const std::vector<double>& yield_in_windows, 
+                       const std::vector<double>& bs_in_windows,
+				       double yield_remainder, double bs_remainder){
+	// 3a. calibrate yield model (y = Bs * f(X))
+	linregresult res;
+	std::vector<double> y(yield_in_windows.size());
+	if (control_model == "exp"){
+		// exponential model: y = Bs (1-e^-kX) --> -log(1-y/Bs) = kX
+		std::transform(yield_in_windows.begin(), yield_in_windows.end(),
+						bs_in_windows.begin(), y.begin(),
+						[](double yield, double bs) {
+							return (bs == 0)? 0 : -log(1 - (yield / bs));
+						});
+
+		res = linreg0(chi_in_windows, y);
+	}
+	else if (control_model == "linear"){
+		// linear model: y = Bs (k X) --> y/Bs = kX
+		std::transform(yield_in_windows.begin(), yield_in_windows.end(),
+						bs_in_windows.begin(), y.begin(),
+						[](double yield, double bs) {
+							return (bs == 0)? 0 : yield / bs;
+						});
+
+		res = linreg0(chi_in_windows, y);
+	}
+
+	// 3b. predict new chi
+	if (control_model == "exp"){
+		// exponential model: y = Bs (1-e^-kX)
+		// std::cout << "using exp model" << std::endl;
+		chi = linreg_predict_inverse(-log(1 - (yield_remainder/bs_remainder)), res);
+	}
+	else if (control_model == "linear"){
+		// linear model: y = Bs k X
+		// std::cout << "using linear model" << std::endl;
+		chi = linreg_predict_inverse((yield_remainder/bs_remainder), res);
+	}
+
+	chi = std::clamp(chi, 1e-6, 200.0);
+
+}
+
+
 std::vector<double> Fleet::harvest(Population& pop, double h, double temp){
 	double yield = 0, to_sea_bed = 0;
 	double survival_mean = 0, n_survival_mean = 0;
@@ -131,119 +177,13 @@ std::vector<double> Fleet::harvest(Population& pop, double h, double temp){
 				yield_prev = yield;
 				bs_prev = B_sampled;
 
-				// 1. Continual multiplicative adjustment  
-				// chi = chi * std::clamp((yield_expected+1)/(yield+1), 1/k, k);
-
-				// 2. Continual additive adjustment  
-				// chi = chi + k*1e-9*(yield_expected-yield);
-
-				// // 3. Only n corrections in chi (up to O(n))
-				// if (windows_sampled == 1){
-				// 	// 3a. calibrate yield model (y = Bs * f(X))
-				// 	double kchi;
-				// 	if (control_model == "exp"){
-				// 		// exponential model: y = Bs (1-e^-kX) --> -log(1-y/Bs) = kx
-				// 		kchi = -log(1 - (yield_in_windows[1]/bs_in_windows[1])) / chi_in_windows[1];
-				// 	}
-				// 	else if (control_model == "linear" || control_model == "quadratic"){
-				// 		// linear model: y = Bs k X
-				// 		kchi = (yield_in_windows[1]/bs_in_windows[1]) / chi_in_windows[1];
-				// 	}
-
-				// 	// 3b. remainder biomass and yield
-				// 	double bs_remainder = B - B_sampled;
-				// 	double yield_remainder = quota - yield;
-
-				// 	// 3c. project yield
-				// 	if (control_model == "exp"){
-				// 		// exponential model: y = Bs (1-e^-kX)
-				// 		// std::cout << "using exp model" << std::endl;
-				// 		chi = -log(1 - (yield_remainder/bs_remainder)) / kchi;
-				// 	}
-				// 	else if (control_model == "linear" || control_model == "quadratic"){
-				// 		// linear model: y = Bs k X
-				// 		// std::cout << "using linear model" << std::endl;
-				// 		chi = (yield_remainder/bs_remainder) / kchi;
-				// 	}
-
-				// 	//chi = chi_in_windows[1]*(bs_in_windows[1]/yield_in_windows[1])*(quota-yield_in_windows[1])/(B-bs_in_windows[1]);
-				// }
-				// else if (windows_sampled == 2){
-				// 	// 3a. calibrate yield model 
-				// 	double alpha, beta;
-				// 	if (control_model == "quadratic"){
-				// 		// quadratic model: (y/Bs =  X a + X^2 b)
-				// 		double a1 = chi_in_windows[1]; // X   = coeff of alpha
-				// 		double b1 = a1*a1;             // X^2 = coeff of beta
-				// 		double c1 = yield_in_windows[1]/bs_in_windows[1];
-				// 		double a2 = chi_in_windows[2];
-				// 		double b2 = a2*a2;
-				// 		double c2 = yield_in_windows[2]/bs_in_windows[2];
-
-				// 		alpha =  (c1*b2 - b1*c1)/(a1*b2 - b1*a2);
-				// 		beta  = -(c1*a2 - a1*c2)/(a1*b2 - b1*a2);
-				// 	}
-
-				// 	// 3b. remainder biomass and yield
-				// 	double bs_remainder = B - B_sampled;
-				// 	double yield_remainder = quota - yield;
-
-				// 	// 3c. project yield
-				// 	if (control_model == "quadratic"){
-				// 		// quadratic model: (y/Bs =  X a + X^2 b) <--- solve for X
-				// 		chi = (-alpha + sqrt(alpha*alpha + 4*beta*yield_remainder/bs_remainder)) / (2*beta);
-				// 	}
-				// }
-				// else{
-				// 	// no further adjustments
-				// }
-				// 3. Only n corrections in chi (up to O(n))
-
-				// if (windows_sampled == 1){
-				// 3a. calibrate yield model (y = Bs * f(X))
-				linregresult res;
-				std::vector<double> y(yield_in_windows.size());
-				if (control_model == "exp"){
-					// exponential model: y = Bs (1-e^-kX) --> -log(1-y/Bs) = kX
-					std::transform(yield_in_windows.begin(), yield_in_windows.end(),
-									bs_in_windows.begin(), y.begin(),
-									[](double yield, double bs) {
-										return (bs == 0)? 0 : -log(1 - (yield / bs));
-									});
-
-					res = linreg0(chi_in_windows, y);
-				}
-				else if (control_model == "linear"){
-					// linear model: y = Bs (k X) --> y/Bs = kX
-					std::transform(yield_in_windows.begin(), yield_in_windows.end(),
-									bs_in_windows.begin(), y.begin(),
-									[](double yield, double bs) {
-										return (bs == 0)? 0 : yield / bs;
-									});
-
-					res = linreg0(chi_in_windows, y);
-				}
-
-				// 3b. remainder biomass and yield (new values to predict)
+				// remainder biomass and yield (new values to update chi)
 				double bs_remainder = B - B_sampled;
 				double yield_remainder = quota - yield;
 
-				// 3c. project yield
-				if (control_model == "exp"){
-					// exponential model: y = Bs (1-e^-kX)
-					// std::cout << "using exp model" << std::endl;
-					chi = linreg_predict_inverse(-log(1 - (yield_remainder/bs_remainder)), res);
-				}
-				else if (control_model == "linear"){
-					// linear model: y = Bs k X
-					// std::cout << "using linear model" << std::endl;
-					chi = linreg_predict_inverse((yield_remainder/bs_remainder), res);
-				}
+				// if (windows_sampled == 1){
+				update_chi(chi_in_windows, yield_in_windows, bs_in_windows, yield_remainder, bs_remainder);
 				// }
-
-				//chi = chi_in_windows[1]*(bs_in_windows[1]/yield_in_windows[1])*(quota-yield_in_windows[1])/(B-bs_in_windows[1]);
-
-				chi = std::clamp(chi, 1e-6, 200.0);
 
 			}
 

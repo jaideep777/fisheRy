@@ -189,7 +189,6 @@ RCPP_EXPOSED_CLASS(Fleet);
 RCPP_MODULE(fleet_module){
 	class_ <Fleet>("Fleet")
 	.constructor()
-	.field("k", &Fleet::k)
 	.field("control_model", &Fleet::control_model)
 	.method("harvest_dry_run", &Fleet::harvest_dry_run)
 	;

@@ -1,12 +1,12 @@
 ---
 title: "Effort control: fishing until quota is filled"
 author: "Jaideep Joshi"
-date: "28 March 2022"
+date: "28 October 2024"
 output: html_document
 editor_options:
   chunk_output_type: inline
 ---
-  
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
