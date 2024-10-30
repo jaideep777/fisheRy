@@ -1,6 +1,7 @@
 #include "fleet.h"
 #include <cmath>
 #include <algorithm>
+#include <stdexcept>
 
 inline double runif(double rmin=0, double rmax=1){
 	double r = double(rand())/RAND_MAX; 
@@ -67,6 +68,7 @@ inline double linreg_predict_inverse(double y_new, const linregresult& res){
 Fleet::Fleet() : g(rd()){
 }
 
+/// Dry run simply takes population by value, so that original one is not altered
 std::vector<double> Fleet::harvest_dry_run(Population pop, double h, double temp){
 	return harvest(pop, h, temp);
 }
@@ -99,6 +101,9 @@ void Fleet::update_chi(const std::vector<double>& chi_in_windows,
 
 		res = linreg0(chi_in_windows, y);
 	}
+	else {
+		// throw std::runtime_error("Unsopported control model");
+	}
 
 	// 3b. predict new chi
 	if (control_model == "exp"){
@@ -117,6 +122,9 @@ void Fleet::update_chi(const std::vector<double>& chi_in_windows,
 }
 
 
+/// Note: this function takes pop by reference so it is altered
+/// Some computations are doubled in the function below, but that's ok for now as it serves to
+/// cross-check those calcs. These can be removed after sufficient testing
 std::vector<double> Fleet::harvest(Population& pop, double h, double temp){
 	double yield = 0, to_sea_bed = 0;
 	double survival_mean = 0, n_survival_mean = 0;
@@ -134,32 +142,42 @@ std::vector<double> Fleet::harvest(Population& pop, double h, double temp){
 	std::vector<double> progress;
 	std::vector<double> chi_in_windows(1, 0), yield_in_windows(1, 0), bs_in_windows(1, 0);
 	double yield_prev = 0, bs_prev = 0;
-	int window_width = std::ceil(0.1*n_alive);
+	int window_n = std::ceil(window_dt*n_alive);
 	int windows_sampled = 0;
+	WindowProps window_props;
 	for (auto& f : pop.fishes){
 		if (f.isAlive){
-			B_sampled += pop.isFishable(f)? f.weight*pop.par.n : 0;
+			bool f_is_fishable = pop.isFishable(f);
+
+			B_sampled += f_is_fishable? f.weight*pop.par.n : 0;
 			yield_expected = (B_sampled/B) * quota;
 
-			double fishing_mort_rate = chi*pop.fishingMortalityRef(f.length); //*(F_real/(F_req+1e-20)); // the factor F_real/F_req is needed if effort limitation is used
+			double fishing_mort_rate = chi*pop.fishingMortalityRef(f.length); 
 			double natural_mort_rate = f.naturalMortalityRate(temp); // This does not (should not) include spawning-related mortality
 			double mortality_rate = natural_mort_rate + fishing_mort_rate; // post-spawning mortality rate is same for mature and immature individuals
-			double survival_prob = exp(-mortality_rate*1.0);	// mortality in feeding grounds (post-spawning), over full year.
+			double survival_prob = exp(-mortality_rate*1.0);	// mortality in feeding grounds (post-spawning), over full year. Note that survival prob must be annualized because this fish will be iterated over only once
 			survival_mean += survival_prob;
 			n_survival_mean += 1;
+
+			window_props.M_fishable += f_is_fishable? natural_mort_rate : 0;
+			window_props.B_sampled  += f_is_fishable? f.weight*pop.par.n : 0;
+			window_props.n_fishable += f_is_fishable? 1 : 0;
 
 			f.isAlive = f.isAlive && ((rand() / double(RAND_MAX)) <= survival_prob);	// set the fish to die probabilistically, if not dead already.
 			
 			if (!f.isAlive){
 				f.isCaught = runif() < fishing_mort_rate/mortality_rate; // check if fish is caught or goes to sea bed!
 				
-				if (f.isCaught) yield += pop.par.n*f.weight; // if caught, add to yield
+				if (f.isCaught){
+					yield += pop.par.n*f.weight; // if caught, add to yield
+					window_props.yield += pop.par.n*f.weight;
+				}
 				else to_sea_bed += pop.par.n*f.weight;       // else, goes to sea bed
 			}
 
 			++count;
 
-			if (count >= window_width){ 
+			if (count >= window_n){ 
 				count = 0;
 				++windows_sampled;
 
@@ -168,10 +186,26 @@ std::vector<double> Fleet::harvest(Population& pop, double h, double temp){
 				double yield_window = yield - yield_prev;
 				double bs_window = B_sampled - bs_prev;
 
+				window_props.chi = chi;
+				window_props.B_start = B - bs_prev; // bs_prev was sampled biomass at start of window, so remaining biomass at start of window is B - bs_prev
+				window_props.Cbar = window_props.yield/window_dt; // catch rate = yield per year
+				window_props.M_fishable /= window_props.n_fishable; 
+				window_props.F_fishable /= window_props.n_fishable; 
+
+				// std::cout << "Yield window: " << yield_window << " " << window_props.yield << '\n';
+				// std::cout << "Bs window: " << bs_window << " " << window_props.B_sampled << '\n';
+
+				assert(fabs(yield_window - window_props.yield) < 1e-6);
+				assert(fabs(bs_window - window_props.B_sampled) < 1e-6);
+
 				// push them into history
-				yield_in_windows.push_back(yield_window);
-				chi_in_windows.push_back(chi_window);
-				bs_in_windows.push_back(bs_window);
+				window_props_vec.push_back(window_props);
+				yield_in_windows.push_back(window_props.yield);
+				chi_in_windows.push_back(window_props.chi);
+				bs_in_windows.push_back(window_props.B_sampled);
+				// yield_in_windows.push_back(yield_window);
+				// chi_in_windows.push_back(chi_window);
+				// bs_in_windows.push_back(bs_window);
 
 				// update cumulative yield and bs 
 				yield_prev = yield;
@@ -185,6 +219,8 @@ std::vector<double> Fleet::harvest(Population& pop, double h, double temp){
 				update_chi(chi_in_windows, yield_in_windows, bs_in_windows, yield_remainder, bs_remainder);
 				// }
 
+				// reset window_props
+				window_props = WindowProps();
 			}
 
 			progress.insert(progress.end(), 
@@ -201,3 +237,4 @@ std::vector<double> Fleet::harvest(Population& pop, double h, double temp){
 	survival_mean /= n_survival_mean;
 	return progress;
 }
+
