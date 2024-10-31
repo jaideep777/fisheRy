@@ -93,6 +93,10 @@ df %>%
 
 table(df$chi)
 
+
+fleet$effort_constantC(2.83e-6, 0.75, ssb_nf)*pop$par$dsea
+fleet$effort_constantF(2.83e-6, 0.75, ssb_nf)*pop$par$dsea
+
 ```
 
 ## Mock fish the population to calculate fishing mortality rate

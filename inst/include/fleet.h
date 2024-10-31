@@ -7,7 +7,7 @@
 class WindowProps{
 	public:
 	double B_start = 0;     ///< fishable biomass at the start of the window (for calculating Nrel)
-	double Cbar = 0;        ///< Catch rate (annualized yield) during window
+	double C_rate = 0;      ///< Catch rate (annualized yield) during window
 
 	double chi = 0;         ///< Fishing mortality scalar applied during window
 	double yield = 0;       ///< yield acquired within window
@@ -40,6 +40,10 @@ class Fleet{
 
 	std::vector<double> harvest_dry_run(Population pop, double h, double temp);
 	std::vector<double> harvest(Population& pop, double h, double temp);
+
+	double effort_constantC(double q, double b, double K);
+	double effort_constantF(double q, double b, double K);
+
 };
 
 #endif

@@ -191,6 +191,8 @@ RCPP_MODULE(fleet_module){
 	.constructor()
 	.field("control_model", &Fleet::control_model)
 	.method("harvest_dry_run", &Fleet::harvest_dry_run)
+	.method("effort_constantC", &Fleet::effort_constantC)
+	.method("effort_constantF", &Fleet::effort_constantF)
 	;
 }
 

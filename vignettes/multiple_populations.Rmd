@@ -57,9 +57,30 @@ pop$set_superFishSize(2e6)
 pop$verbose = F
 pop$init(1000, 5.61)
 pop$noFishingEquilibriate(5.61)
+
+pop$print_summary()
 ```
 
+### Simulate 1 population
 
+```{r}
+nsteps = 50
+pop$verbose = T
+
+res = sim$simulate_multi_2d(pop, 5.61, 45, 0.3, nsteps, 1.93e3, F)
+
+as.data.frame(res[,1,1,1,]) %>% 
+  setNames(pop$colnames) %>% 
+  mutate(t = 1:n()) %>% 
+  select(t, ssb, yield, employment.sea, nsuperfish, nfish_ra) %>% 
+  pivot_longer(-t) %>% 
+  ggplot(aes(x=t, y=value)) +
+  geom_line()+
+  facet_wrap(~name, scales="free_y")
+
+
+
+```
 
 ### Plotting utility
 

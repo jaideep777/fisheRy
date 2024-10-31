@@ -122,13 +122,14 @@ void Fleet::update_chi(const std::vector<double>& chi_in_windows,
 }
 
 
-/// Note: this function takes pop by reference so it is altered
+/// Note: this function takes pop by reference so it IS altered
 /// Some computations are doubled in the function below, but that's ok for now as it serves to
 /// cross-check those calcs. These can be removed after sufficient testing
 std::vector<double> Fleet::harvest(Population& pop, double h, double temp){
 	double yield = 0, to_sea_bed = 0;
 	double survival_mean = 0, n_survival_mean = 0;
 	int count = 0, n_alive = 0;
+	window_props_vec.clear(); // clear old data in windows 
 
 	for (auto& f : pop.fishes) n_alive += f.isAlive? 1:0;
 	
@@ -160,6 +161,7 @@ std::vector<double> Fleet::harvest(Population& pop, double h, double temp){
 			n_survival_mean += 1;
 
 			window_props.M_fishable += f_is_fishable? natural_mort_rate : 0;
+			window_props.F_fishable += f_is_fishable? fishing_mort_rate : 0;
 			window_props.B_sampled  += f_is_fishable? f.weight*pop.par.n : 0;
 			window_props.n_fishable += f_is_fishable? 1 : 0;
 
@@ -188,7 +190,7 @@ std::vector<double> Fleet::harvest(Population& pop, double h, double temp){
 
 				window_props.chi = chi;
 				window_props.B_start = B - bs_prev; // bs_prev was sampled biomass at start of window, so remaining biomass at start of window is B - bs_prev
-				window_props.Cbar = window_props.yield/window_dt; // catch rate = yield per year
+				window_props.C_rate = window_props.yield/window_dt; // catch rate = annualized yield = yield per year
 				window_props.M_fishable /= window_props.n_fishable; 
 				window_props.F_fishable /= window_props.n_fishable; 
 
@@ -236,5 +238,31 @@ std::vector<double> Fleet::harvest(Population& pop, double h, double temp){
 	} 
 	survival_mean /= n_survival_mean;
 	return progress;
+}
+
+double Fleet::effort_constantC(double q, double b, double K){
+	double effort = 0;
+	for (auto& w : window_props_vec){
+		double N0 = w.B_start / K;
+		double C  = w.C_rate / K;
+		double M  = w.M_fishable;
+		double t = window_dt/2;
+		double effort_t = C/q/(pow( (N0+C/M)*exp(-M*t) - C/M, b));
+		effort += effort_t*window_dt;
+	}
+	return effort;
+}
+
+double Fleet::effort_constantF(double q, double b, double K){
+	double effort = 0;
+	for (auto& w : window_props_vec){
+		double N0 = w.B_start / K;
+		double F  = w.F_fishable;
+		double M  = w.M_fishable;
+		double t = window_dt/2;
+		double effort_t = F/q/(pow( N0*exp(-(F+M)*t), b-1));
+		effort += effort_t*window_dt;
+	}
+	return effort;
 }
 
