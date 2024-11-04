@@ -38,8 +38,8 @@ class Fleet{
 					const std::vector<double>& bs_in_windows,
 					double yield_remainder, double bs_remainder);
 
-	std::vector<double> harvest_dry_run(Population pop, double h, double temp);
-	std::vector<double> harvest(Population& pop, double h, double temp);
+	std::vector<double> harvest_dry_run(Population pop, double quota, double temp);
+	std::vector<double> harvest(Population& pop, double quota, double temp);
 
 	double effort_constantC(double q, double b, double K);
 	double effort_constantF(double q, double b, double K);
