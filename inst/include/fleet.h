@@ -33,6 +33,8 @@ class Fleet{
 
 	Fleet();
 
+	void init_chi(Population &pop, double Fc, double rho, double temp);
+
 	void update_chi(const std::vector<double>& chi_in_windows, 
 					const std::vector<double>& yield_in_windows, 
 					const std::vector<double>& bs_in_windows,

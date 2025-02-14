@@ -127,6 +127,7 @@ RCPP_MODULE(population_module){
 		.field("dsea", &PopulationParams::dsea)
 		.field("dmax", &PopulationParams::dmax)
 		.field("recruitmentAge", &PopulationParams::recruitmentAge)
+		.field("rho", &PopulationParams::rho)
 
 		.field("update_env", &PopulationParams::update_env)
 		.field("simulate_bio_only", &PopulationParams::simulate_bio_only)
@@ -189,7 +190,9 @@ RCPP_EXPOSED_CLASS(Fleet);
 RCPP_MODULE(fleet_module){
 	class_ <Fleet>("Fleet")
 	.constructor()
+	.field("chi", &Fleet::chi)
 	.field("control_model", &Fleet::control_model)
+	.method("init_chi", &Fleet::init_chi)
 	.method("harvest_dry_run", &Fleet::harvest_dry_run)
 	.method("effort_constantC", &Fleet::effort_constantC)
 	.method("effort_constantF", &Fleet::effort_constantF)

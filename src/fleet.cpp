@@ -74,6 +74,15 @@ std::vector<double> Fleet::harvest_dry_run(Population pop, double quota, double 
 }
 
 
+void Fleet::init_chi(Population &pop, double Fc, double rho, double temp){
+	double Fref_ref = pop.fishingMortRefFishable();
+	double Mort_ref = pop.naturalMortFishable(temp);
+	double Mat_ref = pop.maturityFishable();
+
+	chi = (Fref_ref == 0)? 0 : Fc*(1-rho*Mat_ref)/Fref_ref;
+}
+
+
 void Fleet::update_chi(const std::vector<double>& chi_in_windows, 
                        const std::vector<double>& yield_in_windows, 
                        const std::vector<double>& bs_in_windows,
@@ -214,8 +223,8 @@ std::vector<double> Fleet::harvest(Population& pop, double quota, double temp){
 				bs_prev = B_sampled;
 
 				// remainder biomass and yield (new values to update chi)
-				double bs_remainder = B - B_sampled;
-				double yield_remainder = quota - yield;
+				double bs_remainder = fmax(B - B_sampled, 0);
+				double yield_remainder = fmax(quota - yield, 0);
 
 				// if (windows_sampled == 1){
 				update_chi(chi_in_windows, yield_in_windows, bs_in_windows, yield_remainder, bs_remainder);
@@ -227,7 +236,7 @@ std::vector<double> Fleet::harvest(Population& pop, double quota, double temp){
 
 			progress.insert(progress.end(), 
 							{
-								f.age,
+								static_cast<double>(f.age),
 								B,
 								B_sampled,
 								yield,
