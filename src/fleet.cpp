@@ -226,9 +226,10 @@ std::vector<double> Fleet::harvest(Population& pop, double quota, double temp){
 				double bs_remainder = fmax(B - B_sampled, 0);
 				double yield_remainder = fmax(quota - yield, 0);
 
-				// if (windows_sampled == 1){
-				update_chi(chi_in_windows, yield_in_windows, bs_in_windows, yield_remainder, bs_remainder);
-				// }
+				// update chi once yield goes above 0
+				if (yield > 0){
+					update_chi(chi_in_windows, yield_in_windows, bs_in_windows, yield_remainder, bs_remainder);
+				}
 
 				// reset window_props
 				window_props = WindowProps();
@@ -241,7 +242,11 @@ std::vector<double> Fleet::harvest(Population& pop, double quota, double temp){
 								B_sampled,
 								yield,
 								yield_expected,
-								chi
+								chi,
+								window_props.chi,
+								window_props.B_sampled,
+								window_props.B_start,
+								window_props.yield
 							});
 		}
 	} 
