@@ -70,7 +70,7 @@ Fleet::Fleet() : g(rd()){
 
 /// Dry run simply takes population by value, so that original one is not altered
 std::vector<double> Fleet::harvest_dry_run(Population pop, double quota, double temp){
-	return harvest(pop, quota, temp);
+	return harvest(pop, quota, temp, true); // harvest a copy population and return progress
 }
 
 
@@ -134,7 +134,7 @@ void Fleet::update_chi(const std::vector<double>& chi_in_windows,
 /// Note: this function takes pop by reference so it IS altered
 /// Some computations are doubled in the function below, but that's ok for now as it serves to
 /// cross-check those calcs. These can be removed after sufficient testing
-std::vector<double> Fleet::harvest(Population& pop, double quota, double temp){
+std::vector<double> Fleet::harvest(Population& pop, double quota, double temp, bool return_progress){
 	double yield = 0, to_sea_bed = 0;
 	double survival_mean = 0, n_survival_mean = 0;
 	int count = 0, n_alive = 0;
@@ -226,7 +226,7 @@ std::vector<double> Fleet::harvest(Population& pop, double quota, double temp){
 				double bs_remainder = fmax(B - B_sampled, 0);
 				double yield_remainder = fmax(quota - yield, 0);
 
-				// update chi once yield goes above 0
+				// update chi once yield goes above 0. This condition is to prevent degenerate points in regression
 				if (yield > 0){
 					update_chi(chi_in_windows, yield_in_windows, bs_in_windows, yield_remainder, bs_remainder);
 				}
@@ -235,24 +235,27 @@ std::vector<double> Fleet::harvest(Population& pop, double quota, double temp){
 				window_props = WindowProps();
 			}
 
-			progress.insert(progress.end(), 
-							{
-								static_cast<double>(f.age),
-								B,
-								B_sampled,
-								yield,
-								yield_expected,
-								chi,
-								window_props.chi,
-								window_props.B_sampled,
-								window_props.B_start,
-								window_props.yield
-							});
+			if (return_progress){
+				progress.insert(progress.end(), 
+					{
+						static_cast<double>(f.age),
+						B,
+						B_sampled,
+						yield,
+						yield_expected,
+						chi,
+						window_props.chi,
+						window_props.B_sampled,
+						window_props.B_start,
+						window_props.yield
+					});
+			}
 		}
 	} 
 	survival_mean /= n_survival_mean;
 	return progress;
 }
+
 
 double Fleet::effort_constantC(double q, double b, double K){
 	double effort = 0;

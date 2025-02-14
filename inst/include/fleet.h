@@ -41,7 +41,7 @@ class Fleet{
 					double yield_remainder, double bs_remainder);
 
 	std::vector<double> harvest_dry_run(Population pop, double quota, double temp);
-	std::vector<double> harvest(Population& pop, double quota, double temp);
+	std::vector<double> harvest(Population& pop, double quota, double temp, bool return_progress = false);
 
 	double effort_constantC(double q, double b, double K);
 	double effort_constantF(double q, double b, double K);
