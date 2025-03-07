@@ -26,6 +26,7 @@ class Fleet{
 	std::vector<WindowProps> window_props_vec;
 
 	double chi = 1;
+	double chi0_scalar_slope = 1.5;
 	std::string control_model = "exp";
 	double window_dt = 0.1; // window length [years]
 

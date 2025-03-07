@@ -191,6 +191,7 @@ RCPP_MODULE(fleet_module){
 	class_ <Fleet>("Fleet")
 	.constructor()
 	.field("chi", &Fleet::chi)
+	.field("chi0_scalar_slope", &Fleet::chi0_scalar_slope)
 	.field("control_model", &Fleet::control_model)
 	.method("init_chi", &Fleet::init_chi)
 	.method("harvest_dry_run", &Fleet::harvest_dry_run)

@@ -80,6 +80,9 @@ void Fleet::init_chi(Population &pop, double Fc, double rho, double temp){
 	double Mat_ref = pop.maturityFishable();
 
 	chi = (Fref_ref == 0)? 0 : Fc*(1-rho*Mat_ref)/Fref_ref;
+
+	double h = 1-exp(-Fc);
+	chi *= exp(chi0_scalar_slope*(h-0.5));
 }
 
 
@@ -118,7 +121,8 @@ void Fleet::update_chi(const std::vector<double>& chi_in_windows,
 	if (control_model == "exp"){
 		// exponential model: y = Bs (1-e^-kX)
 		// std::cout << "using exp model" << std::endl;
-		chi = linreg_predict_inverse(-log(1 - (yield_remainder/bs_remainder)), res);
+		if (yield_remainder >= bs_remainder) chi = 1e20;
+		else chi = linreg_predict_inverse(-log(1 - (yield_remainder/bs_remainder)), res);
 	}
 	else if (control_model == "linear"){
 		// linear model: y = Bs k X
@@ -126,7 +130,7 @@ void Fleet::update_chi(const std::vector<double>& chi_in_windows,
 		chi = linreg_predict_inverse((yield_remainder/bs_remainder), res);
 	}
 
-	chi = std::clamp(chi, 1e-6, 200.0);
+	chi = std::clamp(chi, 1e-6, 1e20);
 
 }
 
