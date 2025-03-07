@@ -198,7 +198,7 @@ std::vector<double> Fleet::harvest(Population& pop, double quota, double temp, b
 				double bs_window = B_sampled - bs_prev;
 
 				window_props.chi = chi;
-				window_props.B_start = B - bs_prev; // bs_prev was sampled biomass at start of window, so remaining biomass at start of window is B - bs_prev
+				window_props.B_start = B - yield - to_sea_bed;
 				window_props.C_rate = window_props.yield/window_dt; // catch rate = annualized yield = yield per year
 				window_props.M_fishable /= window_props.n_fishable; 
 				window_props.F_fishable /= window_props.n_fishable; 

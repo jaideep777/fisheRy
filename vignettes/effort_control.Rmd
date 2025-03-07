@@ -170,33 +170,6 @@ df %>%
 
 ```
 
-
-## Mock fish the population to calculate fishing mortality rate (quadratic model)
-
-Using the quadratic control model (2 updates to chi are required)
-
-```{r}
-fleet = new(Fleet)
-fleet$control_model = "quadratic"
-fleet$chi = 100
-fleet$init_chi(pop, pop$par$Fc, pop$par$rho, 5.61)
-
-out = fleet$harvest_dry_run(pop, quota, 5.61)
-
-df = as.data.frame(matrix(data = out, ncol=length(progress_names), byrow = T))
-colnames(df) = progress_names
-
-df %>% 
-  mutate(fish = 1:n()) %>% 
-  mutate(yield_err_pc = (yield-yield_expected)/yield_expected*100) %>%
-  select(-B) %>% 
-  pivot_longer(-fish) %>% 
-  ggplot(aes(x=fish, y=value))+
-  geom_line()+
-  facet_wrap(~name, scales="free_y")
-
-```
-
 ## Calculate error characteristics 
 
 ```{r}
@@ -214,10 +187,14 @@ pc_error = function(i, mode, h){
   df = as.data.frame(matrix(data = out, ncol=length(progress_names), byrow = T))
   colnames(df) = progress_names
   
-  df %>% 
-    mutate(yield_err_pc = (yield-yield_expected)/yield_expected*100) %>% 
-    pull(yield_err_pc) %>% 
-    tail(1)
+  data.frame(
+    err = df %>% 
+        mutate(yield_err_pc = (yield-yield_expected)/yield_expected*100) %>% 
+        pull(yield_err_pc) %>% 
+        tail(1),
+    effort_c = fleet$effort_constantC(2.83e-6, 0.75, ssb_nf)*pop$par$dsea,
+    effort_f = fleet$effort_constantF(2.83e-6, 0.75, ssb_nf)*pop$par$dsea
+  )
 }
 ```
 
@@ -226,7 +203,14 @@ pc_error = function(i, mode, h){
 $Y/B_s = 1-e^{-k \chi}$
 
 ```{r}
-hist(sapply(X = 1:500, pc_error, mode="exp", h=h), main="exponential model", breaks=20)
+res_exp = tibble(i = 1:500) %>%
+  mutate(res = map(i, ~pc_error(.x, mode="exp", h=h))) %>%
+  unnest(res)
+
+res_exp %>%
+  ggplot(aes(x=err)) +
+  geom_histogram(bins=20) +
+  labs(title="Exp model", x="Error (%)", y="Frequency")
 ```
 
 ### Try linear model
@@ -235,32 +219,30 @@ $Y/B_s = k \chi$
 
 
 ```{r}
-hist(sapply(X = 1:500, pc_error, mode="linear", h=h), main="linear model", breaks=20)
-```
+res_linear = tibble(i = 1:500) %>%
+  mutate(res = map(i, ~pc_error(.x, mode="linear", h=h))) %>%
+  unnest(res)
 
-Error as function of harvest rate
+res_linear %>%
+  ggplot(aes(x=err)) +
+  geom_histogram(bins=20) +
+  labs(title="linear model", x="Error (%)", y="Frequency")
+```
 
 ```{r}
-err_chars = function(h){
-  v = sapply(X = 1:500, pc_error, mode="linear", h=h)
-  list(mean=mean(v), sd=sd(v))
-}
+res = expand.grid(h = seq(0.1, 0.99, length.out=10), i = 1:500) |>
+  mutate(res = purrr::pmap(list(i, mode="linear", h), pc_error)) |>
+  unnest(res)
 
-tibble(h = seq(0.1, 0.99, 0.1)) |> 
-  mutate(err = purrr::map(h, err_chars)) |> 
-  unnest_wider(err) |> 
-  ggplot(aes(x=h, y=mean)) +
-  geom_point() +
-  geom_errorbar(aes(ymin=mean-sd, ymax=mean+sd), width=0.01)
+res |>
+  ggplot(aes(x=factor(h), y=err)) +
+  geom_violin() +
+  labs(x="Harvest rate (h)", y="Error (%)", title="Error distribution by harvest rate")
+
+res |> 
+  ggplot(aes(x=effort_c, y=effort_f)) +
+  geom_point()+
+  geom_abline(slope = 1, intercept = 0, col="red")
 ```
 
 
-### Try quadratic model
-
-$Y/B_s = \alpha \chi+ \beta \chi^2$
-
-This requires 2 updates to chi
-
-```{r}
-hist(sapply(X = 1:500, pc_error, mode="quadratic", h=h), main="quadratic model", breaks=20)
-```
