@@ -61,7 +61,7 @@ RCPP_MODULE(fish_module) {
 		.field("length", &Fish::length)
 		.field("weight", &Fish::weight)
 		.field_readonly("t_birth", &Fish::t_birth)
-		.field("par", &Fish::par)
+		.field("par", &Fish::par)  // THIS WORKS, even though par is a different copy every time!
 		.field("trait_variances", &Fish::trait_variances)
 
 		.method("setMortalityParams", &Fish::setMortalityParams)
@@ -139,7 +139,7 @@ RCPP_MODULE(population_module){
 	class_ <Population>("Population")
 		.constructor<Fish>()
 		.field("par", &Population::par)
-		.field("env", &Population::env)
+		.field("env", &Population::env) // Caution: Check that this can actually modify the object
 		.field("verbose", &Population::verbose)
 		.field("K_fishableBiomass", &Population::K_fishableBiomass)
 		.field("K_ssb", &Population::K_ssb)
@@ -208,11 +208,11 @@ RCPP_EXPOSED_CLASS(Population);
 
 RCPP_MODULE(simulator_module){
 	class_ <Fishery>("Fishery")
-		.constructor<Fish>()
-
-		.field_readonly("noFishingPop", &Fishery::noFishingPop)
-
-		.method("setNaturalPopulation", &Fishery::setNaturalPopulation)
+		.constructor<std::string, Fish>()
+		// .field("pop", &Fishery::pop)
+		// .property("pop", &Fishery::get_pop) // DOESNT WORK, returns a different object each time, and init() does nothing  
+		.method("get_pop", &Fishery::get_pop)  // DOESNT WORK, returns a different object each time, and init() does nothing 
+		// .field("fleets", &Fishery::fleets)
 		.method("equilibriateNaturalPopulation", &Fishery::equilibriateNaturalPopulation)
 	;
 

@@ -7,13 +7,17 @@ Fishery::Fishery(std::string _params_file, const Fish& f) : I(), pop(f), no_fish
 	no_fishing_pop.readParams(params_file);
 }
 
-vector<double> Fishery::equilibriateNaturalPopulation(double temp, double _n){
+
+std::vector<double> Fishery::equilibriateNaturalPopulation(double temp, double _n){
 	no_fishing_pop.set_superFishSize(_n);
 	no_fishing_pop.set_traitVariances({0,0,0,0,0,0});
 	return no_fishing_pop.noFishingEquilibriate(temp);
 }
 
 
+Population& Fishery::get_pop(){
+	return pop;
+}
 
 
 

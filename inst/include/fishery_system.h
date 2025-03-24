@@ -18,15 +18,16 @@ class Fishery {
 
 	public:
 	Fishery(std::string _params_file, const Fish& f);
-	vector<double> equilibriateNaturalPopulation(double temp, double _n);
 	
-	harvest();
-	harvest_dry_run();
+	std::vector<double> equilibriateNaturalPopulation(double temp, double _n);
+	
+	std::vector<double> harvest();
+	std::vector<double> harvest_dry_run();
 
 	void initialize();
 	void update();
-	void shutdown();
 
+	Population& get_pop();
 
 };
 

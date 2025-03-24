@@ -240,11 +240,13 @@ void Population::set_traitVariances(vector<double> var){
 }
                             
 void Population::init(int n, double temp){
+	cout << "init\n";
 	current_year = 1;
 	fishes.clear();
 	proto_fish.init(0, temp); // initialize prototype fish under 0 tsb conditions
 	proto_fish.t_birth = current_year;
 	fishes.resize(n, proto_fish);
+	cout << "fishes.size() = " << fishes.size() << "\n";
 //	if (par.use_old_model_effort) calc_athresh(tsb, temp);
 }
 
