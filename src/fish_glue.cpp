@@ -189,41 +189,53 @@ RCPP_EXPOSED_CLASS(Fleet);
 
 RCPP_MODULE(fleet_module){
 	class_ <Fleet>("Fleet")
-	.constructor()
-	.field("chi", &Fleet::chi)
-	.field("chi0_scalar_slope", &Fleet::chi0_scalar_slope)
-	.field("control_model", &Fleet::control_model)
-	.method("init_chi", &Fleet::init_chi)
-	.method("harvest_dry_run", &Fleet::harvest_dry_run)
-	.method("effort_constantC", &Fleet::effort_constantC)
-	.method("effort_constantF", &Fleet::effort_constantF)
+		.constructor()
+		.field("chi", &Fleet::chi)
+		.field("chi0_scalar_slope", &Fleet::chi0_scalar_slope)
+		.field("control_model", &Fleet::control_model)
+		.method("init_chi", &Fleet::init_chi)
+		.method("harvest_dry_run", &Fleet::harvest_dry_run)
+		.method("effort_constantC", &Fleet::effort_constantC)
+		.method("effort_constantF", &Fleet::effort_constantF)
 	;
 }
 
 
+#include "fishery_system.h"
 #include "simulator.h"
+
 RCPP_EXPOSED_CLASS(Population);
 
 RCPP_MODULE(simulator_module){
+	class_ <Fishery>("Fishery")
+		.constructor<Fish>()
+
+		.field_readonly("noFishingPop", &Fishery::noFishingPop)
+
+		.method("setNaturalPopulation", &Fishery::setNaturalPopulation)
+		.method("equilibriateNaturalPopulation", &Fishery::equilibriateNaturalPopulation)
+	;
+
+	
 	class_ <Simulator>("Simulator")
-	.constructor<Fish>()
+		.constructor<Fish>()
 
-	.field_readonly("noFishingPop", &Simulator::noFishingPop)
+		.field_readonly("noFishingPop", &Simulator::noFishingPop)
 
-	.method("setNaturalPopulation", &Simulator::setNaturalPopulation)
-	.method("equilibriateNaturalPopulation", &Simulator::equilibriateNaturalPopulation)
-	
-	.method("simulate", &Simulator::simulate_r)
-    
-	// .method("simulate_multi", &Simulator::simulate_multi_r)
-    // .method("max_avg_utils", &Simulator::max_avg_utils)
-    // .method("stakeholder_satisfaction", &Simulator::stakeholder_satisfaction)
-	
-	.method("simulate_multi_2d", &Simulator::simulate_multi_2d_r)
-    .method("max_avg_utils_2d", &Simulator::max_avg_utils_2d)
-    .method("stakeholder_satisfaction_2d", &Simulator::stakeholder_satisfaction_2d)
+		.method("setNaturalPopulation", &Simulator::setNaturalPopulation)
+		.method("equilibriateNaturalPopulation", &Simulator::equilibriateNaturalPopulation)
+		
+		.method("simulate", &Simulator::simulate_r)
+		
+		// .method("simulate_multi", &Simulator::simulate_multi_r)
+		// .method("max_avg_utils", &Simulator::max_avg_utils)
+		// .method("stakeholder_satisfaction", &Simulator::stakeholder_satisfaction)
+		
+		.method("simulate_multi_2d", &Simulator::simulate_multi_2d_r)
+		.method("max_avg_utils_2d", &Simulator::max_avg_utils_2d)
+		.method("stakeholder_satisfaction_2d", &Simulator::stakeholder_satisfaction_2d)
 
-    .method("stakeholder_satisfaction_2d_t", &Simulator::stakeholder_satisfaction_2d_t)
+		.method("stakeholder_satisfaction_2d_t", &Simulator::stakeholder_satisfaction_2d_t)
 	;
 }
 
