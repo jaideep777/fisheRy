@@ -100,6 +100,7 @@ RCPP_EXPOSED_CLASS(SeaEnvironment);
 ////RCPP_EXPOSED_AS(Population);
 RCPP_MODULE(population_module){
 	class_ <SeaEnvironment>("SeaEnvironment")
+		.constructor()
 		.field("temperature", &SeaEnvironment::temperature)
 		.field("recruitment_noise_multiplier", &SeaEnvironment::recruitment_noise_multiplier)
 	;
@@ -138,8 +139,8 @@ RCPP_MODULE(population_module){
 	
 	class_ <Population>("Population")
 		.constructor<Fish>()
-		.field("par", &Population::par)
-		.field("env", &Population::env) // Caution: Check that this can actually modify the object
+		.field("par", &Population::par) // FIXME: seems to work, but add a test to check that this can actually modify the object
+		.field("env", &Population::env) // FIXME: seems to work, but add a test to check that this can actually modify the object
 		.field("verbose", &Population::verbose)
 		.field("K_fishableBiomass", &Population::K_fishableBiomass)
 		.field("K_ssb", &Population::K_ssb)
@@ -209,11 +210,12 @@ RCPP_EXPOSED_CLASS(Population);
 RCPP_MODULE(simulator_module){
 	class_ <Fishery>("Fishery")
 		.constructor<std::string, Fish>()
-		// .field("pop", &Fishery::pop)
-		// .property("pop", &Fishery::get_pop) // DOESNT WORK, returns a different object each time, and init() does nothing  
-		.method("get_pop", &Fishery::get_pop)  // DOESNT WORK, returns a different object each time, and init() does nothing 
+		// .field_readonly("pop", &Fishery::pop) // Marked readonly because we cannot call functions of pop using this accessor
+		.property("pop", &Fishery::get_pop) // DOESNT WORK, returns a different object each time, and init() does nothing  
+		// .method("get_pop", &Fishery::get_pop)  // DOESNT WORK, returns a different object each time, and init() does nothing 
 		// .field("fleets", &Fishery::fleets)
 		.method("equilibriateNaturalPopulation", &Fishery::equilibriateNaturalPopulation)
+		.method("init", &Fishery::init)
 	;
 
 	

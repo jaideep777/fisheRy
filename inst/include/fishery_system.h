@@ -12,7 +12,7 @@ class Fishery {
 	io::Initializer I;
 	Population no_fishing_pop;
 
-	public:
+	private:
 	Population pop;
 	std::vector<Fleet> fleets;
 
@@ -24,7 +24,7 @@ class Fishery {
 	std::vector<double> harvest();
 	std::vector<double> harvest_dry_run();
 
-	void initialize();
+	void init(int n, double temp);
 	void update();
 
 	Population& get_pop();

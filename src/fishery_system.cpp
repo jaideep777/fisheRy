@@ -1,6 +1,6 @@
 #include <fishery_system.h>
 
-Fishery::Fishery(std::string _params_file, const Fish& f) : I(), pop(f), no_fishing_pop(f) {
+Fishery::Fishery(std::string _params_file, const Fish& f) : I(), no_fishing_pop(f), pop(f) {
 	params_file = _params_file;
 	// I.parse(params_file, false, true);
 	pop.readParams(params_file);
@@ -14,10 +14,10 @@ std::vector<double> Fishery::equilibriateNaturalPopulation(double temp, double _
 	return no_fishing_pop.noFishingEquilibriate(temp);
 }
 
-
-Population& Fishery::get_pop(){
-	return pop;
+void Fishery::init(int n, double temp){
+	pop.init(n, temp);
 }
 
-
-
+Population& Fishery::get_pop(){
+    return pop;
+}

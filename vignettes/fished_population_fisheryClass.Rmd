@@ -13,13 +13,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r, include = F, echo = F}
 library(fisheRy)
-source("../tests/ref/parameters.cod.R")
-source("../tests/ref/simulator.7.R")
+source(here::here("tests/ref/parameters.cod.R"))
+source(here::here("tests/ref/simulator.7.R"))
 ```
 
 
 ```{r}
-params_file = "../params/cod_params.ini"
+params_file = here::here("params/cod_params.ini")
 ```
 
 ## Initialize a Fishery
@@ -39,7 +39,11 @@ fishery$equilibriateNaturalPopulation(5.6, 2e6)
 For simulating fishing, it is important for the population to start with a realistic state distribution. Therfore, we "spin-up" the population under no-fishing conditions. 
 
 ```{r}
+fishery$pop$print_summary()
 fishery$pop$init(1000, 5.61)
+fishery$pop$print_summary()
+fishery$init(1000, 5.61)
+
 state_nf = fishery$pop$noFishingEquilibriate(5.61)
 ssb_nf = state_nf[1]
 ```
