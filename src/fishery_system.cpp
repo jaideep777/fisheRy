@@ -14,10 +14,46 @@ std::vector<double> Fishery::equilibriateNaturalPopulation(double temp, double _
 	return no_fishing_pop.noFishingEquilibriate(temp);
 }
 
+Population& Fishery::get_pop(){
+    return pop;
+}
+
+// ---------------------------------------------------------
+// Wrapper functions for enabling R interface for Fishery
+// ---------------------------------------------------------
+int Fishery::readParams(std::string filename, bool verbose) {
+	return pop.readParams(filename, verbose);
+}
+
+void Fishery::set_superFishSize(double _n) {
+	pop.set_superFishSize(_n);
+}
+
+int Fishery::readEnvironmentFile(std::string filename) {
+	return pop.readEnvironmentFile(filename);
+}
+
+void Fishery::updateEnv(double t) {
+	pop.updateEnv(t);
+}
+
+void Fishery::set_harvestProp(double _h) {
+	pop.set_harvestProp(_h);
+}
+
+void Fishery::set_minSizeLimit(double _lf50) {
+	pop.set_minSizeLimit(_lf50);
+}
+
+void Fishery::set_traitVariances(std::vector<double> var) {
+	pop.set_traitVariances(var);
+}
+
 void Fishery::init(int n, double temp){
 	pop.init(n, temp);
 }
 
-Population& Fishery::get_pop(){
-    return pop;
+void Fishery::noFishingEquilibriate(double temp){
+	pop.noFishingEquilibriate(temp);
 }
+

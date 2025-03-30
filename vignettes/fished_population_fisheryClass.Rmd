@@ -40,11 +40,12 @@ For simulating fishing, it is important for the population to start with a reali
 
 ```{r}
 fishery$pop$print_summary()
-fishery$pop$init(1000, 5.61)
-fishery$pop$print_summary()
 fishery$init(1000, 5.61)
+fishery$pop$print_summary()
+fishery$noFishingEquilibriate(5.61)
+fishery$pop$print_summary()
 
-state_nf = fishery$pop$noFishingEquilibriate(5.61)
+state_nf = fishery$pop$get_state()
 ssb_nf = state_nf[1]
 ```
 
@@ -70,12 +71,14 @@ The most important step is to set the `simulate_bio_only` flag, because simulati
 
 ```{r}
 h = 0.3
-pop$set_harvestProp(h)   # Harvest 
-pop$set_minSizeLimit(45) # Only fish above 45 cm length can be harvested
+fishery$set_harvestProp(h)   # Harvest 
+fishery$set_minSizeLimit(45) # Only fish above 45 cm length can be harvested
+print(fishery$pop$par$h)
+print(fishery$pop$par$lmin)
 ```
 
 ```{r}
-pop$par$simulate_bio_only = T # VERY IMPORTANT
+fishery$pop$par$simulate_bio_only = T # VERY IMPORTANT
 ```
 
 ## Simulate the population
@@ -84,7 +87,7 @@ Now we are ready to simulate the population with fishing by continuously `update
 
 Let's confirm that the parameters we have set are registered:
 ```{r}
-pop$par$print()
+fishery$pop$par$print()
 ```
 
 This time, we also provide a dynamic temperature timeseries to the population, wherein the first 100 years have a fixed temperature of 5.61 degC, and in the next 100 years, temperature increases linearly to 8 degC.

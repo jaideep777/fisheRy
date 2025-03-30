@@ -24,11 +24,20 @@ class Fishery {
 	std::vector<double> harvest();
 	std::vector<double> harvest_dry_run();
 
-	void init(int n, double temp);
 	void update();
 
 	Population& get_pop();
 
+	// Wrapper functions for enabling R interface
+	int readParams(std::string filename, bool verbose = false);
+	void set_superFishSize(double _n);
+	int readEnvironmentFile(std::string filename);
+	void updateEnv(double t);
+	void set_harvestProp(double _h);
+	void set_minSizeLimit(double _lf50);
+	void set_traitVariances(std::vector<double> var);
+	void init(int n, double temp);
+	void noFishingEquilibriate(double temp);
 };
 
 #endif // FISHERY_SYSTEM_H

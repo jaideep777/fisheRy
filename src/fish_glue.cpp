@@ -1,3 +1,63 @@
+//   ====== RCPP BLACKLISTED METHOD NAMES ======
+// 
+//   Avoid using these names for any method exposed via RCPP_MODULE:
+// 
+//   - initialize
+//   - finalize
+//   - show
+//   - call
+//   - dim
+//   - length
+//   - names
+//   - levels
+//   - plot
+//   - print
+//   - summary
+//   - mean
+//   - median
+//   - quantile
+//   - any other common S4 or base generic
+// 
+//   Why?
+//   These names are intercepted by R's S4 / S3 method dispatch system.
+//   Your methods will either:
+//     - not show up at all
+//     - be silently ignored
+//     - be replaced by base R behavior
+//     - give mysterious errors when calling from R
+//     
+//   Recommendation:
+//     - Always use custom or non-conflicting names.
+//     - E.g., use "init" instead of "initialize", "print_line" instead of "print".
+//    
+//
+//   Source:
+//     Rcpp FAQ + StackOverflow + blood, sweat, and tears.
+
+//   ====== R OBJECT COPYING GOTCHAS ======
+//
+//   When accessing nested objects in R (e.g., fishery$population$method()), 
+//   R creates temporary copies. Any modifications made through such calls
+//   will be lost because they modify the temporary copy, not the original object.
+//
+//   Example of the problem:
+//     fishery$population$modifier()  # Modifies a temporary copy
+//     print(fishery$population)      # Original remains unchanged
+//
+//   To avoid this:
+//   1. Don't expose methods that modify state through nested objects
+//   2. Expose modification methods at the top level (e.g., fishery$modifyPopulation())
+//   3. If you must modify nested objects in R, use intermediate assignment:
+//      pop <- fishery$population
+//      pop$modifier()
+//      fishery$population <- pop
+//
+//   However, this behaviour appears to be limited to functions. Directly setting nested 
+//   object members appears to work. E.g.,
+//
+//     fishery$pop$par$n <- new_n  # works
+// 
+
 #include <Rcpp.h>
 using namespace Rcpp;
 
@@ -70,15 +130,15 @@ RCPP_MODULE(fish_module) {
 		.method("print_line", &Fish::print_line)
 		.method("print_header", &Fish::print_header)
 
-		.method("set_age", &Fish::set_age)
-		.method("set_length", &Fish::set_length)
-		.method("set_traits", &Fish::set_traits)
+		.method("set_age", &Fish::set_age)           // consider unexposing: modifies state
+		.method("set_length", &Fish::set_length)     // consider unexposing: modifies state
+		.method("set_traits", &Fish::set_traits)     // consider unexposing: modifies state
 
-		.method("init", &Fish::init)
+		.method("init", &Fish::init)                 // consider unexposing: modifies state
 		//.method("matureNow", &Fish::matureNow)
 		.method("maturationProb", &Fish::maturationProb)
-		.method("updateMaturity", &Fish::updateMaturity)
-		.method("grow", &Fish::grow)
+		.method("updateMaturity", &Fish::updateMaturity)  // consider unexposing: modifies state
+		.method("grow", &Fish::grow)                 // consider unexposing: modifies state
 		.method("produceRecruits", &Fish::produceRecruits)
 		
 		.method("naturalMortalityRate", &Fish::naturalMortalityRate)
@@ -139,25 +199,27 @@ RCPP_MODULE(population_module){
 	
 	class_ <Population>("Population")
 		.constructor<Fish>()
-		.field("par", &Population::par) // FIXME: seems to work, but add a test to check that this can actually modify the object
-		.field("env", &Population::env) // FIXME: seems to work, but add a test to check that this can actually modify the object
+		.field("par", &Population::par)
+		.field("env", &Population::env)
 		.field("verbose", &Population::verbose)
 		.field("K_fishableBiomass", &Population::K_fishableBiomass)
 		.field("K_ssb", &Population::K_ssb)
 		.field("colnames", &Population::colnames)
 		.field("current_year", &Population::current_year)
 
-		.method("readParams", &Population::readParams) 
+		// ALL FUNCTIONS THAT MODIFTY POPULATION ARE NOW EXPOSED VIA FISHERY CLASS
+		// .method("readParams", &Population::readParams) 
+		// .method("set_superFishSize", &Population::set_superFishSize) 
+		// .method("set_traitVariances", &Population::set_traitVariances) 
+		// .method("set_harvestProp", &Population::set_harvestProp) 
+		// .method("set_minSizeLimit", &Population::set_minSizeLimit) 
+		// .method("init", &Population::init) 
+		// .method("update", &Population::update)
+		// .method("noFishingEquilibriate", &Population::noFishingEquilibriate)
+		// .method("summarize", &Population::summarize)
+		// .method("readEnvironmentFile", &Population::readEnvironmentFile)
+		// .method("updateEnv", &Population::updateEnv)
 
-		.method("set_superFishSize", &Population::set_superFishSize) 
-		.method("set_traitVariances", &Population::set_traitVariances) 
-		
-		.method("set_harvestProp", &Population::set_harvestProp) 
-		.method("set_minSizeLimit", &Population::set_minSizeLimit) 
-
-		// .method("selectivity", &Population::selectivity) 
-		.method("init", &Population::init) 
-		.method("update", &Population::update)
 		.method("calcSSB", &Population::calcSSB)
 		.method("fishableBiomass", &Population::fishableBiomass)
 		.method("fishingMortalityRef", &Population::fishingMortalityRef)
@@ -166,8 +228,6 @@ RCPP_MODULE(population_module){
 		.method("naturalMortByAge", &Population::naturalMortByAge)
 		.method("avgOverAges", &Population::avgOverAges)
 
-		.method("noFishingEquilibriate", &Population::noFishingEquilibriate)
-
 		.method("fishingMortRefByAge", &Population::fishingMortRefByAge)
 		.method("maturityByAge", &Population::maturityByAge)
 		.method("naturalMortByAge", &Population::naturalMortByAge)
@@ -175,12 +235,8 @@ RCPP_MODULE(population_module){
 
 		.method("get_state", &Population::get_state)
 		.method("get_traits", &Population::get_traits)
-		.method("summarize", &Population::summarize)
 		.method("print_summary", &Population::print_summary)
 		.method("nfish", &Population::nfish)
-
-		.method("readEnvironmentFile", &Population::readEnvironmentFile)
-		.method("updateEnv", &Population::updateEnv)
 	;
 }
 
@@ -194,7 +250,9 @@ RCPP_MODULE(fleet_module){
 		.field("chi", &Fleet::chi)
 		.field("chi0_scalar_slope", &Fleet::chi0_scalar_slope)
 		.field("control_model", &Fleet::control_model)
-		.method("init_chi", &Fleet::init_chi)
+		
+		.method("init_chi", &Fleet::init_chi) // consider unexposing: modifies state
+
 		.method("harvest_dry_run", &Fleet::harvest_dry_run)
 		.method("effort_constantC", &Fleet::effort_constantC)
 		.method("effort_constantF", &Fleet::effort_constantF)
@@ -210,12 +268,19 @@ RCPP_EXPOSED_CLASS(Population);
 RCPP_MODULE(simulator_module){
 	class_ <Fishery>("Fishery")
 		.constructor<std::string, Fish>()
-		// .field_readonly("pop", &Fishery::pop) // Marked readonly because we cannot call functions of pop using this accessor
 		.property("pop", &Fishery::get_pop) // DOESNT WORK, returns a different object each time, and init() does nothing  
-		// .method("get_pop", &Fishery::get_pop)  // DOESNT WORK, returns a different object each time, and init() does nothing 
-		// .field("fleets", &Fishery::fleets)
+
+		// Wrappers for population functions exposed from Fishery because they modify population state
 		.method("equilibriateNaturalPopulation", &Fishery::equilibriateNaturalPopulation)
 		.method("init", &Fishery::init)
+		.method("readParams", &Fishery::readParams)
+		.method("set_superFishSize", &Fishery::set_superFishSize)
+		.method("readEnvironmentFile", &Fishery::readEnvironmentFile)
+		.method("updateEnv", &Fishery::updateEnv)
+		.method("set_harvestProp", &Fishery::set_harvestProp)
+		.method("set_minSizeLimit", &Fishery::set_minSizeLimit)
+		.method("set_traitVariances", &Fishery::set_traitVariances)
+		.method("noFishingEquilibriate", &Fishery::noFishingEquilibriate)
 	;
 
 	
