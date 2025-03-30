@@ -12,7 +12,7 @@ class Fishery {
 	io::Initializer I;
 	Population no_fishing_pop;
 
-	private:
+	public:
 	Population pop;
 	std::vector<Fleet> fleets;
 
@@ -24,9 +24,9 @@ class Fishery {
 	std::vector<double> harvest();
 	std::vector<double> harvest_dry_run();
 
-	void update();
+	std::vector<double> update(double temp);
 
-	Population& get_pop();
+	Population& get_pop(); // Return a reference to the Population object
 
 	// Wrapper functions for enabling R interface
 	int readParams(std::string filename, bool verbose = false);

@@ -208,17 +208,20 @@ RCPP_MODULE(population_module){
 		.field("current_year", &Population::current_year)
 
 		// ALL FUNCTIONS THAT MODIFTY POPULATION ARE NOW EXPOSED VIA FISHERY CLASS
-		// .method("readParams", &Population::readParams) 
-		// .method("set_superFishSize", &Population::set_superFishSize) 
-		// .method("set_traitVariances", &Population::set_traitVariances) 
-		// .method("set_harvestProp", &Population::set_harvestProp) 
-		// .method("set_minSizeLimit", &Population::set_minSizeLimit) 
-		// .method("init", &Population::init) 
-		// .method("update", &Population::update)
-		// .method("noFishingEquilibriate", &Population::noFishingEquilibriate)
-		// .method("summarize", &Population::summarize)
-		// .method("readEnvironmentFile", &Population::readEnvironmentFile)
-		// .method("updateEnv", &Population::updateEnv)
+		// ------------------------------------------------
+		// These are retained for transitioning/debugging purposes (DO NOT USE in production code)
+		.method("readParams", &Population::readParams) 
+		.method("set_superFishSize", &Population::set_superFishSize) 
+		.method("set_traitVariances", &Population::set_traitVariances) 
+		.method("set_harvestProp", &Population::set_harvestProp) 
+		.method("set_minSizeLimit", &Population::set_minSizeLimit) 
+		.method("init", &Population::init) 
+		.method("update", &Population::update)
+		.method("noFishingEquilibriate", &Population::noFishingEquilibriate)
+		.method("summarize", &Population::summarize)
+		.method("readEnvironmentFile", &Population::readEnvironmentFile)
+		.method("updateEnv", &Population::updateEnv)
+		// -----------------------------------------------
 
 		.method("calcSSB", &Population::calcSSB)
 		.method("fishableBiomass", &Population::fishableBiomass)
@@ -268,7 +271,8 @@ RCPP_EXPOSED_CLASS(Population);
 RCPP_MODULE(simulator_module){
 	class_ <Fishery>("Fishery")
 		.constructor<std::string, Fish>()
-		.property("pop", &Fishery::get_pop) // DOESNT WORK, returns a different object each time, and init() does nothing  
+		
+		.field("pop", &Fishery::pop) // Use updated getter and setter
 
 		// Wrappers for population functions exposed from Fishery because they modify population state
 		.method("equilibriateNaturalPopulation", &Fishery::equilibriateNaturalPopulation)
@@ -281,6 +285,8 @@ RCPP_MODULE(simulator_module){
 		.method("set_minSizeLimit", &Fishery::set_minSizeLimit)
 		.method("set_traitVariances", &Fishery::set_traitVariances)
 		.method("noFishingEquilibriate", &Fishery::noFishingEquilibriate)
+
+		.method("update", &Fishery::update)
 	;
 
 	

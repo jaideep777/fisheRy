@@ -14,8 +14,13 @@ std::vector<double> Fishery::equilibriateNaturalPopulation(double temp, double _
 	return no_fishing_pop.noFishingEquilibriate(temp);
 }
 
-Population& Fishery::get_pop(){
-    return pop;
+std::vector<double> Fishery::update(double temp){
+    return pop.update(temp); // Update the population state and return the state vector
+}
+
+Population &Fishery::get_pop()
+{
+    return pop; // Return a reference to the Population object
 }
 
 // ---------------------------------------------------------

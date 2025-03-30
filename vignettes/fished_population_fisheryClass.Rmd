@@ -42,10 +42,8 @@ For simulating fishing, it is important for the population to start with a reali
 fishery$pop$print_summary()
 fishery$init(1000, 5.61)
 fishery$pop$print_summary()
-fishery$noFishingEquilibriate(5.61)
-fishery$pop$print_summary()
 
-state_nf = fishery$pop$get_state()
+state_nf = fishery$noFishingEquilibriate(5.61)
 ssb_nf = state_nf[1]
 ```
 
@@ -93,11 +91,11 @@ fishery$pop$par$print()
 This time, we also provide a dynamic temperature timeseries to the population, wherein the first 100 years have a fixed temperature of 5.61 degC, and in the next 100 years, temperature increases linearly to 8 degC.
 
 ```{r fig.height=9}
-pop$verbose = T
+fishery$pop$verbose = T
 nsteps = 200             # Let's simulate for 200 years
 nfish = numeric(nsteps)  # Let's keep track of the number of superfish
-nfish[1]=pop$nfish()            
-cnames = pop$colnames
+nfish[1]= fishery$pop$nfish()            
+cnames = fishery$pop$colnames
 dat = data.frame(matrix(ncol=length(cnames), nrow=0))
 colnames(dat) = cnames
 
@@ -105,12 +103,12 @@ temp = rep(5.61, nsteps)
 temp[(nsteps/2+1):nsteps] = seq(5.61,8, length.out=nsteps/2)
 
 for (i in 1:nsteps){
-  v = pop$update(temp[i])       # Update all fish over 1 year 
+  v = fishery$update(temp[i])       # Update all fish over 1 year 
   dat[i,] = v    # some book-keeping
-  nfish[i] = pop$nfish()
+  nfish[i] = fishery$pop$nfish()
 }
 
-d = pop$get_state()
+d = fishery$pop$get_state()
 dist = table(d$age, d$length)
 
 par(mfrow = c(4,1), mar=c(5,5,1,1), oma=c(1,1,1,1), cex.lab=1.5, cex.axis=1.5)
