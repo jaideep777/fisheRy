@@ -245,18 +245,32 @@ RCPP_MODULE(population_module){
 
 #include "fleet.h"
 
+RCPP_EXPOSED_CLASS(FleetParams);
 RCPP_EXPOSED_CLASS(Fleet);
 
 RCPP_MODULE(fleet_module){
+	class_ <FleetParams>("FleetParams")
+		.constructor()
+		.method("initFromFile", &FleetParams::initFromFile) // Expose initFromFile
+		.method("print", &FleetParams::print)              // Expose print
+	;
+
 	class_ <Fleet>("Fleet")
 		.constructor()
 		.field("chi", &Fleet::chi)
 		.field("chi0_scalar_slope", &Fleet::chi0_scalar_slope)
 		.field("control_model", &Fleet::control_model)
-		
-		.method("init_chi", &Fleet::init_chi) // consider unexposing: modifies state
+		.field("par", &Fleet::par)
 
+		.method("readParams", &Fleet::readParams) 
+
+		.method("init_chi", &Fleet::init_chi) // modifies state: consider unexposing
+
+		.method("set_minSizeLimit", &Fleet::set_minSizeLimit)
+		.method("fishingMortalityRef", &Fleet::fishingMortalityRef)
+		.method("update_chi", &Fleet::update_chi)
 		.method("harvest_dry_run", &Fleet::harvest_dry_run)
+		.method("harvest", &Fleet::harvest)
 		.method("effort_constantC", &Fleet::effort_constantC)
 		.method("effort_constantF", &Fleet::effort_constantF)
 	;

@@ -13,31 +13,33 @@ class Fishery {
 	Population no_fishing_pop;
 
 	public:
+	bool debug = true; // Should debugging calculations be done 
 	Population pop;
 	std::vector<Fleet> fleets;
 
 	public:
 	Fishery(std::string _params_file, const Fish& f);
-	
-	std::vector<double> equilibriateNaturalPopulation(double temp, double _n);
-	
-	std::vector<double> harvest();
-	std::vector<double> harvest_dry_run();
 
-	std::vector<double> update(double temp);
-
-	Population& get_pop(); // Return a reference to the Population object
+	// Functions to specify fishery-level control parameters
+	void set_harvestProp(double _h);
+	void set_minSizeLimit(double _lf50);
 
 	// Wrapper functions for enabling R interface
 	int readParams(std::string filename, bool verbose = false);
 	void set_superFishSize(double _n);
 	int readEnvironmentFile(std::string filename);
 	void updateEnv(double t);
-	void set_harvestProp(double _h);
-	void set_minSizeLimit(double _lf50);
 	void set_traitVariances(std::vector<double> var);
 	void init(int n, double temp);
 	void noFishingEquilibriate(double temp);
+
+	// Fishery functions
+	std::vector<double> equilibriateNaturalPopulation(double temp, double _n);
+	std::vector<double> harvest();
+	std::vector<double> harvest_dry_run();
+
+
+	std::vector<double> update(double temp);
 };
 
 #endif // FISHERY_SYSTEM_H

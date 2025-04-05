@@ -135,16 +135,16 @@ error_fun_emd = function(par, nsteps = 200, nsup = 5e6, bplot=F, nymax=50){
 }
 
 #### Test and calibrate ## -----------------------
-error_fun_emd(par = c(0.02, 0.0275, 0.06, 1), 
-              nsup = 5e6, nsteps=200)
+# error_fun_emd(par = c(0.02, 0.0275, 0.06, 1), 
+#               nsup = 5e6, nsteps=200)
 
-opt = optim(par = c(0.02, 0.06, 0.16, 2.45),
-            fn = error_fun_emd, 
-            nsup = 5e6, nsteps=200,
-            control=list(parscale=c(0.02,0.05,0.1,2), 
-                         maxit=500)) #, method = "Brent", lower=0.00000001, upper=0.2)
-print(opt)
-par_opt = opt$par
+# opt = optim(par = c(0.02, 0.06, 0.16, 2.45),
+#             fn = error_fun_emd, 
+#             nsup = 5e6, nsteps=200,
+#             control=list(parscale=c(0.02,0.05,0.1,2), 
+#                          maxit=500)) #, method = "Brent", lower=0.00000001, upper=0.2)
+# print(opt)
+# par_opt = opt$par
 
 ##### Run and plot @@@ ---------------------------
 

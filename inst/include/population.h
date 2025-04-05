@@ -23,6 +23,7 @@ class PopulationParams {
 //	double s0 = 0.1126797; //0.11;          // Egg survival propbability
 	int recruitmentAge; // = 3;
 
+	// ---------------- DEPRECATED ------------------------------
 	// management / fishing selectivity
 	double lmin_sq;  // status quo minimum size limit, for which the selectivity curve is calibrated
 	double F3_sq;    // F3 for status quo fishery
@@ -43,9 +44,10 @@ class PopulationParams {
 	double sigmaf; // = 0.4858775;
 
 	// effort dynamics and employment
+	// Fleet specific
 	double q; // = 2.83e-6;		// scaling parameter relating to catchability and density
 	double dsea; // = 0.054;	// Required Person-years per vessel day
-	double dmax; // = 30000e20;	// max available person-years
+	double dmax; // = 30000e20;	// max available person-years // DEPREACATED, remove entirely
 	double dshr; // = 0.000004;	// FTE/kg
 	double b; // = 0.75;		// density dependence
 
@@ -60,6 +62,7 @@ class PopulationParams {
 	double fixed_costs_shore; // = 1032468000;	// fixed costs shore NOK
 	double variable_costs_sea; // = 65000; 		// variable costs NOK/vessel day
 	double scale_catch; // = 0.356; //0.53; 		// percentage of total codfish catch that is cod
+	// ---------------------------------------------------
 	
 	double rho;   // ratio of spawning grounds F to total (control) F 
 	double f_spf_before; // percent of spawning grounds fishing that happens before spawning

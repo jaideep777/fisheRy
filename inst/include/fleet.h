@@ -17,12 +17,59 @@ class WindowProps{
 	double n_fishable = 0;  ///< Number of fishable individuals sampled in window
 };
 
+class FleetParams{
+	public:
+
+	// management / fishing selectivity
+	double lmin_sq;  // status quo minimum size limit, for which the selectivity curve is calibrated
+	double F3_sq;    // F3 for status quo fishery
+	double F5_sq;    // F5 for status quo fishery
+
+	double F1;
+	double F2;
+	double F3;
+	double F4;
+	double F5;
+	double F6;
+
+	// double sf; // = 0.1222;	// steepness of selectivity curve
+	// double lf50; // = 45; //61.4806;  // threshold fish length
+
+	// environmental stochasticity
+	double sigmaf; // = 0.4858775;
+
+	// effort dynamics and employment
+	double q; // = 2.83e-6;		// scaling parameter relating to catchability and density
+	double dsea; // = 0.054;	// Required Person-years per vessel day
+	double dmax; // = 30000e20;	// max available person-years // DEPREACATED, remove entirely
+	double dshr; // = 0.000004;	// FTE/kg
+	double b; // = 0.75;		// density dependence
+
+	// revenue and profit 
+	double price_sea; // = 13.13;		// landing price NOK/kg
+	double price_shore; // = 17.0;		// selling price NOK/kg
+	double fee_ratio;                            // fees as proportion of landed value
+
+	double salary_sea; // = 1078000;			// employment cost sea NOK/FTE
+	double salary_shore; // = 348000;			// employment cost shore NOK/FTE
+	double fixed_costs_sea; // = 351123000;	// fixed costs sea NOK (= average per unit * #units)
+	double fixed_costs_shore; // = 1032468000;	// fixed costs shore NOK
+	double variable_costs_sea; // = 65000; 		// variable costs NOK/vessel day
+	double scale_catch; // = 0.356; //0.53; 		// percentage of total codfish catch that is cod
+
+	public:
+	void initFromFile(std::string params_file, bool verbose=false);
+	void print();
+};
+
 class Fleet{
 	private:
 	std::random_device rd;
 	std::mt19937 g;
 	
 	public:
+	FleetParams par;
+
 	std::vector<WindowProps> window_props_vec;
 
 	double chi = 1;
@@ -33,6 +80,12 @@ class Fleet{
 	public:
 
 	Fleet();
+
+	void readParams(std::string params_file, bool verbose=false);
+
+	void set_minSizeLimit(double _lf50);
+
+	double fishingMortalityRef(double len);
 
 	void init_chi(Population &pop, double Fc, double rho, double temp);
 

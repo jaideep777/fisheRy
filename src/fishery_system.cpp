@@ -7,22 +7,6 @@ Fishery::Fishery(std::string _params_file, const Fish& f) : I(), no_fishing_pop(
 	no_fishing_pop.readParams(params_file);
 }
 
-
-std::vector<double> Fishery::equilibriateNaturalPopulation(double temp, double _n){
-	no_fishing_pop.set_superFishSize(_n);
-	no_fishing_pop.set_traitVariances({0,0,0,0,0,0});
-	return no_fishing_pop.noFishingEquilibriate(temp);
-}
-
-std::vector<double> Fishery::update(double temp){
-    return pop.update(temp); // Update the population state and return the state vector
-}
-
-Population &Fishery::get_pop()
-{
-    return pop; // Return a reference to the Population object
-}
-
 // ---------------------------------------------------------
 // Wrapper functions for enabling R interface for Fishery
 // ---------------------------------------------------------
@@ -62,3 +46,33 @@ void Fishery::noFishingEquilibriate(double temp){
 	pop.noFishingEquilibriate(temp);
 }
 
+
+// ---------------------------------------------------------
+// Fishery functions
+// ---------------------------------------------------------
+
+std::vector<double> Fishery::equilibriateNaturalPopulation(double temp, double _n){
+	no_fishing_pop.set_superFishSize(_n);
+	no_fishing_pop.set_traitVariances({0,0,0,0,0,0});
+	return no_fishing_pop.noFishingEquilibriate(temp);
+}
+
+std::vector<double> Fishery::update(double temp){
+	if (debug){
+		// at the start of the step, ensure that all fish are alive and not caught
+		for (auto& f : pop.fishes) assert(f.isAlive);
+		for (auto& f : pop.fishes) assert(!f.isCaught);
+	}
+
+	int nfish_start = pop.fishes.size();
+
+	
+    return pop.update(temp); // Update the population state and return the state vector
+}
+
+/*
+Questions:
+1. Should lmin a fleet-specific parameter?
+2. Thus, is fishable biomass of the population only valid from the perspective of a given fleet?
+3. Which all socio-economic parameters should move to Fleet?
+*/

@@ -14,38 +14,38 @@ struct linregresult{
 };
 
 inline linregresult linreg(const std::vector<double> &x, const std::vector<double> &y){
-    double xMean = std::accumulate(x.begin(), x.end(), 0.0) / x.size();
-    double yMean = std::accumulate(y.begin(), y.end(), 0.0) / y.size();
+	double xMean = std::accumulate(x.begin(), x.end(), 0.0) / x.size();
+	double yMean = std::accumulate(y.begin(), y.end(), 0.0) / y.size();
 
-    // Calculate the numerator and denominator for the slope (m) using transform and accumulate
-    double numerator = std::inner_product(
-        x.begin(), x.end(), y.begin(), 0.0,
-        std::plus<>(),
-        [xMean, yMean](double xi, double yi) { return (xi - xMean) * (yi - yMean); }
-    );
+	// Calculate the numerator and denominator for the slope (m) using transform and accumulate
+	double numerator = std::inner_product(
+		x.begin(), x.end(), y.begin(), 0.0,
+		std::plus<>(),
+		[xMean, yMean](double xi, double yi) { return (xi - xMean) * (yi - yMean); }
+	);
 
-    double denominator = std::accumulate(
-        x.begin(), x.end(), 0.0,
-        [xMean](double acc, double xi) { return acc + (xi - xMean) * (xi - xMean); }
-    );
+	double denominator = std::accumulate(
+		x.begin(), x.end(), 0.0,
+		[xMean](double acc, double xi) { return acc + (xi - xMean) * (xi - xMean); }
+	);
 
-    linregresult res;
+	linregresult res;
 	res.slope = numerator / denominator;
-    res.intercept = yMean - res.slope * xMean;
-    
-    return res;
+	res.intercept = yMean - res.slope * xMean;
+	
+	return res;
 }
 
 inline linregresult linreg0(const std::vector<double>& x, const std::vector<double>& y) {
-    // Calculate the numerator and denominator for the slope (m)
-    double numerator = std::inner_product(x.begin(), x.end(), y.begin(), 0.0);
-    double denominator = std::accumulate(
-        x.begin(), x.end(), 0.0,
-        [](double acc, double xi) { return acc + (xi * xi); }
-    );
+	// Calculate the numerator and denominator for the slope (m)
+	double numerator = std::inner_product(x.begin(), x.end(), y.begin(), 0.0);
+	double denominator = std::accumulate(
+		x.begin(), x.end(), 0.0,
+		[](double acc, double xi) { return acc + (xi * xi); }
+	);
 
-    linregresult res;
-    res.slope = numerator / denominator;
+	linregresult res;
+	res.slope = numerator / denominator;
 	res.intercept = 0;
 	
 	// std::cout << "linreg0: \n"; 
@@ -65,12 +65,118 @@ inline double linreg_predict_inverse(double y_new, const linregresult& res){
 }
 
 
+void FleetParams::initFromFile(std::string params_file, bool verbose){
+	io::Initializer I;
+	I.parse(params_file, false, verbose);
+
+	#define READ_PAR(x) x = I.get<double>("fleet", #x)
+
+	// management / fishing selectivity
+	READ_PAR(F1);
+	READ_PAR(F2);
+	READ_PAR(F3);
+	READ_PAR(F4);
+	READ_PAR(F5);
+	READ_PAR(F6);
+
+	// get status quo lmin, and save the values of F3 and F5 correeponding to status quo lmin
+	READ_PAR(lmin_sq);
+	F3_sq = F3;
+	F5_sq = F5;
+
+	// effort dynamics and employment
+	READ_PAR(q);
+	READ_PAR(dsea);
+	READ_PAR(dmax);
+	READ_PAR(dshr);
+	READ_PAR(b);
+
+	// revenue and profit 
+	READ_PAR(price_sea);
+	READ_PAR(price_shore);
+	READ_PAR(fee_ratio);
+
+	READ_PAR(salary_sea);
+	READ_PAR(salary_shore);
+	READ_PAR(fixed_costs_sea);
+	READ_PAR(fixed_costs_shore);
+	READ_PAR(variable_costs_sea);
+	READ_PAR(scale_catch);
+
+	#undef READ_PAR
+
+}
+
+void FleetParams::print(){
+	#define PRINT_PAR(x) std::cout << #x << " = " << x << "\n"
+
+	// management / fishing selectivity
+	PRINT_PAR(F1);
+	PRINT_PAR(F2);
+	PRINT_PAR(F3);
+	PRINT_PAR(F4);
+	PRINT_PAR(F5);
+	PRINT_PAR(F6);
+
+	PRINT_PAR(F3_sq);
+	PRINT_PAR(F5_sq);
+	PRINT_PAR(lmin_sq);
+
+	// effort dynamics and employment
+	PRINT_PAR(q);
+	PRINT_PAR(dsea);
+	PRINT_PAR(dmax);
+	PRINT_PAR(dshr);
+	PRINT_PAR(b);
+
+	// revenue and profit 
+	PRINT_PAR(price_sea);
+	PRINT_PAR(price_shore);
+	PRINT_PAR(fee_ratio);
+
+	PRINT_PAR(salary_sea);
+	PRINT_PAR(salary_shore);
+	PRINT_PAR(fixed_costs_sea);
+	PRINT_PAR(fixed_costs_shore);
+	PRINT_PAR(variable_costs_sea);
+	PRINT_PAR(scale_catch);
+
+	#undef PRINT_PAR
+}
+
+
+
 Fleet::Fleet() : g(rd()){
 }
+
+void Fleet::readParams(std::string params_file, bool verbose){
+	par.initFromFile(params_file, verbose);
+}
+
+void Fleet::set_minSizeLimit(double _lf50){
+	// par.lf50 = _lf50;
+	double dl = _lf50 - par.lmin_sq;
+	par.F3 = par.F3_sq + dl;
+	par.F5 = par.F5_sq + dl;
+//	calc_athresh();
+}
+
 
 /// Dry run simply takes population by value, so that original one is not altered
 std::vector<double> Fleet::harvest_dry_run(Population pop, double quota, double temp){
 	return harvest(pop, quota, temp, true); // harvest a copy population and return progress
+}
+
+
+/// Formula:
+/// \f[
+/// F_\text{ref} = \frac{F_1}{1 + \exp(-F_2 \cdot (l - F_3))} - \frac{F_6}{1 + \exp(-F_4 \cdot (l - F_5))}
+/// \f]
+double Fleet::fishingMortalityRef(double len){
+	// return par.F1/(1+exp(-par.F2*(len-par.F3))); 
+	return 
+		  par.F1/(1+exp(-par.F2*(len-par.F3))) 
+		- par.F6/(1+exp(-par.F4*(len-par.F5)));
 }
 
 
@@ -87,9 +193,9 @@ void Fleet::init_chi(Population &pop, double Fc, double rho, double temp){
 
 
 void Fleet::update_chi(const std::vector<double>& chi_in_windows, 
-                       const std::vector<double>& yield_in_windows, 
-                       const std::vector<double>& bs_in_windows,
-				       double yield_remainder, double bs_remainder){
+					   const std::vector<double>& yield_in_windows, 
+					   const std::vector<double>& bs_in_windows,
+					   double yield_remainder, double bs_remainder){
 	// 3a. calibrate yield model (y = Bs * f(X))
 	linregresult res;
 	std::vector<double> y(yield_in_windows.size());

@@ -316,6 +316,7 @@ int Population::nfish(){
 /// \f[
 /// F_\text{ref} = \frac{F_1}{1 + \exp(-F_2 \cdot (l - F_3))} - \frac{F_6}{1 + \exp(-F_4 \cdot (l - F_5))}
 /// \f]
+/// DEPRECATED
 double Population::fishingMortalityRef(double len){
 	// return par.F1/(1+exp(-par.F2*(len-par.F3))); 
 	return 
@@ -325,6 +326,7 @@ double Population::fishingMortalityRef(double len){
 
 
 /// Currently, a fish is fishable simply if it is larger than the minimum size limit
+// DEPRECATED
 bool Population::isFishable(const Fish &f){
 	return f.length >= par.lmin;
 }
@@ -335,6 +337,7 @@ bool Population::isFishable(const Fish &f){
 /// \f[
 /// B_{\text{fishable}} = \sum_{i=1}^{N} n \cdot w_i \cdot \mathbb{1}(L_i \geq l_{\text{min}} \ \text{and} \ \text{alive})
 /// \f]
+// DEPRECATED
 double Population::fishableBiomass(){
 	double B_fishable = 0;
 	// for (auto& f : fishes) if (f.age > 1) B_fishable += par.n * f.weight * selectivity(f.length);
@@ -355,6 +358,7 @@ double Population::fishableBiomass(){
 /// \f]
 /// 
 /// If no fish are present in a particular age group, the average is set to a missing value indicator.
+// DEPRECATED
 std::vector<double> Population::fishingMortRefByAge(){
 	vector<double> fa_sum(proto_fish.par.amax+2, 0); 
 	vector<double> fa_n(proto_fish.par.amax+2, 0); 
@@ -438,6 +442,7 @@ vector<double> Population::naturalMortByAge(double temp){
 /// If no fishable fish are present, the average is set to 0.
 /// 
 /// @see Fish::naturalMortalityRate, fishes
+// DEPRECATED
 double Population::naturalMortFishable(double temp){
 	double mu = 0, n = 0;
 	for (auto& f : fishes){
@@ -459,6 +464,7 @@ double Population::naturalMortFishable(double temp){
 /// If no fishable fish are present, the average is set to 0.
 /// 
 /// @see Fish::naturalMortalityRate, fishes
+// DEPRECATED
 double Population::fishingMortRefFishable(){
 	double mu = 0, n = 0;
 	for (auto& f : fishes){
@@ -480,6 +486,7 @@ double Population::fishingMortRefFishable(){
 /// If no fishable fish are present, the average is set to 0.
 /// 
 /// @see Fish::maturity, fishes
+// DEPRECATED
 double Population::maturityFishable(){
 	double ma = 0, n = 0;
 	for (auto& f : fishes){

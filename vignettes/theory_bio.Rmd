@@ -16,8 +16,8 @@ rm(list=ls())
 ```{r, include = F, echo = F}
 library(fisheRy)
 library(tidyverse)
-source("../tests/ref/parameters.cod.R")
-source("../tests/ref/simulator.7.R")
+source(here::here("tests/ref/parameters.cod.R"))
+source(here::here("tests/ref/simulator.7.R"))
 ```
 
 ## Introduction
@@ -93,7 +93,8 @@ $$
 
 
 ```{r}
-params_file = "../params/cod_params.ini"
+params_file = here::here("params/cod_params.ini")
+fleet_params_file = here::here("params/fleet_1_params.ini")
 ```
 
 Let us now simulate the growth of a fish starting at age 1 upto age 30 under constant temperature and TSB. The fish will perform maturation, growth, and age increment, every year in that order. We will record the fish length at each timestep so that we can plot the growth trajectory.
@@ -357,12 +358,30 @@ $$
 where $s$ is the Slope of the fishing selectivity curve.
 
 ```{r}
-tibble(length = seq(0,200,length.out=100)) %>%
-  mutate(mort = 0.6901/(1+exp(-0.06517*(length-68.81))) - 0.4381674/(1+exp(-0.4151*(length-112.8))) ) %>% 
-  ggplot(aes(y=mort, x=length))+geom_line(col="red", size=2)+labs(x="Length", y="Fishing selectivity", col="Temp")+theme_classic(base_size = 20)
+fleet = new(Fleet)
+fleet$readParams(fleet_params_file, F)
+fleet$par$print()
+
+fleet2 = new(Fleet)
+fleet2$readParams(fleet_params_file, F)
+fleet2$set_minSizeLimit(65)
+
+bind_rows(
+  tibble(length = seq(0,200,length.out=100)) %>%
+    mutate(mort = purrr::map_dbl(length, ~fleet$fishingMortalityRef(.x))  ) |> 
+    mutate(lmin = 45),
+  tibble(length = seq(0,200,length.out=100)) %>%
+    mutate(mort = purrr::map_dbl(length, ~fleet2$fishingMortalityRef(.x)) ) |>
+    mutate(lmin = 65)
+  ) %>% 
+  ggplot(aes(y=mort, x=length, group=lmin, col=factor(lmin)))+
+  geom_line(size=2)+
+  labs(x="Length", y="Ref fishing mortality rate", col="Lmin")+
+  theme_classic(base_size = 20)
+
 
 dat_full %>% 
-  mutate(sel = 0.6901/(1+exp(-0.06517*(length-68.81))) - 0.4381674/(1+exp(-0.4151*(length-112.8))) ) %>% 
+  mutate(sel = purrr::map_dbl(length, ~fleet$fishingMortalityRef(.x))  ) |> 
   ggplot(aes(y=mort-log(1-0.4)*sel, x=length, col=temp))+geom_point(alpha=0.5)+geom_jitter()+labs(x="Length", y=expression("Inst. total mortality rate (yr"^"-1"*")"), col="Temp")+theme_classic(base_size = 20)+scale_color_viridis_c()+scale_y_log10()+scale_x_log10()
 ```
 
