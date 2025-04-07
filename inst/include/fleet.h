@@ -57,6 +57,9 @@ class FleetParams{
 	double variable_costs_sea; // = 65000; 		// variable costs NOK/vessel day
 	double scale_catch; // = 0.356; //0.53; 		// percentage of total codfish catch that is cod
 
+	// Share in a multi-fleet fishery
+	double quota;      // Quota assigned to this fleet (fraction of total harvest among all fleets)
+
 	public:
 	void initFromFile(std::string params_file, bool verbose=false);
 	void print();
@@ -67,6 +70,9 @@ class Fleet{
 	std::random_device rd;
 	std::mt19937 g;
 	
+	double h;
+	double Fc;
+
 	public:
 	FleetParams par;
 
@@ -77,17 +83,25 @@ class Fleet{
 	std::string control_model = "exp";
 	double window_dt = 0.1; // window length [years]
 
+	Fref_fishable = 0; ///< Reference fishing mortality rate averaged over fishable individuals
+
 	public:
 
 	Fleet();
 
 	void readParams(std::string params_file, bool verbose=false);
 
+	void set_harvestProportion(double _h);
 	void set_minSizeLimit(double _lf50);
 
 	double fishingMortalityRef(double len);
 
 	void init_chi(Population &pop, double Fc, double rho, double temp);
+	
+	/// @brief Compute approximate initial chi 
+	/// @param f_fgf Fraction of the total fishing mortality (across all fleets) that happens in the feeding grounds
+	/// This function requires that harvest proportion has been set using set_harvestProportion()
+	void init_chi(double f_fgf);
 
 	void update_chi(const std::vector<double>& chi_in_windows, 
 					const std::vector<double>& yield_in_windows, 

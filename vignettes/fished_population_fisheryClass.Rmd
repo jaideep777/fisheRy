@@ -20,6 +20,7 @@ source(here::here("tests/ref/simulator.7.R"))
 
 ```{r}
 params_file = here::here("params/cod_params.ini")
+fleet_params_file = here::here("params/fleet_1_params.ini")
 ```
 
 ## Initialize a Fishery

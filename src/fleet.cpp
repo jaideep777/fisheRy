@@ -103,6 +103,8 @@ void FleetParams::initFromFile(std::string params_file, bool verbose){
 	READ_PAR(variable_costs_sea);
 	READ_PAR(scale_catch);
 
+	READ_PAR(quota);
+
 	#undef READ_PAR
 
 }
@@ -141,6 +143,8 @@ void FleetParams::print(){
 	PRINT_PAR(variable_costs_sea);
 	PRINT_PAR(scale_catch);
 
+	PRINT_PAR(quota);
+
 	#undef PRINT_PAR
 }
 
@@ -153,14 +157,16 @@ void Fleet::readParams(std::string params_file, bool verbose){
 	par.initFromFile(params_file, verbose);
 }
 
+void Fleet::set_harvestProportion(double _h){
+	h = _h;
+	Fc = -log(1-_h);
+}
+
 void Fleet::set_minSizeLimit(double _lf50){
-	// par.lf50 = _lf50;
 	double dl = _lf50 - par.lmin_sq;
 	par.F3 = par.F3_sq + dl;
 	par.F5 = par.F5_sq + dl;
-//	calc_athresh();
 }
-
 
 /// Dry run simply takes population by value, so that original one is not altered
 std::vector<double> Fleet::harvest_dry_run(Population pop, double quota, double temp){
@@ -188,6 +194,12 @@ void Fleet::init_chi(Population &pop, double Fc, double rho, double temp){
 	chi = (Fref_ref == 0)? 0 : Fc*(1-rho*Mat_ref)/Fref_ref;
 
 	double h = 1-exp(-Fc);
+	chi *= exp(chi0_scalar_slope*(h-0.5));
+}
+
+
+void Fleet::init_chi(double f_fgf){
+	chi = (Fref_fishable == 0)? 0 : Fc*f_fgf/Fref_fishable;
 	chi *= exp(chi0_scalar_slope*(h-0.5));
 }
 

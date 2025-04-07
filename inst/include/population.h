@@ -119,6 +119,7 @@ class Population{
 
 	std::default_random_engine generator;
 	std::normal_distribution<double> normal_dist;
+
 	std::vector<double> nrecruits_vec;
 
 	double std_missing_value = -1e20;
