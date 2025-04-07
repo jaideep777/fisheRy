@@ -96,27 +96,57 @@ std::vector<double> Fishery::update(double temp){
 		}
 	);
 
-	// Calculate by-age metrics
+	// Adundance at age
 	stock_summary.n_a = aggregateByAge([this](const Fish &f){
 		return (f.isAlive)? pop.par.n : 0;
 	});
 
+	// Avg weight at age
 	stock_summary.w_a = aggregateByAge([this](const Fish &f){
 			return (f.isAlive)? pop.par.n*f.weight : 0;
 	});
 	for (int i=0; i<stock_summary.w_a.size(); ++i) stock_summary.w_a[i] /= (stock_summary.n_a[i]+1e-20);
 
+	// Maturity at age
 	stock_summary.mat_a = aggregateByAge([this](const Fish &f){
 		return (f.isAlive && f.isMature)? pop.par.n : 0;
 	});
 	for (int i=0; i<stock_summary.mat_a.size(); ++i) stock_summary.mat_a[i] /= (stock_summary.n_a[i]+1e-20);
 
-
+	// Overall maturity
 	stock_summary.maturity = std::accumulate(fishes.begin(), fishes.end(), 0.0, 
-		[](double sum, const Fish& f) { return sum + ((f.isAlive && f.isMature) ? 1 : 0); }) / fishes.size();
+		[](double sum, const Fish& f) { 
+			return sum + ((f.isAlive && f.isMature) ? 1 : 0); 
+		}
+	) / fishes.size();
 
+	// Number of fish at recruitment age
 	stock_summary.nfish_ra = std::accumulate(fishes.begin(), fishes.end(), 0.0, 
-		[this](double sum, const Fish& f) { return sum + ((f.isAlive && f.age == pop.par.recruitmentAge) ? pop.par.n : 0); });
+		[this](double sum, const Fish& f) { 
+			return sum + ((f.isAlive && f.age == pop.par.recruitmentAge) ? pop.par.n : 0); 
+		}
+	);
+
+	// Spawing and total stock biomass
+	stock_summary.ssb = pop.calcSSB(pop.par.recruitmentAge);
+	stock_summary.tsb = pop.calcTSB(pop.par.recruitmentAge);
+
+	// Max length
+	stock_summary.lmax = std::accumulate(fishes.begin(), fishes.end(), 0.0, 
+		[](double lmax, const Fish& f) { 
+			return fmax(lmax,  f.length); 
+		}
+	);
+
+	// Average length of the top 5% fish
+	vector<Fish> ff = fishes;
+	std::sort(ff.begin(), ff.end(), [](const Fish &f1, const Fish &f2){return f1.length > f2.length;});  // sort fishes descending by length
+	for (int i=1; i<ff.size(); ++i) assert(ff[i].length <= ff[i-1].length); // Fixme: This is just checking whether the array got sorted, can go
+
+	stock_summary.length90 = 0;
+	double cut = 0.05;
+	for (int i=0; i < ceil(cut*ff.size()); ++i) stock_summary.length90 += ff[i].length;
+	stock_summary.length90 /= ceil(cut*ff.size());
 
 
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -148,9 +178,6 @@ std::vector<double> Fishery::update(double temp){
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//  2. Growth
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	stock_summary.ssb = pop.calcSSB(pop.par.recruitmentAge);
-	stock_summary.tsb = pop.calcTSB(pop.par.recruitmentAge);
-
 	for (auto& f : fishes){
 		f.grow(stock_summary.tsb/1e6, temp); // convert tsb to kT
 	}
@@ -162,28 +189,11 @@ std::vector<double> Fishery::update(double temp){
 		}
 	) / fishes.size();
 	
-	// calc max length
-	stock_summary.lmax = std::accumulate(fishes.begin(), fishes.end(), 0.0, 
-		[](double lmax, const Fish& f) { 
-			return fmax(lmax,  f.length); 
-		}
-	);
-
-	// Calculate average length of the top 5% of fish
-	vector<Fish> ff = fishes;
-	std::sort(ff.begin(), ff.end(), [](const Fish &f1, const Fish &f2){return f1.length > f2.length;});  // sort fishes descending by length
-	for (int i=1; i<ff.size(); ++i) assert(ff[i].length <= ff[i-1].length); // Fixme: This is just checking whether the array got sorted, can go
-
-	stock_summary.length90 = 0;
-	double cut = 0.05;
-	for (int i=0; i < ceil(cut*ff.size()); ++i) stock_summary.length90 += ff[i].length;
-	stock_summary.length90 /= ceil(cut*ff.size());
-
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	//  3. Reproduction and Spawning grounds fishery
 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	stock_summary.ssb0 = pop.calcSSB(pop.par.recruitmentAge);
-
+	
 	// 3a. pre-spawning part of the SPF
 	double yield_spf = 0;
 	double ssb_spawning = 0;
@@ -201,6 +211,87 @@ std::vector<double> Fishery::update(double temp){
 	}
 	double ssb_spawning_ref = ssb0*p_survival_spf_before;
 	if (verbose) cout << "ssb spawning = " << ssb_spawning << " / " << ssb_spawning_ref << endl;
+
+	// 3b. Spawning
+	// double nrecruits = par.r0*ssb / (1 + ssb/par.Bhalf); // * exp(rnorm(-par.sigmaf*par.sigmaf/2, par.sigmaf));
+	double nspawners = 0;
+	nrecruits_vec.resize(fishes.size());
+	std::fill(nrecruits_vec.begin(), nrecruits_vec.end(), 0.0);
+	double nrecruits_total = 0;
+	double nrecruits_potential = 0;
+	for (int k=0; k<fishes.size(); ++k) {
+		auto &f = fishes[k];
+		// nrecruits += par.r0*n*f.weight/(1+ssb/par.Bhalf);
+		if (f.isAlive && f.isMature){  // fish survies the spawning-grounds fishery until actual spawning time
+			// count as spawner (for analysis only)
+			nspawners += par.n; 
+
+			// Recruitment
+			double nrecruits_fish = f.produceRecruits(ssb_spawning, temp) * par.n;
+			nrecruits_vec[k] = nrecruits_fish;
+			nrecruits_total     += nrecruits_fish; // * (1/(1+ssb/f.par.Bhalf));
+			nrecruits_potential += f.produceRecruits(  0, temp) * par.n;
+
+			// Mortality due to spawning
+			double p_survival_spawning = exp(-f.par.Mspawning);
+			f.isAlive = f.isAlive && (runif() <= p_survival_spawning);
+		}
+	}
+	//nrecruits *= exp(rnorm(-par.sigmaf*par.sigmaf/2, par.sigmaf));
+	double nrecruits_real = std::min(nrecruits_total, par.rmax);
+//	for (auto& nn : nrecruits_vec) nn = nn*nrecruits_real/(nrecruits_total+1e-20); 
+
+	// ** for analysis
+	double r0_avg = (ssb_spawning>0)? (nrecruits_real * (1 + ssb_spawning/proto_fish.par.Bhalf) / ssb_spawning) : -999;
+	double factor_dr = nrecruits_real / (nrecruits_potential+1e-12);
+	double nrecruits_per_fish = nrecruits_real/nspawners;
+	double ssb_after_spawning = calcSSB(par.recruitmentAge);
+	if (verbose) cout << "n_spawners / n_recruits = " << nspawners << " / " << nrecruits_real << endl;
+	// **
+
+	// Generate recruits (in a separate vector)
+	int nr = nrecruits_real/par.n;
+	if (nr <= 0) nr = 1;
+	std::discrete_distribution<size_t> fitness_dist(nrecruits_vec.begin(), nrecruits_vec.end());
+	++proto_fish.t_birth;
+	if (verbose) cout << "n_recruits (actual) = " << nr << endl;
+
+	vector<Fish> recruits;
+	recruits.reserve(nr);
+
+	for (int i=0; i<nr; ++i){
+		vector<double> mother_traits = fishes[fitness_dist(generator)].get_traits();
+		vector<double> father_traits = fishes[fitness_dist(generator)].get_traits();
+		vector<double> offspring_traits(mother_traits.size());
+		for (int k=0; k<mother_traits.size(); ++k){
+			offspring_traits[k] = (mother_traits[k] + father_traits[k])/2 + sqrt(proto_fish.trait_variances[k])*proto_fish.trait_scalars[k]*normal_dist(generator);
+		}
+		proto_fish.set_traits(offspring_traits);
+		proto_fish.init(tsb/1e6, temp);
+		recruits.push_back(proto_fish);
+	}
+
+	double ssb_after_spawning_ref = ssb0*exp(-proto_fish.par.Mspawning)*(1-par.f_spf_before*h_spf);
+	if (verbose) cout << "ssb after spawning = " << ssb_after_spawning << " / " << ssb_after_spawning_ref << endl;
+
+	// 3c. post-spawning part of the SPF
+	double p_survival_spf_after = (1-h_spf)/(1 - par.f_spf_before*h_spf);
+	for (int k=0; k<fishes.size(); ++k) {
+		auto &f = fishes[k];
+		if (f.isAlive && f.isMature){ // only mature fish are exposed to SPF
+			f.isAlive = f.isAlive && (runif() <= p_survival_spf_after);
+
+			if (!f.isAlive) yield_spf += par.n * f.weight;
+			if (!f.isAlive) f.isCaught = true;               // mark fish as caught
+
+		}
+	}
+
+	double ssbn = calcSSB(par.recruitmentAge);
+
+	double yield_spf_ref = ssb0*h_spf*(par.f_spf_before + (1-par.f_spf_before)*exp(-proto_fish.par.Mspawning));
+	double ssbn_ref = ssb0*(1-h_spf)*exp(-proto_fish.par.Mspawning);
+
 	
 
 }

@@ -300,7 +300,9 @@ double Stock::fishableBiomass(){
 double Stock::calcSSB(double min_age){
     return 
     std::accumulate(fishes.begin(), fishes.end(), 0.0, 
-        [](double sum, const Fish& f) { return sum + ((f.isAlive && f.isMature && f.age >= min_age) ? f.weight * par.n : 0); }
+        [](double sum, const Fish& f) { 
+			return sum + ((f.isAlive && f.isMature && f.age >= min_age) ? f.weight * par.n : 0); 
+		}
     );
 }
 
@@ -308,7 +310,9 @@ double Stock::calcSSB(double min_age){
 double Stock::calcTSB(double min_age){
     return 
     std::accumulate(fishes.begin(), fishes.end(), 0.0, 
-        [](double sum, const Fish& f) { return sum + ((f.isAlive && f.age >= min_age) ? f.weight * par.n : 0); }
+        [](double sum, const Fish& f) { 
+			return sum + ((f.isAlive && f.age >= min_age) ? f.weight * par.n : 0); 
+		}
     );
 }
 
@@ -316,7 +320,9 @@ double Stock::calcTSB(double min_age){
 double Stock::calcMaturity(double min_age){
     return 
     std::accumulate(fishes.begin(), fishes.end(), 0.0, 
-        [](double sum, const Fish& f) { return sum + ((f.isAlive && f.isMature && f.age >= min_age) ? 1 : 0); }
+        [](double sum, const Fish& f) { 
+			return sum + ((f.isAlive && f.isMature && f.age >= min_age) ? 1 : 0); 
+		}
     ) / fishes.size();
 } 
 

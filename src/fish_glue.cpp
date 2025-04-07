@@ -311,7 +311,6 @@ RCPP_MODULE(simulator_module){
         .method("update", &Fishery::update)
     ;
 
-    
     class_ <Simulator>("Simulator")
         .constructor<Fish>()
 
