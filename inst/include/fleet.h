@@ -83,7 +83,7 @@ class Fleet{
 	std::string control_model = "exp";
 	double window_dt = 0.1; // window length [years]
 
-	Fref_fishable = 0; ///< Reference fishing mortality rate averaged over fishable individuals
+	double Fref_fishable = 0; ///< Reference fishing mortality rate averaged over fishable individuals
 
 	public:
 

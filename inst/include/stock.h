@@ -13,7 +13,10 @@
 class StockParams {	
 	public:
 	int recruitmentAge; ///< Age at recruitment
-	double n = 5e6;	    ///< superfish size
+
+	public:
+	void initFromFile(std::string params_file, bool verbose=false);
+	void print();
 };
 
 
@@ -112,7 +115,8 @@ class Stock{
 
 	Fish proto_fish;	           ///< Prototype fish. A copy of this fish is always used to initialize new fish in population.
 	std::vector<Fish> fishes;      ///< Vector of all fish in the population
-	
+	double n = 5e6;	               ///< superfish size
+
 	public:
 	Stock(Fish f);
 

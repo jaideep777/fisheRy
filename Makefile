@@ -4,7 +4,9 @@ TARGET := 1
 
 # files
 SRCFILES  :=  src/fish.cpp \
-              src/population.cpp  # $(filter-out src/RcppExports.cpp src/fish_glue.cpp, $(wildcard src/*.cpp))
+              src/population.cpp \
+			  src/fleet.cpp \
+			  src/fishery_system.cpp  # $(filter-out src/RcppExports.cpp src/fish_glue.cpp, $(wildcard src/*.cpp))
 HEADERS := $(wildcard inst/include/*.h) $(wildcard tests/*.h)
 # ------------------------------------------------------------------------------
 
@@ -16,7 +18,7 @@ INC_PATH :=  -I./inst/include #-I./CppNumericalSolvers-1.0.0
 LIB_PATH :=  
 
 # flags
-CPPFLAGS = -O3 -g -pg -std=c++11 -Wno-sign-compare -Wno-unused-variable -Wno-unused-but-set-variable -DNATIVE_CPP
+CPPFLAGS = -O3 -g -pg -std=c++17 -Wno-sign-compare -Wno-unused-variable -Wno-unused-but-set-variable -DNATIVE_CPP
 LDFLAGS =  -g -pg
 
 # libs

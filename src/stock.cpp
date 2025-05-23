@@ -11,179 +11,28 @@
 
 using namespace std;
 
-void PopulationParams::initFromFile(std::string params_file, bool verbose){
+void StockParams::initFromFile(std::string params_file, bool verbose) {
 	io::Initializer I;
 	I.parse(params_file, false, verbose);
 
-	#define READ_PAR(x) x = I.get<double>("population", #x)
+	#define READ_PAR(x) x = I.get<double>("stock", #x)
 
 	READ_PAR(recruitmentAge);
 
-	// management / fishing selectivity
-	// READ_PAR(sf);
-	// READ_PAR(lf50);
-	READ_PAR(F1);
-	READ_PAR(F2);
-	READ_PAR(F3);
-	READ_PAR(F4);
-	READ_PAR(F5);
-	READ_PAR(F6);
-
-	// save the values of F3 and F5 for status quo control params
-	F3_sq = F3;
-	F5_sq = F5;
-	READ_PAR(lmin_sq);
-	lmin = lmin_sq;
-
-	// environmental stochasticity
-	READ_PAR(sigmaf);
-
-	// effort dynamics and employment
-	READ_PAR(q);
-	READ_PAR(dsea);
-	READ_PAR(dmax);
-	READ_PAR(dshr);
-	READ_PAR(b);
-
-	// revenue and profit 
-	READ_PAR(price_sea);
-	READ_PAR(price_shore);
-	READ_PAR(fee_ratio);
-
-	READ_PAR(salary_sea);
-	READ_PAR(salary_shore);
-	READ_PAR(fixed_costs_sea);
-	READ_PAR(fixed_costs_shore);
-	READ_PAR(variable_costs_sea);
-	READ_PAR(scale_catch);
-
-	// Fraction of harvest from spawning grounds
-	// READ_PAR(F_spf); 
-	READ_PAR(f_spf_before);
-	rho = 0.12;
-
-	// READ_PAR(h);
-
-	// READ_PAR(n);
 	#undef READ_PAR
-
 }
 
-void PopulationParams::print(){
+void StockParams::print() {
 	#define PRINT_PAR(x) std::cout << #x << " = " << x << "\n"
 
 	PRINT_PAR(recruitmentAge);
-
-	// management / fishing selectivity
-	// PRINT_PAR(sf);
-	// PRINT_PAR(lf50);
-	PRINT_PAR(F1);
-	PRINT_PAR(F2);
-	PRINT_PAR(F3);
-	PRINT_PAR(F4);
-	PRINT_PAR(F5);
-	PRINT_PAR(F6);
-
-	PRINT_PAR(F3_sq);
-	PRINT_PAR(F5_sq);
-	PRINT_PAR(lmin_sq);
-
-	// environmental stochasticity
-	PRINT_PAR(sigmaf);
-
-	// effort dynamics and employment
-	PRINT_PAR(q);
-	PRINT_PAR(dsea);
-	PRINT_PAR(dmax);
-	PRINT_PAR(dshr);
-	PRINT_PAR(b);
-
-	// revenue and profit 
-	PRINT_PAR(price_sea);
-	PRINT_PAR(price_shore);
-	PRINT_PAR(fee_ratio);
-
-	PRINT_PAR(salary_sea);
-	PRINT_PAR(salary_shore);
-	PRINT_PAR(fixed_costs_sea);
-	PRINT_PAR(fixed_costs_shore);
-	PRINT_PAR(variable_costs_sea);
-	PRINT_PAR(scale_catch);
-
-	// Spawning grounds fishery
-	// PRINT_PAR(F_spf); 
-	PRINT_PAR(f_spf_before);
-	PRINT_PAR(rho);
-
-	// Calculated pars
-	PRINT_PAR(h);
-	PRINT_PAR(Fc);
-	PRINT_PAR(n);
-
 
 	#undef PRINT_PAR
 }
 
 
-int Stock::readEnvironmentFile(std::string filename){
-	
-	ifstream fin(filename.c_str());
-	if (!fin) throw std::runtime_error("Could not open file: " + filename);
-	
-	t_env.clear();
-	v_env.clear();
 
-	// skip header
-	std::string line;
-	getline(fin, line);
-	
-	// read env file
-	while (fin.peek() != EOF){
-		std::getline(fin, line);
-	
-		std::stringstream lineStream(line);
-
-		std::string cell;
-		
-		std::getline(lineStream, cell, ',');
-		int year = stoi(cell);
-
-		SeaEnvironment env;
-		env.year = year;
-
-		std::getline(lineStream, cell, ',');
-		env.temperature = stod(cell);
-		
-		std::getline(lineStream, cell, ',');
-		env.recruitment_noise_multiplier = stod(cell);
-		
-		t_env.push_back(year);
-		v_env.push_back(env);
-	}
-	
-	for (int i=0; i<t_env.size(); ++i) cout << "env: " << t_env[i] << " " << v_env[i].temperature << "\n";
-		
-	return 0;
-
-}
-
-void Stock::updateEnv(double t){
-	if (par.update_env){
-		int id = (t - *t_env.begin());
-		int D = t_env.size(); // NEVER USE UNSIGNED INTs in modulo operations. Hence store in int.
-		id = id % D;
-		if (id < 0) id += D;
-	
-		if (verbose) cout << "update: t = " << t << " " << id << " " << t_env[id] << " " << v_env[id].temperature << " (" << *t_env.begin() << ", " << t_env.size() << ")\n";	
-		env = v_env[id];
-	}
-}
-
-
-
-Stock::Population(Fish f) : proto_fish(f){
-//	proto_fish = f;
-//	calc_athresh();
+Stock::Stock(Fish f) : proto_fish(f){
 }
 
 int Stock::readParams(std::string filename, bool verbose){
@@ -191,54 +40,10 @@ int Stock::readParams(std::string filename, bool verbose){
 	return 0;
 }
 
-void Stock::set_superFishSize(double _n){
-	par.n = _n;
-}
 
-void Stock::set_harvestProp(double _h){
-	par.h = _h;
-	par.Fc = -log(1-_h);
-	// par.mort_fishing_mature = par.Fc;
-	// par.mort_fishing_immature = par.Fc;
-}
-
-// void Stock::set_fishingMortality(double _F_fgf){
-// 	par.Fc = _F_fgf;
-// 	par.h = 1-exp(-_F_fgf);
-// 	par.mort_fishing_mature = par.Fc;
-// 	par.mort_fishing_immature = par.Fc;
+// void Stock::set_traitVariances(vector<double> var){
+// 	proto_fish.trait_variances = var;
 // }
-
-
-//// USED IN OLD FORMULATION ONLY
-//void Stock::calc_athresh(double tsb0, double temp){
-//	// set a_thresh
-//	Fish f = proto_fish;
-//	assert(f.par.growth_model == Model::Dankel22); // this calculation is only valid for old growth model
-//	par.a_thresh = 99999;
-//	for (int i=1; i <= f.par.amax; ++i){
-//		f.set_age(i);
-//		if (selectivity(f.length) > 0.5){
-//			par.a_thresh = i;
-//			break;
-//		}
-//	}
-//	cout << "a_0.5 = " << par.a_thresh << "\n";
-//}
-
-
-void Stock::set_minSizeLimit(double _lf50){
-	// par.lf50 = _lf50;
-	par.lmin = _lf50;
-	double dl = par.lmin - par.lmin_sq;
-	par.F3 = par.F3_sq + dl;
-	par.F5 = par.F5_sq + dl;
-//	calc_athresh();
-}
-
-void Stock::set_traitVariances(vector<double> var){
-	proto_fish.trait_variances = var;
-}
                             
 void Stock::init(int n, double temp){
 	cout << "init\n";
@@ -351,177 +156,6 @@ int Stock::nfish(){
 	return fishes.size();
 }
 
-// double Stock::selectivity(double len){
-// 	// return par.F1/(1+exp(-par.F2*(len-par.F3))); 
-// 	return 
-// 	  par.F1/(1+exp(-par.F2*(len-par.F3))) 
-// 	- par.F6/(1+exp(-par.F4*(len-par.F5)));
-// }
-
-/// Formula:
-/// \f[
-/// F_\text{ref} = \frac{F_1}{1 + \exp(-F_2 \cdot (l - F_3))} - \frac{F_6}{1 + \exp(-F_4 \cdot (l - F_5))}
-/// \f]
-double Stock::fishingMortalityRef(double len){
-	// return par.F1/(1+exp(-par.F2*(len-par.F3))); 
-	return 
-	  par.F1/(1+exp(-par.F2*(len-par.F3))) 
-	- par.F6/(1+exp(-par.F4*(len-par.F5)));
-}
-
-
-// /// This function computes the average reference fishing mortality rate for each age group within the fish population
-// /// 
-// /// The calculation proceeds by summing up the reference fishing mortality rate 
-// /// and counting the number of fish in each age group. The average for
-// /// each age is then computed by dividing the sum by the count.
-// /// 
-// /// \f[
-// ///   F_\text{ref}(a) = \frac{1}{N_a} \sum_{i} F_\text{ref}(l_a) \mathbb{1}[\text{age}=a]
-// /// \f]
-// /// 
-// /// If no fish are present in a particular age group, the average is set to a missing value indicator.
-// // DEPRECATED
-// std::vector<double> Stock::fishingMortRefByAge(){
-// 	vector<double> fa_sum(proto_fish.par.amax+2, 0); 
-// 	vector<double> fa_n(proto_fish.par.amax+2, 0); 
-// 	for (auto& f : fishes){
-// 		if (f.isAlive){
-// 			fa_sum[f.age] += fishingMortalityRef(f.length);
-// 			fa_n[f.age] += 1;
-// 		}
-// 	} 
-// 	for (int i=0; i<fa_sum.size(); ++i){
-// 		if (fa_n[i] != 0) fa_sum[i] /= fa_n[i];
-// 		else fa_sum[i] = std_missing_value; // should be treated as missing value in averages
-// 	}
-// 	return fa_sum;
-// }
-
-// /// This function computes the average maturity for each age group within the fish population,
-// /// considering both non-spawning and spawning-related mortality rates if applicable.
-// /// 
-// /// The calculation proceeds by summing up the maturity and counting the number of fish in each age group. The average for
-// /// each age is then computed by dividing the sum by the count.
-// /// 
-// /// \f[
-// ///   M(a) = \frac{1}{N_a} \sum_{i} \mathbb{1}[\text{Mature}] \mathbb{1}[\text{age}=a]
-// /// \f]
-// /// 
-// /// If no fish are present in a particular age group, the average is set to a missing value indicator.
-// std::vector<double> Stock::maturityByAge(){
-// 	vector<double> m_sum(proto_fish.par.amax+2, 0); 
-// 	vector<double> m_n(proto_fish.par.amax+2, 0); 
-// 	for (auto& f : fishes){
-// 		if (f.isAlive){
-// 			m_sum[f.age] += (f.isMature)? 1:0;
-// 			m_n[f.age] += 1;
-// 		}
-// 	} 
-// 	for (int i=0; i<m_sum.size(); ++i){
-// 		if (m_n[i] != 0) m_sum[i] /= m_n[i];
-// 		else m_sum[i] = std_missing_value; // should be treated as missing value in averages
-// 	}
-// 	return m_sum;
-// }
-
-// /// This function computes the average natural mortality rate for each age group within the fish population,
-// /// considering both non-spawning and spawning-related mortality rates if applicable.
-// /// 
-// /// The calculation proceeds by summing up the natural mortality rates (adjusted for spawning mortality if
-// /// the fish is mature) and counting the number of fish in each age group. The average mortality rate for
-// /// each age is then computed by dividing the sum by the count.
-// /// 
-// /// \f[
-// ///   \mu(a) = \frac{1}{N_a} \sum_{i} \left( \mu_i(T) + \mathbb{1}[\text{Mature}] \cdot M_\text{spawning} \right) \mathbb{1}[\text{age}=a]
-// /// \f]
-// /// 
-// /// If no fish are present in a particular age group, the average is set to a missing value indicator.
-// /// 
-// /// @see Fish::naturalMortalityRate, fishes
-// vector<double> Stock::naturalMortByAge(double temp){
-// 	vector<double> ma_sum(proto_fish.par.amax+2, 0); 
-// 	vector<double> ma_n(proto_fish.par.amax+2, 0); 
-// 	for (auto& f : fishes){
-// 		if (f.isAlive){
-// 			ma_sum[f.age] += f.naturalMortalityRate(temp) + double(f.isMature)*f.par.Mspawning;
-// 			ma_n[f.age] += 1;
-// 		}
-// 	} 
-// 	for (int i=0; i<ma_sum.size(); ++i){
-// 		if (ma_n[i] != 0) ma_sum[i] /= ma_n[i];
-// 		else ma_sum[i] = std_missing_value; // should be treated as missing value in averages
-// 	}
-// 	return ma_sum;
-// }
-
-
-// /// This function computes the average per capita natural mortality rate over the fishable population.
-// /// 
-// /// \f[
-// ///   \mu = \frac{1}{N} \sum_{i} \left( \mu_i(T) + \mathbb{1}[\text{Mature}] \cdot M_\text{spawning} \right) \mathbb{1}[\text{fishbale}]
-// /// \f]
-// /// 
-// /// If no fishable fish are present, the average is set to 0.
-// /// 
-// /// @see Fish::naturalMortalityRate, fishes
-// // DEPRECATED
-// double Stock::naturalMortFishable(double temp){
-// 	double mu = 0, n = 0;
-// 	for (auto& f : fishes){
-// 		if (f.isAlive && isFishable(f)){
-// 			mu += f.naturalMortalityRate(temp) + double(f.isMature)*f.par.Mspawning;
-// 			n += 1;
-// 		}
-// 	} 
-// 	if (n == 0) return 0;
-// 	else return mu/n;
-// }
-
-// /// This function computes the average per capita reference fishing mortality rate over the fishable population.
-// /// 
-// /// \f[
-// ///   \mu = \frac{1}{N} \sum_{i} F_\text{ref}(l_a) \mathbb{1}[\text{fishable}]
-// /// \f]
-// /// 
-// /// If no fishable fish are present, the average is set to 0.
-// /// 
-// /// @see Fish::naturalMortalityRate, fishes
-// // DEPRECATED
-// double Stock::fishingMortRefFishable(){
-// 	double mu = 0, n = 0;
-// 	for (auto& f : fishes){
-// 		if (f.isAlive && isFishable(f)){
-// 			mu += fishingMortalityRef(f.length);
-// 			n += 1;
-// 		}
-// 	} 
-// 	if (n == 0) return 0;
-// 	else return mu/n;
-// }
-
-// /// This function computes the average maturity rate the fishable population.
-// /// 
-// /// \f[
-// ///   \mu = \frac{1}{N} \sum_{i} M(l_a) \mathbb{1}[\text{fishable}]
-// /// \f]
-// /// 
-// /// If no fishable fish are present, the average is set to 0.
-// /// 
-// /// @see Fish::maturity, fishes
-// // DEPRECATED
-// double Stock::maturityFishable(){
-// 	double ma = 0, n = 0;
-// 	for (auto& f : fishes){
-// 		if (f.isAlive && isFishable(f)){
-// 			ma += (f.isMature)? 1:0;
-// 			n += 1;
-// 		}
-// 	} 
-// 	if (n == 0) return 0;
-// 	else return ma/n;
-// }
-
 
 double Stock::avgOverAges(const std::vector<double> &Qa, int amin, int amax, double missing_value){
 	double Q_sum = 0;
@@ -535,20 +169,6 @@ double Stock::avgOverAges(const std::vector<double> &Qa, int amin, int amax, dou
 	if (nQ == 0) return 0;
 	else return Q_sum/nQ;
 }
-
-
-// double Stock::effort(double Nr, double F, double temp){
-// //	double M = proto_fish.par.mam[proto_fish.par.amax];
-// 	double sum_wimi = 0, sum_wi = 0;
-// 	for (auto& f : fishes){
-// 		if (f.age <= f.par.amax){
-// 			sum_wimi += f.weight * selectivity(f.length) * f.naturalMortalityRate(temp);
-// 			sum_wi   += f.weight * selectivity(f.length);
-// 		}
-// 	} 
-// 	double M = sum_wimi / sum_wi;  // Mass-weighted average mortality of fishable population
-// 	return pow(Nr, 1-par.b) * F * (exp(-(F+M)*(1-par.b))-1) / (par.q*(F+M)*(par.b-1)); 
-// }
 
 
 inline double runif(double rmin=0, double rmax=1){

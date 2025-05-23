@@ -2,6 +2,7 @@
 #include <cmath>
 #include <algorithm>
 #include <stdexcept>
+#include <cassert>
 
 inline double runif(double rmin=0, double rmax=1){
 	double r = double(rand())/RAND_MAX; 
@@ -71,7 +72,10 @@ void FleetParams::initFromFile(std::string params_file, bool verbose){
 
 	#define READ_PAR(x) x = I.get<double>("fleet", #x)
 
-	// management / fishing selectivity
+	// get status quo lmin
+	READ_PAR(lmin_sq);
+
+	// management / fishing selectivity parameters at status quo lmin
 	READ_PAR(F1);
 	READ_PAR(F2);
 	READ_PAR(F3);
@@ -79,8 +83,7 @@ void FleetParams::initFromFile(std::string params_file, bool verbose){
 	READ_PAR(F5);
 	READ_PAR(F6);
 
-	// get status quo lmin, and save the values of F3 and F5 correeponding to status quo lmin
-	READ_PAR(lmin_sq);
+	// save the values of F3 and F5 corresponding to status quo lmin
 	F3_sq = F3;
 	F5_sq = F5;
 
@@ -103,6 +106,7 @@ void FleetParams::initFromFile(std::string params_file, bool verbose){
 	READ_PAR(variable_costs_sea);
 	READ_PAR(scale_catch);
 
+	// Fractional quota assigned to this fleet
 	READ_PAR(quota);
 
 	#undef READ_PAR
@@ -111,6 +115,9 @@ void FleetParams::initFromFile(std::string params_file, bool verbose){
 
 void FleetParams::print(){
 	#define PRINT_PAR(x) std::cout << #x << " = " << x << "\n"
+
+	// status quo lmin
+	PRINT_PAR(lmin_sq);
 
 	// management / fishing selectivity
 	PRINT_PAR(F1);
@@ -122,7 +129,6 @@ void FleetParams::print(){
 
 	PRINT_PAR(F3_sq);
 	PRINT_PAR(F5_sq);
-	PRINT_PAR(lmin_sq);
 
 	// effort dynamics and employment
 	PRINT_PAR(q);
