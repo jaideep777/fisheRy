@@ -152,10 +152,11 @@ RCPP_MODULE(fish_module) {
 
 
 #include "population.h"
+#include "stock.h"
 
 RCPP_EXPOSED_CLASS(PopulationParams);
+RCPP_EXPOSED_CLASS(StockParams);
 RCPP_EXPOSED_CLASS(SeaEnvironment);
-
 
 ////RCPP_EXPOSED_AS(Population);
 RCPP_MODULE(population_module){
@@ -241,6 +242,29 @@ RCPP_MODULE(population_module){
 		.method("print_summary", &Population::print_summary)
 		.method("nfish", &Population::nfish)
 	;
+	
+	class_ <StockParams>("StockParams")
+		.constructor()
+		.field("recruitmentAge", &StockParams::recruitmentAge)
+		.field("rmax", &StockParams::rmax)
+	;
+
+	class_ <Stock>("Stock")
+		.constructor<Fish>()
+		.field("par", &Stock::par)
+		.field("superfish_size", &Stock::superfish_size)
+		
+		.method("readParams", &Stock::readParams)
+		.method("init", &Stock::init)
+		.method("calcSSB", &Stock::calcSSB)
+		.method("calcTSB", &Stock::calcTSB)
+		
+		.method("nfish", &Stock::nfish)
+		.method("get_state", &Stock::get_state)
+		.method("get_traits", &Stock::get_traits)
+
+		.method("equilibriate_debug", &Stock::equilibriate_debug)
+		;
 }
 
 #include "fleet.h"
@@ -277,39 +301,40 @@ RCPP_MODULE(fleet_module){
 }
 
 
-#include "fishery_system.h"
+// #include "fishery_system.h"
 #include "simulator.h"
 
 RCPP_EXPOSED_CLASS(Population);
-RCPP_EXPOSED_CLASS(FisheryParams);
+RCPP_EXPOSED_CLASS(Stock);
+// RCPP_EXPOSED_CLASS(FisheryParams);
 
 RCPP_MODULE(simulator_module){
-    class_ <FisheryParams>("FisheryParams")
-        .constructor()
-        .field("rho", &FisheryParams::rho)
-        .field("f_spf_before", &FisheryParams::f_spf_before)
-        .method("print", &FisheryParams::print)
-    ;
+    // class_ <FisheryParams>("FisheryParams")
+    //     .constructor()
+    //     .field("rho", &FisheryParams::rho)
+    //     .field("f_spf_before", &FisheryParams::f_spf_before)
+    //     .method("print", &FisheryParams::print)
+    // ;
 
-    class_ <Fishery>("Fishery")
-        .constructor<std::string, Fish>()
-        .field("par", &Fishery::par)
-        .field("pop", &Fishery::pop) // Use updated getter and setter
+    // class_ <Fishery>("Fishery")
+    //     .constructor<std::string, Fish>()
+    //     .field("par", &Fishery::par)
+    //     .field("pop", &Fishery::pop) // Use updated getter and setter
 
-        // Wrappers for population functions exposed from Fishery because they modify population state
-        .method("equilibriateNaturalPopulation", &Fishery::equilibriateNaturalPopulation)
-        .method("init", &Fishery::init)
-        .method("readParams", &Fishery::readParams)
-        .method("set_superFishSize", &Fishery::set_superFishSize)
-        .method("readEnvironmentFile", &Fishery::readEnvironmentFile)
-        .method("updateEnv", &Fishery::updateEnv)
-        .method("set_harvestProp", &Fishery::set_harvestProp)
-        .method("set_minSizeLimit", &Fishery::set_minSizeLimit)
-        .method("set_traitVariances", &Fishery::set_traitVariances)
-        .method("noFishingEquilibriate", &Fishery::noFishingEquilibriate)
+    //     // Wrappers for population functions exposed from Fishery because they modify population state
+    //     .method("equilibriateNaturalPopulation", &Fishery::equilibriateNaturalPopulation)
+    //     .method("init", &Fishery::init)
+    //     .method("readParams", &Fishery::readParams)
+    //     .method("set_superFishSize", &Fishery::set_superFishSize)
+    //     .method("readEnvironmentFile", &Fishery::readEnvironmentFile)
+    //     .method("updateEnv", &Fishery::updateEnv)
+    //     .method("set_harvestProp", &Fishery::set_harvestProp)
+    //     .method("set_minSizeLimit", &Fishery::set_minSizeLimit)
+    //     .method("set_traitVariances", &Fishery::set_traitVariances)
+    //     .method("noFishingEquilibriate", &Fishery::noFishingEquilibriate)
 
-        .method("update", &Fishery::update)
-    ;
+    //     .method("update", &Fishery::update)
+    // ;
 
     class_ <Simulator>("Simulator")
         .constructor<Fish>()

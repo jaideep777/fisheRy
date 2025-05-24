@@ -5,8 +5,9 @@ TARGET := 1
 # files
 SRCFILES  :=  src/fish.cpp \
               src/population.cpp \
-			  src/fleet.cpp \
-			  src/fishery_system.cpp  # $(filter-out src/RcppExports.cpp src/fish_glue.cpp, $(wildcard src/*.cpp))
+			  src/stock.cpp \
+			  src/fleet.cpp 
+			#   src/fishery_system.cpp  # $(filter-out src/RcppExports.cpp src/fish_glue.cpp, $(wildcard src/*.cpp))
 HEADERS := $(wildcard inst/include/*.h) $(wildcard tests/*.h)
 # ------------------------------------------------------------------------------
 

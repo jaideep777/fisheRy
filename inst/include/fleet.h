@@ -2,7 +2,7 @@
 #define FISHERY_FLEET_H
 
 #include "population.h"
-
+#include "stock.h"
 
 class WindowProps{
 	public:
@@ -79,6 +79,7 @@ class Fleet{
 	std::vector<WindowProps> window_props_vec;
 
 	double chi = 1;
+	// FIXME: below can be moved to FleetParams
 	double chi0_scalar_slope = 1.5;
 	std::string control_model = "exp";
 	double window_dt = 0.1; // window length [years]
@@ -96,12 +97,20 @@ class Fleet{
 
 	double fishingMortalityRef(double len);
 
-	void init_chi(Population &pop, double Fc, double rho, double temp);
-	
-	/// @brief Compute approximate initial chi 
-	/// @param f_fgf Fraction of the total fishing mortality (across all fleets) that happens in the feeding grounds
-	/// This function requires that harvest proportion has been set using set_harvestProportion()
-	void init_chi(double f_fgf);
+	bool isFishable(const Fish &f);
+
+	/// @group stuff calculated over fishable individuals
+	/// @brief Calculate natural mortality, maturity, and fishing mortality rates averaged over fishable individuals of Stock stock	
+	double naturalMortFishable(const Stock &stock, double temp);
+	double maturityFishable(const Stock &stock);
+	double fishingMortRefFishable(const Stock& stock);
+	/// @}
+
+	/// @brief         Initialize chi, the fishing mortality scalar
+	/// @param pop     Stock to fish
+	/// @param F       Fishing mortality rate realized in feeding grounds ( = f_fgf * Fc)
+	/// @param temp    Temperature
+	void init_chi(Stock &pop, double F_fgf, double temp);
 
 	void update_chi(const std::vector<double>& chi_in_windows, 
 					const std::vector<double>& yield_in_windows, 
@@ -113,6 +122,21 @@ class Fleet{
 
 	double effort_constantC(double q, double b, double K);
 	double effort_constantF(double q, double b, double K);
+
+	private:
+
+	template<class Func>
+	double avgOverFishable(Func get_property, const Stock &stock){
+		double mu = 0, n = 0;
+		for (auto& f : stock.fishes){
+			if (f.isAlive && isFishable(f)){
+				mu += get_property(f); 
+				n += 1;
+			}
+		} 
+		if (n == 0) return 0;
+		else return mu/n;
+	}
 
 };
 

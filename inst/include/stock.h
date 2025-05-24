@@ -10,8 +10,11 @@
 
 #include "fish.h"
 
+class Fleet; // Forward declaration of Fleet class needed by fishable_X() functions
+
 class StockParams {	
 	public:
+	double rmax = 1e20;
 	int recruitmentAge; ///< Age at recruitment
 
 	public:
@@ -96,46 +99,36 @@ class Stock{
 		}
 		return val;
 	}
-
-	template<class Func>
-	double avgOverFishable(Func get_property){
-		double mu = 0, n = 0;
-		for (auto& f : fishes){
-			if (f.isAlive && isFishable(f)){
-				mu += get_property(f); // f.naturalMortalityRate(temp) + double(f.isMature)*f.par.Mspawning;
-				n += 1;
-			}
-		} 
-		if (n == 0) return 0;
-		else return mu/n;
-	}
 	
 	public:
 	StockParams par;
 
 	Fish proto_fish;	           ///< Prototype fish. A copy of this fish is always used to initialize new fish in population.
 	std::vector<Fish> fishes;      ///< Vector of all fish in the population
-	double n = 5e6;	               ///< superfish size
+	double superfish_size = 5e6;	               ///< superfish size
 
 	public:
 	Stock(Fish f);
 
 	int readParams(std::string filename, bool verbose=false);
-	void init(int n, double temp);	// initialize stock with n individuals
+	
+	void init(int n, double t_init, double temp);	// initialize stock with n individuals
 
 	double calcSSB(double min_age = 0);
 	double calcTSB(double min_age = 0);
 	double calcMaturity(double min_age = 0);
     double calcAbundanceAtAge(int age);
 
-    /// @brief  Is this fish fishable?
-	/// @param f fish to test
-	/// @return true if fishable, false otherwise
-	bool isFishable(const Fish &f);
-
-	/// @brief Fishable biomass in the population
+	/// @brief Fishable biomass in the population from the perspective of a given fleet
+	/// @param fleet The fleet to check against
 	/// @return fishable biomass [kg]
-	double fishableBiomass();
+	/// In the NEA cod fishery, the minimum size limit is a property of the fishery, and all fleets 
+	/// follow the same limit - so it is possible to define a fleet-independent fishable biomass if it is 
+	/// simply all biomass above min size limit. However, in this code, the fishable biomass is fleet-dependent
+	/// because (a) min size limit could in-principle be different for each fleet, and (b) if fishable biomass 
+	/// is calculated using a more complex average rather than just everything above min-size limit, then it 
+	/// will strongly depend on the fleet selectivity curve parameters.
+	// double fishableBiomass(const Fleet& fleet);
 
 	/// @brief Calculate average maturity for each age class
 	/// @return A vector containing the average maturity rate for each age group, indexed by age
@@ -146,15 +139,6 @@ class Stock{
 	/// @return A vector containing the average natural mortality rate for each age group, indexed by age
 	std::vector<double> naturalMortByAge(double temp);
 
-	/// @brief Calculate average natural mortality rate over all fishable individuals
-	/// @param temp The current temperature affecting natural mortality rates.
-	/// @return average natural mortality rate
-	double naturalMortFishable(double temp);
-
-	/// @brief Calculate average maturity over fishable population
-	/// @return A vector containing the average maturity rate for each age group, indexed by age
-	double maturityFishable();
-
 	/// @brief Average an age-dependent quantity Q over the given age range, excluding missing values
 	/// @param Qa     vector containing the age-dependent quantity Q. The vector is indexed by age, so Q[0] will be a garbage value
 	/// @param amin   minimum age (inclusive)
@@ -163,7 +147,11 @@ class Stock{
 	/// @return averaged quantity
 	double avgOverAges(const std::vector<double>& Qa, int amin, int amax, double missing_value = -1e20);
 
-	std::vector<double> noFishingEquilibriate(double temp);	
+    std::vector<Fish> spawn(double ssb_now, double tsb_now, double temp, StockSummary &stock_summary);
+
+    void equilibriate_debug(double temp);
+
+    std::vector<double> noFishingEquilibriate(double temp);	
 
 	int nfish();
 	void summarize();

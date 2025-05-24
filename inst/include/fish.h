@@ -210,7 +210,7 @@ class Fish{
 	/// @brief Calculate the instantaneous matural mortality rate
 	/// @param temp The environmental temperature.
 	/// @return The natural mortality rate of the fish.
-	double naturalMortalityRate(double temp);
+	double naturalMortalityRate(double temp) const;
 
 	/// @brief Calculate the number of surviving recruits produced based on egg production and offspring survival until recruitment.
 	/// @param ssb Total spawning stock biomass \f$S\f$ of the population (kg)

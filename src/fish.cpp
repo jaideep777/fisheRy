@@ -108,7 +108,7 @@ vector<double> Fish::get_traits(){
 ///                    \right) \left( \frac{T}{T_{\text{ref}}} \right)^{c_T}
 /// \f]
 /// @throws std::runtime_error If an invalid mortality model is specified.
-double Fish::naturalMortalityRate(double temp){
+double Fish::naturalMortalityRate(double temp) const{
 	double rate;
 	if (age > par.amax) return 1e20; // FIXME: use inf
 	else {

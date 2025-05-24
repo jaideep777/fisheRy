@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <cassert>
+#include "population.h"
 
 inline double runif(double rmin=0, double rmax=1){
 	double r = double(rand())/RAND_MAX; 
@@ -163,6 +164,7 @@ void Fleet::readParams(std::string params_file, bool verbose){
 	par.initFromFile(params_file, verbose);
 }
 
+
 void Fleet::set_harvestProportion(double _h){
 	h = _h;
 	Fc = -log(1-_h);
@@ -192,20 +194,77 @@ double Fleet::fishingMortalityRef(double len){
 }
 
 
-void Fleet::init_chi(Population &pop, double Fc, double rho, double temp){
-	double Fref_ref = pop.fishingMortRefFishable();
-	double Mort_ref = pop.naturalMortFishable(temp);
-	double Mat_ref = pop.maturityFishable();
+bool Fleet::isFishable(const Fish &f){
+	return f.length >= par.F3;
+}
 
-	chi = (Fref_ref == 0)? 0 : Fc*(1-rho*Mat_ref)/Fref_ref;
-
-	double h = 1-exp(-Fc);
-	chi *= exp(chi0_scalar_slope*(h-0.5));
+/// This function computes the average per capita natural mortality rate over the fishable population.
+/// 
+/// \f[
+///   \mu = \frac{1}{N} \sum_{i} \left( \mu_i(T) + \mathbb{1}[\text{Mature}] \cdot M_\text{spawning} \right) \mathbb{1}[\text{fishbale}]
+/// \f]
+/// 
+/// If no fishable fish are present, the average is set to 0.
+/// 
+/// @see Fish::naturalMortalityRate, fishes
+double Fleet::naturalMortFishable(const Stock& stock, double temp){
+	return 
+	avgOverFishable(
+		[temp](const Fish& f){
+			return f.naturalMortalityRate(temp) + double(f.isMature)*f.par.Mspawning; // FIXME: Is it correct to include spawning mortality here?
+		},
+		stock
+	);
 }
 
 
-void Fleet::init_chi(double f_fgf){
-	chi = (Fref_fishable == 0)? 0 : Fc*f_fgf/Fref_fishable;
+/// This function computes the average per capita reference fishing mortality rate over the fishable population.
+/// 
+/// \f[
+///   \mu = \frac{1}{N} \sum_{i} F_\text{ref}(l_a) \mathbb{1}[\text{fishable}]
+/// \f]
+/// 
+/// If no fishable fish are present, the average is set to 0.
+/// 
+/// @see Fish::naturalMortalityRate, fishes
+double Fleet::fishingMortRefFishable(const Stock& stock){
+	return 
+	avgOverFishable(
+		[this](const Fish& f){
+			return fishingMortalityRef(f.length);
+		},
+		stock
+	);
+}
+
+
+/// This function computes the average maturity rate the fishable population.
+/// 
+/// \f[
+///   \mu = \frac{1}{N} \sum_{i} M(l_a) \mathbb{1}[\text{fishable}]
+/// \f]
+/// 
+/// If no fishable fish are present, the average is set to 0.
+/// 
+/// @see Fish::maturity, fishes
+double Fleet::maturityFishable(const Stock& stock){
+	return 
+	avgOverFishable(
+		[](const Fish& f){
+			return (f.isMature)? 1:0;
+		},
+		stock
+	);
+}
+
+
+void Fleet::init_chi(Stock &pop, double F_fgf, double temp){
+	double Fref_fishable = fishingMortRefFishable(pop);
+	double Mort_fishable = naturalMortFishable(pop, temp);
+
+	chi = (Fref_fishable == 0)? 0 : F_fgf/Fref_fishable;
+
+	double h = 1-exp(-F_fgf);
 	chi *= exp(chi0_scalar_slope*(h-0.5));
 }
 
