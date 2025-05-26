@@ -230,6 +230,7 @@ vector<double> Stock::equilibriate_debug(double temp){
 
 		double ssb = calcSSB(par.recruitmentAge);
 		double tsb = calcTSB(par.recruitmentAge);
+		double maturity = calcMaturity(par.recruitmentAge);
 
 		// 1. Maturation
 		for (auto& f: fishes) f.updateMaturity(temp);
@@ -262,7 +263,10 @@ vector<double> Stock::equilibriate_debug(double temp){
 		// 7. Calculate metrics for analysis
 		state_t.insert(state_t.end(), {
 			ssb, 
-			tsb, 
+			tsb,
+			maturity,
+			stock_summary.nrecruits_real,
+			stock_summary.factor_dr,
 			fishes.size()
 		});
 	}
