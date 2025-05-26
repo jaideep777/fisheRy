@@ -217,11 +217,12 @@ vector<Fish> Stock::spawn(double ssb_now, double tsb_now, double temp, StockSumm
 
 
 
-void Stock::equilibriate_debug(double temp){
+vector<double> Stock::equilibriate_debug(double temp){
 	// start with 1000 age-1 superfish created under the specified temperature
 	init(1000, 0, temp); 
 	StockSummary stock_summary;
 
+	std::vector<double> state_t;
 	// run 200 years of population dynamics
 	int nsteps = 200;
 	for (int t=0; t<nsteps; ++t){
@@ -257,8 +258,16 @@ void Stock::equilibriate_debug(double temp){
 
 		// 6. Finally, add recruits to population 
 		fishes.insert(fishes.end(), recruits.begin(), recruits.end());
+		
+		// 7. Calculate metrics for analysis
+		state_t.insert(state_t.end(), {
+			ssb, 
+			tsb, 
+			fishes.size()
+		});
 	}
 
+	return state_t;
 }
 
 
