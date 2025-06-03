@@ -217,7 +217,7 @@ vector<Fish> Stock::spawn(double ssb_now, double tsb_now, double temp, StockSumm
 
 
 
-vector<double> Stock::equilibriate_debug(double temp){
+vector<double> Stock::equilibriate_without_fishing(double temp){
 	// start with 1000 age-1 superfish created under the specified temperature
 	init(1000, 0, temp); 
 	StockSummary stock_summary;
@@ -249,25 +249,23 @@ vector<double> Stock::equilibriate_debug(double temp){
 			f.isAlive = f.isAlive && (runif() <= survival_prob);	// set the fish to die probabilistically, if not dead already.
 		}
 
-		// remove dead fish from population
+		// 6. remove dead fish from population
 		fishes.erase(std::remove_if(fishes.begin(), fishes.end(), [](Fish &f){return !f.isAlive;}), fishes.end());
 
-		// 5. Increment age and advance to new year
-		for (auto& f: fishes){
-			f.set_age(f.age+1);
-		}
+		// 7. Increment age and advance to new year
+		for (auto& f: fishes)  f.set_age(f.age+1);
 
-		// 6. Finally, add recruits to population 
+		// 8. Finally, add recruits to population 
 		fishes.insert(fishes.end(), recruits.begin(), recruits.end());
 		
-		// 7. Calculate metrics for analysis
+		// 9. Calculate metrics for analysis
 		state_t.insert(state_t.end(), {
 			ssb, 
 			tsb,
 			maturity,
 			stock_summary.nrecruits_real,
 			stock_summary.factor_dr,
-			fishes.size()
+			static_cast<double>(fishes.size())
 		});
 	}
 

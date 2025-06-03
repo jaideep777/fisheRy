@@ -149,7 +149,7 @@ class Stock{
 
     std::vector<Fish> spawn(double ssb_now, double tsb_now, double temp, StockSummary &stock_summary);
 
-    std::vector<double> equilibriate_debug(double temp);
+    std::vector<double> equilibriate_without_fishing(double temp);
 
     std::vector<double> noFishingEquilibriate(double temp);	
 

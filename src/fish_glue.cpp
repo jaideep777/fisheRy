@@ -263,7 +263,7 @@ RCPP_MODULE(population_module){
 		.method("get_state", &Stock::get_state)
 		.method("get_traits", &Stock::get_traits)
 
-		.method("equilibriate_debug", &Stock::equilibriate_debug)
+		.method("equilibriate_without_fishing", &Stock::equilibriate_without_fishing)
 		;
 }
 
@@ -277,6 +277,8 @@ RCPP_MODULE(fleet_module){
 		.constructor()
 		.method("initFromFile", &FleetParams::initFromFile) // Expose initFromFile
 		.method("print", &FleetParams::print)              // Expose print
+
+		.field("dsea", &FleetParams::dsea)
 	;
 
 	class_ <Fleet>("Fleet")
@@ -291,6 +293,8 @@ RCPP_MODULE(fleet_module){
 		.method("init_chi", &Fleet::init_chi) // modifies state: consider unexposing
 
 		.method("set_minSizeLimit", &Fleet::set_minSizeLimit)
+		.method("set_harvestProportion", &Fleet::set_harvestProportion)
+
 		.method("fishingMortalityRef", &Fleet::fishingMortalityRef)
 		.method("update_chi", &Fleet::update_chi)
 		.method("harvest_dry_run", &Fleet::harvest_dry_run)

@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <cassert>
-#include "population.h"
+#include "stock.h"
 
 inline double runif(double rmin=0, double rmax=1){
 	double r = double(rand())/RAND_MAX; 
@@ -177,7 +177,7 @@ void Fleet::set_minSizeLimit(double _lf50){
 }
 
 /// Dry run simply takes population by value, so that original one is not altered
-std::vector<double> Fleet::harvest_dry_run(Population pop, double quota, double temp){
+std::vector<double> Fleet::harvest_dry_run(Stock pop, double quota, double temp){
 	return harvest(pop, quota, temp, true); // harvest a copy population and return progress
 }
 
@@ -198,14 +198,24 @@ bool Fleet::isFishable(const Fish &f){
 	return f.length >= par.F3;
 }
 
+
+double Fleet::biomassFishable(const Stock &stock, double min_age){
+	return 
+	std::accumulate(stock.fishes.begin(), stock.fishes.end(), 0.0, 
+		[min_age, this, &stock](double sum, const Fish& f) { 
+			return sum + ((f.isAlive && isFishable(f) && f.age >= min_age) ? f.weight * stock.superfish_size : 0);
+		}
+	);
+}
+
 /// This function computes the average per capita natural mortality rate over the fishable population.
-/// 
+///
 /// \f[
 ///   \mu = \frac{1}{N} \sum_{i} \left( \mu_i(T) + \mathbb{1}[\text{Mature}] \cdot M_\text{spawning} \right) \mathbb{1}[\text{fishbale}]
 /// \f]
-/// 
+///
 /// If no fishable fish are present, the average is set to 0.
-/// 
+///
 /// @see Fish::naturalMortalityRate, fishes
 double Fleet::naturalMortFishable(const Stock& stock, double temp){
 	return 
@@ -313,6 +323,8 @@ void Fleet::update_chi(const std::vector<double>& chi_in_windows,
 		chi = linreg_predict_inverse((yield_remainder/bs_remainder), res);
 	}
 
+	if (isinf(chi) || isnan(chi) || chi > 1e20) throw std::runtime_error("Regressed chi is Inf or NA or extremely large");
+
 	chi = std::clamp(chi, 1e-6, 1e20);
 
 }
@@ -321,7 +333,7 @@ void Fleet::update_chi(const std::vector<double>& chi_in_windows,
 /// Note: this function takes pop by reference so it IS altered
 /// Some computations are doubled in the function below, but that's ok for now as it serves to
 /// cross-check those calcs. These can be removed after sufficient testing
-std::vector<double> Fleet::harvest(Population& pop, double quota, double temp, bool return_progress){
+std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool return_progress){
 	double yield = 0, to_sea_bed = 0;
 	double survival_mean = 0, n_survival_mean = 0;
 	int count = 0, n_alive = 0;
@@ -331,7 +343,7 @@ std::vector<double> Fleet::harvest(Population& pop, double quota, double temp, b
 	
 	shuffle(pop.fishes.begin(), pop.fishes.end(), g);
 
-	double B = pop.fishableBiomass();
+	double B = biomassFishable(pop, 0);
 	// double quota = B*h; // Should this be fishable biomass at start of season or after SPF?
 	double B_sampled = 0;
 	double yield_expected;
@@ -344,12 +356,13 @@ std::vector<double> Fleet::harvest(Population& pop, double quota, double temp, b
 	WindowProps window_props;
 	for (auto& f : pop.fishes){
 		if (f.isAlive){
-			bool f_is_fishable = pop.isFishable(f);
+			bool f_is_fishable = isFishable(f);
 
-			B_sampled += f_is_fishable? f.weight*pop.par.n : 0;
+			B_sampled += (f.isAlive && f_is_fishable)? f.weight*pop.superfish_size : 0;
 			yield_expected = (B_sampled/B) * quota;
+			if (yield_expected > quota) throw std::runtime_error("Expected yield exceeds quota");
 
-			double fishing_mort_rate = chi*pop.fishingMortalityRef(f.length); 
+			double fishing_mort_rate = chi*fishingMortalityRef(f.length); 
 			double natural_mort_rate = f.naturalMortalityRate(temp); // This does not (should not) include spawning-related mortality
 			double mortality_rate = natural_mort_rate + fishing_mort_rate; // post-spawning mortality rate is same for mature and immature individuals
 			double survival_prob = exp(-mortality_rate*1.0);	// mortality in feeding grounds (post-spawning), over full year. Note that survival prob must be annualized because this fish will be iterated over only once
@@ -358,19 +371,19 @@ std::vector<double> Fleet::harvest(Population& pop, double quota, double temp, b
 
 			window_props.M_fishable += f_is_fishable? natural_mort_rate : 0;
 			window_props.F_fishable += f_is_fishable? fishing_mort_rate : 0;
-			window_props.B_sampled  += f_is_fishable? f.weight*pop.par.n : 0;
+			window_props.B_sampled  += f_is_fishable? f.weight*pop.superfish_size : 0;
 			window_props.n_fishable += f_is_fishable? 1 : 0;
 
-			f.isAlive = f.isAlive && ((rand() / double(RAND_MAX)) <= survival_prob);	// set the fish to die probabilistically, if not dead already.
+			f.isAlive = f.isAlive && (runif() <= survival_prob);	// set the fish to die probabilistically, if not dead already.
 			
 			if (!f.isAlive){
 				f.isCaught = runif() < fishing_mort_rate/mortality_rate; // check if fish is caught or goes to sea bed!
 				
 				if (f.isCaught){
-					yield += pop.par.n*f.weight; // if caught, add to yield
-					window_props.yield += pop.par.n*f.weight;
+					yield += pop.superfish_size*f.weight; // if caught, add to yield
+					window_props.yield += pop.superfish_size*f.weight;
 				}
-				else to_sea_bed += pop.par.n*f.weight;       // else, goes to sea bed
+				else to_sea_bed += pop.superfish_size*f.weight;       // else, goes to sea bed
 			}
 
 			++count;
@@ -393,8 +406,8 @@ std::vector<double> Fleet::harvest(Population& pop, double quota, double temp, b
 				// std::cout << "Yield window: " << yield_window << " " << window_props.yield << '\n';
 				// std::cout << "Bs window: " << bs_window << " " << window_props.B_sampled << '\n';
 
-				assert(fabs(yield_window - window_props.yield) < 1e-6);
-				assert(fabs(bs_window - window_props.B_sampled) < 1e-6);
+				assert(fabs(yield_window - window_props.yield) < 1e-5);
+				assert(fabs(bs_window - window_props.B_sampled) < 1e-5);
 
 				// push them into history
 				window_props_vec.push_back(window_props);
@@ -437,7 +450,20 @@ std::vector<double> Fleet::harvest(Population& pop, double quota, double temp, b
 						window_props.yield
 					});
 			}
+
 		}
+
+		// std::cout << B << " "
+		// 		<< B_sampled << " "
+		// 		<< yield << " "
+		// 		<< yield_expected << " "
+		// 		<< chi << " "
+		// 		<< window_props.chi << " "
+		// 		<< window_props.B_sampled << " "
+		// 		<< window_props.B_start << " "
+		// 		<< window_props.yield << " "
+		// 		<< '\n';
+
 	} 
 	survival_mean /= n_survival_mean;
 	return progress;

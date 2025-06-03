@@ -1,7 +1,6 @@
 #ifndef FISHERY_FLEET_H
 #define FISHERY_FLEET_H
 
-#include "population.h"
 #include "stock.h"
 
 class WindowProps{
@@ -101,6 +100,7 @@ class Fleet{
 
 	/// @group stuff calculated over fishable individuals
 	/// @brief Calculate natural mortality, maturity, and fishing mortality rates averaged over fishable individuals of Stock stock	
+	double biomassFishable(const Stock &stock, double min_age);
 	double naturalMortFishable(const Stock &stock, double temp);
 	double maturityFishable(const Stock &stock);
 	double fishingMortRefFishable(const Stock& stock);
@@ -117,8 +117,8 @@ class Fleet{
 					const std::vector<double>& bs_in_windows,
 					double yield_remainder, double bs_remainder);
 
-	std::vector<double> harvest_dry_run(Population pop, double quota, double temp);
-	std::vector<double> harvest(Population& pop, double quota, double temp, bool return_progress = false);
+	std::vector<double> harvest_dry_run(Stock pop, double quota, double temp);
+	std::vector<double> harvest(Stock& pop, double quota, double temp, bool return_progress = false);
 
 	double effort_constantC(double q, double b, double K);
 	double effort_constantF(double q, double b, double K);
