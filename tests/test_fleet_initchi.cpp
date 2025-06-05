@@ -34,23 +34,21 @@ int main(){
 	double ssb_nf = pop.calcSSB(pop.par.recruitmentAge);
 	cout << "SSB at equilibrium without fishing: " << ssb_nf << " kg\n";
 
-	double h = 0.99;
-	double F_fgf = -log(1-h);
-	double quota = h*ssb_nf;
-
 	Fleet fleet;
 	fleet.readParams(params_file_fleet, true);
 	fleet.par.print();
 	fleet.set_harvestProportion(0.99);
 
 	fleet.debug = true;
-	fleet.control_model = "linear";
+	fleet.control_model = "exp";
 	fleet.chi = 100;
-	fleet.init_chi(pop, F_fgf, 5.61);
 
-	cout << "Fleet initial chi = " << fleet.chi << endl;
-
-	auto out = fleet.harvest_dry_run(pop, quota, 5.61);
+	cout << "Fleet initial chi = \n";
+	for(double h = 0.0; h <= 0.99; h += 0.04){
+		double F_fgf = -log(1-h);	
+		fleet.init_chi(pop, F_fgf, 5.61);
+		cout << h << "\t" << fleet.chi << endl;
+	}
 
 	return 0;
 }

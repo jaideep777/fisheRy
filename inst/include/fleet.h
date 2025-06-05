@@ -83,7 +83,7 @@ class Fleet{
 	std::string control_model = "exp";
 	double window_dt = 0.1; // window length [years]
 
-	double Fref_fishable = 0; ///< Reference fishing mortality rate averaged over fishable individuals
+	bool debug = false; // debug mode, prints additional info
 
 	public:
 
@@ -95,16 +95,20 @@ class Fleet{
 	void set_minSizeLimit(double _lf50);
 
 	double fishingMortalityRef(double len);
+	double fishingMortality(double len);
 
 	bool isFishable(const Fish &f);
 
-	/// @group stuff calculated over fishable individuals
-	/// @brief Calculate natural mortality, maturity, and fishing mortality rates averaged over fishable individuals of Stock stock	
+    double fishability(double length);
+
+	/// @brief 
+	/// @param stock 
+	/// @param min_age 
+	/// @return sum(w * Fref) over fish below and above lmin
+	std::vector<double> cummulativeFishingMortalityRef(const Stock &stock, double min_age = 0);
+
+    /// @brief Calculate natural mortality, maturity, and fishing mortality rates averaged over fishable individuals of Stock stock	
 	double biomassFishable(const Stock &stock, double min_age);
-	double naturalMortFishable(const Stock &stock, double temp);
-	double maturityFishable(const Stock &stock);
-	double fishingMortRefFishable(const Stock& stock);
-	/// @}
 
 	/// @brief         Initialize chi, the fishing mortality scalar
 	/// @param pop     Stock to fish
@@ -126,12 +130,12 @@ class Fleet{
 	private:
 
 	template<class Func>
-	double avgOverFishable(Func get_property, const Stock &stock){
+	double avgOverFishable(Func get_property, const Stock &stock, double min_age = 0){
 		double mu = 0, n = 0;
 		for (auto& f : stock.fishes){
-			if (f.isAlive && isFishable(f)){
-				mu += get_property(f); 
-				n += 1;
+			if (f.isAlive && f.age >= min_age){
+				mu += fishability(f.length) * get_property(f); 
+				n += fishability(f.length);
 			}
 		} 
 		if (n == 0) return 0;

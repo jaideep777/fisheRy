@@ -251,6 +251,7 @@ res |>
   labs(x="Harvest rate (h)", y="Error (%)", title="Error distribution (Exp model)")
 
 res |> 
+  
   ggplot(aes(x=effort_c, y=effort_f)) +
   geom_point()+
   geom_abline(slope = 1, intercept = 0, col="red")
