@@ -151,7 +151,7 @@ class Stock{
 
     std::vector<double> equilibriate_without_fishing(double temp);
 
-    std::vector<double> noFishingEquilibriate(double temp);	
+    // std::vector<double> noFishingEquilibriate(double temp);	
 
 	int nfish();
 	void summarize();

@@ -60,8 +60,13 @@ class FleetParams{
 	// Share in a multi-fleet fishery
 	double quota;      // Quota assigned to this fleet (fraction of total harvest among all fleets)
 
+	// control model
+	std::string control_model;
+
 	// technical parameters
 	double max_chi; ///< Maximum value of chi, the fishing mortality scalar
+	double chi0_scalar_slope;
+	double window_dt; // window length [years]
 
 	public:
 	void initFromFile(std::string params_file, bool verbose=false);
@@ -83,9 +88,6 @@ class Fleet{
 
 	double chi = 1;
 	// FIXME: below can be moved to FleetParams
-	double chi0_scalar_slope = 1.5;
-	std::string control_model = "exp";
-	double window_dt = 0.1; // window length [years]
 
 	bool debug = false; // debug mode, prints additional info
 

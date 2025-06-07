@@ -68,7 +68,7 @@ matplot(cbind(v$ssb/1e9, res$summaries$SSB[1:200]/1e9), ylab="SSB (MT)", xlab="Y
 fleet = new(Fleet)
 fleet$readParams(params_file_fleet, F)
 fleet$par$print()
-fleet$control_model = "linear"
+fleet$par$control_model = "linear"
 fleet$chi = 100
 
 print(

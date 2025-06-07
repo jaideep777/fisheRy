@@ -114,6 +114,9 @@ void FleetParams::initFromFile(std::string params_file, bool verbose){
 	READ_PAR(quota);
 
 	READ_PAR(max_chi);
+	READ_PAR(chi0_scalar_slope);
+	READ_PAR(window_dt);
+	control_model = I.get<std::string>("fleet", "control_model");
 
 	#undef READ_PAR
 
@@ -159,6 +162,9 @@ void FleetParams::print(){
 	PRINT_PAR(quota);
 
 	PRINT_PAR(max_chi);
+	PRINT_PAR(control_model);
+	PRINT_PAR(chi0_scalar_slope);
+	PRINT_PAR(window_dt);
 
 	#undef PRINT_PAR
 }
@@ -257,7 +263,7 @@ void Fleet::init_chi(Stock &pop, double F_fgf, double temp){
 	else chi = (wsum*F_fgf - Fref_below_lmin)/Fref_above_lmin;
 
 	double h = 1-exp(-F_fgf);
-	chi *= exp(chi0_scalar_slope*(h-0.5));
+	chi *= exp(par.chi0_scalar_slope*(h-0.5));
 }
 
 
@@ -268,7 +274,7 @@ void Fleet::update_chi(const std::vector<double>& chi_in_windows,
 	// 3a. calibrate yield model (y = Bs * f(X))
 	linregresult res;
 	std::vector<double> y(yield_in_windows.size());
-	if (control_model == "exp"){
+	if (par.control_model == "exp"){
 		// exponential model: y = Bs (1-e^-kX) --> -log(1-y/Bs) = kX
 		std::transform(yield_in_windows.begin(), yield_in_windows.end(),
 						bs_in_windows.begin(), y.begin(),
@@ -280,7 +286,7 @@ void Fleet::update_chi(const std::vector<double>& chi_in_windows,
 
 		res = linreg0(chi_in_windows, y, debug);
 	}
-	else if (control_model == "linear"){
+	else if (par.control_model == "linear"){
 		// linear model: y = Bs (k X) --> y/Bs = kX
 		std::transform(yield_in_windows.begin(), yield_in_windows.end(),
 						bs_in_windows.begin(), y.begin(),
@@ -291,17 +297,17 @@ void Fleet::update_chi(const std::vector<double>& chi_in_windows,
 		res = linreg0(chi_in_windows, y, debug);
 	}
 	else {
-		// throw std::runtime_error("Unsopported control model");
+		throw std::runtime_error("Unsopported control model");
 	}
 
 	// 3b. predict new chi
-	if (control_model == "exp"){
+	if (par.control_model == "exp"){
 		// exponential model: y = Bs (1-e^-kX)
 		// std::cout << "using exp model" << std::endl;
 		if (yield_remainder >= bs_remainder) chi = 25;
 		else chi = linreg_predict_inverse(-log(1 - (yield_remainder/bs_remainder)), res);
 	}
-	else if (control_model == "linear"){
+	else if (par.control_model == "linear"){
 		// linear model: y = Bs k X
 		// std::cout << "using linear model" << std::endl;
 		chi = linreg_predict_inverse((yield_remainder/bs_remainder), res);
@@ -325,7 +331,7 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 	// count number of alive fish to calculate per-window samples
 	double n_alive = 0;
 	for (auto& f : pop.fishes) n_alive += f.isAlive? 1:0;
-	int window_n = std::ceil(window_dt*n_alive);
+	int window_n = std::ceil(par.window_dt*n_alive);
 	
 	// shuffle fish so that all windows are statistically similar
 	shuffle(pop.fishes.begin(), pop.fishes.end(), g);
@@ -400,7 +406,7 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 
 				window_props.chi = chi;
 				window_props.B_start = B - yield - to_sea_bed;
-				window_props.C_rate = window_props.yield/window_dt; // catch rate = annualized yield = yield per year
+				window_props.C_rate = window_props.yield/par.window_dt; // catch rate = annualized yield = yield per year
 				window_props.M_fishable /= window_props.n_fishable; 
 				window_props.F_fishable /= window_props.n_fishable; 
 
@@ -483,9 +489,9 @@ double Fleet::effort_constantC(double q, double b, double K){
 		double N0 = w.B_start / K;
 		double C  = w.C_rate / K;
 		double M  = w.M_fishable;
-		double t = window_dt/2;
+		double t = par.window_dt/2;
 		double effort_t = C/q/(pow( (N0+C/M)*exp(-M*t) - C/M, b));
-		effort += effort_t*window_dt;
+		effort += effort_t*par.window_dt;
 	}
 	return effort;
 }
@@ -496,9 +502,9 @@ double Fleet::effort_constantF(double q, double b, double K){
 		double N0 = w.B_start / K;
 		double F  = w.F_fishable;
 		double M  = w.M_fishable;
-		double t = window_dt/2;
+		double t = par.window_dt/2;
 		double effort_t = F/q/(pow( N0*exp(-(F+M)*t), b-1));
-		effort += effort_t*window_dt;
+		effort += effort_t*par.window_dt;
 	}
 	return effort;
 }

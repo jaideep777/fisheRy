@@ -278,14 +278,14 @@ RCPP_MODULE(fleet_module){
 		.method("initFromFile", &FleetParams::initFromFile) // Expose initFromFile
 		.method("print", &FleetParams::print)              // Expose print
 
+		.field("chi0_scalar_slope", &FleetParams::chi0_scalar_slope)
+		.field("control_model", &FleetParams::control_model)
 		.field("dsea", &FleetParams::dsea)
 	;
 
 	class_ <Fleet>("Fleet")
 		.constructor()
 		.field("chi", &Fleet::chi)
-		.field("chi0_scalar_slope", &Fleet::chi0_scalar_slope)
-		.field("control_model", &Fleet::control_model)
 		.field("par", &Fleet::par)
 
 		.method("readParams", &Fleet::readParams) 

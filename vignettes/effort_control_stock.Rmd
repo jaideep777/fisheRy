@@ -96,7 +96,7 @@ $Y/B_s = k \chi$
 fleet = new(Fleet)
 fleet$readParams(params_file_fleet, F)
 fleet$par$print()
-fleet$control_model = "linear"
+fleet$par$control_model = "linear"
 fleet$chi = 100
 fleet$init_chi(pop, F_fgf, 5.61)
 
@@ -129,7 +129,7 @@ Try one more time
 fleet = new(Fleet)
 fleet$readParams(params_file_fleet, F)
 fleet$par$print()
-fleet$control_model = "linear"
+fleet$par$control_model = "linear"
 fleet$chi = 100
 fleet$init_chi(pop, F_fgf, 5.61)
 
@@ -164,7 +164,7 @@ Using the exponential control model
 fleet = new(Fleet)
 fleet$readParams(params_file_fleet, F)
 fleet$par$print()
-fleet$control_model = "exp"
+fleet$par$control_model = "exp"
 fleet$chi = 100
 fleet$init_chi(pop, F_fgf, 5.61)
 
@@ -198,8 +198,8 @@ pc_error = function(i, mode, h, slope){
 
   fleet = new(Fleet)
   fleet$readParams(params_file_fleet, F)
-  fleet$control_model = mode
-  fleet$chi0_scalar_slope = slope
+  fleet$par$control_model = mode
+  fleet$par$chi0_scalar_slope = slope
   fleet$chi = 100
   fleet$init_chi(pop, F_fgf, 5.61)
 

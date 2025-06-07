@@ -46,7 +46,6 @@ int main(){
 	// fleet.set_harvestProportion(0.99);
 
 	fleet.debug = true;
-	fleet.control_model = "exp";
 	fleet.chi = 100;
 	fleet.init_chi(pop, F_fgf, 5.61);
 
