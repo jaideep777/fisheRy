@@ -53,13 +53,10 @@ class Fishery {
 	int readEnvironmentFile(std::string filename);
 	void updateEnv(double t);
 	void init(int n, double temp);
-	void noFishingEquilibriate(double temp);
 
 	// Fishery functions
 	std::vector<double> equilibriateNaturalPopulation(double temp, double _n);
 	void addFleet(std::string params_file, bool verbose = false);
-	std::vector<double> harvest();
-	std::vector<double> harvest_dry_run();
 
 	std::vector<double> update(double temp);
 };

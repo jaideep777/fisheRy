@@ -293,7 +293,7 @@ RCPP_MODULE(fleet_module){
 		.method("init_chi", &Fleet::init_chi) // modifies state: consider unexposing
 
 		.method("set_minSizeLimit", &Fleet::set_minSizeLimit)
-		.method("set_harvestProportion", &Fleet::set_harvestProportion)
+		// .method("set_harvestProportion", &Fleet::set_harvestProportion)
 
 		.method("fishability", &Fleet::fishability)
 		.method("fishingMortalityRef", &Fleet::fishingMortalityRef)

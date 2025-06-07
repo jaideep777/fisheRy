@@ -6,6 +6,8 @@ using namespace std;
 
 int main(){
 
+	srand(0);
+
 	string params_file = "params/cod_params.ini";
 	string params_file_fleet = "params/fleet_1_params.ini";
 
@@ -41,16 +43,23 @@ int main(){
 	Fleet fleet;
 	fleet.readParams(params_file_fleet, true);
 	fleet.par.print();
-	fleet.set_harvestProportion(0.99);
+	// fleet.set_harvestProportion(0.99);
 
 	fleet.debug = true;
-	fleet.control_model = "linear";
+	fleet.control_model = "exp";
 	fleet.chi = 100;
 	fleet.init_chi(pop, F_fgf, 5.61);
 
 	cout << "Fleet initial chi = " << fleet.chi << endl;
 
 	auto out = fleet.harvest_dry_run(pop, quota, 5.61);
+
+	double n = out.size();
+	cout << "Yield expected = " << out[n-6] << " kg\n";
+	cout << "Yield          = " << out[n-7] << " kg\n";
+	
+	double yield_error = (out[n-6] - out[n-7])/out[n-7]*100;
+	cout << "Yield error    = " << yield_error << "%\n";
 
 	return 0;
 }

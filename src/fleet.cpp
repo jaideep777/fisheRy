@@ -76,7 +76,8 @@ void FleetParams::initFromFile(std::string params_file, bool verbose){
 	#define READ_PAR(x) x = I.get<double>("fleet", #x)
 
 	// get status quo lmin
-	READ_PAR(lmin_sq);
+	READ_PAR(lmin);
+	lmin_sq = lmin;
 
 	// management / fishing selectivity parameters at status quo lmin
 	READ_PAR(F1);
@@ -112,6 +113,8 @@ void FleetParams::initFromFile(std::string params_file, bool verbose){
 	// Fractional quota assigned to this fleet
 	READ_PAR(quota);
 
+	READ_PAR(max_chi);
+
 	#undef READ_PAR
 
 }
@@ -120,6 +123,7 @@ void FleetParams::print(){
 	#define PRINT_PAR(x) std::cout << #x << " = " << x << "\n"
 
 	// status quo lmin
+	PRINT_PAR(lmin);
 	PRINT_PAR(lmin_sq);
 
 	// management / fishing selectivity
@@ -154,9 +158,10 @@ void FleetParams::print(){
 
 	PRINT_PAR(quota);
 
+	PRINT_PAR(max_chi);
+
 	#undef PRINT_PAR
 }
-
 
 
 Fleet::Fleet() : g(rd()){
@@ -167,15 +172,17 @@ void Fleet::readParams(std::string params_file, bool verbose){
 }
 
 
-void Fleet::set_harvestProportion(double _h){
-	h = _h;
-	Fc = -log(1-_h);
-}
+// void Fleet::set_harvestProportion(double _h){
+// 	h = _h;
+// 	Fc = -log(1-_h);
+// }
 
 void Fleet::set_minSizeLimit(double _lf50){
 	double dl = _lf50 - par.lmin_sq;
-	par.F3 = par.F3_sq + dl;
-	par.F5 = par.F5_sq + dl;
+
+	par.lmin = par.lmin_sq + dl;
+	par.F3   = par.F3_sq + dl;
+	par.F5   = par.F5_sq + dl;
 }
 
 /// Dry run simply takes population by value, so that original one is not altered
@@ -196,26 +203,21 @@ double Fleet::fishingMortalityRef(double len){
 }
 
 double Fleet::fishingMortality(double len){
-	double scalar = (len < par.F3)? fmin(1, chi) : chi;
+	double scalar = (len < par.lmin)? fmin(1, chi) : chi;
 	return scalar * fishingMortalityRef(len);
 }
 
 
-// double Fleet::fishingMortality(double len){
-// 	if (chi > 1) return ((len < par.F3)? 1 : chi) * fishingMortalityRef(len);
-// 	else return chi * fishingMortalityRef(len);
+// bool Fleet::isFishable(const Fish &f){
+// 	return f.length >= par.lmin;
 // }
-
-
-bool Fleet::isFishable(const Fish &f){
-	return f.length >= par.F3;
-}
 
 
 double Fleet::fishability(double length){
 	// Above minimum size limit, fishability = 1; below min size limit, fishability = probability of death
-	return (length > par.F3)? 1.0 : 1-exp(-fishingMortalityRef(length)); 
+	return (length > par.lmin)? 1.0 : 1-exp(-fishingMortalityRef(length)); 
 }
+
 
 std::vector<double> Fleet::cummulativeFishingMortalityRef(const Stock &stock, double min_age){
 	double wF_below_lmin = 0, wF_above_lmin = 0, w_sum = 0;
@@ -224,7 +226,7 @@ std::vector<double> Fleet::cummulativeFishingMortalityRef(const Stock &stock, do
 
 		double w = fishability(f.length);
 		w_sum += w;
-		if (f.length < par.F3) wF_below_lmin += w * fishingMortalityRef(f.length);
+		if (f.length < par.lmin) wF_below_lmin += w * fishingMortalityRef(f.length);
 		else wF_above_lmin += w * fishingMortalityRef(f.length);
 	}
 	return {wF_below_lmin, wF_above_lmin, w_sum, (wF_below_lmin+wF_above_lmin)/(w_sum+1e-20)};
@@ -307,7 +309,7 @@ void Fleet::update_chi(const std::vector<double>& chi_in_windows,
 
 	// if (std::isinf(chi) || std::isnan(chi) || chi > 1e20) throw std::runtime_error("Regressed chi is Inf or NA or extremely large");
 
-	chi = std::clamp(chi, 1e-6, 1e20);
+	chi = std::clamp(chi, 1e-6, par.max_chi);
 
 }
 
@@ -318,10 +320,10 @@ void Fleet::update_chi(const std::vector<double>& chi_in_windows,
 std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool return_progress){
 	double yield = 0, to_sea_bed = 0;
 	double survival_mean = 0, n_survival_mean = 0;
-	int count = 0, n_alive = 0;
 	window_props_vec.clear(); // clear old data in windows 
 
 	// count number of alive fish to calculate per-window samples
+	double n_alive = 0;
 	for (auto& f : pop.fishes) n_alive += f.isAlive? 1:0;
 	int window_n = std::ceil(window_dt*n_alive);
 	
@@ -351,6 +353,7 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 	double yield_prev = 0, bs_prev = 0;
 	int windows_sampled = 0;
 	WindowProps window_props;
+	int count = 0;
 	for (auto& f : pop.fishes){
 		if (f.isAlive){
 			double fishability_f = fishability(f.length);
@@ -386,7 +389,7 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 
 			++count;
 
-			if (count >= window_n){ 
+			if (count >= window_n){ // update chi, but not if most fish have already been sampled
 				count = 0;
 				++windows_sampled;
 
@@ -401,12 +404,16 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 				window_props.M_fishable /= window_props.n_fishable; 
 				window_props.F_fishable /= window_props.n_fishable; 
 
-				// std::cout << "Yield window: " << yield_window << " " << window_props.yield << '\n';
-				// std::cout << "Bs window: " << bs_window << " " << window_props.B_sampled << std::endl;
+				if (debug){
+					std::cout << "Yield window: " << yield_window << " " << window_props.yield << '\n';
+					std::cout << "Bs window: " << bs_window << " " << window_props.B_sampled << std::endl;
+				}
 
-				assert(fabs(1-yield_window/(window_props.yield+1e-20)) < 1e-5);
-				assert(fabs(1-bs_window/(window_props.B_sampled+1e-20)) < 1e-5);
-
+				if (fabs(1-yield_window/(window_props.yield+1e-20)) > 1e-5 && fabs(yield_window-window_props.yield) > 1e-5) 
+					throw std::runtime_error("Yield in window_props does not match yield_window");
+				if (fabs(1-bs_window/(window_props.B_sampled+1e-20)) > 1e-5 && fabs(bs_window-window_props.B_sampled) > 1e-5) 
+					throw std::runtime_error("Yield or B_sampled in window_props does not match yield_window or bs_window");
+				
 				// push them into history
 				window_props_vec.push_back(window_props);
 				yield_in_windows.push_back(window_props.yield);
@@ -425,7 +432,7 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 				double yield_remainder = fmax(quota - yield, 0);
 
 				// update chi once yield goes above 0. This condition is to prevent degenerate points in regression
-				if (yield > 0){
+				if (yield > 0 && window_props.n_fishable > 1){
 					update_chi(chi_in_windows, yield_in_windows, bs_in_windows, yield_remainder, bs_remainder);
 				}
 
@@ -453,15 +460,15 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 
 		if (debug){
 			std::cout 
-				<< B << " "
-				<< B_sampled << " "
-				<< yield << " "
-				<< yield_expected << " "
+				<< B/1e9 << " "
+				<< B_sampled/1e9 << " "
+				<< yield/1e9 << " "
+				<< yield_expected/1e9 << " "
 				<< chi << " "
 				<< window_props.chi << " "
-				<< window_props.B_sampled << " "
-				<< window_props.B_start << " "
-				<< window_props.yield << " "
+				<< window_props.B_sampled/1e9 << " "
+				<< window_props.B_start/1e9 << " "
+				<< window_props.yield/1e9 << " "
 				<< std::endl;
 		}
 	} 

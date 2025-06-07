@@ -30,6 +30,7 @@ class FleetParams{
 	double F4;
 	double F5;
 	double F6;
+	double lmin;
 
 	// double sf; // = 0.1222;	// steepness of selectivity curve
 	// double lf50; // = 45; //61.4806;  // threshold fish length
@@ -59,6 +60,9 @@ class FleetParams{
 	// Share in a multi-fleet fishery
 	double quota;      // Quota assigned to this fleet (fraction of total harvest among all fleets)
 
+	// technical parameters
+	double max_chi; ///< Maximum value of chi, the fishing mortality scalar
+
 	public:
 	void initFromFile(std::string params_file, bool verbose=false);
 	void print();
@@ -69,8 +73,8 @@ class Fleet{
 	std::random_device rd;
 	std::mt19937 g;
 	
-	double h;
-	double Fc;
+	// double h;
+	// double Fc;
 
 	public:
 	FleetParams par;
@@ -91,13 +95,13 @@ class Fleet{
 
 	void readParams(std::string params_file, bool verbose=false);
 
-	void set_harvestProportion(double _h);
+	// void set_harvestProportion(double _h);
 	void set_minSizeLimit(double _lf50);
 
 	double fishingMortalityRef(double len);
 	double fishingMortality(double len);
 
-	bool isFishable(const Fish &f);
+	// bool isFishable(const Fish &f);
 
     double fishability(double length);
 
