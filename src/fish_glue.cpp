@@ -315,32 +315,36 @@ RCPP_EXPOSED_CLASS(Stock);
 // RCPP_EXPOSED_CLASS(FisheryParams);
 
 RCPP_MODULE(simulator_module){
-    // class_ <FisheryParams>("FisheryParams")
-    //     .constructor()
-    //     .field("rho", &FisheryParams::rho)
-    //     .field("f_spf_before", &FisheryParams::f_spf_before)
-    //     .method("print", &FisheryParams::print)
-    // ;
+    class_ <FisheryParams>("FisheryParams")
+        .constructor()
+        .field("rho", &FisheryParams::rho)
+        .field("f_spf_before", &FisheryParams::f_spf_before)
+        .method("print", &FisheryParams::print)
+    ;
 
-    // class_ <Fishery>("Fishery")
-    //     .constructor<std::string, Fish>()
-    //     .field("par", &Fishery::par)
-    //     .field("pop", &Fishery::pop) // Use updated getter and setter
+    class_ <Fishery>("Fishery")
+        .constructor<std::string, Fish>()
+        .field("par", &Fishery::par)
+        .field("pop", &Fishery::pop) // Use updated getter and setter
 
-    //     // Wrappers for population functions exposed from Fishery because they modify population state
-    //     .method("equilibriateNaturalPopulation", &Fishery::equilibriateNaturalPopulation)
-    //     .method("init", &Fishery::init)
-    //     .method("readParams", &Fishery::readParams)
-    //     .method("set_superFishSize", &Fishery::set_superFishSize)
-    //     .method("readEnvironmentFile", &Fishery::readEnvironmentFile)
-    //     .method("updateEnv", &Fishery::updateEnv)
-    //     .method("set_harvestProp", &Fishery::set_harvestProp)
-    //     .method("set_minSizeLimit", &Fishery::set_minSizeLimit)
-    //     .method("set_traitVariances", &Fishery::set_traitVariances)
-    //     .method("noFishingEquilibriate", &Fishery::noFishingEquilibriate)
+        // Wrappers for population functions exposed from Fishery because they modify population state
+        .method("set_superFishSize", &Fishery::set_superFishSize)
+        .method("readEnvironmentFile", &Fishery::readEnvironmentFile)
+        .method("updateEnv", &Fishery::updateEnv)
 
-    //     .method("update", &Fishery::update)
-    // ;
+		// core Fishery functions
+		.method("addFleet", &Fishery::addFleet)
+		.method("calc_quota", &Fishery::calc_quota)
+		.method("equilibriateNaturalPopulation", &Fishery::equilibriateNaturalPopulation)
+        .method("init", &Fishery::init)
+        .method("readParams", &Fishery::readParams)
+        .method("set_harvestProp", &Fishery::set_harvestProp)
+        .method("set_minSizeLimit", &Fishery::set_minSizeLimit)
+        // .method("set_traitVariances", &Fishery::set_traitVariances)
+        .method("equilibriateNaturalPopulation", &Fishery::equilibriateNaturalPopulation)
+
+        .method("update", &Fishery::update)
+    ;
 
     class_ <Simulator>("Simulator")
         .constructor<Fish>()
