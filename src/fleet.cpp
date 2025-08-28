@@ -169,6 +169,7 @@ void FleetParams::print(){
 	#undef PRINT_PAR
 }
 
+std::random_device rd;
 
 Fleet::Fleet() : g(rd()){
 }
@@ -212,6 +213,18 @@ double Fleet::fishingMortality(double len){
 	double scalar = (len < par.lmin)? fmin(1, chi) : chi;
 	return scalar * fishingMortalityRef(len);
 }
+
+
+double Fleet::FishingMortalityRef_avgl(double lmax = 200, int n = 100){
+	double Fref_avgl = 0;
+	for (int i = 0; i < n; ++i){
+		double l = par.lmin + (lmax - par.lmin) * double(i)/(n-1);
+		Fref_avgl += fishingMortalityRef(l);
+	}
+	Fref_avgl /= n;
+	return Fref_avgl;
+}
+
 
 
 // bool Fleet::isFishable(const Fish &f){
@@ -479,7 +492,13 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 		}
 	} 
 	survival_mean /= n_survival_mean;
-	return progress;
+
+	if (return_progress) return progress;
+	else return {
+		yield,
+		to_sea_bed,
+		survival_mean
+	};
 }
 
 

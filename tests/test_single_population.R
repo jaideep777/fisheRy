@@ -125,3 +125,24 @@ for (ih in 1:length(hvec)){
 Bfishable_h0.1 = K[1,1:10]/1e9
 
 # matplot(x = l50vec, y= cbind(Bfishable_nonfished, Bfishable_h0.1), col=c("black", "blue"), type="l", lty=1, ylab="Fishable Biomass (MT)", xlab="L50")
+
+library(tidyverse)
+dat = read.csv(here::here("test_fisherysystem.csv"), header=F)
+dat = dat |> setNames(c("i", "ssb", "tsb", "maturity", "quota", "yield", "effort")) |> 
+  mutate(ssb = ssb/1e9, tsb = tsb/1e9, quota = quota/1e9, yield = yield/1e9, effort = effort)
+
+dat |> head()
+
+dat |> 
+  ggplot(aes(x=quota, y=yield)) +
+  geom_line() +
+  geom_abline(slope=1, intercept=0, color="red")
+
+dat |> 
+  ggplot(aes(x=tsb, y=quota)) +
+  geom_line() +
+  geom_abline(slope=0.5, intercept=0, color="red")
+
+dat |> 
+  ggplot(aes(x=i, y=ssb)) +
+  geom_line() 

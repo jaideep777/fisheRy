@@ -45,6 +45,8 @@ class Fishery {
 	void set_harvestProp(double _h);
 	void set_minSizeLimit(double _lf50);
 
+	double calc_quota(double temp);
+
 	// Wrapper functions for enabling R interface
 	void set_superFishSize(double _n);
 	void set_traitVariances(std::vector<double> var);
@@ -52,7 +54,7 @@ class Fishery {
 	int readParams(std::string filename, bool verbose = false);
 	int readEnvironmentFile(std::string filename);
 	void updateEnv(double t);
-	void init(int n, double temp);
+	void init(int n, double t_init, double temp);
 
 	// Fishery functions
 	std::vector<double> equilibriateNaturalPopulation(double temp, double _n);

@@ -6,8 +6,8 @@ TARGET := 1
 SRCFILES  :=  src/fish.cpp \
               src/population.cpp \
 			  src/stock.cpp \
-			  src/fleet.cpp 
-			#   src/fishery_system.cpp  # $(filter-out src/RcppExports.cpp src/fish_glue.cpp, $(wildcard src/*.cpp))
+			  src/fleet.cpp \
+		      src/fishery_system.cpp  # $(filter-out src/RcppExports.cpp src/fish_glue.cpp, $(wildcard src/*.cpp))
 HEADERS := $(wildcard inst/include/*.h) $(wildcard tests/*.h)
 # ------------------------------------------------------------------------------
 
@@ -50,7 +50,7 @@ superclean: clean testclean
 
 website:
 	R -e "Sys.setenv(RSTUDIO_PANDOC='/usr/lib/rstudio/resources/app/bin/quarto/bin/tools'); print(Sys.getenv('RSTUDIO_PANDOC')); pkgdown::clean_site(); pkgdown::init_site(); pkgdown::build_home(); pkgdown::build_articles(); pkgdown::build_tutorials(); pkgdown::build_news()"
-	doxygen	doxygen/Doxyfile
+	# doxygen	doxygen/Doxyfile
 
 ## TESTING SUITE ##
 

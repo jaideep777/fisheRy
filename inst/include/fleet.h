@@ -73,9 +73,10 @@ class FleetParams{
 	void print();
 };
 
+extern std::random_device rd;
+
 class Fleet{
 	private:
-	std::random_device rd;
 	std::mt19937 g;
 	
 	// double h;
@@ -103,7 +104,9 @@ class Fleet{
 	double fishingMortalityRef(double len);
 	double fishingMortality(double len);
 
-	// bool isFishable(const Fish &f);
+    double FishingMortalityRef_avgl(double lmax, int n);
+
+    // bool isFishable(const Fish &f);
 
     double fishability(double length);
 
