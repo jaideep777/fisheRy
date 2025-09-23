@@ -6,6 +6,10 @@
 #include "fleet.h"
 #include "initializer_v2.h"
 
+#ifndef NATIVE_CPP
+#include <Rcpp.h>
+#endif
+
 class FisheryParams {
     public:
     double rho;   // ratio of spawning grounds F to total (control) F 
@@ -23,6 +27,8 @@ class Fishery {
 	std::string params_file;
 	io::Initializer I;
 	Stock no_fishing_pop;
+
+	std::vector<std::string> colnames = {"ssb", "tsb", "maturity", "quota_fgf", "yield", "effort"};
 
 	public:
 	bool debug = true; // Should debugging calculations be done 
@@ -60,7 +66,15 @@ class Fishery {
 	std::vector<double> equilibriateNaturalPopulation(double temp, double _n);
 	void addFleet(std::string params_file, bool verbose = false);
 
-	std::vector<double> update(double temp);
+    void summarize_population_metrics();
+    void summarize_catch_metrics();
+
+    std::vector<double> update(double temp);
+    
+#ifndef NATIVE_CPP	
+	Rcpp::DataFrame simulate_r(double lf, double h, int nyears, double tsb0, double temp, bool re_init, std::string output_file);
+#endif
+
 };
 
 #endif // FISHERY_SYSTEM_H

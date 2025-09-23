@@ -1,4 +1,5 @@
 #include <fishery_system.h>
+#include <fstream>
 
 inline double runif(double rmin=0, double rmax=1){
 	double r = double(rand())/RAND_MAX; 
@@ -333,8 +334,39 @@ void Fishery::addFleet(std::string params_file, bool verbose){
 // }
 
 
+void Fishery::summarize_population_metrics(){
+	// Calc by-age metrics
+	stock_summary.n_a = pop.aggregateByAge([this](const Fish &f){
+		return (f.isAlive)? pop.superfish_size : 0;
+	});
+
+	stock_summary.w_a = pop.aggregateByAge([this](const Fish &f){
+			return (f.isAlive)? pop.superfish_size*f.weight : 0;
+		});
+	for (int i=0; i<stock_summary.w_a.size(); ++i) stock_summary.w_a[i] /= (stock_summary.n_a[i]+1e-20);
+
+	stock_summary.mat_a = pop.aggregateByAge([this](const Fish &f){
+			return (f.isAlive && f.isMature)? pop.superfish_size : 0;
+		});
+	for (int i=0; i<stock_summary.mat_a.size(); ++i) stock_summary.mat_a[i] /= (stock_summary.n_a[i]+1e-20);
+}
+
+
+void Fishery::summarize_catch_metrics(){
+	// Calc by-age metrics in catch
+	stock_summary.nc_a = pop.aggregateByAge([this](const Fish &f){
+			return (!f.isAlive && f.isCaught)? pop.superfish_size : 0;
+		});
+
+	stock_summary.wc_a = pop.aggregateByAge([this](const Fish &f){
+			return (!f.isAlive && f.isCaught)? pop.superfish_size*f.weight : 0;
+		});
+	for (int i=0; i<stock_summary.wc_a.size(); ++i) stock_summary.wc_a[i] /= (stock_summary.nc_a[i]+1e-20);
+}
+
+
 std::vector<double> Fishery::update(double temp){
-	stock_summary = StockSummary(); // reset stock summary for each year
+	stock_summary = StockSummary(); // reset stock summary for each year. FIXME: Maybe better to do outside 
 
 	double ssb = pop.calcSSB(pop.par.recruitmentAge);
 	double tsb = pop.calcTSB(pop.par.recruitmentAge);
@@ -342,6 +374,7 @@ std::vector<double> Fishery::update(double temp){
 
 	// 1. Maturation
 	for (auto& f: pop.fishes) f.updateMaturity(temp);
+	summarize_population_metrics();
 
 	// 2. Growth
 	for (auto& f: pop.fishes) f.grow(tsb/1e6, temp); // convert tsb to kT
@@ -362,6 +395,7 @@ std::vector<double> Fishery::update(double temp){
 		yield = harvest_out[0]; // total yield from the feeding grounds fishery
 		effort = 0;
 	}
+	summarize_catch_metrics();
 
 	// 6. remove dead fish from population
 	pop.fishes.erase(std::remove_if(pop.fishes.begin(), pop.fishes.end(), [](Fish &f){return !f.isAlive;}), pop.fishes.end());
@@ -392,3 +426,74 @@ Questions:
 
 4. Summary variables are calculated in certain order. What happens when we make life sequence a parameter?
 */
+
+// ************ R stuff *****************
+#ifndef NATIVE_CPP
+
+Rcpp::DataFrame Fishery::simulate_r(double lf, double h, int nyears, double tsb0, double temp, bool re_init, std::string output_file){
+	bool writestate = (output_file != "");
+
+	std::ofstream fout;
+	if (writestate){
+		fout.open(output_file.c_str());
+		fout << "Year" << ',' 
+		     << "age" << ',' 
+			 << "N" << ',' 
+			 << "weight" << ',' 
+			 << "mat" << ',' 
+			 << "catch_N" << ',' 
+			 << "catch_weight"
+			 << '\n';
+
+	}
+
+	// no_fishing_pop.set_harvestProp(h);
+	// no_fishing_pop.set_minSizeLimit(lf);
+	// double K = no_fishing_pop.fishableBiomass();
+	// std::cout << "h/lf = " << h << " / " << lf << " | K = " << K << std::endl;
+
+	// pop.K_fishableBiomass = K;
+	// pop.set_harvestProp(h);
+	// pop.set_minSizeLimit(lf);
+	if (re_init) pop.init(1000, 0, temp);
+
+	std::vector<std::vector<double>> columns(colnames.size());
+	for (auto& vec : columns) vec.reserve(nyears);
+	
+	Rcpp::DataFrame df = Rcpp::DataFrame::create();
+
+	for (int i=0; i<nyears; ++i){
+		std::vector<double> state_now = update(temp);
+		
+		for (int col=0; col<state_now.size(); ++col){
+			columns[col].push_back(state_now[col]);
+		}
+
+		// write age-wise summaries to file
+		if (writestate){
+			for (int a=0; a < stock_summary.n_a.size(); ++a){
+				fout << i << ',' 
+					 << a << ',' 
+					 << stock_summary.n_a[a] << ',' 
+					 << stock_summary.w_a[a] << ',' 
+					 << stock_summary.mat_a[a] << ',' 
+					 << stock_summary.nc_a[a] << ',' 
+					 << stock_summary.wc_a[a]
+					 << '\n';
+			}
+		}
+
+	}
+
+	// put summarized population state in dataframe
+	for (int i=0; i<columns.size(); ++i){	
+		// if (verbose) std::cout << "Adding columns[" << i << "] = " << colnames[i] << std::endl; 
+		df.push_back(columns[i], colnames[i]);
+	}
+
+	if (writestate) fout.close();
+
+	return df;
+}
+
+#endif

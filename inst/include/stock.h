@@ -90,6 +90,7 @@ class Stock{
 	std::normal_distribution<double> normal_dist;
 	std::vector<double> nrecruits_vec;
 	
+	public:
 	template<class Func>
 	std::vector<double> aggregateByAge(Func get_property){
 		int amax = proto_fish.par.amax+2;
