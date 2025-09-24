@@ -6,19 +6,31 @@ inline double runif(double rmin=0, double rmax=1){
 	return rmin + (rmax-rmin)*r;
 }
 
+int FisheryParams::initFromFile(std::string filename, bool verbose){
+	io::Initializer I;
+	I.parse(filename, false, verbose);
+	
+	rho = I.get<double>("spf", "rho");
+	f_spf_before = I.get<double>("spf", "f_spf_before");
+
+	return 0;
+}
+
 
 Fishery::Fishery(std::string _params_file, const Fish& f) : I(), no_fishing_pop(f), pop(f) {
 	params_file = _params_file;
 	// I.parse(params_file, false, true);
-	pop.readParams(params_file);
 	no_fishing_pop.readParams(params_file);
+	this->readParams(params_file, true);
 }
 
 // ---------------------------------------------------------
 // Wrapper functions for enabling R interface for Fishery
 // ---------------------------------------------------------
 int Fishery::readParams(std::string filename, bool verbose) {
-	return pop.readParams(filename, verbose);
+	par.initFromFile(filename, true);
+	pop.readParams(filename, verbose);
+	return 0;
 }
 
 void Fishery::set_superFishSize(double _n) {

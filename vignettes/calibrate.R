@@ -52,31 +52,34 @@ age_dist_obs = N_v_age_obs %>%
 
 #### Function to simulate population given parameters vector #-------------------
 
-simulate_pop = function(par, nsup = 1e6, verbose=F, nsteps=500, nymax=50, params_file, out_file = ""){
-  fish = new(Fish, params_file)
+simulate_pop = function(par, nsup = 1e6, verbose=F, nsteps=500, nymax=50, params_file_fish, params_file_fleet, out_file = ""){
+  h = 0.22
+  lf = 45  
+
+  fish = new(Fish, params_file_fish)
   fish$par$s0 = par[1] #0.07
   if (length(par) > 1){
     fish$setMortalityParams(par[2], par[3], par[4])
   }
-  
-  pop = new(Population, fish)
-  pop$readParams(params_file, F)
-  pop$set_superFishSize(nsup)
-  pop$verbose = verbose
-  pop$init(1000, 5.61)
-  pop$noFishingEquilibriate(5.61)
+    
+  fleet = new(Fleet)
+  fleet$readParams(params_file_fleet, T)
+  fleet$par$print();
 
-  sim = new(Simulator, fish)
-  sim$setNaturalPopulation(pop)
-  # sim$equilibriateNaturalPopulation(params_file, 5.61, nsup)
+  fishery = new(Fishery, params_file_fish, fish);
+  fishery$par$print();
 
-  h = 0.22
-  lf = 45
+  fishery$set_harvestProp(h)
+  fishery$set_minSizeLimit(lf)
+  fishery$addFleet(params_file_fleet, T);
+
+  fishery$equilibriateNaturalPopulation(5.61, 2e6);
+
+  fishery$init(1000, 0, 5.61);
+
+  res_ibm <- fishery$simulate(lf, h, nsteps, 1.93e3, 5.61, F, out_file)
   
-  pop$verbose = verbose
-  res_ibm = sim$simulate(pop, lf, h, nsteps, 1.93e3, 5.61, F, out_file)
-  
-  list(d=pop$get_state(), res_ibm=res_ibm)
+  list(d=fishery$pop$get_state(), res_ibm=res_ibm)
 }
 
 #### Error function using sum-sqaured Earth-mover distances ###-------------------
@@ -150,8 +153,10 @@ error_fun_emd = function(par, nsteps = 200, nsup = 5e6, bplot=F, nymax=50){
 
 # par_opt = c(0.02, 0.0275, 0.06, 1)
 par_opt = c(0.01924969, 0.03239047, 0.07911014, 0.9809538)
+# par_opt = c(0.01924969, 0.062994, 0.07911014, 2.455715)
 l = simulate_pop(par = par_opt, 
-                 params_file= here("params/cod_params.ini"), 
+                 params_file_fish = here("params/cod_params.ini"), 
+                 params_file_fleet = here("params/fleet_1_params.ini"), 
                  nsup=1e6, 
                  nsteps=200,
                  verbose=F, 
@@ -187,7 +192,10 @@ pa = age_dists_pred %>% filter(Year > max(Year)-50) %>%
   theme(strip.placement = "outside",
         strip.background = element_blank())+
   labs(y="")
-pa
+
+cairo_pdf(here::here("fishery_output/age_dists_calibrated_params.pdf"), width = 10, height=5)
+print(pa)
+dev.off()
 
 p1 = l$d %>% 
   group_by(age) %>%
@@ -209,8 +217,8 @@ p1 = l$d %>%
   labs(y="")
 
 p2 = l$res_ibm %>% 
-  mutate(recruits = nfish_ra) %>% 
-  select(ssb, tsb, yield, recruits) %>% 
+  # mutate(recruits = nfish_ra) %>% 
+  select(ssb, tsb, yield) %>% #, recruits) %>% 
   tail(nrow(dat)) %>% 
   colMeans() %>% 
   enframe(value="pred") %>% 
@@ -233,6 +241,7 @@ p2 = l$res_ibm %>%
   geom_abline(slope=1, intercept = 0, col="grey")+
   expand_limits(y=0, x=0)+
   theme_bw()
+p2
 
 p2all = l$res_ibm %>% 
   mutate(recruits = nfish_ra) %>% 
@@ -259,6 +268,27 @@ p2all = l$res_ibm %>%
   geom_abline(slope=1, intercept = 0, col="grey")+
   expand_limits(y=0, x=0)+
   theme_bw()
+
+# Timeseries plots
+p3_ts = l$res_ibm %>% 
+  mutate(ssb=ssb/1e9,
+         tsb=tsb/1e9, 
+         yield=yield/1e9,
+         quota_fgf=quota_fgf/1e9) %>% 
+  mutate(Year=1:n()) %>% 
+  pivot_longer(-Year) %>% 
+  ggplot(aes(y=value, x=Year, col=name))+
+  geom_line()+
+  facet_wrap(~name, scales="free_y", strip.position="left", nrow=1)+
+  scale_x_continuous(n.breaks = 3)+
+  theme_bw()+
+  theme(strip.placement = "outside",
+      strip.background = element_blank())+
+  labs(y="")
+
+cairo_pdf(here::here("fishery_output/timeseries_calibrated_params.pdf"), width = 10, height=3)
+p3_ts
+dev.off()
 
 p3 = l$res_ibm %>% select(ssb:profit) %>% 
   mutate(ssb=ssb/1e9, 

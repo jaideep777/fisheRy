@@ -15,6 +15,8 @@ class FisheryParams {
     double rho;   // ratio of spawning grounds F to total (control) F 
     double f_spf_before; // percent of spawning grounds fishing that happens before spawning
 
+	int initFromFile(std::string filename, bool verbose=false);
+
     void print() {
         std::cout << "FisheryParams:" << std::endl;
         std::cout << "  rho: " << rho << std::endl;

@@ -1,0 +1,91 @@
+---
+title: "Fished Population and Stock Analysis"
+author: "Jaideep"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(fisheRy)
+```
+
+
+# Fishery System Setup
+
+Set up the fishery system using parameter files for fleet and fish, and inspect initial parameters.
+
+```{r setup-fishery}
+params_file_fleet = here::here("params/fleet_1_params.ini")
+params_file_fish  = here::here("params/cod_params.ini")
+
+fleet = new(Fleet)
+fleet$readParams(params_file_fleet, T)
+fleet$par$print();
+
+fish = new(Fish, params_file_fish)
+
+fishery = new(Fishery, params_file_fish, fish);
+fishery$par$print();
+```
+
+# Fishery Simulation
+
+Configure the fishery, set harvest proportion, add fleet, and run equilibrium and initialization steps.
+
+```{r configure-fishery}
+fishery$set_harvestProp(0.5);
+fishery$addFleet(params_file_fleet, T);
+
+fishery$equilibriateNaturalPopulation(5.61, 2e6);
+
+fishery$init(1000, 0, 5.61);
+
+quota = fishery$calc_quota(5.61);
+cat("Quota: ", quota, '\n')
+```
+
+# Running and Visualizing Simulation
+
+Simulate the fishery over time and visualize key outputs.
+
+```{r run-simulation}
+dat <- fishery$simulate(45, 0.55, 300, 0, 5.61, T, here::here("fishery_output/age_dist_pred.csv"))
+dat |> head()
+```
+
+## Quota (FGF) vs Yield
+
+This plot compares the feeding ground fishery quota to the yield, excluding the first 10 iterations.
+
+```{r plot-quota-fgf-yield}
+dat |> 
+  slice(-(1:10)) |>
+  ggplot(aes(x=quota_fgf, y=yield)) +
+  geom_point() +
+  geom_abline(slope=1, intercept=0, color="red")
+```
+
+## TSB vs Quota (FGF)
+
+This plot shows the relationship between total stock biomass and feeding ground fishery quota. Slope should be equal to harvest proportion.
+
+```{r plot-tsb-quota-fgf}
+dat |> 
+  slice(-(1:10)) |>
+  ggplot(aes(x=tsb, y=quota_fgf)) +
+  geom_point() +
+  geom_smooth(method="lm", se=F, formula = y ~ x-1) +
+  geom_abline(slope=0.5, intercept=0, color="red")
+```
+
+## SSB Over Simulation
+
+This plot tracks spawning stock biomass over the course of the simulation.
+
+```{r plot-ssb-simulation}
+dat |> 
+  ggplot(aes(x=1:nrow(dat), y=ssb/1e9)) +
+  geom_line()
+```
+

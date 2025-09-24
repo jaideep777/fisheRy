@@ -126,10 +126,9 @@ Bfishable_h0.1 = K[1,1:10]/1e9
 
 # matplot(x = l50vec, y= cbind(Bfishable_nonfished, Bfishable_h0.1), col=c("black", "blue"), type="l", lty=1, ylab="Fishable Biomass (MT)", xlab="L50")
 
+
 library(tidyverse)
 library(fisheRy)
-
-
 
 dat = read.csv(here::here("test_fisherysystem.csv"), header=F)
 dat = dat |> setNames(c("i", "ssb", "tsb", "maturity", "quota", "yield", "effort")) |> 
@@ -152,7 +151,9 @@ dat |>
   geom_line() 
 
 
+############ 24 Sept 2025 trials ############
 
+library(tidyverse)
 library(fisheRy)
 
 params_file_fleet = here::here("params/fleet_1_params.ini")
@@ -177,5 +178,24 @@ fishery$init(1000, 0, 5.61);
 quota = fishery$calc_quota(5.61);
 cat("Quota: ", quota, '\n')
 
-fishery$simulate(45, 0.55, 200, 0, 5.61, T, here::here("fishery_output/age_dist_pred.csv"))
+dat <- fishery$simulate(45, 0.55, 300, 0, 5.61, T, here::here("fishery_output/age_dist_pred.csv"))
+
+dat |> head()
+
+dat |> 
+  slice(-(1:10)) |>
+  ggplot(aes(x=quota_fgf, y=yield)) +
+  geom_point() +
+  geom_abline(slope=1, intercept=0, color="red")
+
+dat |> 
+  slice(-(1:10)) |>
+  ggplot(aes(x=tsb, y=quota_fgf)) +
+  geom_point() +
+  geom_smooth(method="lm", se=F, formula = y ~ x-1) +
+  geom_abline(slope=0.5, intercept=0, color="red")
+
+dat |> 
+  ggplot(aes(x=1:nrow(dat), y=ssb/1e9)) +
+  geom_line() 
 
