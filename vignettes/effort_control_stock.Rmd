@@ -33,7 +33,9 @@ fish = new(Fish, params_file)
 
 pop = new(Stock, fish)
 pop$readParams(params_file, F)
-pop$superfish_size = 2e6  # Each superfish contains so many fish
+pop$superfish_size = 0.2e6  # Each superfish contains so many fish
+
+pop$superfish_size
 
 ```
 
@@ -82,7 +84,8 @@ progress_names = c("fish_age",
                    "chi_window",
                    "b_sampled_window",
                    "b_start_window",
-                   "yield_window")
+                   "yield_window",
+                   "fishing_mort_window")
 ```
 
 ## Mock fish the population to calculate fishing mortality rate (linear model)
@@ -99,11 +102,18 @@ fleet$par$print()
 fleet$par$control_model = "linear"
 fleet$chi = 100
 fleet$init_chi(pop, F_fgf, 5.61)
+k_unfished = fleet$biomassFishable(pop, 0)
 
+print(k_unfished/1e9)
+```
+
+```{r}
 out = fleet$harvest_dry_run(pop, quota, 5.61)
 
 df = as.data.frame(matrix(data = out, ncol=length(progress_names), byrow = T))
 colnames(df) = progress_names
+
+print((df$B |> first())/1e9)
 
 df %>% 
   mutate(fish = 1:n()) %>% 
@@ -117,8 +127,8 @@ df %>%
 table(df$chi)
 
 
-fleet$effort_constantC(2.83e-6, 0.75, ssb_nf)*fleet$par$dsea
-fleet$effort_constantF(2.83e-6, 0.75, ssb_nf)*fleet$par$dsea
+fleet$effort_constantC(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
+fleet$effort_constantF(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
 
 ```
 
@@ -132,6 +142,7 @@ fleet$par$print()
 fleet$par$control_model = "linear"
 fleet$chi = 100
 fleet$init_chi(pop, F_fgf, 5.61)
+k_unfished = fleet$biomassFishable(pop, 0)
 
 out = fleet$harvest_dry_run(pop, quota, 5.61)
 
@@ -150,8 +161,8 @@ df %>%
 table(df$chi)
 
 
-fleet$effort_constantC(2.83e-6, 0.75, ssb_nf)*fleet$par$dsea
-fleet$effort_constantF(2.83e-6, 0.75, ssb_nf)*fleet$par$dsea
+fleet$effort_constantC(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
+fleet$effort_constantF(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
 
 ```
 
@@ -167,6 +178,7 @@ fleet$par$print()
 fleet$par$control_model = "exp"
 fleet$chi = 100
 fleet$init_chi(pop, F_fgf, 5.61)
+k_unfished = fleet$biomassFishable(pop, 0)
 
 out = fleet$harvest_dry_run(pop, quota, 5.61)
 
@@ -184,9 +196,13 @@ df %>%
 
 table(df$chi)
 
+# df %>% 
+#   ggplot(aes(x=yield/k_unfished, y=catch_rate_constantF)) +
+#   geom_point()+
+#   geom_abline(slope=1, intercept=0, col="red")
 
-fleet$effort_constantC(2.83e-6, 0.75, ssb_nf)*fleet$par$dsea
-fleet$effort_constantF(2.83e-6, 0.75, ssb_nf)*fleet$par$dsea
+fleet$effort_constantC(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
+fleet$effort_constantF(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
 
 ```
 
@@ -202,6 +218,7 @@ pc_error = function(i, mode, h, slope){
   fleet$par$chi0_scalar_slope = slope
   fleet$chi = 100
   fleet$init_chi(pop, F_fgf, 5.61)
+  k_unfished = fleet$biomassFishable(pop, 0)
 
   out = fleet$harvest_dry_run(pop, quota, 5.61)
 
@@ -214,8 +231,8 @@ pc_error = function(i, mode, h, slope){
         mutate(yield_err_pc = (yield-yield_expected)/yield_expected*100) %>% 
         pull(yield_err_pc) %>% 
         tail(1),
-    effort_c = fleet$effort_constantC(2.83e-6, 0.75, ssb_nf)*fleet$par$dsea,
-    effort_f = fleet$effort_constantF(2.83e-6, 0.75, ssb_nf)*fleet$par$dsea
+    effort_c = fleet$effort_constantC(2.83e-6, 0.75, k_unfished)*fleet$par$dsea,
+    effort_f = fleet$effort_constantF(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
   )
 }
 ```
@@ -225,7 +242,7 @@ pc_error = function(i, mode, h, slope){
 $Y/B_s = 1-e^{-k \chi}$
 
 ```{r}
-niterations = 200
+niterations = 100
 
 res_exp = tibble(i = 1:niterations) %>%
   mutate(res = map(i, ~pc_error(.x, mode="exp", h=h, slope=0))) %>%
@@ -251,7 +268,11 @@ res |>
   labs(x="Harvest rate (h)", y="Error (%)", title="Error distribution (Exp model)")
 
 res |> 
-  
+  ggplot(aes(x=effort_c, y=effort_f)) +
+  geom_point()+
+  geom_abline(slope = 1, intercept = 0, col="red")
+
+res |> 
   ggplot(aes(x=effort_c, y=effort_f)) +
   geom_point()+
   geom_abline(slope = 1, intercept = 0, col="red")

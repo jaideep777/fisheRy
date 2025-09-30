@@ -297,6 +297,7 @@ RCPP_MODULE(fleet_module){
 
 		.method("fishability", &Fleet::fishability)
 		.method("fishingMortalityRef", &Fleet::fishingMortalityRef)
+		.method("biomassFishable", &Fleet::biomassFishable)
 		.method("fishingMortality", &Fleet::fishingMortality)
 		.method("update_chi", &Fleet::update_chi)
 		.method("harvest_dry_run", &Fleet::harvest_dry_run)

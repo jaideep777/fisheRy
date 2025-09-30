@@ -37,10 +37,10 @@ int main(){
 	Fleet fleet;
 	fleet.readParams(params_file_fleet, true);
 	fleet.par.print();
-	fleet.set_harvestProportion(0.99);
+	// fleet.set_harvestProportion(0.99);
 
 	fleet.debug = true;
-	fleet.control_model = "exp";
+	fleet.par.control_model = "exp";
 	fleet.chi = 100;
 
 	cout << "Fleet initial chi = \n";
@@ -50,6 +50,11 @@ int main(){
 		cout << h << "\t" << fleet.chi << endl;
 	}
 
+	double K = fleet.biomassFishable(pop,0);
+	double ssb = pop.calcSSB(0);
+	cout << "SSB = " << ssb/1e9 << " Mt\n";
+	cout << "Fishable biomass = " << K/1e9 << " Mt\n";
+	
 	return 0;
 }
 

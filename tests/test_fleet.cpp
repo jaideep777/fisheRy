@@ -53,6 +53,9 @@ int main(){
 
 	auto out = fleet.harvest_dry_run(pop, quota, 5.61);
 
+	double effort = fleet.effort_constantC(fleet.par.q, fleet.par.b, fleet.biomassFishable(pop,0))*fleet.par.dsea;
+	cout << "Effort (constant C) = " << effort << " vessel-days\n";
+
 	double n = out.size();
 	cout << "Yield expected = " << out[n-6] << " kg\n";
 	cout << "Yield          = " << out[n-7] << " kg\n";

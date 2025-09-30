@@ -136,7 +136,10 @@ class Fleet{
 	double effort_constantC(double q, double b, double K);
 	double effort_constantF(double q, double b, double K);
 
-	private:
+    double fishing_mort_constantC(const WindowProps &w, double K);
+    double catch_rate_constantF(const WindowProps &w, double K);
+
+private:
 
 	template<class Func>
 	double avgOverFishable(Func get_property, const Stock &stock, double min_age = 0){

@@ -254,6 +254,7 @@ std::vector<double> Fleet::cummulativeFishingMortalityRef(const Stock &stock, do
 
 
 double Fleet::biomassFishable(const Stock &stock, double min_age){
+	// std::cout << stock.fishes.size() << " fish in stock\n";
 	return 
 	std::accumulate(stock.fishes.begin(), stock.fishes.end(), 0.0, 
 		[min_age, this, &stock](double sum, const Fish& f) { 
@@ -369,7 +370,7 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 
 	std::vector<double> progress;
 	std::vector<double> chi_in_windows(1, 0), yield_in_windows(1, 0), bs_in_windows(1, 0);
-	double yield_prev = 0, bs_prev = 0;
+	double yield_prev = 0, bs_prev = 0, to_sea_bed_prev = 0;
 	int windows_sampled = 0;
 	WindowProps window_props;
 	int count = 0;
@@ -418,7 +419,7 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 				double bs_window = B_sampled - bs_prev;
 
 				window_props.chi = chi;
-				window_props.B_start = B - yield - to_sea_bed;
+				window_props.B_start = B - yield_prev - to_sea_bed_prev;
 				window_props.C_rate = window_props.yield/par.window_dt; // catch rate = annualized yield = yield per year
 				window_props.M_fishable /= window_props.n_fishable; 
 				window_props.F_fishable /= window_props.n_fishable; 
@@ -444,6 +445,7 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 
 				// update cumulative yield and bs 
 				yield_prev = yield;
+				to_sea_bed_prev = to_sea_bed;
 				bs_prev = B_sampled;
 
 				// remainder biomass and yield (new values to update chi)
@@ -471,7 +473,10 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 						window_props.chi,
 						window_props.B_sampled,
 						window_props.B_start,
-						window_props.yield
+						window_props.yield,
+						window_props.F_fishable
+						// ((window_props_vec.size() > 0)? catch_rate_constantF(window_props_vec.back(), B) : 0),   // TODO: Remove this eventually, meant for debugging
+						// ((window_props_vec.size() > 0)? fishing_mort_constantC(window_props_vec.back(), B) : 0)  // TODO: Remove this eventually, meant for debugging
 					});
 			}
 
@@ -502,6 +507,7 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 }
 
 
+// FIXME: Ask Mikko: Should K here also be adjusted to K_start?
 double Fleet::effort_constantC(double q, double b, double K){
 	double effort = 0;
 	for (auto& w : window_props_vec){
@@ -509,8 +515,11 @@ double Fleet::effort_constantC(double q, double b, double K){
 		double C  = w.C_rate / K;
 		double M  = w.M_fishable;
 		double t = par.window_dt/2;
+
 		double effort_t = C/q/(pow( (N0+C/M)*exp(-M*t) - C/M, b));
 		effort += effort_t*par.window_dt;
+
+		std::cout << "N0: " << N0 << ", C: " << C << ", M: " << M << ", t: " << t << ", effort_t: " << effort_t << std::endl;
 	}
 	return effort;
 }
@@ -528,3 +537,21 @@ double Fleet::effort_constantF(double q, double b, double K){
 	return effort;
 }
 
+
+double Fleet::fishing_mort_constantC(const WindowProps& w, double K){
+	double N0 = w.B_start / K;
+	double F  = w.F_fishable;
+	double M  = w.M_fishable;
+	double t = par.window_dt/2;
+
+	return F*N0*exp(-(F+M)*t);
+}
+
+double Fleet::catch_rate_constantF(const WindowProps& w, double K){
+	double N0 = w.B_start / K;
+	double M  = w.M_fishable;
+	double C = w.C_rate / K;
+	double t = par.window_dt/2;
+
+	return C/((N0+C/M)*exp(-M*t) - C/M);
+}
