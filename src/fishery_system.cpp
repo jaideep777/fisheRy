@@ -405,7 +405,7 @@ std::vector<double> Fishery::update(double temp){
 		fleets[0].init_chi(pop, -log(1-harvest_prop), temp); // initialize chi for the feeding grounds fishery
 		std::vector<double> harvest_out = fleets[0].harvest(pop, quota_fgf, temp, false);
 		yield = harvest_out[0]; // total yield from the feeding grounds fishery
-		effort = 0;
+		effort = 0; // fleets[0].effort_constantC(fleets[0].par.q, fleets[0].par.b, pop.fishableBiomass());
 	}
 	summarize_catch_metrics();
 
@@ -428,6 +428,67 @@ std::vector<double> Fishery::update(double temp){
 		effort
 	};
 }
+
+
+// Tensor<double> Simulator::scan(vector<double> Tvec, vector<double> lminvec, vector<double> hvec, int nyears, double tsb0, int niters, bool re_init){
+// 	Tensor<double> res({niters, static_cast<int>(colnames.size()), static_cast<int>(Tvec.size()), static_cast<int>(lminvec.size()), static_cast<int>(hvec.size()), nyears});
+// 	Stock pop_ref = pop;
+
+// 	for (int iter = 0; iter < niters; ++iter){  // loop over iterations
+// 	for (int it=0; it<Tvec.size(); ++it){       // loop over parameter 3 (temperature)
+// 	for (int il=0; il<lminvec.size(); ++il){    // loop over control parameter 2 (lmin)
+// 	for (int ih=0; ih<hvec.size(); ++ih){       // loop over control parameter 1 (h)
+// 		pop = pop_ref;
+// 		// if (hvec[ih] > 0.5) pop.set_superFishSize(1e0);
+		
+// 		noFishingPop.set_harvestProp(hvec[ih]);
+// 		noFishingPop.set_minSizeLimit(lminvec[il]);
+// 		double K_fishable = noFishingPop.fishableBiomass();
+// 		double K_ssb      = noFishingPop.calcSSB();
+// 		cout << "h = " << hvec[ih] << ", L50 = " << noFishingPop.par.F3 << ", T = " << Tvec[it] << ", n = " << pop.par.n << " | K_fishable = " << K_fishable << ", K_ssb = " << K_ssb << endl;
+
+// 		pop.K_fishableBiomass = K_fishable;
+// 		pop.K_ssb = K_ssb;
+
+// 		pop.set_harvestProp(hvec[ih]);
+// 		pop.set_minSizeLimit(lminvec[il]);
+
+// 		if (re_init) pop.init(1000, Tvec[it]);
+// 		// pop.print_summary();
+	
+// 		for (int t=0; t<nyears; ++t){
+// 			double Tnow;
+// 			if (pop.par.update_env){
+// 				// cout << "t = " << t << "pop.current_year = " << pop.current_year;
+// 				pop.updateEnv(pop.current_year);
+// 				Tnow = pop.env.temperature;
+// 				// cout << " | env.t = " << pop.env.year << ", T = " << pop.env.temperature << "\n";
+// 			}
+// 			else{
+// 				Tnow = Tvec[it];
+// 			}
+
+// 			std::vector<double> state_now = pop.update(Tnow);
+			
+// 			for (int col=0; col<state_now.size(); ++col){
+// 				res({iter, col, it, il, ih, t}) = state_now[col];
+// 			}
+// 			// res({iter, 0, il, ih, t}) = state_now[0];  // ssb
+// 			// res({iter, 1, il, ih, t}) = state_now[1];  // yield
+// 			// res({iter, 2, il, ih, t}) = state_now[2];  // employment sea
+// 			// res({iter, 3, il, ih, t}) = state_now[3];  // employment shore
+// 			// res({iter, 4, il, ih, t}) = state_now[4];  // profit sea
+// 			// res({iter, 5, il, ih, t}) = state_now[5];  // profit shore
+// 		}
+// 		}
+// 		}
+// 		}
+// 	}
+// 	//res.print();
+	
+// 	return res.avg_dim(5);	// average over iterations
+
+// }
 
 
 /*
@@ -509,3 +570,4 @@ Rcpp::DataFrame Fishery::simulate_r(double lf, double h, int nyears, double tsb0
 }
 
 #endif
+

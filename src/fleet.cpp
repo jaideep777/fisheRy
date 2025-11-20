@@ -197,7 +197,6 @@ std::vector<double> Fleet::harvest_dry_run(Stock pop, double quota, double temp)
 	return harvest(pop, quota, temp, true); // harvest a copy population and return progress
 }
 
-
 /// Formula:
 /// \f[
 /// F_\text{ref} = \frac{F_1}{1 + \exp(-F_2 \cdot (l - F_3))} - \frac{F_6}{1 + \exp(-F_4 \cdot (l - F_5))}
@@ -232,6 +231,7 @@ double Fleet::FishingMortalityRef_avgl(double lmax = 200, int n = 100){
 // }
 
 
+// FIXME: Should this be binary
 double Fleet::fishability(double length){
 	// Above minimum size limit, fishability = 1; below min size limit, fishability = probability of death
 	return (length > par.lmin)? 1.0 : 1-exp(-fishingMortalityRef(length)); 
