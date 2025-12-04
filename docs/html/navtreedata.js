@@ -26,6 +26,7 @@ var NAVTREE =
 [
   [ "fisheRy", "index.html", [
     [ "Home", "../index.html", null ],
+    [ "Todo List", "todo.html", null ],
     [ "Namespaces", "namespaces.html", [
       [ "Namespace List", "namespaces.html", "namespaces_dup" ],
       [ "Namespace Members", "namespacemembers.html", [
@@ -39,7 +40,7 @@ var NAVTREE =
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", null ],
-        [ "Variables", "functions_vars.html", null ],
+        [ "Variables", "functions_vars.html", "functions_vars" ],
         [ "Typedefs", "functions_type.html", null ]
       ] ]
     ] ],
@@ -60,7 +61,8 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "../index.html",
-"dir_920884c6b3b2f0be94e27d51660adee5.html"
+"classPopulation.html#ad1a0e8e4ea3e203afdbb0e067bd913b8",
+"functions_n.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

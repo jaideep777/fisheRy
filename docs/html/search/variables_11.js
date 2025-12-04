@@ -1,12 +1,24 @@
 var searchData=
 [
-  ['s0_492',['s0',['../classFishParams.html#a2569ba98253c5c963d2e510c97229dea',1,'FishParams']]],
-  ['salary_5fsea_493',['salary_sea',['../classPopulationParams.html#aec582aace03245ebf0b2c0927efddb97',1,'PopulationParams']]],
-  ['salary_5fshore_494',['salary_shore',['../classPopulationParams.html#a67bda91cd832ffd7cd3a44f8fe1e88e9',1,'PopulationParams']]],
-  ['scale_5fcatch_495',['scale_catch',['../classPopulationParams.html#ab77e0a1ad3d0d36744a43ba78c9e7c33',1,'PopulationParams']]],
-  ['sections_496',['sections',['../classio_1_1Initializer.html#a2e0ea01d64f170e98232175353afd39f',1,'io::Initializer']]],
-  ['sf_497',['sf',['../classPopulationParams.html#a47b39d0811de8e5368d1a733a66ab5b1',1,'PopulationParams']]],
-  ['sigmaf_498',['sigmaf',['../classPopulationParams.html#a213bd6922078ab92d8d852abac1ad075',1,'PopulationParams']]],
-  ['simulate_5fbio_5fonly_499',['simulate_bio_only',['../classPopulationParams.html#ac53863ffb8de683f3c25a2837d2ff8b3',1,'PopulationParams']]],
-  ['steepness_500',['steepness',['../classFishParams.html#abd9ae2686bbe953a6b96cc830999ff8b',1,'FishParams']]]
+  ['s0_0',['s0',['../classFishParams.html#a2569ba98253c5c963d2e510c97229dea',1,'FishParams']]],
+  ['salary_5fsea_1',['salary_sea',['../classFleetParams.html#a5b72e4e6cfa1b1529f14537f28c75674',1,'FleetParams::salary_sea'],['../classPopulationParams.html#aec582aace03245ebf0b2c0927efddb97',1,'PopulationParams::salary_sea']]],
+  ['salary_5fshore_2',['salary_shore',['../classFleetParams.html#a84b321c9a1144004c1b58b6302a44399',1,'FleetParams::salary_shore'],['../classPopulationParams.html#a67bda91cd832ffd7cd3a44f8fe1e88e9',1,'PopulationParams::salary_shore']]],
+  ['scale_5fcatch_3',['scale_catch',['../classFleetParams.html#a7621655d8e3f5a75e5a6da0f365ca6dc',1,'FleetParams::scale_catch'],['../classPopulationParams.html#ab77e0a1ad3d0d36744a43ba78c9e7c33',1,'PopulationParams::scale_catch']]],
+  ['sections_4',['sections',['../classio_1_1Initializer.html#a2e0ea01d64f170e98232175353afd39f',1,'io::Initializer']]],
+  ['sigmaf_5',['sigmaf',['../classFleetParams.html#af94fe504bba97f14565cad01394de002',1,'FleetParams::sigmaf'],['../classPopulationParams.html#a213bd6922078ab92d8d852abac1ad075',1,'PopulationParams::sigmaf']]],
+  ['simulate_5fbio_5fonly_6',['simulate_bio_only',['../classFishery.html#ab01a1da49bafa7490d3748345e6b36e9',1,'Fishery::simulate_bio_only'],['../classPopulationParams.html#ac53863ffb8de683f3c25a2837d2ff8b3',1,'PopulationParams::simulate_bio_only']]],
+  ['slope_7',['slope',['../structlinregresult.html#adde4e42e5c8b50d417b038ef9d0222fe',1,'linregresult']]],
+  ['ssb_8',['ssb',['../structStockSummary.html#a8d4b5c006eb2939f2adf9be141a42892',1,'StockSummary']]],
+  ['ssb0_9',['ssb0',['../structStockSummary.html#aba429b012bc3ee3c44c1b747d6403115',1,'StockSummary']]],
+  ['ssb_5fafter_5fspawning_10',['ssb_after_spawning',['../structStockSummary.html#a900871f944fe0092b37c036318ac0720',1,'StockSummary']]],
+  ['ssb_5fafter_5fspawning_5fref_11',['ssb_after_spawning_ref',['../structStockSummary.html#a444234368ba4d27115ea674593cbc69a',1,'StockSummary']]],
+  ['ssb_5fspawning_12',['ssb_spawning',['../structStockSummary.html#a349ea9adfa9db28cd4bb81e799e7e1ef',1,'StockSummary']]],
+  ['ssb_5fspawning_5fref_13',['ssb_spawning_ref',['../structStockSummary.html#a555dbb26ab4b6421e6deb8d73982db3b',1,'StockSummary']]],
+  ['ssbn_14',['ssbn',['../structStockSummary.html#af12866a1eadae4236d4da4c317b571bb',1,'StockSummary']]],
+  ['ssbn_5fref_15',['ssbn_ref',['../structStockSummary.html#aaaec8fc6a40e350fff4acdf4b9915d6f',1,'StockSummary']]],
+  ['std_5fmissing_5fvalue_16',['std_missing_value',['../classPopulation.html#a7f0ee8a68b54a778fc80315472721b0f',1,'Population::std_missing_value'],['../classStock.html#a33bca6819148bffb6b1f548636de4c1f',1,'Stock::std_missing_value']]],
+  ['steepness_17',['steepness',['../classFishParams.html#abd9ae2686bbe953a6b96cc830999ff8b',1,'FishParams']]],
+  ['stock_5fsummary_18',['stock_summary',['../classFishery.html#a006de40cf7d89d76ad3bfc7b7f1a1c04',1,'Fishery']]],
+  ['superfish_5fsize_19',['superfish_size',['../classStock.html#af8e482424a6000b73b381b4829411e54',1,'Stock']]],
+  ['survival_5fmean_20',['survival_mean',['../structStockSummary.html#a78abf27324054888755bd93eeeacf9f2',1,'StockSummary']]]
 ];

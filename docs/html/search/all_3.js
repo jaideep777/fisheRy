@@ -1,13 +1,21 @@
 var searchData=
 [
-  ['c_28',['c',['../classFishParams.html#a9b953d7f9a6bf05398c2d08fd92d3b6b',1,'FishParams']]],
-  ['calc_5fathresh_29',['calc_athresh',['../classPopulation.html#a413a383f94e1d0ead9d8b11f7dbc27ce',1,'Population']]],
-  ['calcsb_30',['calcSB',['../classPopulation.html#aaae10299ca2e22292f57559380805948',1,'Population']]],
-  ['calcssb_31',['calcSSB',['../classPopulation.html#af15e7ba23b161c710d4013204b542cb6',1,'Population']]],
-  ['calctsb_32',['calcTSB',['../classPopulation.html#ae942ef70cc9f4dfc40b5d843baf40b1e',1,'Population']]],
-  ['callentries_33',['CallEntries',['../RcppExports_8cpp.html#acc66047eee9f1e8112081542de22411c',1,'RcppExports.cpp']]],
-  ['carrying_5fcapacity_34',['carrying_capacity',['../classPopulation.html#a3405cbe11077ebc2cb490e44577d2fc9',1,'Population']]],
-  ['colnames_35',['colnames',['../classPopulation.html#a082c237025a600bed56daa10e419477d',1,'Population']]],
-  ['ct_36',['cT',['../classFishParams.html#acefe46e8f3cbe68ffd259c3ae45c8f47',1,'FishParams']]],
-  ['current_5fyear_37',['current_year',['../classPopulation.html#a573c1d6d1aa0680eee016b5329f605ce',1,'Population']]]
+  ['c_0',['c',['../classFishParams.html#a9b953d7f9a6bf05398c2d08fd92d3b6b',1,'FishParams']]],
+  ['c_5frate_1',['C_rate',['../classWindowProps.html#a5eb75f6e7e35859b2adc42e7b7126dd8',1,'WindowProps']]],
+  ['calc_5fquota_2',['calc_quota',['../classFishery.html#a2a9b773fdae8273737f90b984555f71d',1,'Fishery']]],
+  ['calcabundanceatage_3',['calcAbundanceAtAge',['../classStock.html#a95514ca4ece27724a0f32993cd92cfad',1,'Stock']]],
+  ['calcmaturity_4',['calcMaturity',['../classStock.html#a6641936ba78d9564c667e5466062f7dd',1,'Stock']]],
+  ['calcsb_5',['calcSB',['../classPopulation.html#a5492a1a8ce27a75172375752567f0a4f',1,'Population']]],
+  ['calcssb_6',['calcssb',['../classPopulation.html#a411a2d453fd7d65b8961d6ea3ee2e35f',1,'Population::calcSSB()'],['../classStock.html#ace5fdd83ce66a5f64ebcfdcd34460f70',1,'Stock::calcSSB()']]],
+  ['calctsb_7',['calctsb',['../classPopulation.html#a23be56a8d9b14439dae491e80617c02d',1,'Population::calcTSB()'],['../classStock.html#abdfcf1bb4cf065136301fb4daa0735d9',1,'Stock::calcTSB()']]],
+  ['callentries_8',['CallEntries',['../RcppExports_8cpp.html#acc66047eee9f1e8112081542de22411c',1,'RcppExports.cpp']]],
+  ['carrying_5fcapacity_9',['carrying_capacity',['../classPopulation.html#a3405cbe11077ebc2cb490e44577d2fc9',1,'Population']]],
+  ['catch_5frate_5fconstantf_10',['catch_rate_constantF',['../classFleet.html#ab39b0f192fc68e41e75fdc72ce388083',1,'Fleet']]],
+  ['chi_11',['chi',['../classWindowProps.html#a54c506d388ff26eb46e6868439f77d87',1,'WindowProps::chi'],['../classFleet.html#a9335f7e29c636f191c3829e98880a2c4',1,'Fleet::chi']]],
+  ['chi0_5fscalar_5fslope_12',['chi0_scalar_slope',['../classFleetParams.html#ab1066afe7e16c3dc3f6c386503593055',1,'FleetParams']]],
+  ['colnames_13',['colnames',['../classFishery.html#a076ee32b9e1403e99e6b4264ae423e64',1,'Fishery::colnames'],['../classPopulation.html#a082c237025a600bed56daa10e419477d',1,'Population::colnames']]],
+  ['control_5fmodel_14',['control_model',['../classFleetParams.html#ac655cea4ac967d96fc6d51f15e0d255a',1,'FleetParams']]],
+  ['ct_15',['cT',['../classFishParams.html#acefe46e8f3cbe68ffd259c3ae45c8f47',1,'FishParams']]],
+  ['cummulativefishingmortalityref_16',['cummulativeFishingMortalityRef',['../classFleet.html#a970d306c270f5340cbc773162c4e67f4',1,'Fleet']]],
+  ['current_5fyear_17',['current_year',['../classPopulation.html#a573c1d6d1aa0680eee016b5329f605ce',1,'Population']]]
 ];

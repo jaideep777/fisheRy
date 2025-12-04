@@ -1,23 +1,12 @@
 var searchData=
 [
-  ['selectivity_362',['selectivity',['../classPopulation.html#ac8ed845bbda25c937a2fd76b3788e987',1,'Population']]],
-  ['set_5fage_363',['set_age',['../classFish.html#ab9b673887514b9d446232e0019c6034a',1,'Fish']]],
-  ['set_5fharvestprop_364',['set_harvestProp',['../classPopulation.html#a20696fa511c914e7c8837acb2a254b33',1,'Population']]],
-  ['set_5flength_365',['set_length',['../classFish.html#a0a1f9fe15dae9fc71e5abbc2a03de9aa',1,'Fish']]],
-  ['set_5fminsizelimit_366',['set_minSizeLimit',['../classPopulation.html#a343a346cae1413da400c042868c15859',1,'Population']]],
-  ['set_5fsuperfishsize_367',['set_superFishSize',['../classPopulation.html#ae8a6455aa45e65bf8bd41312f9caa328',1,'Population']]],
-  ['set_5ftraits_368',['set_traits',['../classFish.html#aaa3e67187a587efc7a99485b4a6ee248',1,'Fish']]],
-  ['set_5ftraitvariances_369',['set_traitVariances',['../classPopulation.html#aadec56893118cacf7774f7f9e2aac18f',1,'Population']]],
-  ['setnaturalpopulation_370',['setNaturalPopulation',['../classSimulator.html#a1e385d56b6ae6694463f127b5f1d98d5',1,'Simulator']]],
-  ['simulate_5fmulti_371',['simulate_multi',['../classSimulator.html#a7540919b97662be7deacba9194c0ed60',1,'Simulator']]],
-  ['simulate_5fmulti_5f2d_372',['simulate_multi_2d',['../classSimulator.html#ab21d1c6b0af00931f9a8fa5e0b6d417f',1,'Simulator']]],
-  ['simulate_5fmulti_5f2d_5fr_373',['simulate_multi_2d_r',['../classSimulator.html#af1b0a9562ecf0ad8f98d61576efba28b',1,'Simulator']]],
-  ['simulate_5fmulti_5fr_374',['simulate_multi_r',['../classSimulator.html#a1a5454ee4736819d709398b225d7876d',1,'Simulator']]],
-  ['simulate_5fr_375',['simulate_r',['../classSimulator.html#aa6e6cfd73fd8d3200e7f515b473e88f2',1,'Simulator']]],
-  ['simulator_376',['Simulator',['../classSimulator.html#a1b65fa1ed6538201dffcba8bce997d82',1,'Simulator']]],
-  ['stakeholder_5fsatisfaction_377',['stakeholder_satisfaction',['../classSimulator.html#a1b66b7260ff50758884d1f7361a1b988',1,'Simulator']]],
-  ['stakeholder_5fsatisfaction_5f2d_378',['stakeholder_satisfaction_2d',['../classSimulator.html#aac842e5498b4c9731910ce9a93fa555d',1,'Simulator']]],
-  ['stakeholder_5fsatisfaction_5f2d_5ft_379',['stakeholder_satisfaction_2d_t',['../classSimulator.html#a27a15b20249b51c6a8ed65560b3b1e91',1,'Simulator']]],
-  ['summarize_380',['summarize',['../classPopulation.html#af069291adb3fb7b451a36cf0a179398b',1,'Population']]],
-  ['survival_5fprobability_381',['survival_probability',['../namespacefish.html#a8145736f4c8af31563881d90bf61cbf0',1,'fish']]]
+  ['r_5finit_5ffishery_0',['R_init_fisheRy',['../RcppExports_8cpp.html#a475ac289c7f0475132fe1511d0d166b6',1,'RcppExports.cpp']]],
+  ['rcpp_5fexposed_5fclass_1',['rcpp_exposed_class',['../fish__glue_8cpp.html#a61cb614a3f9dc0f2b7238e44ffb4d55d',1,'RCPP_EXPOSED_CLASS(FisheryParams):&#160;fish_glue.cpp'],['../fish__glue_8cpp.html#acd09b5f7669323ce9de8e5842df6ac0f',1,'RCPP_EXPOSED_CLASS(Stock):&#160;fish_glue.cpp'],['../fish__glue_8cpp.html#a0a48a8421c09272bf10328a0f84d3c56',1,'RCPP_EXPOSED_CLASS(Population):&#160;fish_glue.cpp'],['../fish__glue_8cpp.html#a98419b0e357e28499fdbf638fbe73e50',1,'RCPP_EXPOSED_CLASS(Fish):&#160;fish_glue.cpp'],['../fish__glue_8cpp.html#abef93d8b682ec93cf83cb9137488f626',1,'RCPP_EXPOSED_CLASS(FishParams):&#160;fish_glue.cpp'],['../fish__glue_8cpp.html#ac432fdbab3d6eb56303fe0c2bac528ef',1,'RCPP_EXPOSED_CLASS(PopulationParams):&#160;fish_glue.cpp'],['../fish__glue_8cpp.html#a7bdb2f200bfe1b4fb610dcc15c00a216',1,'RCPP_EXPOSED_CLASS(StockParams):&#160;fish_glue.cpp'],['../fish__glue_8cpp.html#ab55db998c424cc4029006614b710ecdc',1,'RCPP_EXPOSED_CLASS(SeaEnvironment):&#160;fish_glue.cpp'],['../fish__glue_8cpp.html#a105d46e138327c933b6f5d094d7ed7c5',1,'RCPP_EXPOSED_CLASS(FleetParams):&#160;fish_glue.cpp'],['../fish__glue_8cpp.html#a6d85de7514c5d17a372a21224e287424',1,'RCPP_EXPOSED_CLASS(Fleet):&#160;fish_glue.cpp']]],
+  ['rcpp_5fmodule_2',['rcpp_module',['../fish__glue_8cpp.html#addebb0997b0e49067d8784c9954b7b96',1,'RCPP_MODULE(simulator_module):&#160;fish_glue.cpp'],['../fish__glue_8cpp.html#a778381d9eafd2a89f3b6e2ea2a7bd4c3',1,'RCPP_MODULE(fleet_module):&#160;fish_glue.cpp'],['../fish__glue_8cpp.html#ab96ae82277aa9004dc603b77512c7265',1,'RCPP_MODULE(population_module):&#160;fish_glue.cpp'],['../fish__glue_8cpp.html#a7b6a9b6d94c71377c935b2cfbffdfabc',1,'RCPP_MODULE(fish_module):&#160;fish_glue.cpp']]],
+  ['readenvironmentfile_3',['readenvironmentfile',['../classPopulation.html#a2cbbf4e1d4fdfe6fc3f67b96a5aa698d',1,'Population::readEnvironmentFile()'],['../classFishery.html#a8ae41eae55efc567fa24d4fa3016f270',1,'Fishery::readEnvironmentFile()']]],
+  ['readparams_4',['readparams',['../classStock.html#a46b47de61c4c858cdc1dca9414ca95a9',1,'Stock::readParams()'],['../classPopulation.html#aeb1d470183d21899c25151c6fe15a4dc',1,'Population::readParams()'],['../classFleet.html#a10c121be3837eca2148ecda571d2eabe',1,'Fleet::readParams()'],['../classFishery.html#a3f96f666929f7b4e1ada705db7fd1325',1,'Fishery::readParams()']]],
+  ['repeat_5finner_5',['repeat_inner',['../classTensor.html#af7842b03189c09e8b982adc4d4adf24c',1,'Tensor']]],
+  ['repeat_5fouter_6',['repeat_outer',['../classTensor.html#a60ed984f4e027e42540619c148242481',1,'Tensor']]],
+  ['rnorm_7',['rnorm',['../population_8cpp.html#a61a9d6b6e4939c3d945009e0406dc44f',1,'rnorm(double mu=0, double sd=1):&#160;population.cpp'],['../stock_8cpp.html#a61a9d6b6e4939c3d945009e0406dc44f',1,'rnorm(double mu=0, double sd=1):&#160;stock.cpp']]],
+  ['runif_8',['runif',['../fishery__system_8cpp.html#a448644b6a3a0fa7cd89a6ce52b9bd3aa',1,'runif(double rmin=0, double rmax=1):&#160;fishery_system.cpp'],['../fleet_8cpp.html#a448644b6a3a0fa7cd89a6ce52b9bd3aa',1,'runif(double rmin=0, double rmax=1):&#160;fleet.cpp'],['../population_8cpp.html#a448644b6a3a0fa7cd89a6ce52b9bd3aa',1,'runif(double rmin=0, double rmax=1):&#160;population.cpp'],['../stock_8cpp.html#a448644b6a3a0fa7cd89a6ce52b9bd3aa',1,'runif(double rmin=0, double rmax=1):&#160;stock.cpp']]]
 ];

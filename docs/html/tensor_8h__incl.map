@@ -1,9 +1,15 @@
 <map id="inst/include/tensor.h" name="inst/include/tensor.h">
-<area shape="rect" id="node1" title=" " alt="" coords="207,5,361,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,80,85,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="109,80,179,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="203,80,266,107"/>
-<area shape="rect" id="node5" title=" " alt="" coords="290,80,377,107"/>
-<area shape="rect" id="node6" title=" " alt="" coords="401,80,487,107"/>
-<area shape="rect" id="node7" title=" " alt="" coords="511,80,585,107"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="207,5,361,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,85,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="246,33,98,77,96,72,245,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="109,79,179,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="263,33,180,75,178,70,260,28"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="203,79,266,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="278,33,253,69,248,66,274,29"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="290,79,377,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="294,29,320,66,315,69,290,33"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="401,79,487,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="311,28,406,71,404,75,309,33"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="511,79,585,104"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="327,28,498,74,496,79,326,33"/>
 </map>

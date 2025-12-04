@@ -1,9 +1,19 @@
 var searchData=
 [
-  ['n_466',['n',['../classPopulationParams.html#ab5b9c6a5b69512f129cc98001ae4c9d1',1,'PopulationParams']]],
-  ['nelem_467',['nelem',['../classTensor.html#a31f1d53c1981fae259f2fdfd22d0b15f',1,'Tensor']]],
-  ['nfnct_468',['nfnct',['../structpn_1_1BrentRes.html#ada3749a575a09aa6ec6cc804cee9fa34',1,'pn::BrentRes']]],
-  ['nofishingpop_469',['noFishingPop',['../classSimulator.html#a09f897004c8c5769805de60357c852ba',1,'Simulator']]],
-  ['normal_5fdist_470',['normal_dist',['../classPopulation.html#a06b05a3e490e9bc49e3c9cd341ce07ab',1,'Population']]],
-  ['nrecruits_5fvec_471',['nrecruits_vec',['../classPopulation.html#ac35942a03daf91992a517eaf09fa8db4',1,'Population']]]
+  ['n_0',['n',['../classPopulationParams.html#ab5b9c6a5b69512f129cc98001ae4c9d1',1,'PopulationParams']]],
+  ['n_5fa_1',['n_a',['../classPopulationSummary.html#a7a9a10d60a24669078ac86680c4608a0',1,'PopulationSummary::n_a'],['../structStockSummary.html#a5925de10a0a735def4b3a938f758a530',1,'StockSummary::n_a']]],
+  ['n_5ffishable_2',['n_fishable',['../classWindowProps.html#aec49690f56ba3b69ea6924373bdf94cb',1,'WindowProps']]],
+  ['nc_5fa_3',['nc_a',['../classPopulationSummary.html#a1af10722826f1904cd7c76e308a59e61',1,'PopulationSummary::nc_a'],['../structStockSummary.html#af64939956e9b606e4a17c057bef8a843',1,'StockSummary::nc_a']]],
+  ['nelem_4',['nelem',['../classTensor.html#a31f1d53c1981fae259f2fdfd22d0b15f',1,'Tensor']]],
+  ['nfish_5fra_5',['nfish_ra',['../structStockSummary.html#abd66178d6cc5cc23750ceef1be584ae8',1,'StockSummary']]],
+  ['nfish_5fstart_6',['nfish_start',['../structStockSummary.html#a10116291296bc13e560e59919c70afb4',1,'StockSummary']]],
+  ['nfnct_7',['nfnct',['../structpn_1_1BrentRes.html#ada3749a575a09aa6ec6cc804cee9fa34',1,'pn::BrentRes']]],
+  ['no_5ffishing_5fpop_8',['no_fishing_pop',['../classFishery.html#ad0243aef4a17caa1c204fc352e960f0d',1,'Fishery']]],
+  ['nofishingpop_9',['noFishingPop',['../classSimulator.html#a09f897004c8c5769805de60357c852ba',1,'Simulator']]],
+  ['normal_5fdist_10',['normal_dist',['../classPopulation.html#a06b05a3e490e9bc49e3c9cd341ce07ab',1,'Population::normal_dist'],['../classStock.html#a532b86696e2db111d06d12e3bcfa8b88',1,'Stock::normal_dist']]],
+  ['nrecruits_5fper_5ffish_11',['nrecruits_per_fish',['../structStockSummary.html#aeb3cfa6a3e46781be336fc5cc4cedf6a',1,'StockSummary']]],
+  ['nrecruits_5fpotential_12',['nrecruits_potential',['../structStockSummary.html#afe5c800c8b50c759a9c5381700dda69c',1,'StockSummary']]],
+  ['nrecruits_5freal_13',['nrecruits_real',['../structStockSummary.html#a374c2a8e6009760952dca57e1548f86d',1,'StockSummary']]],
+  ['nrecruits_5fvec_14',['nrecruits_vec',['../classPopulation.html#ac35942a03daf91992a517eaf09fa8db4',1,'Population::nrecruits_vec'],['../classStock.html#a6303f70699e5b55133afae771b4e869c',1,'Stock::nrecruits_vec']]],
+  ['nspawners_15',['nspawners',['../structStockSummary.html#a90b3a62179b282fd39a1f09aa06764a2',1,'StockSummary']]]
 ];

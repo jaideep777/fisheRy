@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['seaenvironment_272',['SeaEnvironment',['../classSeaEnvironment.html',1,'']]],
-  ['simulator_273',['Simulator',['../classSimulator.html',1,'']]]
+  ['population_0',['Population',['../classPopulation.html',1,'']]],
+  ['populationparams_1',['PopulationParams',['../classPopulationParams.html',1,'']]],
+  ['populationsummary_2',['PopulationSummary',['../classPopulationSummary.html',1,'']]]
 ];

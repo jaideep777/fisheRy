@@ -1,9 +1,10 @@
 var searchData=
 [
-  ['maturation_5fprobability_326',['maturation_probability',['../namespacefish.html#a214a54b82cb48878c083a73958c45847',1,'fish']]],
-  ['maturation_5fsteepness_327',['maturation_steepness',['../namespacefish.html#a79ee7b63f43f9e9bda95cc04deb3a082',1,'fish']]],
-  ['maturationprob_328',['maturationProb',['../classFish.html#ac7121f25ba24b82a7faabd07702d7e73',1,'Fish']]],
-  ['max_5favg_5futils_329',['max_avg_utils',['../classSimulator.html#addbc3da16a6f9c352eefbdc423419bca',1,'Simulator']]],
-  ['max_5favg_5futils_5f2d_330',['max_avg_utils_2d',['../classSimulator.html#a32eeba843e7526dceb75a2c6aebe240e',1,'Simulator']]],
-  ['max_5fdim_331',['max_dim',['../classTensor.html#abf7346c2dbd5e6b195cfe9b66e5049e8',1,'Tensor']]]
+  ['length_5fadult_0',['length_adult',['../namespacefish.html#adc414165e9acd76993cbaaf5140c5f22',1,'fish']]],
+  ['length_5fjuvenile_1',['length_juvenile',['../namespacefish.html#a1d06e0358aca1be4446ed148b7ce3d84',1,'fish']]],
+  ['linreg_2',['linreg',['../fleet_8cpp.html#a252e6a3c8a187cdffb76f6da61c2d0b2',1,'fleet.cpp']]],
+  ['linreg0_3',['linreg0',['../fleet_8cpp.html#a3805e1087f32a64ce55f93422ec92d1a',1,'fleet.cpp']]],
+  ['linreg_5fpredict_4',['linreg_predict',['../fleet_8cpp.html#a03484686b57803bccef4d1ec0ec998ee',1,'fleet.cpp']]],
+  ['linreg_5fpredict_5finverse_5',['linreg_predict_inverse',['../fleet_8cpp.html#abdda32af9a7aa3d25bdb76afe403bc67',1,'fleet.cpp']]],
+  ['location_6',['location',['../classTensor.html#ac96d9345bd34612ca648f0b2cef1a147',1,'Tensor::location(std::vector&lt; int &gt; ix)'],['../classTensor.html#a2e4d51ac74c4a518c4e83a4be3eab68a',1,'Tensor::location(ARGS... ids)']]]
 ];

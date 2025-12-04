@@ -1,9 +1,23 @@
 var searchData=
 [
-  ['f_5fharvest_5fspg_424',['f_harvest_spg',['../classPopulationParams.html#ab177aedcb00ca6b00448dcb12c56acf2',1,'PopulationParams']]],
-  ['fin_425',['fin',['../classio_1_1Initializer.html#a8e36a703479eb463e633447cb7307420',1,'io::Initializer']]],
-  ['fishes_426',['fishes',['../classPopulation.html#acaba56624b9cce2d2c25fe622a9b950a',1,'Population']]],
-  ['fixed_5fcosts_5fsea_427',['fixed_costs_sea',['../classPopulationParams.html#af2f8a6129b953195214d7246afec9439',1,'PopulationParams']]],
-  ['fixed_5fcosts_5fshore_428',['fixed_costs_shore',['../classPopulationParams.html#a5a7729850cb0fddac19ee98e5d7dd1b7',1,'PopulationParams']]],
-  ['flag_429',['flag',['../classFishParams.html#a0bfb29134656160d7361f0ea1b6bc081',1,'FishParams']]]
+  ['f1_0',['f1',['../classPopulationParams.html#aa2b661ec566a441a99d44b19d929c294',1,'PopulationParams::F1'],['../classFleetParams.html#a3ee81b3a25a7b33400ad72e412ce3dbb',1,'FleetParams::F1']]],
+  ['f2_1',['f2',['../classFleetParams.html#a8abff2f1b88c31cba932b00df91b8bf2',1,'FleetParams::F2'],['../classPopulationParams.html#ae5975d8c0b3cdb23fe420382fbcc4012',1,'PopulationParams::F2']]],
+  ['f3_2',['f3',['../classFleetParams.html#a028e4fc17848f41dec233275dafbb480',1,'FleetParams::F3'],['../classPopulationParams.html#a7e528460266857ad4d7734fc4d501f9a',1,'PopulationParams::F3']]],
+  ['f3_5fsq_3',['f3_sq',['../classFleetParams.html#a57498a89aa69df3ce7297637e2886813',1,'FleetParams::F3_sq'],['../classPopulationParams.html#a70067d0fb838486ff693a83ab7516318',1,'PopulationParams::F3_sq']]],
+  ['f4_4',['f4',['../classFleetParams.html#afa285eff078057b6f633657a82f2bd20',1,'FleetParams::F4'],['../classPopulationParams.html#a67acb5a791c31710a970f83c67e9a493',1,'PopulationParams::F4']]],
+  ['f5_5',['f5',['../classFleetParams.html#ac7878d6564cb16df794c9014fffad9a1',1,'FleetParams::F5'],['../classPopulationParams.html#afee19271cdd83fdc1f917f101def61c5',1,'PopulationParams::F5']]],
+  ['f5_5fsq_6',['f5_sq',['../classFleetParams.html#a39deecf0abe7e9ce32685f151ca64d3c',1,'FleetParams::F5_sq'],['../classPopulationParams.html#a04db63551c65dd4cd8eb8585ac82c2a8',1,'PopulationParams::F5_sq']]],
+  ['f6_7',['f6',['../classFleetParams.html#ac622077ffd77363ae9e79ba0ac6528e0',1,'FleetParams::F6'],['../classPopulationParams.html#ae9d48f2ef8ce212c184299203ba9bc3a',1,'PopulationParams::F6']]],
+  ['f_5ffishable_8',['F_fishable',['../classWindowProps.html#a7e00e7296992f590e90367127c6f4465',1,'WindowProps']]],
+  ['f_5fspf_5fbefore_9',['f_spf_before',['../classFisheryParams.html#a4cc172dc05ec3165ff54ee2712dee66c',1,'FisheryParams::f_spf_before'],['../classPopulationParams.html#ac004f8408818fddfcc81a1fb3b17b2d7',1,'PopulationParams::f_spf_before']]],
+  ['factor_5fdg_10',['factor_dg',['../structStockSummary.html#af0831917bc49409963d3dafd71bea12b',1,'StockSummary']]],
+  ['factor_5fdr_11',['factor_dr',['../structStockSummary.html#addd678759a149f99bb07917b9d8c3f9f',1,'StockSummary']]],
+  ['fc_12',['Fc',['../classPopulationParams.html#a44cd6e65ed5e45f810595e2235b34ad5',1,'PopulationParams']]],
+  ['fee_5fratio_13',['fee_ratio',['../classFleetParams.html#a0f98376e303d59df68c64f597ba0d9f0',1,'FleetParams::fee_ratio'],['../classPopulationParams.html#a5edd3b8135bf6ebd49bf13a6449b1638',1,'PopulationParams::fee_ratio']]],
+  ['fin_14',['fin',['../classio_1_1Initializer.html#a8e36a703479eb463e633447cb7307420',1,'io::Initializer']]],
+  ['fishes_15',['fishes',['../classPopulation.html#acaba56624b9cce2d2c25fe622a9b950a',1,'Population::fishes'],['../classStock.html#a8867359bd5157d1e2f9ce25bbbeec251',1,'Stock::fishes']]],
+  ['fixed_5fcosts_5fsea_16',['fixed_costs_sea',['../classFleetParams.html#a5dea85003c4d9b4adde290e3449d0edb',1,'FleetParams::fixed_costs_sea'],['../classPopulationParams.html#af2f8a6129b953195214d7246afec9439',1,'PopulationParams::fixed_costs_sea']]],
+  ['fixed_5fcosts_5fshore_17',['fixed_costs_shore',['../classFleetParams.html#aaad62f18f1f8577037cae68230d76f3c',1,'FleetParams::fixed_costs_shore'],['../classPopulationParams.html#a5a7729850cb0fddac19ee98e5d7dd1b7',1,'PopulationParams::fixed_costs_shore']]],
+  ['flag_18',['flag',['../classFishParams.html#a0bfb29134656160d7361f0ea1b6bc081',1,'FishParams']]],
+  ['fleets_19',['fleets',['../classFishery.html#a970a78f513953633ef972ec27715d256',1,'Fishery']]]
 ];

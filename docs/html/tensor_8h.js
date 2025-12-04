@@ -1,14 +1,14 @@
 var tensor_8h =
 [
-    [ "Tensor", "classTensor.html", "classTensor" ],
-    [ "operator*", "tensor_8h.html#acb032d3cb6aac012e1b274e39199838f", null ],
-    [ "operator*", "tensor_8h.html#a13eeae4ee31d7741e9822166e2c15d9c", null ],
-    [ "operator*", "tensor_8h.html#a4d7a51790f1c41bab1746aa712aa543d", null ],
-    [ "operator+", "tensor_8h.html#aff8765a70f5037669a8ba92e07c9d296", null ],
-    [ "operator+", "tensor_8h.html#abf205fb6e01c8ff7da503f9df27cc26f", null ],
-    [ "operator+", "tensor_8h.html#af44229e1f423a170b980d55e73f84c25", null ],
-    [ "operator-", "tensor_8h.html#a766ee6f76c9c1c8d6fe18e690040034b", null ],
-    [ "operator-", "tensor_8h.html#a7c2aea450ce283b85445db6a714d766f", null ],
-    [ "operator-", "tensor_8h.html#a62a2a1a0b50a839294f7f801445e798c", null ],
-    [ "operator/", "tensor_8h.html#aec9a2dcafe1048c8558b79f584d86a0e", null ]
+    [ "Tensor< T >", "classTensor.html", "classTensor" ],
+    [ "operator*", "tensor_8h.html#aa5c6a9db956e095104953146e39f4857", null ],
+    [ "operator*", "tensor_8h.html#a15723f76ded791c6ca9c66bf730a3c01", null ],
+    [ "operator*", "tensor_8h.html#acc9fb6f97003f757ef2c06518fab4788", null ],
+    [ "operator+", "tensor_8h.html#a5a4228da810304f0bf30bd60e7ccdf71", null ],
+    [ "operator+", "tensor_8h.html#a5e584fe1717c84ff729d529dcfe16198", null ],
+    [ "operator+", "tensor_8h.html#afd999cd732f56d06ac75e0899b766ee1", null ],
+    [ "operator-", "tensor_8h.html#a5202c44ffe976bd0db4439a110483e47", null ],
+    [ "operator-", "tensor_8h.html#a208563631669aff3ff4e2e6c9c3a0313", null ],
+    [ "operator-", "tensor_8h.html#a3cd7b1a531bda1d3ac191d0c675df9b0", null ],
+    [ "operator/", "tensor_8h.html#aec5574a5638ae2d2e524c81339913827", null ]
 ];
