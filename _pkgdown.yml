@@ -33,9 +33,9 @@ navbar:
         - text: Biological model
           icon: fa-fish
           href: articles/theory_bio.html
-        - text: Socioeconomic model
-          icon: fa-fish
-          href: articles/theory_eco.html
+        # - text: Socioeconomic model
+        #   icon: fa-fish
+        #   href: articles/theory_eco.html
     tutorials:
       text: Tutorials
       icon: fa-book fa-lg
@@ -43,30 +43,36 @@ navbar:
         # - text: Simulating a single fish
         #   icon: fa-fish
         #   href: articles/single_fish.html
+        - text: Understanding fishability and selectivity
+          icon: fa-fish
+          href: articles/fishability_selectivity.html
+        - text: Testing effort control
+          icon: fa-fish
+          href: articles/effort_control_stock.html
         - text: Simulating an unfished population
           icon: fa-fish
-          href: articles/unfished_population.html
+          href: articles/unfished_population_stock.html
         # - text: Simulating an unfished fished population with evolution
         #   icon: fa-fish
         #   href: articles/evolving_unfished_population.html
         - text: Simulating a fished population (biological model only)
           icon: fa-fish
-          href: articles/fished_population.html
-        - text: Simulating multiple populations at once
-          icon: fa-fish
-          href: articles/multiple_populations.html
-        - text: Compare models (harvest proportion)
-          icon: fa-fish
-          href: articles/compare_hscans.html
-        - text: Compare models (min size limit)
-          icon: fa-fish
-          href: articles/compare_lminscans.html
-        - text: Calculating JSS with 1 control parameter - h
-          icon: fa-fish
-          href: articles/jss_calcs_h.html
-        - text: Calculating 2D JSS without evolution
-          icon: fa-fish
-          href: articles/jss_calcs_hxL.html
+          href: articles/fished_population_stock.html
+        # - text: Simulating multiple populations at once
+        #   icon: fa-fish
+        #   href: articles/multiple_populations.html
+        # - text: Compare models (harvest proportion)
+        #   icon: fa-fish
+        #   href: articles/compare_hscans.html
+        # - text: Compare models (min size limit)
+        #   icon: fa-fish
+        #   href: articles/compare_lminscans.html
+        # - text: Calculating JSS with 1 control parameter - h
+        #   icon: fa-fish
+        #   href: articles/jss_calcs_h.html
+        # - text: Calculating 2D JSS without evolution
+        #   icon: fa-fish
+        #   href: articles/jss_calcs_hxL.html
         # - text: Calculating 2D JSS with evolution
         #   icon: fa-fish
         #   href: articles/jss_calcs_hxL_evol.html

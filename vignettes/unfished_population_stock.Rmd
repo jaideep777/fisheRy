@@ -17,6 +17,14 @@ source(here::here("tests/ref/parameters.cod.R"))
 source(here::here("tests/ref/simulator.7.R"))
 ```
 
+<!-- Inserted: high-level orienting paragraph before Create a fish -->
+
+Before we start with the hands-on code, a short orientation:
+
+- Goal: build a prototype Fish, use it to create a Stock, and run short unfished simulations to inspect equilibrium behaviour.
+- Output you will inspect: time-series of SSB/TSB, recruitment, maturity and an age×length distribution snapshot.
+- Run time: the examples use modest agent counts (1000 superfish) and short horizons (200 years) and should be quick on a modern laptop; increasing realism (smaller superfish_size, more runs) increases CPU/time.
+
 ### Create a fish
 
 A population is a collection of fish. Therefore to create a population, we first create a fish. This fish will be used a prototype to construct the population.
@@ -43,6 +51,20 @@ fish$par$print()
 fish$get_state()
 ```
 
+<!-- Inserted: expanded explanation of Fish and FishParams following the fish creation -->
+
+Notes on the Fish prototype and parameters
+
+- Fish objects encapsulate an individual (or, in practice, a "superfish") life-history. Important fields you will commonly inspect or modify from R:
+  - age, length, weight, t_birth — the basic state variables.
+  - par — a FishParams object containing biological parameters (r0, Bhalf, Mspawning, s0, growth/maturation/mortality model names, etc.). These parameters drive growth, maturation, mortality and recruitment functions implemented in C++.
+  - trait_variances, trait_scalars, trait_names — used by the trait-inheritance and evolutionary parts of the model (offspring inherit parental trait means plus normal noise).
+- Typical workflow: create a Fish, tune `fish$par` fields to choose a growth/maturation/recruitment model and numeric parameter values, then call `fish$init(tsb, temp)` to set the initial physiological state consistent with environmental conditions.
+- Choosing models:
+  - Dankel-like / empirical: select growth_model_name and maturation_model_name values that point to fitted empirical curves in the codebase (e.g., "Dankel22").
+  - Bioenergetic: tune s0 and related parameters so growth and reproduction come from mechanistic energy-budget rules.
+- Always call `fish$par$print()` after modifying params — it helps to verify that intended values were applied.
+
 ### Create a population
 
 The constructor for the population requires a Fish object as an argument. This fish object will be used as a prototype to construct all fish in the population. You can create a fish population as follows:
@@ -51,6 +73,15 @@ The constructor for the population requires a Fish object as an argument. This f
 pop = new(Stock, fish)  
 pop$readParams(params_file, F)
 ```
+
+<!-- Inserted: explanation of Stock, superfish_size and scaling -->
+
+Stock, superfish_size and units
+
+- Stock stores the population state in a std::vector<Fish> (exposed as pop$fishes in C++). The Stock constructor takes a prototype Fish (proto_fish) which is copied to initialize new recruits and the initial population.
+- superfish_size: each Fish instance represents superfish_size real individuals. This scaling reduces computational load: e.g., superfish_size = 1e6 means each simulated agent stands for one million fish in population metrics.
+- Units and presentation: biomass summary functions (calcSSB, calcTSB) return values in the model's mass units. In this vignette we divide by 1e9 before plotting to obtain numbers on a convenient scale (labelled "MT" in prior plots). Always be mindful of unit conversions when comparing with external datasets or other model implementations.
+- Practical rule of thumb: reduce superfish_size to lower discretization noise (more simulated agents) but expect higher CPU/time. Increase it when you want faster exploratory runs.
 
 ### Setting population parameters
 
@@ -61,6 +92,13 @@ Two parameters are important:
 + `n` - Superfish size. Since the population can have billions of fish, we do not simulate each individual fish. Rather, each "Fish" represents a group of `n` actual fish. This collection is called "Superfish". Reducing this parameter will necessitate simulating more agents in the model, which will reduce noise but also take more computational time. 
 + `Bhalf` - This is a parameter that controls density dependent recruitment. 
 
+<!-- Inserted: practical guidance on superfish_size and Bhalf -->
+
+Practical guidance and sanity checks:
+
+- Superfish size: choose a value that balances stochastic noise and runtime. Typical working values in these vignettes are 1e6–5e6. If you see large step-changes in outputs between years, consider increasing superfish_size (fewer agents) for speed or decreasing it (more agents) to reduce discreteness noise.
+- Bhalf and recruitment: Bhalf sets the SSB scale where density dependence halves recruitment. If SSB and recruitment appear uncoupled (very low sensitivity), verify Bhalf is within the same order of magnitude as observed SSB in the model (inspect v$ssb after a run). For debugging, temporarily set Bhalf very large (weak density dependence) or very small (strong density dependence) to confirm expected qualitative behaviour.
+- Reproducibility: the Stock uses C++ RNGs internally. Use multiple replicates with different seeds to assess stochastic spread; for debugging, run shorter horizons and inspect diagnostics (nfish, nr, dr).
 
 ```{r}
 pop$superfish_size = 2e6  # Each superfish contains so many fish
@@ -111,7 +149,10 @@ For example, let is simulate a population for 200 years.
 #   nfish[i] = pop$nfish()
 # }
 
-v = pop$equilibriate_without_fishing(5.61) |> matrix(nrow=200, byrow=T) |> as.data.frame() |> setNames(c("ssb", "tsb", "maturity", "nr", "dr", "nfish"))
+v = pop$equilibriate_without_fishing(5.61) |> 
+      matrix(nrow=200, byrow=T) |> 
+      as.data.frame() |> 
+      setNames(c("ssb", "tsb", "maturity", "nr", "dr", "nfish"))
 
 d = pop$get_state()
 dist = table(d$age, d$length)

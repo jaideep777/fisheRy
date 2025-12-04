@@ -210,7 +210,7 @@ fleet$effort_constantF(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
 
 ```{r}
 pc_error = function(i, mode, h, slope){
-  quota = h*ssb_nf
+  # quota = h*ssb_nf
 
   fleet = new(Fleet)
   fleet$readParams(params_file_fleet, F)
@@ -219,6 +219,8 @@ pc_error = function(i, mode, h, slope){
   fleet$chi = 100
   fleet$init_chi(pop, F_fgf, 5.61)
   k_unfished = fleet$biomassFishable(pop, 0)
+
+  quota = h * k_unfished
 
   out = fleet$harvest_dry_run(pop, quota, 5.61)
 

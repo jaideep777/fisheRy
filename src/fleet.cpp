@@ -519,7 +519,7 @@ double Fleet::effort_constantC(double q, double b, double K){
 		double effort_t = C/q/(pow( (N0+C/M)*exp(-M*t) - C/M, b));
 		effort += effort_t*par.window_dt;
 
-		std::cout << "N0: " << N0 << ", C: " << C << ", M: " << M << ", t: " << t << ", effort_t: " << effort_t << std::endl;
+		if (debug) std::cout << "N0: " << N0 << ", C: " << C << ", M: " << M << ", t: " << t << ", effort_t: " << effort_t << std::endl;
 	}
 	return effort;
 }

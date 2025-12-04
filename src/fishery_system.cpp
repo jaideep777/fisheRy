@@ -57,6 +57,45 @@ void Fishery::set_minSizeLimit(double _lf50) {
 	}
 }
 
+// double Fishery::calc_quota(double temp){
+// 	if (fleets.empty()) {
+// 		throw std::runtime_error("Fishery: No fleets defined, cannot calculate quota.");
+// 	}
+	
+// 	auto& fl = fleets[0]; // Since lmin is the same across all fleets, we use the first fleet to calculate quota
+// 	double Fc = -log(1-harvest_prop);
+	
+// 	// Calculate chi of the fleet to implement mortality
+// 	fl.chi = Fc/fl.FishingMortalityRef_avgl(200, 100);
+
+// 	// Calculate expected Catch with the given chi
+// 	// Note: Be careful to not modify the fishes vector here
+// 	double expected_catch = 0, to_sea_bed = 0;
+// 	for (const auto& f: pop.fishes) {  // const auto& ensures we do not modify the fish 
+// 		if (!f.isAlive) continue; // Skip already dead fishes
+
+// 		double natural_mort_rate = f.naturalMortalityRate(temp);
+// 		double fishing_mort_rate = fl.fishingMortality(f.length);
+// 		double mortality_rate = natural_mort_rate + fishing_mort_rate;
+
+// 		double survival_prob = exp(-mortality_rate*1.0);
+		
+// 		bool f_isAlive = f.isAlive && (runif() <= survival_prob);	// set the fish to die probabilistically, if not dead already.
+
+// 		if (!f_isAlive){
+// 			bool f_isCaught = runif() < fishing_mort_rate/mortality_rate; // check if fish is caught or goes to sea bed!
+			
+// 			if (f_isCaught) expected_catch += pop.superfish_size*f.weight; // if caught, add to yield
+// 			else to_sea_bed += pop.superfish_size*f.weight;       // else, goes to sea bed
+// 		}
+			
+// 	}
+
+// 	return expected_catch;
+// }
+
+
+// This is with the new definition of harvest proportion, i.e., a fraction h of fishable biomass
 double Fishery::calc_quota(double temp){
 	if (fleets.empty()) {
 		throw std::runtime_error("Fishery: No fleets defined, cannot calculate quota.");
