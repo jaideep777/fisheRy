@@ -15,8 +15,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, include = F, echo = F}
 library(fisheRy)
 library(tidyverse)
-source("../tests/ref/parameters.cod.R")
-source("../tests/ref/simulator.7.R")
+source(here::here("tests/ref/parameters.cod.R"))
+source(here::here("tests/ref/simulator.7.R"))
 ```
 
 Given the fisheries management parameters, i.e., the minimum size limit and the harvest proportion, the socioeconomic model calculates fishing mortality, the corresponding yield, and other socioeconomic outcomes such as employment and profit. 
@@ -24,7 +24,7 @@ Given the fisheries management parameters, i.e., the minimum size limit and the 
 ## Set up a population
 
 ```{r}
-params_file = "../params/cod_params.ini"
+params_file = here::here("params/cod_params.ini")
 
 fish = new(Fish, params_file)
 

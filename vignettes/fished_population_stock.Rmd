@@ -13,34 +13,51 @@ library(fisheRy)
 
 # Fishery System Setup
 
-Set up the fishery system using parameter files for fleet and fish, and inspect initial parameters.
+To simulate a fishery, i.e., a fished population, we need a `Stock` to harvest, a `Fleet` that harvests it, and a `Fishery` that manages this interaction. A Fishery also contains a hypothetical unfished population, separate from the actual population that we will fish.
+
+Fish and population parameters are the same as in the case of an unfished population.
+Fleet parameters must be defined in a separate parameters file. Each fleet needs its own parameters file.
+
+Let us now set up the fishery system using parameter files for fleet and fish, and inspect initial parameters.
 
 ```{r setup-fishery}
+# define parameter files
 params_file_fleet = here::here("params/fleet_1_params.ini")
 params_file_fish  = here::here("params/cod_params.ini")
 
+# Create a fleet and read parameters
 fleet = new(Fleet)
 fleet$readParams(params_file_fleet, T)
-fleet$par$print();
+fleet$par$print()
 
+# Create a prototype fish to construct the population
 fish = new(Fish, params_file_fish)
 
+# Craeate the fishery. Note that we do not need to explicitly create a population - it is contained within the fishery
 fishery = new(Fishery, params_file_fish, fish);
-fishery$par$print();
+fishery$par$print()
 ```
 
 # Fishery Simulation
 
-Configure the fishery, set harvest proportion, add fleet, and run equilibrium and initialization steps.
+Configure the fishery:
+
+- set contol parameters, such as harvest proportion and min size limit
+- add the fleet to the fishery
+- A fishery simulation requires an estimate of the carrying capacity of the ocean, which is computed by simulating a hypothetical unfished population to equilibrium. This unfished population is also implicitly included in the Fishery class.
+- Initialize the fishery - this creates fish in the real fish population.
 
 ```{r configure-fishery}
 fishery$set_harvestProp(0.5);
 fishery$addFleet(params_file_fleet, T);
 
-fishery$equilibriateNaturalPopulation(5.61, 2e6);
+# Simulate the Fishery's hypothetical unfished population to equilibrium
+v = fishery$equilibriateNaturalPopulation(5.61, 2e6);
 
+# Initialize the 
 fishery$init(1000, 0, 5.61);
 
+# Just a demo calc of the initial quota corresponding to the set defined harvest proportion. The Fishery will recalculate this every year.
 quota = fishery$calc_quota(5.61);
 cat("Quota: ", quota, '\n')
 ```
