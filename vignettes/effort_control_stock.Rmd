@@ -33,7 +33,7 @@ fish = new(Fish, params_file)
 
 pop = new(Stock, fish)
 pop$readParams(params_file, F)
-pop$superfish_size = 0.2e6  # Each superfish contains so many fish
+pop$superfish_size = 2e6  # Each superfish contains so many fish
 
 pop$superfish_size
 

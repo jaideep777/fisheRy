@@ -85,7 +85,7 @@ double Fishery::calc_quota(double temp){
 		if (!f_isAlive){
 			bool f_isCaught = runif() < fishing_mort_rate/mortality_rate; // check if fish is caught or goes to sea bed!
 			
-			if (f_isCaught) expected_catch += pop.superfish_size*f.weight; // if caught, add to yield
+			if (f_isCaught && f.length >= min_size_limit) expected_catch += pop.superfish_size*f.weight; // if caught, add to yield
 			else to_sea_bed += pop.superfish_size*f.weight;       // else, goes to sea bed
 		}
 			
@@ -425,7 +425,8 @@ std::vector<double> Fishery::update(double temp){
 		maturity,
 		quota_fgf,
 		yield,
-		effort
+		effort,
+		recruits.size()*pop.superfish_size
 	};
 }
 

@@ -54,6 +54,18 @@ dat <- fishery$simulate(45, 0.55, 300, 0, 5.61, T, here::here("fishery_output/ag
 dat |> head()
 ```
 
+## Plot all output variables
+
+```{r}
+dat |> 
+  mutate(t=1:n()) |>
+  pivot_longer(-t) |> 
+  ggplot(aes(x=t, y=value)) +
+  geom_line(col="seagreen") +
+  facet_wrap(~name, scales="free_y")
+  
+```
+
 ## Quota (FGF) vs Yield
 
 This plot compares the feeding ground fishery quota to the yield, excluding the first 10 iterations.

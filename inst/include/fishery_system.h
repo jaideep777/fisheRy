@@ -30,7 +30,7 @@ class Fishery {
 	io::Initializer I;
 	Stock no_fishing_pop;
 
-	std::vector<std::string> colnames = {"ssb", "tsb", "maturity", "quota_fgf", "yield", "effort"};
+	std::vector<std::string> colnames = {"ssb", "tsb", "maturity", "quota_fgf", "yield", "effort", "recruits"};
 
 	public:
 	bool debug = true; // Should debugging calculations be done 
