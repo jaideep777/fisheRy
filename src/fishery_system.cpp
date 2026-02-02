@@ -400,6 +400,8 @@ void Fishery::summarize_population_metrics(){
 			return (f.isAlive && f.isMature)? pop.superfish_size : 0;
 		});
 	for (int i=0; i<stock_summary.mat_a.size(); ++i) stock_summary.mat_a[i] /= (stock_summary.n_a[i]+1e-20);
+
+	stock_summary.nfish_ra = stock_summary.n_a[pop.par.recruitmentAge];
 }
 
 
@@ -465,7 +467,7 @@ std::vector<double> Fishery::update(double temp){
 		quota_fgf,
 		yield,
 		effort,
-		recruits.size()*pop.superfish_size
+		stock_summary.nfish_ra
 	};
 }
 
