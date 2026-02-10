@@ -315,12 +315,14 @@ void FishParams::init(){
 }
 
 void FishParams::initFromFile(std::string params_file){
-	std::cout << "initFromFile_A";
+	std::cout << "initFromFile_A" << std::endl;
+	std::cout << "params_file " << params_file << std::endl;
 	io::Initializer I;
+	std::cout << "initFromFile_B" << std::endl;
 	I.parse(params_file, false, verbose);
-	std::cout << "initFromFile_B";
+	std::cout << "initFromFile_C" << std::endl;
 	#define READ_PAR(x) x = I.get<double>("fish", #x)
-	std::cout << "initFromFile_C";
+	std::cout << "initFromFile_D" << std::endl;
 	READ_PAR(beta); // = 0.655793; // 0.648728;
 	READ_PAR(r); // = 0.090367; // 0.077281;
 	READ_PAR(c); // = 6.519584; // 6.318308; //6.51559;
