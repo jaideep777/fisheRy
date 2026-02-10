@@ -76,8 +76,9 @@ class Initializer{
 		std::string current_section = "global";
 		std::smatch pieces;
 		std::string line;
+		std::cout << "BEGIN WHILE" << std::endl;
 		while (std::getline(in, line)){
-			std::cout << line << std::endl;
+			std::cout << "line: " << line << std::endl;
 			// trim text following comment characters
 			std::regex_search(line, pieces, comment_regex);
 			if (pieces.size() == 3){
