@@ -134,7 +134,8 @@ class FishParams {
 	// bool use_old_model_fec = false;
 	// bool use_old_model_mor = false;
 	
-	bool verbose = false;
+	// enable verbose output during initialization (to check that new parse function works as expected)
+	bool verbose = true;
 
 	void init();
 	void initFromFile(std::string params_file);

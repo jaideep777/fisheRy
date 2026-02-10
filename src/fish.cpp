@@ -16,7 +16,7 @@ using namespace std;
 Fish::Fish(string params_file){
 	t_birth = 0;
 	par.initFromFile(params_file);
-	//par.print();
+	par.print();
 }
 
 
@@ -313,9 +313,7 @@ void FishParams::init(){
 void FishParams::initFromFile(std::string params_file){
 	io::Initializer I;
 	I.parse(params_file, false, verbose);
-
 	#define READ_PAR(x) x = I.get<double>("fish", #x)
-
 	READ_PAR(beta); // = 0.655793; // 0.648728;
 	READ_PAR(r); // = 0.090367; // 0.077281;
 	READ_PAR(c); // = 6.519584; // 6.318308; //6.51559;
@@ -378,7 +376,6 @@ void FishParams::initFromFile(std::string params_file){
 	recruitment_model_name = I.get<string>("fish", "recruitment_model_name");
 	mortality_model_name = I.get<string>("fish", "mortality_model_name");
 	maturation_model_name = I.get<string>("fish", "maturation_model_name");
-
 	init();	
 }
 
