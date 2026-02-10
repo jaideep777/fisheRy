@@ -14,7 +14,8 @@ using namespace std;
 /// Reads parameters from the file and initializes them
 /// @param params_file Parameters in .ini format
 Fish::Fish(string params_file){
-	std::cout << "PASA_A";
+	std::cout << "PASA_A" << std::endl;
+	std::cout << params_file << std::endl;
 	t_birth = 0;
 	par.initFromFile(params_file);
 	par.print();
@@ -300,7 +301,7 @@ std::vector<double> Fish::get_state(){
 
 
 void FishParams::init(){
-	std::cout << "PASA_B";
+	std::cout << "FishParams::init";
 	steepness = fish::maturation_steepness(pmrn_width, pmrn_envelope);
 	std::cout << steepness << std::endl;
 	if (steepness <= 0) throw std::runtime_error("Calculated steepness values is <= 0");
@@ -314,11 +315,12 @@ void FishParams::init(){
 }
 
 void FishParams::initFromFile(std::string params_file){
+	std::cout << "initFromFile_A";
 	io::Initializer I;
 	I.parse(params_file, false, verbose);
-
+	std::cout << "initFromFile_B";
 	#define READ_PAR(x) x = I.get<double>("fish", #x)
-
+	std::cout << "initFromFile_C";
 	READ_PAR(beta); // = 0.655793; // 0.648728;
 	READ_PAR(r); // = 0.090367; // 0.077281;
 	READ_PAR(c); // = 6.519584; // 6.318308; //6.51559;
@@ -381,7 +383,7 @@ void FishParams::initFromFile(std::string params_file){
 	recruitment_model_name = I.get<string>("fish", "recruitment_model_name");
 	mortality_model_name = I.get<string>("fish", "mortality_model_name");
 	maturation_model_name = I.get<string>("fish", "maturation_model_name");
-
+	std::cout << "initFromFile_END";
 	init();	
 }
 
