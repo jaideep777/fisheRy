@@ -14,6 +14,7 @@ using namespace std;
 /// Reads parameters from the file and initializes them
 /// @param params_file Parameters in .ini format
 Fish::Fish(string params_file){
+	std::cout("PASA_A");
 	t_birth = 0;
 	par.initFromFile(params_file);
 	par.print();
