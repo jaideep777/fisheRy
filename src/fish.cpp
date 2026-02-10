@@ -14,7 +14,7 @@ using namespace std;
 /// Reads parameters from the file and initializes them
 /// @param params_file Parameters in .ini format
 Fish::Fish(string params_file){
-	std::cout("PASA_A");
+	std::cout << "PASA_A";
 	t_birth = 0;
 	par.initFromFile(params_file);
 	par.print();
@@ -300,6 +300,7 @@ std::vector<double> Fish::get_state(){
 
 
 void FishParams::init(){
+	std::cout << "PASA_B";
 	steepness = fish::maturation_steepness(pmrn_width, pmrn_envelope);
 	std::cout << steepness << std::endl;
 	if (steepness <= 0) throw std::runtime_error("Calculated steepness values is <= 0");
