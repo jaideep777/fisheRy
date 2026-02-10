@@ -69,11 +69,14 @@ class Initializer{
 	inline void parse(std::istream& in, bool add = false, bool verbose = true){
 		std::cout << "parse(std::istream& in" << std::endl;
 		if (!add) sections.clear();
-		
+		std::cout << "A" << std::endl;
 //		static const std::regex comment_regex{R"x(\s*[;#])x"};
-		const std::regex section_regex{R"(\s*\[([^\]]+)\])"};
-		const std::regex value_regex{R"(\s*(\S[^ \t=]*)\s*=\s*((\s*\S+)+)\s*$)"};
-		const std::regex comment_regex{"([^;#]*)([;#])"};
+		static const std::regex section_regex{R"(\s*\[([^\]]+)\])"};
+		std::cout << "B" << std::endl;
+		static const std::regex value_regex{R"(\s*(\S[^ \t=]*)\s*=\s*((\s*\S+)+)\s*$)"};
+		std::cout << "C" << std::endl;
+		static const std::regex comment_regex{"([^;#]*)([;#])"};
+		std::cout << "D" << std::endl;
 		std::string current_section = "global";
 		std::smatch pieces;
 		std::string line;
