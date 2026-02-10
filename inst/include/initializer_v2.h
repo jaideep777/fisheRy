@@ -111,7 +111,7 @@ class Initializer{
 	}
 		
 	inline void parse(std::string filename, bool add = false, bool verbose = true) {
-		std::cout << "parse(std::string filename" << std::endl;
+		std::cout << "parse(std::string filename" << filename.c_str() << std::endl;
 		fin.open(filename.c_str());
 		if (!fin) throw std::invalid_argument("Initializer: Could not open file: "+filename);
 		if (verbose) std::cout << "Parsing file: " << filename << "\n";
