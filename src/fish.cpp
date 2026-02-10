@@ -16,7 +16,7 @@ using namespace std;
 Fish::Fish(string params_file){
 	t_birth = 0;
 	par.initFromFile(params_file);
-	//par.print();
+	par.print();
 }
 
 
@@ -300,6 +300,7 @@ std::vector<double> Fish::get_state(){
 
 void FishParams::init(){
 	steepness = fish::maturation_steepness(pmrn_width, pmrn_envelope);
+	std::cout << steepness << std::endl;
 	if (steepness <= 0) throw std::runtime_error("Calculated steepness values is <= 0");
 
 	growth_model = growth_names_map.at(growth_model_name);
