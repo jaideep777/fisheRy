@@ -77,6 +77,7 @@ class Initializer{
 		std::smatch pieces;
 		std::string line;
 		while (std::getline(in, line)){
+			std::cout << line << std::endl;
 			// trim text following comment characters
 			std::regex_search(line, pieces, comment_regex);
 			if (pieces.size() == 3){
