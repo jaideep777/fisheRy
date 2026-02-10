@@ -134,7 +134,7 @@ class FishParams {
 	// bool use_old_model_fec = false;
 	// bool use_old_model_mor = false;
 	
-	bool verbose = false;
+	bool verbose = true;
 
 	void init();
 	void initFromFile(std::string params_file);
