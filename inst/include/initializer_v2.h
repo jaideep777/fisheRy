@@ -2,7 +2,6 @@
 #define UTILS_IO_INITIALIZER_H_
 
 #include <iostream>
-#include <regex>
 #include <string>
 #include <fstream>
 #include <vector>
@@ -67,112 +66,103 @@ class Initializer{
 
 public:
 	inline void parse(std::istream& in, bool add = false, bool verbose = true) {
-		std::cout << "parse(std::istream& in) [NO-REGEX VERSION]" << std::endl;
-
-		if (!add) sections.clear();
-
-		// --- Whitespace trimming helpers (Lambdas) ---
+		// check if we have to clear existing sections
+		if (!add) {
+			sections.clear();
+		}
+		// first lambda function for trimming whitespace
 		auto ltrim = [](std::string& s) {
 			s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch) {
 				return !std::isspace(ch);
 				}));
 			};
-
+		// second lambda function for trimming whitespace
 		auto rtrim = [](std::string& s) {
 			s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch) {
 				return !std::isspace(ch);
 				}).base(), s.end());
 			};
-
+		// third lambda function for trimming both ends
 		auto trim = [&](std::string& s) {
 			ltrim(s);
 			rtrim(s);
 			};
-		// ---------------------------------------------
-
+		// Start with the global section
 		std::string current_section = "global";
+		// Read file line by line
 		std::string line;
-
-		std::cout << "BEGIN WHILE" << std::endl;
-
 		while (std::getline(in, line)) {
-			std::string original_line = line; // Keep original line for logging purposes
-
-			// 1. Handle Comments (equivalent to comment_regex)
-			// Look for the first ';' or '#'
+			// Keep original line for logging purposes
+			std::string original_line = line; 
+			// 1. Handle Comments: Look for the first ';' or '#'
 			size_t comment_pos = line.find_first_of(";#");
 			if (comment_pos != std::string::npos) {
 				// Cut the line right before the comment
 				line = line.substr(0, comment_pos);
-
+				// show info
 				if (verbose) {
-					// Output log similar to original code
 					std::cout << "Trimming comment line [" << original_line << "] to [" << line << "]\n";
 				}
 			}
-
 			// 2. Trim whitespace around the resulting line
 			std::string clean_line = line;
 			trim(clean_line);
-
 			// 3. Skip empty lines
 			if (clean_line.empty()) {
 				continue;
 			}
-
 			// 4. Detect Section: [SectionName]
-			// Equivalent to section_regex: \s*\[([^\]]+)\]
 			if (clean_line.front() == '[' && clean_line.back() == ']') {
 				// Extract content inside brackets
 				std::string inner = clean_line.substr(1, clean_line.size() - 2);
-
 				// The original regex ([^\]]+) implied it couldn't be empty or contain ']'
 				if (!inner.empty()) {
 					current_section = inner;
-					if (verbose) std::cout << "--- Section = " << current_section << " ---\n";
-					continue; // Processed, skip to next line
+					// show info
+					if (verbose) {
+						std::cout << "--- Section = " << current_section << " ---\n";
+					}
+					// Processed, skip to next line
+					continue; 
 				}
 			}
-
 			// 5. Detect Value: Key = Value
-			// Equivalent to value_regex: \s*(\S[^ \t=]*)\s*=\s*((\s*\S+)+)\s*$
 			size_t eq_pos = clean_line.find('=');
 			if (eq_pos != std::string::npos) {
 				std::string key = clean_line.substr(0, eq_pos);
 				std::string value = clean_line.substr(eq_pos + 1);
-
+				// Trim both key and value
 				trim(key);
 				trim(value);
-
-				// Validations to mimic the strictness of the original regex:
-				// The key regex was (\S[^ \t=]*) -> Starts with non-space, contains no spaces or =.
-				// Since we already trimmed, we only validate it has no internal spaces.
+				// check if has no internal spaces.
 				bool key_has_internal_space = false;
-				for (char c : key) {
+				for (const char c : key) {
 					if (std::isspace(static_cast<unsigned char>(c))) {
 						key_has_internal_space = true;
 						break;
 					}
 				}
-
-				// The value regex was ((\s*\S+)+) -> Must contain at least something non-whitespace.
-				// Since we already trimmed, if value is not empty, it passes.
-
+				// check that key and value are non-empty
 				if (!key.empty() && !key_has_internal_space && !value.empty()) {
 					sections[current_section][key] = value;
-					if (verbose) std::cout << key << " = " << value << "\n";
-					continue; // Processed
+					// show info
+					if (verbose) {
+						std::cout << key << " = " << value << "\n";
+					}
+					// Processed, skip to next line
+					continue;
 				}
 			}
 
 			// 6. If we get here, it doesn't match anything (Else)
-			if (verbose) std::cout << "skipping line [" << original_line << "]\n";
+			if (verbose) {
+				std::cout << "skipping line [" << original_line << "]\n";
+			}
 			// throw std::runtime_error("Cannot parse line "+line);
 		}
 	}
 		
 	inline void parse(std::string filename, bool add = false, bool verbose = true) {
-		std::cout << "parse(std::string filename" << filename.c_str() << std::endl;
 		fin.open(filename.c_str());
 		if (!fin) throw std::invalid_argument("Initializer: Could not open file: "+filename);
 		if (verbose) std::cout << "Parsing file: " << filename << "\n";
