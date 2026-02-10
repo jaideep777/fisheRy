@@ -71,9 +71,9 @@ class Initializer{
 		if (!add) sections.clear();
 		
 //		static const std::regex comment_regex{R"x(\s*[;#])x"};
-		static const std::regex section_regex{R"(\s*\[([^\]]+)\])"};
-		static const std::regex value_regex{R"(\s*(\S[^ \t=]*)\s*=\s*((\s*\S+)+)\s*$)"};
-		static const std::regex comment_regex{"([^;#]*)([;#])"};
+		const std::regex section_regex{R"(\s*\[([^\]]+)\])"};
+		const std::regex value_regex{R"(\s*(\S[^ \t=]*)\s*=\s*((\s*\S+)+)\s*$)"};
+		const std::regex comment_regex{"([^;#]*)([;#])"};
 		std::string current_section = "global";
 		std::smatch pieces;
 		std::string line;
