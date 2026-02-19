@@ -105,14 +105,20 @@ fish$init(0, 5.61)
 
 years = 1:31
 length = numeric(31)
+weight = numeric(31)
+dw = numeric(31)
 for (i in years){
   length[i] = fish$length
+  weight[i] = fish$weight
   fish$updateMaturity(5.61)
   fish$grow(0, 5.61)
+  dw[i] = fish$delta_weight
   fish$set_age(fish$age+1)
 }
 
-plot(length~years, xlab="Age", ylab="Length", type="l", lwd=2)
+plot(length~years, xlab="Age", ylab="Length", type="o", lwd=2)
+plot(weight~years, xlab="Age", ylab="Weight", type="o", lwd=2)
+plot(dw~years, xlab="Age", ylab="dw", type="o", lwd=2)
 ```
 
 

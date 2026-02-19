@@ -165,6 +165,7 @@ class Fish{
 
 	// physiological variables
 	double weight;	           ///< weight in kg
+	double delta_weight = 0;   ///< weight increment in kg due to growth
 
 	bool isMature = false;     ///< Flag indicating whether the fish is mature
 	bool isAlive = true;       ///< Flag indicating whether the fish is alive

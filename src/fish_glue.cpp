@@ -120,6 +120,7 @@ RCPP_MODULE(fish_module) {
 		.field("age", &Fish::age)
 		.field("length", &Fish::length)
 		.field("weight", &Fish::weight)
+		.field("delta_weight", &Fish::delta_weight)
 		.field_readonly("t_birth", &Fish::t_birth)
 		.field("par", &Fish::par)  // THIS WORKS, even though par is a different copy every time!
 		.field("trait_variances", &Fish::trait_variances)

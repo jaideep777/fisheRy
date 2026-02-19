@@ -169,6 +169,7 @@ void Fish::updateMaturity(double temp){
 /// i.e., there is not density constraint on growth. real increment is calculated using the actual tsb.
 /// Actual length increment is based on the real increment. Potential increment is for analysis purposes.
 void Fish::grow(double tsb, double temp){
+	double weight_before = weight;
 	if (par.growth_model == GrowthModel::Dankel22){
 		// do nothing. age is incremented by population update
 		gsi_effective = par.gsi; // required if new fecundity model is used in combination with old growth model
@@ -203,6 +204,7 @@ void Fish::grow(double tsb, double temp){
 	else{
 		throw std::runtime_error("Invalid growth model specified");
 	}
+	delta_weight = weight - weight_before;
 	/// This function does not increment age as growth can happen during the beginning of the year. 
 	/// Age is incremented separately in the population update at the end of the year.
 }

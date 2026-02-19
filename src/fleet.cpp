@@ -259,7 +259,7 @@ double Fleet::biomassFishable(const Stock &stock, double min_age){
 	std::accumulate(stock.fishes.begin(), stock.fishes.end(), 0.0, 
 		[min_age, this, &stock](double sum, const Fish& f) { 
 			if (f.age < min_age || !f.isAlive) return sum + 0;
-			else return sum + (fishability(f.length) * f.weight * stock.superfish_size);
+			else return sum + (fishability(f.length) * (f.weight + f.delta_weight/2) * stock.superfish_size);
 		}
 	);
 }
@@ -376,9 +376,10 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 	int count = 0;
 	for (auto& f : pop.fishes){
 		if (f.isAlive){
+			double f_weight_avg = f.weight + f.delta_weight/2;
 			double fishability_f = fishability(f.length);
 
-			B_sampled += fishability_f * f.weight * pop.superfish_size;
+			B_sampled += fishability_f * f_weight_avg * pop.superfish_size;
 			if (B_sampled > B) throw std::runtime_error("Sampled fishable biomass exceeds total fishable biomass");
 
 			yield_expected = (B_sampled/B) * quota;
@@ -392,7 +393,7 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 
 			window_props.M_fishable += fishability_f * natural_mort_rate;
 			window_props.F_fishable += fishability_f * fishing_mort_rate;
-			window_props.B_sampled  += fishability_f * f.weight*pop.superfish_size;
+			window_props.B_sampled  += fishability_f * f_weight_avg * pop.superfish_size;
 			window_props.n_fishable += fishability_f * 1;
 
 			f.isAlive = f.isAlive && (runif() <= survival_prob);	// set the fish to die probabilistically, if not dead already.
@@ -401,10 +402,10 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 				f.isCaught = runif() < fishing_mort_rate/mortality_rate; // check if fish is caught or goes to sea bed!
 				
 				if (f.isCaught){
-					yield += pop.superfish_size*f.weight; // if caught, add to yield
-					window_props.yield += pop.superfish_size*f.weight;
+					yield += pop.superfish_size*f_weight_avg; // if caught, add to yield
+					window_props.yield += pop.superfish_size*f_weight_avg;
 				}
-				else to_sea_bed += pop.superfish_size*f.weight;       // else, goes to sea bed
+				else to_sea_bed += pop.superfish_size*f_weight_avg;       // else, goes to sea bed
 			}
 
 			++count;

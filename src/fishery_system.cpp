@@ -418,16 +418,23 @@ void Fishery::summarize_catch_metrics(){
 }
 
 
+// Which weight should be used for quota calc? Before growth, so (w - dw)?
+// Which for fishable biomass calc?
+// Which for yield calc? --> Avg, so (w - dw/2)
+//   Census     Spawner fishery   Maturation        Growth     FGF / Mortality     Age/Year increment
+//    1 Jan ---->   1 Jan    ------> 1 May -----> June-Aug ----> Year round  ----->   31 Dec
+//    Quota                                                  yield = avg weight
 std::vector<double> Fishery::update(double temp){
 	stock_summary = StockSummary(); // reset stock summary for each year. FIXME: Maybe better to do outside 
 
+	// Stock assessment happens here based on which quotas are decided (?)
 	double ssb = pop.calcSSB(pop.par.recruitmentAge);
 	double tsb = pop.calcTSB(pop.par.recruitmentAge);
 	double maturity = pop.calcMaturity(pop.par.recruitmentAge);
 
 	// 1. Maturation
 	for (auto& f: pop.fishes) f.updateMaturity(temp);
-	summarize_population_metrics();
+	summarize_population_metrics(); // l~a, w~a, mat~a, n~a
 
 	// 2. Growth
 	for (auto& f: pop.fishes) f.grow(tsb/1e6, temp); // convert tsb to kT
@@ -448,7 +455,7 @@ std::vector<double> Fishery::update(double temp){
 		yield = harvest_out[0]; // total yield from the feeding grounds fishery
 		effort = 0; // fleets[0].effort_constantC(fleets[0].par.q, fleets[0].par.b, pop.fishableBiomass());
 	}
-	summarize_catch_metrics();
+	summarize_catch_metrics(); // nc~a, wc~a
 
 	// 6. remove dead fish from population
 	pop.fishes.erase(std::remove_if(pop.fishes.begin(), pop.fishes.end(), [](Fish &f){return !f.isAlive;}), pop.fishes.end());
