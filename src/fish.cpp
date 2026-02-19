@@ -60,6 +60,8 @@ void Fish::set_age(int _a){
 		length = par.l8*(1-exp(-par.kappa*(age-par.a0)));
 		set_length(length);
 	}
+
+	delta_weight = 0;
 }
 
 void Fish::set_length(double s){

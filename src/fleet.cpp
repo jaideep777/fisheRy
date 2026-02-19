@@ -252,7 +252,8 @@ std::vector<double> Fleet::cummulativeFishingMortalityRef(const Stock &stock, do
 	//      ^ sum(wF)      ^ sum(wF)      ^ sum(w)   ^ average F weighted by w
 }
 
-
+// Calculate fishable biomass AS REALIZED during the year, hence using average weights
+// This function should always be called AFTER growth so that current weight is inclusive of dw and average is is w-dw/2
 double Fleet::biomassFishable(const Stock &stock, double min_age){
 	// std::cout << stock.fishes.size() << " fish in stock\n";
 	return 
@@ -337,6 +338,7 @@ void Fleet::update_chi(const std::vector<double>& chi_in_windows,
 /// Note: this function takes pop by reference so it IS altered
 /// Some computations are doubled in the function below, but that's ok for now as it serves to
 /// cross-check those calcs. These can be removed after sufficient testing
+/// This function must be called AFTER growth
 std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool return_progress){
 	double yield = 0, to_sea_bed = 0;
 	double survival_mean = 0, n_survival_mean = 0;
@@ -359,8 +361,8 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 	// for (auto& f : pop.fishes){
 	// 	if (f.isAlive){
 	// 		double fishability_f = fishability(f.length);
-
-	// 		Bsampled_debug += fishability_f * f.weight * pop.superfish_size;
+	//		double f_weight_avg = f.weight + f.delta_weight/2;
+	// 		Bsampled_debug += fishability_f * f_weight_avg * pop.superfish_size;
 	// 		n_fishable_debug += fishability_f;
 	// 		n_debug += 1;
 	// 	}

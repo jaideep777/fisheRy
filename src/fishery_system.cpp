@@ -96,6 +96,7 @@ void Fishery::set_minSizeLimit(double _lf50) {
 
 
 // This is with the new definition of harvest proportion, i.e., a fraction h of fishable biomass
+// Quota is calculated based on Census time weights, thus fishable biomass available later 
 double Fishery::calc_quota(double temp){
 	if (fleets.empty()) {
 		throw std::runtime_error("Fishery: No fleets defined, cannot calculate quota.");
@@ -411,8 +412,10 @@ void Fishery::summarize_catch_metrics(){
 			return (!f.isAlive && f.isCaught)? pop.superfish_size : 0;
 		});
 
+	// This calc comes after growth so current weight is inclusive of dw, hence subtract dw/2 to get average weight
 	stock_summary.wc_a = pop.aggregateByAge([this](const Fish &f){
-			return (!f.isAlive && f.isCaught)? pop.superfish_size*f.weight : 0;
+			double f_weight_avg = f.weight - f.delta_weight/2;
+			return (!f.isAlive && f.isCaught)? pop.superfish_size*f_weight_avg : 0;
 		});
 	for (int i=0; i<stock_summary.wc_a.size(); ++i) stock_summary.wc_a[i] /= (stock_summary.nc_a[i]+1e-20);
 }
@@ -427,27 +430,27 @@ void Fishery::summarize_catch_metrics(){
 std::vector<double> Fishery::update(double temp){
 	stock_summary = StockSummary(); // reset stock summary for each year. FIXME: Maybe better to do outside 
 
-	// Stock assessment happens here based on which quotas are decided (?)
+	// 1. Stock assessment (census) happens here at the beginning of the year, based on which quotas are decided
 	double ssb = pop.calcSSB(pop.par.recruitmentAge);
 	double tsb = pop.calcTSB(pop.par.recruitmentAge);
 	double maturity = pop.calcMaturity(pop.par.recruitmentAge);
 
-	// 1. Maturation
-	for (auto& f: pop.fishes) f.updateMaturity(temp);
-	summarize_population_metrics(); // l~a, w~a, mat~a, n~a
-
-	// 2. Growth
-	for (auto& f: pop.fishes) f.grow(tsb/1e6, temp); // convert tsb to kT
-
-	// 3. Calculate total quota (feeding + spawning grounds fishery)
+	// 2. Calculate total quota (feeding + spawning grounds fishery)
 	double quota = calc_quota(temp);
 	double quota_fgf = quota * (1 - par.rho); // quota for the feeding grounds fishery
 	double quota_spf = quota * par.rho; // quota for the spawning grounds fishery
 
-	// 4. Reproduction
+	// 3. Reproduction and spawning grounds fishery (currently fishery not implemented)
 	std::vector<Fish> recruits = pop.spawn(ssb, tsb, temp, stock_summary);
 
-	// 5. Feeding grounds fishery and natural mortality
+	// 4. Maturation
+	for (auto& f: pop.fishes) f.updateMaturity(temp);
+	summarize_population_metrics(); // l~a, w~a, mat~a, n~a
+
+	// 5. Growth
+	for (auto& f: pop.fishes) f.grow(tsb/1e6, temp); // convert tsb to kT
+
+	// 6. Feeding grounds fishery and natural mortality - should always come after growth to access weights before and after growth
 	double yield = 0, effort = 0;
 	if (!fleets.empty()) {
 		fleets[0].init_chi(pop, -log(1-harvest_prop), temp); // initialize chi for the feeding grounds fishery
@@ -457,16 +460,16 @@ std::vector<double> Fishery::update(double temp){
 	}
 	summarize_catch_metrics(); // nc~a, wc~a
 
-	// 6. remove dead fish from population
+	// 7. remove dead fish from population
 	pop.fishes.erase(std::remove_if(pop.fishes.begin(), pop.fishes.end(), [](Fish &f){return !f.isAlive;}), pop.fishes.end());
 
-	// 7. Increment age and advance to new year
+	// 8. Increment age and advance to new year, and reset delta_weight
 	for (auto& f: pop.fishes)  f.set_age(f.age+1);
 
-	// 8. Finally, add recruits to population 
+	// 9. Finally, add recruits to population 
 	pop.fishes.insert(pop.fishes.end(), recruits.begin(), recruits.end());
 	
-	// 9. Calculate metrics for analysis
+	// 10. Calculate metrics for analysis
 	return {
 		ssb, 
 		tsb,
