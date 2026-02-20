@@ -75,21 +75,18 @@ void FleetParams::initFromFile(std::string params_file, bool verbose){
 
 	#define READ_PAR(x) x = I.get<double>("fleet", #x)
 
-	// get status quo lmin
-	READ_PAR(lmin);
-	lmin_sq = lmin;
+	// // management / fishing selectivity parameters at status quo lmin
+	// READ_PAR(lmin);
+	// READ_PAR(F1);
+	// READ_PAR(F2);
+	// READ_PAR(F3);
+	// READ_PAR(F4);
+	// READ_PAR(F5);
+	// READ_PAR(F6);
 
-	// management / fishing selectivity parameters at status quo lmin
-	READ_PAR(F1);
-	READ_PAR(F2);
-	READ_PAR(F3);
-	READ_PAR(F4);
-	READ_PAR(F5);
-	READ_PAR(F6);
-
-	// save the values of F3 and F5 corresponding to status quo lmin
-	F3_sq = F3;
-	F5_sq = F5;
+	// // save the values of F3 and F5 corresponding to status quo lmin
+	// F3_sq = F3;
+	// F5_sq = F5;
 
 	// effort dynamics and employment
 	READ_PAR(q);
@@ -125,20 +122,14 @@ void FleetParams::initFromFile(std::string params_file, bool verbose){
 void FleetParams::print(){
 	#define PRINT_PAR(x) std::cout << #x << " = " << x << "\n"
 
-	// status quo lmin
-	PRINT_PAR(lmin);
-	PRINT_PAR(lmin_sq);
-
 	// management / fishing selectivity
+	PRINT_PAR(lmin);
 	PRINT_PAR(F1);
 	PRINT_PAR(F2);
 	PRINT_PAR(F3);
 	PRINT_PAR(F4);
 	PRINT_PAR(F5);
 	PRINT_PAR(F6);
-
-	PRINT_PAR(F3_sq);
-	PRINT_PAR(F5_sq);
 
 	// effort dynamics and employment
 	PRINT_PAR(q);
@@ -179,22 +170,19 @@ void Fleet::readParams(std::string params_file, bool verbose){
 }
 
 
-// void Fleet::set_harvestProportion(double _h){
-// 	h = _h;
-// 	Fc = -log(1-_h);
-// }
-
-void Fleet::set_minSizeLimit(double _lf50){
-	double dl = _lf50 - par.lmin_sq;
-
-	par.lmin = par.lmin_sq + dl;
-	par.F3   = par.F3_sq + dl;
-	par.F5   = par.F5_sq + dl;
-}
-
 /// Dry run simply takes population by value, so that original one is not altered
 std::vector<double> Fleet::harvest_dry_run(Stock pop, double quota, double temp){
 	return harvest(pop, quota, temp, true); // harvest a copy population and return progress
+}
+
+void Fleet::set_referenceFishingMortalityCurve(double F1, double F2, double F3, double F4, double F5, double F6, double lmin){
+	par.F1 = F1;
+	par.F2 = F2;
+	par.F3 = F3;
+	par.F4 = F4;
+	par.F5 = F5;
+	par.F6 = F6;
+	par.lmin = lmin;
 }
 
 /// Formula:
@@ -260,7 +248,7 @@ double Fleet::biomassFishable(const Stock &stock, double min_age){
 	std::accumulate(stock.fishes.begin(), stock.fishes.end(), 0.0, 
 		[min_age, this, &stock](double sum, const Fish& f) { 
 			if (f.age < min_age || !f.isAlive) return sum + 0;
-			else return sum + (fishability(f.length) * (f.weight + f.delta_weight/2) * stock.superfish_size);
+			else return sum + (fishability(f.length) * (f.weight - f.delta_weight/2) * stock.superfish_size);
 		}
 	);
 }
@@ -361,7 +349,7 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 	// for (auto& f : pop.fishes){
 	// 	if (f.isAlive){
 	// 		double fishability_f = fishability(f.length);
-	//		double f_weight_avg = f.weight + f.delta_weight/2;
+	//		double f_weight_avg = f.weight - f.delta_weight/2;
 	// 		Bsampled_debug += fishability_f * f_weight_avg * pop.superfish_size;
 	// 		n_fishable_debug += fishability_f;
 	// 		n_debug += 1;
@@ -378,7 +366,7 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 	int count = 0;
 	for (auto& f : pop.fishes){
 		if (f.isAlive){
-			double f_weight_avg = f.weight + f.delta_weight/2;
+			double f_weight_avg = f.weight - f.delta_weight/2;
 			double fishability_f = fishability(f.length);
 
 			B_sampled += fishability_f * f_weight_avg * pop.superfish_size;

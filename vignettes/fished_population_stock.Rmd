@@ -27,7 +27,7 @@ params_file_fish  = here::here("params/cod_params.ini")
 
 # Create a fleet and read parameters
 fleet = new(Fleet)
-fleet$readParams(params_file_fleet, T)
+fleet$readParams(params_file_fleet, F)
 fleet$par$print()
 
 # Create a prototype fish to construct the population
@@ -70,18 +70,18 @@ Simulate the fishery over time and visualize key outputs.
 dat <- fishery$simulate(45, 0.55, 300, 0, 5.61, T, here::here("fishery_output/age_dist_pred.csv"))
 dat |> head()
 ```
-
 ## Plot all output variables
 
-```{r}
-dat |> 
+```{r plot-all}
+dat |>
   mutate(t=1:n()) |>
-  pivot_longer(-t) |> 
+  pivot_longer(-t) |>
   ggplot(aes(x=t, y=value)) +
   geom_line(col="seagreen") +
   facet_wrap(~name, scales="free_y")
-  
+
 ```
+
 
 ## Quota (FGF) vs Yield
 

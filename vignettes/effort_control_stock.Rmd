@@ -70,6 +70,18 @@ matplot(cbind(v$ssb/1e9, res$summaries$SSB[1:200]/1e9), ylab="SSB (MT)", xlab="Y
 Set a harvest proportion that will determine the fishing quota.
 
 ```{r}
+# selectivity
+F1 = 0.6901
+F2 = 0.06517
+F3 = 68.81
+F4 = 0.4151
+F5 = 112.8
+F6 = 0.4381674
+lmin = 45
+```
+
+
+```{r}
 h = 0.2
 F_fgf = -log(1-h)
 ssb_nf = pop$calcSSB(3)
@@ -94,10 +106,10 @@ Using the linear control model
 
 $Y/B_s = k \chi$
 
-
 ```{r}
 fleet = new(Fleet)
-fleet$readParams(params_file_fleet, F)
+fleet$readParams(params_file_fleet, F) 
+fleet$set_referenceFishingMortalityCurve(F1,F2,F3,F4,F5,F6,lmin)
 fleet$par$print()
 fleet$par$control_model = "linear"
 fleet$chi = 100
@@ -137,7 +149,8 @@ Try one more time
 
 ```{r}
 fleet = new(Fleet)
-fleet$readParams(params_file_fleet, F)
+fleet$readParams(params_file_fleet, F) 
+fleet$set_referenceFishingMortalityCurve(F1,F2,F3,F4,F5,F6,lmin)
 fleet$par$print()
 fleet$par$control_model = "linear"
 fleet$chi = 100
@@ -173,7 +186,8 @@ Using the exponential control model
 
 ```{r}
 fleet = new(Fleet)
-fleet$readParams(params_file_fleet, F)
+fleet$readParams(params_file_fleet, F) 
+fleet$set_referenceFishingMortalityCurve(F1,F2,F3,F4,F5,F6,lmin)
 fleet$par$print()
 fleet$par$control_model = "exp"
 fleet$chi = 100
@@ -213,7 +227,8 @@ pc_error = function(i, mode, h, slope){
   # quota = h*ssb_nf
 
   fleet = new(Fleet)
-  fleet$readParams(params_file_fleet, F)
+  fleet$readParams(params_file_fleet, F) 
+  fleet$set_referenceFishingMortalityCurve(F1,F2,F3,F4,F5,F6,lmin)
   fleet$par$control_model = mode
   fleet$par$chi0_scalar_slope = slope
   fleet$chi = 100

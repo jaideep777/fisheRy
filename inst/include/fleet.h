@@ -20,17 +20,17 @@ class FleetParams{
 	public:
 
 	// management / fishing selectivity
-	double lmin_sq;  // status quo minimum size limit, for which the selectivity curve is calibrated
-	double F3_sq;    // F3 for status quo fishery
-	double F5_sq;    // F5 for status quo fishery
+	// double lmin_sq;  // status quo minimum size limit, for which the selectivity curve is calibrated
+	// double F3_sq;    // F3 for status quo fishery
+	// double F5_sq;    // F5 for status quo fishery
 
-	double F1;
-	double F2;
-	double F3;
-	double F4;
-	double F5;
-	double F6;
-	double lmin;
+	double F1 = 0;
+	double F2 = 0;
+	double F3 = 0;
+	double F4 = 0;
+	double F5 = 0;
+	double F6 = 0;
+	double lmin = 0;
 
 	// double sf; // = 0.1222;	// steepness of selectivity curve
 	// double lf50; // = 45; //61.4806;  // threshold fish length
@@ -99,7 +99,8 @@ class Fleet{
 	void readParams(std::string params_file, bool verbose=false);
 
 	// void set_harvestProportion(double _h);
-	void set_minSizeLimit(double _lf50);
+	// void set_minSizeLimit(double _lf50);
+	void set_referenceFishingMortalityCurve(double F1, double F2, double F3, double F4, double F5, double F6, double lmin);
 
 	double fishingMortalityRef(double len);
 	double fishingMortality(double len);

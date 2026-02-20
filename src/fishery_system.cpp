@@ -9,11 +9,51 @@ inline double runif(double rmin=0, double rmax=1){
 int FisheryParams::initFromFile(std::string filename, bool verbose){
 	io::Initializer I;
 	I.parse(filename, false, verbose);
-	
-	rho = I.get<double>("spf", "rho");
-	f_spf_before = I.get<double>("spf", "f_spf_before");
+
+	#define READ_PAR(x) x = I.get<double>("fishery", #x)
+
+	READ_PAR(rho);
+	READ_PAR(f_spf_before);
+
+	// get status quo lmin
+	READ_PAR(lmin);
+	lmin_sq = lmin;
+
+	// management / fishing selectivity parameters at status quo lmin
+	READ_PAR(F1);
+	READ_PAR(F2);
+	READ_PAR(F3);
+	READ_PAR(F4);
+	READ_PAR(F5);
+	READ_PAR(F6);
+
+	// save the values of F3 and F5 corresponding to status quo lmin
+	F3_sq = F3;
+	F5_sq = F5;
+
+	#undef READ_PAR
 
 	return 0;
+}
+
+void FisheryParams::print(){
+
+	#define PRINT_PAR(x) std::cout << #x << " = " << x << "\n"
+
+	PRINT_PAR(rho);
+	PRINT_PAR(f_spf_before);
+
+	// status quo lmin
+	PRINT_PAR(lmin);
+	// PRINT_PAR(lmin_sq);
+
+	// management / fishing selectivity
+	PRINT_PAR(F1);
+	PRINT_PAR(F2);
+	PRINT_PAR(F3);
+	PRINT_PAR(F4);
+	PRINT_PAR(F5);
+	PRINT_PAR(F6);
 }
 
 
@@ -28,8 +68,18 @@ Fishery::Fishery(std::string _params_file, const Fish& f) : I(), no_fishing_pop(
 // Wrapper functions for enabling R interface for Fishery
 // ---------------------------------------------------------
 int Fishery::readParams(std::string filename, bool verbose) {
+	// update parameters
 	par.initFromFile(filename, true);
+
+	// update population based on new parameters
 	pop.readParams(filename, verbose);
+
+	// Update the effective fleet and all other fleets based on new parameters
+	fleet_effective.set_referenceFishingMortalityCurve(par.F1, par.F2, par.F3, par.F4, par.F5, par.F6, par.lmin);
+	for (auto& fl : fleets) {
+		fl.set_referenceFishingMortalityCurve(par.F1, par.F2, par.F3, par.F4, par.F5, par.F6, par.lmin);
+	}
+	
 	return 0;
 }
 
@@ -50,59 +100,32 @@ void Fishery::set_harvestProp(double _h) {
 	harvest_prop = _h;
 }
 
-void Fishery::set_minSizeLimit(double _lf50) {
-	min_size_limit = _lf50;
+void Fishery::set_minSizeLimit(double _lf50){
+	double dl = _lf50 - par.lmin_sq;
+
+	par.lmin = par.lmin_sq + dl;
+	par.F3   = par.F3_sq + dl;
+	par.F5   = par.F5_sq + dl;
+
+	// Update the effective fleet and all other fleets based on new parameters
+	fleet_effective.set_referenceFishingMortalityCurve(par.F1, par.F2, par.F3, par.F4, par.F5, par.F6, par.lmin);
 	for (auto& fl : fleets) {
-		fl.set_minSizeLimit(_lf50);
+		fl.set_referenceFishingMortalityCurve(par.F1, par.F2, par.F3, par.F4, par.F5, par.F6, par.lmin);
 	}
 }
 
-// double Fishery::calc_quota(double temp){
-// 	if (fleets.empty()) {
-// 		throw std::runtime_error("Fishery: No fleets defined, cannot calculate quota.");
-// 	}
-	
-// 	auto& fl = fleets[0]; // Since lmin is the same across all fleets, we use the first fleet to calculate quota
-// 	double Fc = -log(1-harvest_prop);
-	
-// 	// Calculate chi of the fleet to implement mortality
-// 	fl.chi = Fc/fl.FishingMortalityRef_avgl(200, 100);
 
-// 	// Calculate expected Catch with the given chi
-// 	// Note: Be careful to not modify the fishes vector here
-// 	double expected_catch = 0, to_sea_bed = 0;
-// 	for (const auto& f: pop.fishes) {  // const auto& ensures we do not modify the fish 
-// 		if (!f.isAlive) continue; // Skip already dead fishes
-
-// 		double natural_mort_rate = f.naturalMortalityRate(temp);
-// 		double fishing_mort_rate = fl.fishingMortality(f.length);
-// 		double mortality_rate = natural_mort_rate + fishing_mort_rate;
-
-// 		double survival_prob = exp(-mortality_rate*1.0);
-		
-// 		bool f_isAlive = f.isAlive && (runif() <= survival_prob);	// set the fish to die probabilistically, if not dead already.
-
-// 		if (!f_isAlive){
-// 			bool f_isCaught = runif() < fishing_mort_rate/mortality_rate; // check if fish is caught or goes to sea bed!
-			
-// 			if (f_isCaught) expected_catch += pop.superfish_size*f.weight; // if caught, add to yield
-// 			else to_sea_bed += pop.superfish_size*f.weight;       // else, goes to sea bed
-// 		}
-			
-// 	}
-
-// 	return expected_catch;
-// }
-
-
-// This is with the new definition of harvest proportion, i.e., a fraction h of fishable biomass
-// Quota is calculated based on Census time weights, thus fishable biomass available later 
+/// This function calculates quota based on control Fishing mortality rate Fc. It can also take a notional harvest proportion h which is 
+/// first converted to fishing mortality rate (Fc = -log(1-h)) and then used.
+/// If different fleets have different selectivity curves Fref1, Fref2, ..., then Eq 1 must hold: X1*Fref1_avg + X2*Fref2_avg + ... = Fc = X_eff*Fref_effective_total_avg, where X1, X2, ... 
+/// where X1, X2, ... are the scalars for each fleet. Then with the fishing mortality X_eff*Fref_effective_total, we get a quota of Q (say).
+/// which can be divided into quotas of individual fleets Qi = (X1*Frefi_avg/Fc)*Q. However, for this to work, Eq. 1 must hold for all l, i.e., the selectivity curves must at most differ scalar multiples (absorbed in X). 
+/// In that case, Qi = (Xi/(X1+X2+X3)))*Q. 
+/// Note: Quota is calculated based on Census time weights (before growth), so does not know realized fishable biomass (average pre and post growth)
+/// Note: Quota should only count fish above min size limit
 double Fishery::calc_quota(double temp){
-	if (fleets.empty()) {
-		throw std::runtime_error("Fishery: No fleets defined, cannot calculate quota.");
-	}
-	
-	auto& fl = fleets[0]; // Since lmin is the same across all fleets, we use the first fleet to calculate quota
+	// FishingMortalityRef curve applies to the entire fishery, so we calculate quota from the effective fleet
+	auto& fl = fleet_effective; 
 	double Fc = -log(1-harvest_prop);
 	
 	// Calculate chi of the fleet to implement mortality
@@ -158,6 +181,7 @@ std::vector<double> Fishery::equilibriateNaturalPopulation(double temp, double _
 void Fishery::addFleet(std::string params_file, bool verbose){
 	fleets.emplace_back();
 	fleets.back().readParams(params_file, verbose);
+	fleets.back().set_referenceFishingMortalityCurve(par.F1, par.F2, par.F3, par.F4, par.F5, par.F6, par.lmin);
 }
 
 

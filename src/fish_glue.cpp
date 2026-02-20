@@ -293,7 +293,8 @@ RCPP_MODULE(fleet_module){
 
 		.method("init_chi", &Fleet::init_chi) // modifies state: consider unexposing
 
-		.method("set_minSizeLimit", &Fleet::set_minSizeLimit)
+		.method("set_referenceFishingMortalityCurve", &Fleet::set_referenceFishingMortalityCurve)
+		// .method("set_minSizeLimit", &Fleet::set_minSizeLimit)
 		// .method("set_harvestProportion", &Fleet::set_harvestProportion)
 
 		.method("fishability", &Fleet::fishability)
@@ -340,6 +341,7 @@ RCPP_MODULE(simulator_module){
 		.method("equilibriateNaturalPopulation", &Fishery::equilibriateNaturalPopulation)
 		.method("init", &Fishery::init)
 		.method("readParams", &Fishery::readParams)
+
 		.method("set_harvestProp", &Fishery::set_harvestProp)
 		.method("set_minSizeLimit", &Fishery::set_minSizeLimit)
 		// .method("set_traitVariances", &Fishery::set_traitVariances)

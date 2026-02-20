@@ -12,16 +12,25 @@
 
 class FisheryParams {
     public:
-    double rho;   // ratio of spawning grounds F to total (control) F 
+	// Spawning grounds fishery
+	double rho;   // ratio of spawning grounds F to total (control) F 
     double f_spf_before; // percent of spawning grounds fishing that happens before spawning
 
-	int initFromFile(std::string filename, bool verbose=false);
+	// fishing selectivity
+	double lmin_sq;  // status quo minimum size limit, for which the selectivity curve is calibrated
+	double F3_sq;    // F3 for status quo fishery
+	double F5_sq;    // F5 for status quo fishery
 
-    void print() {
-        std::cout << "FisheryParams:" << std::endl;
-        std::cout << "  rho: " << rho << std::endl;
-        std::cout << "  f_spf_before: " << f_spf_before << std::endl;
-    }
+	double F1;
+	double F2;
+	double F3;
+	double F4;
+	double F5;
+	double F6;
+	double lmin;
+	
+	int initFromFile(std::string filename, bool verbose=false);
+    void print();
 };
 
 class Fishery {
@@ -33,12 +42,14 @@ class Fishery {
 	std::vector<std::string> colnames = {"ssb", "tsb", "maturity", "quota_fgf", "yield", "effort", "recruits"};
 
 	public:
-	bool debug = true; // Should debugging calculations be done 
+	bool debug = true; // Should debugging calculations be done?
 	bool update_env = false;
 	bool simulate_bio_only = false;
 
 	Stock pop;
-	std::vector<Fleet> fleets;
+
+	Fleet fleet_effective;      ///< Hypothetical fleet representing the total effective fishing mortality from all fleets, with fishing parameters ususally set from data. Used for calculating total quota, which is then divided into actual fleets
+	std::vector<Fleet> fleets;  ///< Actual fleets which may have different fishing mortality parameters. Users need to ensure that selectivity of individual fleets are equal and equal to fleet_effective.
 	FisheryParams par;
 
 	double harvest_prop;
