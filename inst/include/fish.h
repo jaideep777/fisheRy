@@ -8,7 +8,7 @@
 
 enum class GrowthModel       {Dankel22, Bioenergetic};
 enum class MaturationModel   {Dankel22, Bioenergetic};
-enum class MortalityModel    {Dankel22, Bioenergetic};
+enum class MortalityModel    {Dankel22, Bioenergetic, Empirical};
 enum class RecruitmentModel  {BevertonHoltDirect, BevertonHoltBioenergetic, RickerDirect, RickerBioenergetic};
 
 class FishParams {
@@ -23,7 +23,8 @@ class FishParams {
 
 	std::map<std::string, MortalityModel> mortality_names_map{
 		{"Dankel22",     MortalityModel::Dankel22}, 
-	    {"Bioenergetic", MortalityModel::Bioenergetic}};
+	    {"Bioenergetic", MortalityModel::Bioenergetic},
+		{"Empirical", MortalityModel::Empirical}};
 
 	std::map<std::string, RecruitmentModel> recruitment_names_map{
 		{"BevertonHoltDirect",       RecruitmentModel::BevertonHoltDirect}, 
@@ -95,7 +96,7 @@ class FishParams {
 	double gsi_ref;
 	double Mspawning; ///< Natural mortality rate due to spawning
 
-	// *********** OLD MODEL *****************
+	// *********** OLD MODEL (dankel) *****************
 	// biology
 	double theta = 8.10e-6; // kg/cm 
 	double zeta  = 3.01; 

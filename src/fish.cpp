@@ -128,6 +128,7 @@ double Fish::naturalMortalityRate(double temp) const{
 					par.alpha5*(par.gsi - par.gsi_ref)
 					) * pow(temp/par.Tref, par.cT);
 		}
+		// Empirical natural mortality not supported at the moment
 		else{
 			throw std::runtime_error("Invalid mortality model specified");
 		}

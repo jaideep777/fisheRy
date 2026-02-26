@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include <cassert>
+#include <string>
 #include "stock.h"
 
 inline double runif(double rmin=0, double rmax=1){
@@ -176,6 +177,7 @@ std::vector<double> Fleet::harvest_dry_run(Stock pop, double quota, double temp)
 }
 
 void Fleet::set_referenceFishingMortalityCurve(double F1, double F2, double F3, double F4, double F5, double F6, double lmin){
+	using_empirical_fref = true;
 	par.F1 = F1;
 	par.F2 = F2;
 	par.F3 = F3;
@@ -184,6 +186,14 @@ void Fleet::set_referenceFishingMortalityCurve(double F1, double F2, double F3, 
 	par.F6 = F6;
 	par.lmin = lmin;
 }
+
+void Fleet::set_referenceFishingMortalityCurveFromSpline(std::string filename){
+	vector<double> l, F;
+	
+
+	par.lmin = lmin;
+}
+
 
 /// Formula:
 /// \f[

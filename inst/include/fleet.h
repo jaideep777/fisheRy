@@ -32,6 +32,11 @@ class FleetParams{
 	double F6 = 0;
 	double lmin = 0;
 
+	// *********** Empirical Selectivity *****************
+	bool using_empirical_fref = false;
+	Spline Fref_fn_spline; // Spline to store empirical selectivity, if using it
+	// ***************************************************
+
 	// double sf; // = 0.1222;	// steepness of selectivity curve
 	// double lf50; // = 45; //61.4806;  // threshold fish length
 
