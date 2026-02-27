@@ -1,6 +1,6 @@
 #-------------------------------------------------------------------------------
 # executable name
-TARGET := 1
+TARGET := libfishery.a
 
 # files
 SRCFILES  :=  src/fish.cpp \
@@ -36,7 +36,7 @@ dir:
 	mkdir -p lib build tests/build
 
 $(TARGET): $(OBJECTS) 
-	g++ $(LDFLAGS) -o $(TARGET) $(LIB_PATH) $(OBJECTS) $(LIBS) 
+#	g++ $(LDFLAGS) -o $(TARGET) $(LIB_PATH) $(OBJECTS) $(LIBS)
 
 $(OBJECTS): build/%.o : src/%.cpp $(HEADERS)
 	g++ -c $(CPPFLAGS) $(INC_PATH) $< -o $@ 

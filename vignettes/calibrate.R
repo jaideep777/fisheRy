@@ -159,7 +159,7 @@ l = simulate_pop(par = par_opt,
                  params_file_fleet = here("params/fleet_1_params.ini"), 
                  nsup=1e6, 
                  nsteps=200,
-                 verbose=F, 
+                 verbose=T, 
                  out_file = here("fishery_output/age_dists_pred.csv"))
 
 age_dists_pred = readr::read_csv(here("fishery_output/age_dists_pred.csv")) 

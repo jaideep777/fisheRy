@@ -65,8 +65,22 @@ matplot(cbind(v$ssb/1e9, res$summaries$SSB[1:200]/1e9), ylab="SSB (MT)", xlab="Y
 # Reference fishing mortality curve
 
 ```{r}
+F1 = 0.6901
+F2 = 0.06517
+F3 = 68.81
+F4 = 0.4151
+F5 = 112.8
+F6 = 0.4381674
+lmin = 45
+
+file = here::here("data/selection.spline.csv")
+```
+
+
+```{r}
 fleet = new(Fleet)
 fleet$readParams(params_file_fleet, F)
+fleet$set_referenceFishingMortalityCurveLogistic(F1,F2,F3,F4,F5,F6,lmin)
 fleet$par$print()
 fleet$par$control_model = "linear"
 fleet$chi = 100
@@ -134,4 +148,32 @@ tibble(h = seq(0.01, 0.99, length.out=50)) |>
 )
 
 ```
+
+## Fleet with empirical fishing mortality (used for calibration)
+
+Now we try to create a fleet with an empirical fishing mortality function.
+
+```{r}
+fleet2 = new(Fleet)
+fleet2$readParams(params_file_fleet, F)
+fleet2$set_referenceFishingMortalityCurveEmpirical(file,lmin)
+fleet2$par$print()
+fleet2$par$control_model = "linear"
+fleet2$chi = 100
+
+print(
+tibble(length = seq(0, 200, length.out=100)) |>
+  mutate(f = purrr::map_dbl(length, ~fleet2$fishingMortalityRef(.))) |>
+  mutate(f_logistic = purrr::map_dbl(length, ~fleet$fishingMortalityRef(.))) |>
+  ggplot() +
+  geom_line(aes(x=length, y=f), col="black") +
+  geom_line(aes(x=length, y=f_logistic), col="cyan4") +
+  labs(x="Length (cm)", y="Ref Fishing mortality (F)")
+)
+
+```
+
+
+
+
 

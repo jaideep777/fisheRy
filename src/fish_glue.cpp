@@ -293,7 +293,8 @@ RCPP_MODULE(fleet_module){
 
 		.method("init_chi", &Fleet::init_chi) // modifies state: consider unexposing
 
-		.method("set_referenceFishingMortalityCurve", &Fleet::set_referenceFishingMortalityCurve)
+		.method("set_referenceFishingMortalityCurveLogistic", &Fleet::set_referenceFishingMortalityCurveLogistic)
+		.method("set_referenceFishingMortalityCurveEmpirical", &Fleet::set_referenceFishingMortalityCurveEmpirical)
 		// .method("set_minSizeLimit", &Fleet::set_minSizeLimit)
 		// .method("set_harvestProportion", &Fleet::set_harvestProportion)
 

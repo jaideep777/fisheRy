@@ -4,6 +4,8 @@
 #include <stdexcept>
 #include <cassert>
 #include <string>
+#include <vector>
+#include "read_csv.h"
 #include "stock.h"
 
 inline double runif(double rmin=0, double rmax=1){
@@ -176,8 +178,8 @@ std::vector<double> Fleet::harvest_dry_run(Stock pop, double quota, double temp)
 	return harvest(pop, quota, temp, true); // harvest a copy population and return progress
 }
 
-void Fleet::set_referenceFishingMortalityCurve(double F1, double F2, double F3, double F4, double F5, double F6, double lmin){
-	using_empirical_fref = true;
+void Fleet::set_referenceFishingMortalityCurveLogistic(double F1, double F2, double F3, double F4, double F5, double F6, double lmin){
+	par.using_empirical_fref = false;
 	par.F1 = F1;
 	par.F2 = F2;
 	par.F3 = F3;
@@ -187,9 +189,13 @@ void Fleet::set_referenceFishingMortalityCurve(double F1, double F2, double F3, 
 	par.lmin = lmin;
 }
 
-void Fleet::set_referenceFishingMortalityCurveFromSpline(std::string filename){
-	vector<double> l, F;
-	
+void Fleet::set_referenceFishingMortalityCurveEmpirical(std::string filename, double lmin){
+	par.using_empirical_fref = true;
+
+	auto v = read_csv_numeric(filename);
+
+	par.Fref_fn_spline.splineType = Spline::LINEAR;
+	par.Fref_fn_spline.set_points(v[0], v[1]);
 
 	par.lmin = lmin;
 }
@@ -201,9 +207,14 @@ void Fleet::set_referenceFishingMortalityCurveFromSpline(std::string filename){
 /// \f]
 double Fleet::fishingMortalityRef(double len){
 	// return par.F1/(1+exp(-par.F2*(len-par.F3))); 
-	return 
+	if (par.using_empirical_fref){
+		return par.Fref_fn_spline.eval(len);
+	}
+	else {
+		return 
 		  par.F1/(1+exp(-par.F2*(len-par.F3))) 
 		- par.F6/(1+exp(-par.F4*(len-par.F5)));
+	}
 }
 
 double Fleet::fishingMortality(double len){

@@ -2,6 +2,7 @@
 #define FISHERY_FLEET_H
 
 #include "stock.h"
+#include "cubic_spline.h"
 
 class WindowProps{
 	public:
@@ -105,9 +106,10 @@ class Fleet{
 
 	// void set_harvestProportion(double _h);
 	// void set_minSizeLimit(double _lf50);
-	void set_referenceFishingMortalityCurve(double F1, double F2, double F3, double F4, double F5, double F6, double lmin);
+	void set_referenceFishingMortalityCurveLogistic(double F1, double F2, double F3, double F4, double F5, double F6, double lmin);
+    void set_referenceFishingMortalityCurveEmpirical(std::string filename, double lmin);
 
-	double fishingMortalityRef(double len);
+    double fishingMortalityRef(double len);
 	double fishingMortality(double len);
 
     double FishingMortalityRef_avgl(double lmax, int n);
