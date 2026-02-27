@@ -341,6 +341,7 @@ RCPP_MODULE(simulator_module){
 		.method("calc_quota", &Fishery::calc_quota)
 		.method("equilibriateNaturalPopulation", &Fishery::equilibriateNaturalPopulation)
 		.method("init", &Fishery::init)
+		.method("equilibriateWithoutFishing", &Fishery::equilibriateWithoutFishing)
 		.method("readParams", &Fishery::readParams)
 
 		.method("set_harvestProp", &Fishery::set_harvestProp)

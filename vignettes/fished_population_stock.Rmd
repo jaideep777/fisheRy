@@ -56,6 +56,7 @@ v = fishery$equilibriateNaturalPopulation(5.61, 2e6);
 
 # Initialize the 
 fishery$init(1000, 0, 5.61);
+v2 = fishery$equilibriateWithoutFishing(5.61)
 
 # Just a demo calc of the initial quota corresponding to the set defined harvest proportion. The Fishery will recalculate this every year.
 quota = fishery$calc_quota(5.61);
@@ -67,7 +68,7 @@ cat("Quota: ", quota, '\n')
 Simulate the fishery over time and visualize key outputs.
 
 ```{r run-simulation}
-dat <- fishery$simulate(45, 0.55, 300, 0, 5.61, T, here::here("fishery_output/age_dist_pred.csv"))
+dat <- fishery$simulate(45, 0.55, 300, 0, 5.61, F, here::here("fishery_output/age_dist_pred.csv"))
 dat |> head()
 ```
 ## Plot all output variables

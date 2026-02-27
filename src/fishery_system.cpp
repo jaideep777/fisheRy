@@ -31,6 +31,9 @@ int FisheryParams::initFromFile(std::string filename, bool verbose){
 	F3_sq = F3;
 	F5_sq = F5;
 
+	using_empirical_fref = (I.get<std::string>("fishery", "using_empirical_fref") == "true")? true : false;
+	Fref_empirical_file = I.get<std::string>("fishery", "Fref_empirical_file");
+
 	#undef READ_PAR
 
 	return 0;
@@ -54,6 +57,10 @@ void FisheryParams::print(){
 	PRINT_PAR(F4);
 	PRINT_PAR(F5);
 	PRINT_PAR(F6);
+
+	PRINT_PAR(using_empirical_fref);
+	PRINT_PAR(Fref_empirical_file);
+
 }
 
 
@@ -62,6 +69,15 @@ Fishery::Fishery(std::string _params_file, const Fish& f) : I(), no_fishing_pop(
 	// I.parse(params_file, false, true);
 	no_fishing_pop.readParams(params_file);
 	this->readParams(params_file, true);
+}
+
+void Fishery::set_referenceFishingMortalityCurve(Fleet &fleet){
+	if (par.using_empirical_fref){
+		fleet.set_referenceFishingMortalityCurveEmpirical(par.Fref_empirical_file, par.lmin);
+	}
+	else {
+		fleet.set_referenceFishingMortalityCurveLogistic(par.F1, par.F2, par.F3, par.F4, par.F5, par.F6, par.lmin);
+	}
 }
 
 // ---------------------------------------------------------
@@ -75,9 +91,9 @@ int Fishery::readParams(std::string filename, bool verbose) {
 	pop.readParams(filename, verbose);
 
 	// Update the effective fleet and all other fleets based on new parameters
-	fleet_effective.set_referenceFishingMortalityCurve(par.F1, par.F2, par.F3, par.F4, par.F5, par.F6, par.lmin);
+	set_referenceFishingMortalityCurve(fleet_effective);
 	for (auto& fl : fleets) {
-		fl.set_referenceFishingMortalityCurve(par.F1, par.F2, par.F3, par.F4, par.F5, par.F6, par.lmin);
+		set_referenceFishingMortalityCurve(fl);
 	}
 	
 	return 0;
@@ -107,10 +123,13 @@ void Fishery::set_minSizeLimit(double _lf50){
 	par.F3   = par.F3_sq + dl;
 	par.F5   = par.F5_sq + dl;
 
-	// Update the effective fleet and all other fleets based on new parameters
-	fleet_effective.set_referenceFishingMortalityCurve(par.F1, par.F2, par.F3, par.F4, par.F5, par.F6, par.lmin);
+	// If using empirical fishing mort, throw error if lmin is changed
+	if (par.using_empirical_fref && fabs(dl) > 1e-6) throw std::runtime_error("Cannot alter lmin when using empirical fishing mortality function");
+
+	// Else update the effective fleet and all other fleets based on new parameters
+	set_referenceFishingMortalityCurve(fleet_effective);
 	for (auto& fl : fleets) {
-		fl.set_referenceFishingMortalityCurve(par.F1, par.F2, par.F3, par.F4, par.F5, par.F6, par.lmin);
+		set_referenceFishingMortalityCurve(fl);
 	}
 }
 
@@ -177,11 +196,15 @@ std::vector<double> Fishery::equilibriateNaturalPopulation(double temp, double _
 	return no_fishing_pop.equilibriate_without_fishing(temp);
 }
 
+std::vector<double> Fishery::equilibriateWithoutFishing(double temp){
+	return pop.equilibriate_without_fishing(temp);
+
+}
 
 void Fishery::addFleet(std::string params_file, bool verbose){
 	fleets.emplace_back();
 	fleets.back().readParams(params_file, verbose);
-	fleets.back().set_referenceFishingMortalityCurve(par.F1, par.F2, par.F3, par.F4, par.F5, par.F6, par.lmin);
+	set_referenceFishingMortalityCurve(fleets.back());
 }
 
 

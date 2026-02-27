@@ -109,7 +109,7 @@ $Y/B_s = k \chi$
 ```{r}
 fleet = new(Fleet)
 fleet$readParams(params_file_fleet, F) 
-fleet$set_referenceFishingMortalityCurve(F1,F2,F3,F4,F5,F6,lmin)
+fleet$set_referenceFishingMortalityCurveLogistic(F1,F2,F3,F4,F5,F6,lmin)
 fleet$par$print()
 fleet$par$control_model = "linear"
 fleet$chi = 100
@@ -150,7 +150,7 @@ Try one more time
 ```{r}
 fleet = new(Fleet)
 fleet$readParams(params_file_fleet, F) 
-fleet$set_referenceFishingMortalityCurve(F1,F2,F3,F4,F5,F6,lmin)
+fleet$set_referenceFishingMortalityCurveLogistic(F1,F2,F3,F4,F5,F6,lmin)
 fleet$par$print()
 fleet$par$control_model = "linear"
 fleet$chi = 100
@@ -187,7 +187,7 @@ Using the exponential control model
 ```{r}
 fleet = new(Fleet)
 fleet$readParams(params_file_fleet, F) 
-fleet$set_referenceFishingMortalityCurve(F1,F2,F3,F4,F5,F6,lmin)
+fleet$set_referenceFishingMortalityCurveLogistic(F1,F2,F3,F4,F5,F6,lmin)
 fleet$par$print()
 fleet$par$control_model = "exp"
 fleet$chi = 100
@@ -228,7 +228,7 @@ pc_error = function(i, mode, h, slope){
 
   fleet = new(Fleet)
   fleet$readParams(params_file_fleet, F) 
-  fleet$set_referenceFishingMortalityCurve(F1,F2,F3,F4,F5,F6,lmin)
+  fleet$set_referenceFishingMortalityCurveLogistic(F1,F2,F3,F4,F5,F6,lmin)
   fleet$par$control_model = mode
   fleet$par$chi0_scalar_slope = slope
   fleet$chi = 100

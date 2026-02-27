@@ -2,6 +2,7 @@
 #define FISHERY_FISHERY_SYSTEM_H
 
 #include <vector>
+#include <string>
 #include "stock.h"
 #include "fleet.h"
 #include "initializer_v2.h"
@@ -28,6 +29,9 @@ class FisheryParams {
 	double F5;
 	double F6;
 	double lmin;
+
+	bool using_empirical_fref;
+	std::string Fref_empirical_file;
 	
 	int initFromFile(std::string filename, bool verbose=false);
     void print();
@@ -63,6 +67,7 @@ class Fishery {
 	// Functions to specify fishery-level control parameters
 	void set_harvestProp(double _h);
 	void set_minSizeLimit(double _lf50);
+	void set_referenceFishingMortalityCurve(Fleet& fleet);
 
 	double calc_quota(double temp);
 
@@ -77,6 +82,7 @@ class Fishery {
 
 	// Fishery functions
 	std::vector<double> equilibriateNaturalPopulation(double temp, double _n);
+	std::vector<double> equilibriateWithoutFishing(double temp);
 	void addFleet(std::string params_file, bool verbose = false);
 
     void summarize_population_metrics();
