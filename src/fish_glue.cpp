@@ -343,6 +343,7 @@ RCPP_MODULE(simulator_module){
 		.method("init", &Fishery::init)
 		.method("equilibriateWithoutFishing", &Fishery::equilibriateWithoutFishing)
 		.method("readParams", &Fishery::readParams)
+		.method("get_fref", &Fishery::get_fref)
 
 		.method("set_harvestProp", &Fishery::set_harvestProp)
 		.method("set_minSizeLimit", &Fishery::set_minSizeLimit)

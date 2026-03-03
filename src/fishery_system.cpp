@@ -528,6 +528,10 @@ std::vector<double> Fishery::update(double temp){
 	};
 }
 
+double Fishery::get_fref(int fleet_id, double len){
+	if (fleets.empty()) return 0;
+	else return fleets[fleet_id].fishingMortalityRef(len);
+}
 
 // Tensor<double> Simulator::scan(vector<double> Tvec, vector<double> lminvec, vector<double> hvec, int nyears, double tsb0, int niters, bool re_init){
 // 	Tensor<double> res({niters, static_cast<int>(colnames.size()), static_cast<int>(Tvec.size()), static_cast<int>(lminvec.size()), static_cast<int>(hvec.size()), nyears});

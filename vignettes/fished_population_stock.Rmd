@@ -51,6 +51,15 @@ Configure the fishery:
 fishery$set_harvestProp(0.5);
 fishery$addFleet(params_file_fleet, T);
 
+# Verify added fleet's fishing mortality curve
+tibble(len=seq(10,200,length.out=100)) |> 
+  mutate(Fref = purrr::map_dbl(len, ~fishery$get_fref(0, .x))) |> 
+  ggplot(aes(x=len, y=Fref))+
+  geom_line()
+
+```
+
+```{r}
 # Simulate the Fishery's hypothetical unfished population to equilibrium
 v = fishery$equilibriateNaturalPopulation(5.61, 2e6);
 

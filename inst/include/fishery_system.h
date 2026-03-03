@@ -89,7 +89,8 @@ class Fishery {
     void summarize_catch_metrics();
 
     std::vector<double> update(double temp);
-    
+
+	double get_fref(int fleet_id, double len); // debug function to verify reference fishing mortality rate in R
 #ifndef NATIVE_CPP	
 	Rcpp::DataFrame simulate_r(double lf, double h, int nyears, double tsb0, double temp, bool re_init, std::string output_file);
 #endif
