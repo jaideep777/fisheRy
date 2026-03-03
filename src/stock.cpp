@@ -272,7 +272,9 @@ vector<double> Stock::equilibriate_without_fishing(double temp){
 	return state_t;
 }
 
-
+std::vector<double> Stock::harvest(std::vector<Fleet> &fleets, double quota, double temp, bool return_progress){
+    return std::vector<double>();
+}
 
 // /// This function simulates the annual dynamics of a fish population, including maturation, growth, reproduction, 
 // /// mortality (both natural and fishing-induced), and population metrics.

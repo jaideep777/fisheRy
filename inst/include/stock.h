@@ -152,6 +152,8 @@ class Stock{
 
     std::vector<double> equilibriate_without_fishing(double temp);
 
+	std::vector<double> harvest(std::vector<Fleet>& fleets, double quota, double temp, bool return_progress);
+
     // std::vector<double> noFishingEquilibriate(double temp);	
 
 	int nfish();
