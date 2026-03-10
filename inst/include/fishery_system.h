@@ -43,7 +43,9 @@ class Fishery {
 	io::Initializer I;
 	Stock no_fishing_pop;
 
-	std::vector<std::string> colnames = {"ssb", "tsb", "maturity", "quota_fgf", "yield", "effort", "recruits"};
+	std::vector<std::string> colnames = {"ssb", "tsb", "maturity", "quota", "quota_fgf", "quota_spf", "yield", "yield_fgf", "yield_spf", "effort", "recruits", 
+		                                 "ssb0", "ssb_spawning", "ssb_spawning_ref", "ssb_after_spawning", "ssb_after_spawning_ref", "ssbn", "ssbn_ref"
+										};
 
 	public:
 	bool debug = true; // Should debugging calculations be done?
@@ -87,6 +89,9 @@ class Fishery {
 
     void summarize_population_metrics();
     void summarize_catch_metrics();
+	void summarize_spawner_fishery_metrics(const std::vector<double>& spf_summary_before, const std::vector<double>& spf_summary_after, double quota_spf);
+	
+	std::vector<double> spawner_fishery(double quota);
 
     std::vector<double> update(double temp);
 

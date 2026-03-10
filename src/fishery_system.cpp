@@ -468,6 +468,42 @@ void Fishery::summarize_catch_metrics(){
 }
 
 
+void Fishery::summarize_spawner_fishery_metrics(const std::vector<double>& spf_summary_before, const std::vector<double>& spf_summary_after, double quota_spf){
+	stock_summary.ssb0 = spf_summary_before[0]; // ssb_before;  ///< SSB just before spawning and SPF
+	stock_summary.ssb_spawning = spf_summary_before[1]; // ssb_remaining   ///< SSB at spawning time
+	stock_summary.ssb_after_spawning = spf_summary_after[0]; // ssb_before   ///< SSB after spawning
+	stock_summary.ssbn = spf_summary_after[1]; // ssb_remaining  ///< Final SSB after all mortality
+
+	double ssb0 = stock_summary.ssb0;
+	double h_spf_ref = quota_spf/ssb0;
+	double p_survival_spf_before = 1 - par.f_spf_before*h_spf_ref;
+	stock_summary.ssb_spawning_ref = ssb0*p_survival_spf_before;  ///< Reference SSB at spawning 
+	stock_summary.ssb_after_spawning_ref = ssb0*exp(-pop.proto_fish.par.Mspawning)*(1-par.f_spf_before*h_spf_ref); ///< Reference SSB after spawning
+	stock_summary.ssbn_ref = ssb0*(1-h_spf_ref)*exp(-pop.proto_fish.par.Mspawning); ///< Reference final SSB
+}
+
+
+// TODO: Move to a spawner fleet?
+std::vector<double> Fishery::spawner_fishery(double quota){
+	double ssb_before = pop.calcSSB(pop.par.recruitmentAge);
+	double yield_spf = 0;
+
+	double h_spf = std::clamp(quota/(ssb_before+1e-12), 0.0, 1.0);
+	double p_survival = 1 - h_spf;
+	double ssb_remaining = 0;
+	for (auto &f : pop.fishes) {
+		if (f.isAlive && f.isMature){ // only alive and mature fish are exposed to SPF
+			f.isAlive = f.isAlive && (runif() <= p_survival);
+
+			if (f.isAlive) ssb_remaining += pop.superfish_size*f.weight; // surviving individuals contribute to SSB
+			if (!f.isAlive) yield_spf += pop.superfish_size*f.weight;   // dying individuals contribute to yield
+			if (!f.isAlive) f.isCaught = true;               // mark fish as caught
+		}
+	}
+	
+	return {ssb_before, ssb_remaining, yield_spf};
+}
+
 // Which weight should be used for quota calc? Before growth, so (w - dw)?
 // Which for fishable biomass calc?
 // Which for yield calc? --> Avg, so (w - dw/2)
@@ -487,8 +523,12 @@ std::vector<double> Fishery::update(double temp){
 	double quota_fgf = quota * (1 - par.rho); // quota for the feeding grounds fishery
 	double quota_spf = quota * par.rho; // quota for the spawning grounds fishery
 
-	// 3. Reproduction and spawning grounds fishery (currently fishery not implemented)
+	// 3. Reproduction and spawning grounds fishery 
+	std::vector<double> spf_summary_before = spawner_fishery(quota_spf * par.f_spf_before);
 	std::vector<Fish> recruits = pop.spawn(ssb, tsb, temp, stock_summary);
+	std::vector<double> spf_summary_after = spawner_fishery(quota_spf * (1-par.f_spf_before));
+	summarize_spawner_fishery_metrics(spf_summary_before, spf_summary_after, quota_spf);
+	double yield_spf = spf_summary_before[2] + spf_summary_after[2];
 
 	// 4. Maturation
 	for (auto& f: pop.fishes) f.updateMaturity(temp);
@@ -498,11 +538,11 @@ std::vector<double> Fishery::update(double temp){
 	for (auto& f: pop.fishes) f.grow(tsb/1e6, temp); // convert tsb to kT
 
 	// 6. Feeding grounds fishery and natural mortality - should always come after growth to access weights before and after growth
-	double yield = 0, effort = 0;
+	double yield_fgf = 0, effort = 0;
 	if (!fleets.empty()) {
 		fleets[0].init_chi(pop, -log(1-harvest_prop), temp); // initialize chi for the feeding grounds fishery
 		std::vector<double> harvest_out = fleets[0].harvest(pop, quota_fgf, temp, false);
-		yield = harvest_out[0]; // total yield from the feeding grounds fishery
+		yield_fgf = harvest_out[0]; // total yield from the feeding grounds fishery
 		effort = 0; // fleets[0].effort_constantC(fleets[0].par.q, fleets[0].par.b, pop.fishableBiomass());
 	}
 	summarize_catch_metrics(); // nc~a, wc~a
@@ -517,14 +557,28 @@ std::vector<double> Fishery::update(double temp){
 	pop.fishes.insert(pop.fishes.end(), recruits.begin(), recruits.end());
 	
 	// 10. Calculate metrics for analysis
+	double yield = yield_fgf + yield_spf;
+
 	return {
 		ssb, 
 		tsb,
 		maturity,
+		quota,
 		quota_fgf,
+		quota_spf,
 		yield,
+		yield_fgf,
+		yield_spf,
 		effort,
-		stock_summary.nfish_ra
+		stock_summary.nfish_ra,
+
+		stock_summary.ssb0,
+		stock_summary.ssb_spawning,
+		stock_summary.ssb_spawning_ref,
+		stock_summary.ssb_after_spawning,
+		stock_summary.ssb_after_spawning_ref,
+		stock_summary.ssbn,
+		stock_summary.ssbn_ref
 	};
 }
 

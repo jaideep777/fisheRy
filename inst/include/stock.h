@@ -77,6 +77,7 @@ struct StockSummary {
 
 
 class StockUtilities{
+	public:
 	// Mortality metrics
 	double yield_spf = 0;            ///< Yield from spawning ground fishery
 	double yield_spf_ref = 0;        ///< Reference yield from spawning ground fishery

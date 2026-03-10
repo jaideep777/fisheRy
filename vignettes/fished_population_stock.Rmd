@@ -90,6 +90,28 @@ dat |>
   geom_line(col="seagreen") +
   facet_wrap(~name, scales="free_y")
 
+dplyr::bind_rows( 
+  dat |> select(
+    sim = ssb_spawning, ref = ssb_spawning_ref, 
+  ) |> 
+  mutate(group = "before spawning"),
+
+  dat |> select(
+    sim = ssb_after_spawning, ref = ssb_after_spawning_ref, 
+  ) |> 
+  mutate(group = "after_spawning"),
+
+  dat |> select(
+    sim = ssbn, ref = ssbn_ref
+  ) |> 
+  mutate(group = "after_spawning_&_spf"),
+) |> 
+  as_tibble() |> 
+  ggplot(aes(x=ref, y=sim)) + 
+  geom_point() + 
+  geom_abline(slope=1,intercept=1,col="red")+
+  facet_wrap(~group)
+
 ```
 
 
@@ -100,9 +122,23 @@ This plot compares the feeding ground fishery quota to the yield, excluding the 
 ```{r plot-quota-fgf-yield}
 dat |> 
   slice(-(1:10)) |>
-  ggplot(aes(x=quota_fgf, y=yield)) +
+  ggplot(aes(x=quota, y=yield)) +
   geom_point() +
   geom_abline(slope=1, intercept=0, color="red")
+
+dat |> 
+  slice(-(1:10)) |>
+  ggplot(aes(x=quota_fgf, y=yield_fgf)) +
+  geom_point() +
+  geom_abline(slope=1, intercept=0, color="red")
+
+dat |> 
+  slice(-(1:10)) |>
+  ggplot(aes(x=quota_spf, y=yield_spf)) +
+  geom_point() +
+  geom_abline(slope=1, intercept=0, color="red")
+
+
 ```
 
 ## TSB vs Quota (FGF)
@@ -112,7 +148,7 @@ This plot shows the relationship between total stock biomass and feeding ground 
 ```{r plot-tsb-quota-fgf}
 dat |> 
   slice(-(1:10)) |>
-  ggplot(aes(x=tsb, y=quota_fgf)) +
+  ggplot(aes(x=tsb, y=quota)) +
   geom_point() +
   geom_smooth(method="lm", se=F, formula = y ~ x-1) +
   geom_abline(slope=0.5, intercept=0, color="red")
