@@ -73,11 +73,16 @@ simulate_pop = function(par, nsup = 1e6, verbose=F, nsteps=500, nymax=50, params
   fishery$set_minSizeLimit(lf)
   fishery$addFleet(params_file_fleet, T);
 
-  fishery$equilibriateNaturalPopulation(5.61, 2e6);
+  v = fishery$equilibriateNaturalPopulation(5.61, 2e6);
 
   fishery$init(1000, 0, 5.61);
-
+  v2 = fishery$equilibriateWithoutFishing(5.61)
+  
   res_ibm <- fishery$simulate(lf, h, nsteps, 1.93e3, 5.61, F, out_file)
+  res_ibm |> 
+    mutate(t = 1:n()) |>
+    ggplot(aes(x=t, y=ssb/1e9)) +
+    geom_line()
   
   list(d=fishery$pop$get_state(), res_ibm=res_ibm)
 }
@@ -152,7 +157,7 @@ error_fun_emd = function(par, nsteps = 200, nsup = 5e6, bplot=F, nymax=50){
 ##### Run and plot @@@ ---------------------------
 
 # par_opt = c(0.02, 0.0275, 0.06, 1)
-par_opt = c(0.01924969, 0.03239047, 0.07911014, 0.9809538)
+par_opt = c(0.02924969, 0.03239047, 0.17911014, 1.7)
 # par_opt = c(0.01924969, 0.062994, 0.07911014, 2.455715)
 l = simulate_pop(par = par_opt, 
                  params_file_fish = here("params/cod_params.ini"), 
@@ -193,9 +198,9 @@ pa = age_dists_pred %>% filter(Year > max(Year)-50) %>%
         strip.background = element_blank())+
   labs(y="")
 
-cairo_pdf(here::here("fishery_output/age_dists_calibrated_params.pdf"), width = 10, height=5)
+# cairo_pdf(here::here("fishery_output/age_dists_calibrated_params.pdf"), width = 10, height=5)
 print(pa)
-dev.off()
+# dev.off()
 
 p1 = l$d %>% 
   group_by(age) %>%
