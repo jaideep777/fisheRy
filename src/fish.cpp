@@ -2,10 +2,14 @@
 #include <iostream>
 #include <cmath>
 #include <stdexcept>
+#include "read_csv.h"
+
 using namespace std;
 
 
 // ************************ Fish ***************************
+
+Spline Fish::mort_fn_spline; // Spline to store empirical mortality function, if using it
 
 // Fish::Fish(double tb){
 // 	t_birth = tb;
@@ -26,6 +30,13 @@ void Fish::setMortalityParams(double _Mref, double _M0, double _b){
 	par.b = _b;
 	par.alpha3 = _Mref;
 	par.gamma3 = -_b;
+}
+
+void Fish::setMortalityCurveEmpirical(std::string filename){
+	auto v = read_csv_numeric(filename);
+
+	mort_fn_spline.splineType = Spline::LINEAR;
+	mort_fn_spline.set_points(v[0], v[1]);
 }
 
 
@@ -128,7 +139,9 @@ double Fish::naturalMortalityRate(double temp) const{
 					par.alpha5*(par.gsi - par.gsi_ref)
 					) * pow(temp/par.Tref, par.cT);
 		}
-		// Empirical natural mortality not supported at the moment
+		else if (par.mortality_model == MortalityModel::Empirical){
+			return natural_mort_scalar * mort_fn_spline.eval(length);
+		}
 		else{
 			throw std::runtime_error("Invalid mortality model specified");
 		}

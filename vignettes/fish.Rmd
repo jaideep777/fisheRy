@@ -1,0 +1,93 @@
+---
+title: 'Test Empirical natural mortality function'
+author: "Jaideep Joshi"
+date: "28 March 2026"
+output:
+  html_document: default
+editor_options:
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+rm(list=ls())
+```
+
+```{r, include = F, echo = F}
+library(fisheRy)
+library(tidyverse)
+source(here::here("tests/ref/parameters.cod.R"))
+source(here::here("tests/ref/simulator.7.R"))
+```
+
+
+```{r}
+params_file = here::here("params/cod_params.ini")
+fleet_params_file = here::here("params/fleet_1_params.ini")
+```
+
+Let us now simulate the growth of a fish starting at age 1 upto age 30 under constant temperature and TSB. The fish will perform maturation, growth, and age increment, every year in that order. We will record the fish length at each timestep so that we can plot the growth trajectory.
+
+```{r}
+fish = new(Fish, params_file)
+fish$natural_mort_scalar = 2.5
+fish$par$print()
+
+fish$setMortalityCurveEmpirical(here::here("data/naturalmort.spline.csv"))
+
+fish$init(0, 5.61)
+
+N = 30
+years = 1:N
+length = numeric(N)
+weight = numeric(N)
+mort = numeric(N)
+dw = numeric(N)
+for (i in years){
+  length[i] = fish$length
+  weight[i] = fish$weight
+  fish$updateMaturity(5.61)
+  fish$grow(0, 5.61)
+  dw[i] = fish$delta_weight
+  mort[i] = fish$naturalMortalityRate(5.61)
+  fish$set_age(fish$age+1)
+}
+
+plot(length~years, xlab="Age", ylab="Length", type="o", lwd=2)
+plot(weight~years, xlab="Age", ylab="Weight", type="o", lwd=2)
+plot(dw~years, xlab="Age", ylab="dw", type="o", lwd=2)
+plot(mort~years, xlab="Age", ylab="dw", type="o", lwd=2)
+plot(mort~length, xlab="Age", ylab="dw", type="o", lwd=2)
+```
+
+
+For further fish, the spline does not need to be recreated
+
+```{r fig.width=4, fig.height=4}
+fish2 = new(Fish, params_file)
+fish2$natural_mort_scalar = 10
+
+fish2$init(0, 5.61)
+
+N = 30
+years = 1:N
+length = numeric(N)
+weight = numeric(N)
+mort = numeric(N)
+dw = numeric(N)
+for (i in years){
+  length[i] = fish2$length
+  weight[i] = fish2$weight
+  fish2$updateMaturity(5.61)
+  fish2$grow(0, 5.61)
+  dw[i] = fish2$delta_weight
+  mort[i] = fish2$naturalMortalityRate(5.61)
+  fish2$set_age(fish2$age+1)
+}
+
+plot(length~years, xlab="Age", ylab="Length", type="o", lwd=2)
+plot(weight~years, xlab="Age", ylab="Weight", type="o", lwd=2)
+plot(dw~years, xlab="Age", ylab="dw", type="o", lwd=2)
+plot(mort~years, xlab="Age", ylab="dw", type="o", lwd=2)
+plot(mort~length, xlab="Age", ylab="dw", type="o", lwd=2)
+```

@@ -32,6 +32,9 @@ fleet$par$print()
 
 # Create a prototype fish to construct the population
 fish = new(Fish, params_file_fish)
+fish$natural_mort_scalar = 1
+fish$setMortalityCurveEmpirical(here::here("data/naturalmort.spline.csv"))
+fish$par$print()
 
 # Craeate the fishery. Note that we do not need to explicitly create a population - it is contained within the fishery
 fishery = new(Fishery, params_file_fish, fish);
@@ -83,14 +86,14 @@ dat |> head()
 ## Plot all output variables
 
 ```{r plot-all}
-dat |>
+p1 <- dat |>
   mutate(t=1:n()) |>
   pivot_longer(-t) |>
   ggplot(aes(x=t, y=value)) +
   geom_line(col="seagreen") +
   facet_wrap(~name, scales="free_y")
 
-dplyr::bind_rows( 
+p2 <- dplyr::bind_rows( 
   dat |> select(
     sim = ssb_spawning, ref = ssb_spawning_ref, 
   ) |> 
@@ -112,6 +115,8 @@ dplyr::bind_rows(
   geom_abline(slope=1,intercept=1,col="red")+
   facet_wrap(~group)
 
+print(p1)
+print(p2)
 ```
 
 

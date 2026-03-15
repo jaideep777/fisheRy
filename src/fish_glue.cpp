@@ -124,8 +124,10 @@ RCPP_MODULE(fish_module) {
 		.field_readonly("t_birth", &Fish::t_birth)
 		.field("par", &Fish::par)  // THIS WORKS, even though par is a different copy every time!
 		.field("trait_variances", &Fish::trait_variances)
+		.field("natural_mort_scalar", &Fish::natural_mort_scalar)
 
 		.method("setMortalityParams", &Fish::setMortalityParams)
+		.method("setMortalityCurveEmpirical", &Fish::setMortalityCurveEmpirical)
 
 		.method("print", &Fish::print)
 		.method("print_line", &Fish::print_line)

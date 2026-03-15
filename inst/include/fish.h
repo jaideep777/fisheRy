@@ -5,6 +5,7 @@
 #include <map>
 #include "functions.h"
 #include "initializer_v2.h"
+#include "cubic_spline.h"
 
 enum class GrowthModel       {Dankel22, Bioenergetic};
 enum class MaturationModel   {Dankel22, Bioenergetic};
@@ -154,6 +155,9 @@ class Fish{
 
 	public:
 	FishParams par;   ///< Parameters object that holds all necessary fish parameters
+
+	double natural_mort_scalar = 1;
+	static Spline mort_fn_spline; // Spline to store empirical mortality function, if using it
 	
 	// state variables
 	// TODO: age and length should be made private with getter/setters
@@ -183,8 +187,9 @@ class Fish{
 	/// Construct a fish and initialize parameters using a parameters file
 	Fish(std::string params_file);
 	void setMortalityParams(double _Mref, double _M0, double _b);
+    void setMortalityCurveEmpirical(std::string mort_file);
 
-	/// @brief Set fish age and other variables that scale directly with age
+    /// @brief Set fish age and other variables that scale directly with age
 	void set_age(int _a);      
 	/// @brief Set fish length and other variables that scale directly with length
 	void set_length(double s); 

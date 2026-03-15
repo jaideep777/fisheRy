@@ -54,9 +54,11 @@ age_dist_obs = N_v_age_obs %>%
 
 simulate_pop = function(par, nsup = 1e6, verbose=F, nsteps=500, nymax=50, params_file_fish, params_file_fleet, out_file = ""){
   h = 0.22
-  lf = 45  
+  lf = 45
 
   fish = new(Fish, params_file_fish)
+  fish$natural_mort_scalar = 1  # Can be set from par 
+  fish$setMortalityCurveEmpirical(here::here("data/naturalmort.spline.csv"))
   fish$par$s0 = par[1] #0.07
   if (length(par) > 1){
     fish$setMortalityParams(par[2], par[3], par[4])
@@ -155,6 +157,7 @@ error_fun_emd = function(par, nsteps = 200, nsup = 5e6, bplot=F, nymax=50){
 # par_opt = opt$par
 
 ##### Run and plot @@@ ---------------------------
+setwd(here("vignettes"))
 
 # par_opt = c(0.02, 0.0275, 0.06, 1)
 par_opt = c(0.02924969, 0.03239047, 0.17911014, 1.7)
@@ -202,128 +205,128 @@ pa = age_dists_pred %>% filter(Year > max(Year)-50) %>%
 print(pa)
 # dev.off()
 
-p1 = l$d %>% 
-  group_by(age) %>%
-  summarize(weight=mean(weight),
-            mat=mean(isMature),
-            N = log10(n()*1e6)) %>%
-  pivot_longer(-age, values_to="pred") %>% 
-  left_join(age_dist_obs %>% 
-              mutate(N = log10(N)) %>% 
-              pivot_longer(-age, values_to="obs")) %>% 
-  ggplot(aes(x=age)) +
-  geom_line(aes(y=pred, col="pred"), linewidth=1)+
-  geom_point(aes(y=obs, col="obs"), shape=1, size=2, stroke=1)+
-  facet_wrap(~name, scales="free_y", strip.position = "left", nrow=1)+
-  scale_color_manual(values = c(obs="black", pred="cyan3"))+
-  theme_bw()+
-  theme(strip.placement = "outside",
-        strip.background = element_blank())+
-  labs(y="")
+# p1 = l$d %>% 
+#   group_by(age) %>%
+#   summarize(weight=mean(weight),
+#             mat=mean(isMature),
+#             N = log10(n()*1e6)) %>%
+#   pivot_longer(-age, values_to="pred") %>% 
+#   left_join(age_dist_obs %>% 
+#               mutate(N = log10(N)) %>% 
+#               pivot_longer(-age, values_to="obs")) %>% 
+#   ggplot(aes(x=age)) +
+#   geom_line(aes(y=pred, col="pred"), linewidth=1)+
+#   geom_point(aes(y=obs, col="obs"), shape=1, size=2, stroke=1)+
+#   facet_wrap(~name, scales="free_y", strip.position = "left", nrow=1)+
+#   scale_color_manual(values = c(obs="black", pred="cyan3"))+
+#   theme_bw()+
+#   theme(strip.placement = "outside",
+#         strip.background = element_blank())+
+#   labs(y="")
 
-p2 = l$res_ibm %>% 
-  # mutate(recruits = nfish_ra) %>% 
-  select(ssb, tsb, yield) %>% #, recruits) %>% 
-  tail(nrow(dat)) %>% 
-  colMeans() %>% 
-  enframe(value="pred") %>% 
-  mutate(pred = pred/1e9) %>% 
-  left_join(
-    dat %>% select(ssb, totb, catch, recr) %>% 
-      rename(tsb=totb, yield=catch, recruits=recr) %>% 
-      colMeans() %>% 
-      enframe(value = "obs") %>% 
-      mutate(obs= obs*1000/1e9)
-    ) %>% 
-  ggplot(aes(y=obs, x=pred, col=name))+
-  geom_point(size=2)+
-  scale_colour_manual(values = 
-    c(ssb="darkgreen", 
-      tsb="darkgoldenrod1",
-      yield="dodgerblue3", 
-      recruits="coral1")
-  )+
-  geom_abline(slope=1, intercept = 0, col="grey")+
-  expand_limits(y=0, x=0)+
-  theme_bw()
-p2
+# p2 = l$res_ibm %>% 
+#   # mutate(recruits = nfish_ra) %>% 
+#   select(ssb, tsb, yield) %>% #, recruits) %>% 
+#   tail(nrow(dat)) %>% 
+#   colMeans() %>% 
+#   enframe(value="pred") %>% 
+#   mutate(pred = pred/1e9) %>% 
+#   left_join(
+#     dat %>% select(ssb, totb, catch, recr) %>% 
+#       rename(tsb=totb, yield=catch, recruits=recr) %>% 
+#       colMeans() %>% 
+#       enframe(value = "obs") %>% 
+#       mutate(obs= obs*1000/1e9)
+#     ) %>% 
+#   ggplot(aes(y=obs, x=pred, col=name))+
+#   geom_point(size=2)+
+#   scale_colour_manual(values = 
+#     c(ssb="darkgreen", 
+#       tsb="darkgoldenrod1",
+#       yield="dodgerblue3", 
+#       recruits="coral1")
+#   )+
+#   geom_abline(slope=1, intercept = 0, col="grey")+
+#   expand_limits(y=0, x=0)+
+#   theme_bw()
+# p2
 
-p2all = l$res_ibm %>% 
-  mutate(recruits = nfish_ra) %>% 
-  select(ssb, tsb, yield, recruits) %>% 
-  tail(nrow(dat)) %>% 
-  mutate(year = dat$year) %>% 
-  # colMeans() %>% 
-  pivot_longer(-year, values_to="pred") %>% 
-  mutate(pred = pred/1e9) %>% 
-  left_join(
-    dat %>% select(year, ssb, totb, catch, recr) %>% 
-      rename(tsb=totb, yield=catch, recruits=recr) %>% 
-      pivot_longer(-year, values_to="obs") %>% 
-      mutate(obs= obs*1000/1e9)
-  ) %>% 
-  ggplot(aes(y=obs, x=pred, col=name))+
-  geom_point(size=2)+
-  scale_colour_manual(values = 
-                        c(ssb="darkgreen", 
-                          tsb="darkgoldenrod1",
-                          yield="dodgerblue3", 
-                          recruits="coral1")
-  )+
-  geom_abline(slope=1, intercept = 0, col="grey")+
-  expand_limits(y=0, x=0)+
-  theme_bw()
+# p2all = l$res_ibm %>% 
+#   mutate(recruits = nfish_ra) %>% 
+#   select(ssb, tsb, yield, recruits) %>% 
+#   tail(nrow(dat)) %>% 
+#   mutate(year = dat$year) %>% 
+#   # colMeans() %>% 
+#   pivot_longer(-year, values_to="pred") %>% 
+#   mutate(pred = pred/1e9) %>% 
+#   left_join(
+#     dat %>% select(year, ssb, totb, catch, recr) %>% 
+#       rename(tsb=totb, yield=catch, recruits=recr) %>% 
+#       pivot_longer(-year, values_to="obs") %>% 
+#       mutate(obs= obs*1000/1e9)
+#   ) %>% 
+#   ggplot(aes(y=obs, x=pred, col=name))+
+#   geom_point(size=2)+
+#   scale_colour_manual(values = 
+#                         c(ssb="darkgreen", 
+#                           tsb="darkgoldenrod1",
+#                           yield="dodgerblue3", 
+#                           recruits="coral1")
+#   )+
+#   geom_abline(slope=1, intercept = 0, col="grey")+
+#   expand_limits(y=0, x=0)+
+#   theme_bw()
 
-# Timeseries plots
-p3_ts = l$res_ibm %>% 
-  mutate(ssb=ssb/1e9,
-         tsb=tsb/1e9, 
-         yield=yield/1e9,
-         quota_fgf=quota_fgf/1e9) %>% 
-  mutate(Year=1:n()) %>% 
-  pivot_longer(-Year) %>% 
-  ggplot(aes(y=value, x=Year, col=name))+
-  geom_line()+
-  facet_wrap(~name, scales="free_y", strip.position="left", nrow=1)+
-  scale_x_continuous(n.breaks = 3)+
-  theme_bw()+
-  theme(strip.placement = "outside",
-      strip.background = element_blank())+
-  labs(y="")
+# # Timeseries plots
+# p3_ts = l$res_ibm %>% 
+#   mutate(ssb=ssb/1e9,
+#          tsb=tsb/1e9, 
+#          yield=yield/1e9,
+#          quota_fgf=quota_fgf/1e9) %>% 
+#   mutate(Year=1:n()) %>% 
+#   pivot_longer(-Year) %>% 
+#   ggplot(aes(y=value, x=Year, col=name))+
+#   geom_line()+
+#   facet_wrap(~name, scales="free_y", strip.position="left", nrow=1)+
+#   scale_x_continuous(n.breaks = 3)+
+#   theme_bw()+
+#   theme(strip.placement = "outside",
+#       strip.background = element_blank())+
+#   labs(y="")
 
-cairo_pdf(here::here("fishery_output/timeseries_calibrated_params.pdf"), width = 10, height=3)
-p3_ts
-dev.off()
+# cairo_pdf(here::here("fishery_output/timeseries_calibrated_params.pdf"), width = 10, height=3)
+# p3_ts
+# dev.off()
 
-p3 = l$res_ibm %>% select(ssb:profit) %>% 
-  mutate(ssb=ssb/1e9, 
-         yield=yield/1e9,
-         profit=profit/1e9,
-         employment=employment/1000) %>% 
-  mutate(Year=1:n()) %>% 
-  pivot_longer(-Year) %>% 
-  ggplot(aes(y=value, x=Year, col=name))+
-  geom_line()+
-  facet_wrap(~name, scales="free_y", strip.position="left", nrow=1)+
-  scale_colour_manual(values = 
-                        c(ssb="darkgreen", 
-                          tsb="darkgoldenrod1",
-                          yield="dodgerblue3", 
-                          recruits="coral1",
-                          employment="skyblue2",
-                          profit = "purple")
-  )+
-  scale_x_continuous(n.breaks = 3)+
-  theme_bw()+
-  theme(strip.placement = "outside",
-      strip.background = element_blank())+
-  labs(y="")
+# p3 = l$res_ibm %>% select(ssb:profit) %>% 
+#   mutate(ssb=ssb/1e9, 
+#          yield=yield/1e9,
+#          profit=profit/1e9,
+#          employment=employment/1000) %>% 
+#   mutate(Year=1:n()) %>% 
+#   pivot_longer(-Year) %>% 
+#   ggplot(aes(y=value, x=Year, col=name))+
+#   geom_line()+
+#   facet_wrap(~name, scales="free_y", strip.position="left", nrow=1)+
+#   scale_colour_manual(values = 
+#                         c(ssb="darkgreen", 
+#                           tsb="darkgoldenrod1",
+#                           yield="dodgerblue3", 
+#                           recruits="coral1",
+#                           employment="skyblue2",
+#                           profit = "purple")
+#   )+
+#   scale_x_continuous(n.breaks = 3)+
+#   theme_bw()+
+#   theme(strip.placement = "outside",
+#       strip.background = element_blank())+
+#   labs(y="")
 
   
-library(patchwork)
-cairo_pdf(here::here("figures/calibration.pdf"), width = 10, height=5)
-q1 = p3+p2all + plot_layout(widths=c(5.5,1))
-print(
-pa/q1 + plot_layout(widths=c(5,1))
-)
-dev.off()
+# library(patchwork)
+# cairo_pdf(here::here("figures/calibration.pdf"), width = 10, height=5)
+# q1 = p3+p2all + plot_layout(widths=c(5.5,1))
+# print(
+# pa/q1 + plot_layout(widths=c(5,1))
+# )
+# dev.off()
