@@ -18,6 +18,7 @@ void StockParams::initFromFile(std::string params_file, bool verbose) {
 	#define READ_PAR(x) x = I.get<double>("stock", #x)
 
 	READ_PAR(recruitmentAge);
+	READ_PAR(sigmaf);
 
 	#undef READ_PAR
 }
@@ -26,6 +27,7 @@ void StockParams::print() {
 	#define PRINT_PAR(x) std::cout << #x << " = " << x << "\n"
 
 	PRINT_PAR(recruitmentAge);
+	PRINT_PAR(sigmaf);
 
 	#undef PRINT_PAR
 }
@@ -177,7 +179,7 @@ vector<Fish> Stock::spawn(double ssb_now, double tsb_now, double temp, StockSumm
 		}
 	}
 
-	//nrecruits *= exp(rnorm(-par.sigmaf*par.sigmaf/2, par.sigmaf));
+	nrecruits_total *= exp(rnorm(-par.sigmaf*par.sigmaf/2, par.sigmaf));
 	stock_summary.nrecruits_real = std::clamp(nrecruits_total, 1.0, par.rmax);
 	//	for (auto& nn : nrecruits_vec) nn = nn*nrecruits_real/(nrecruits_total+1e-20); 
 

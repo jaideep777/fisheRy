@@ -16,6 +16,7 @@ class StockParams {
 	public:
 	double rmax = 1e20;
 	int recruitmentAge; ///< Age at recruitment
+	double sigmaf; ///< Std dev of environmental stochasticity lognormal
 
 	public:
 	void initFromFile(std::string params_file, bool verbose=false);
