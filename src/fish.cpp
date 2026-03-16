@@ -140,7 +140,7 @@ double Fish::naturalMortalityRate(double temp) const{
 					) * pow(temp/par.Tref, par.cT);
 		}
 		else if (par.mortality_model == MortalityModel::Empirical){
-			return natural_mort_scalar * mort_fn_spline.eval(length);
+			return natural_mort_scalar * (mort_fn_spline.eval(length) - mort_fn_spline.eval(1000)) + par.M0;
 		}
 		else{
 			throw std::runtime_error("Invalid mortality model specified");

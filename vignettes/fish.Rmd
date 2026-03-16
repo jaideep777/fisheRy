@@ -56,8 +56,8 @@ for (i in years){
 plot(length~years, xlab="Age", ylab="Length", type="o", lwd=2)
 plot(weight~years, xlab="Age", ylab="Weight", type="o", lwd=2)
 plot(dw~years, xlab="Age", ylab="dw", type="o", lwd=2)
-plot(mort~years, xlab="Age", ylab="dw", type="o", lwd=2)
-plot(mort~length, xlab="Age", ylab="dw", type="o", lwd=2)
+plot(mort~years, xlab="Age", ylab="mort", type="o", lwd=2)
+plot(mort~length, xlab="length", ylab="mort", type="o", lwd=2)
 ```
 
 
@@ -88,6 +88,6 @@ for (i in years){
 plot(length~years, xlab="Age", ylab="Length", type="o", lwd=2)
 plot(weight~years, xlab="Age", ylab="Weight", type="o", lwd=2)
 plot(dw~years, xlab="Age", ylab="dw", type="o", lwd=2)
-plot(mort~years, xlab="Age", ylab="dw", type="o", lwd=2)
-plot(mort~length, xlab="Age", ylab="dw", type="o", lwd=2)
+plot(mort~years, xlab="Age", ylab="mort", type="o", lwd=2)
+plot(mort~length, xlab="length", ylab="mort", type="o", lwd=2)
 ```
