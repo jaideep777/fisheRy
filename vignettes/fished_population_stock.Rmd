@@ -51,7 +51,7 @@ Configure the fishery:
 - Initialize the fishery - this creates fish in the real fish population.
 
 ```{r configure-fishery}
-fishery$set_harvestProp(0.5);
+fishery$set_harvestProp(0.22);
 fishery$addFleet(params_file_fleet, T);
 
 # Verify added fleet's fishing mortality curve
@@ -65,7 +65,7 @@ tibble(len=seq(10,200,length.out=100)) |>
 ```{r}
 # Simulate the Fishery's hypothetical unfished population to equilibrium
 v = fishery$equilibriateNaturalPopulation(5.61, 2e6);
-
+fishery$set_superFishSize(2e6)
 # Initialize the 
 fishery$init(1000, 0, 5.61);
 v2 = fishery$equilibriateWithoutFishing(5.61)
@@ -80,7 +80,7 @@ cat("Quota: ", quota, '\n')
 Simulate the fishery over time and visualize key outputs.
 
 ```{r run-simulation}
-dat <- fishery$simulate(45, 0.55, 300, 0, 5.61, F, here::here("fishery_output/age_dist_pred.csv"))
+dat <- fishery$simulate(45, 0.22, 300, 1.93e3, 5.61, F, here::here("fishery_output/age_dist_pred.csv"))
 dat |> head()
 ```
 ## Plot all output variables

@@ -51,14 +51,16 @@ age_dist_obs = N_v_age_obs %>%
   
 
 #### Function to simulate population given parameters vector #-------------------
+# params_file_fish = here("params/cod_params.ini")
 
 simulate_pop = function(par, nsup = 1e6, verbose=F, nsteps=500, nymax=50, params_file_fish, params_file_fleet, out_file = ""){
   h = 0.22
   lf = 45
-
+  
   fish = new(Fish, params_file_fish)
   fish$natural_mort_scalar = 1  # Can be set from par 
   fish$setMortalityCurveEmpirical(here::here("data/naturalmort.spline.csv"))
+  
   fish$par$s0 = par[1] #0.07
   if (length(par) > 1){
     fish$setMortalityParams(par[2], par[3], par[4])
@@ -169,6 +171,16 @@ l = simulate_pop(par = par_opt,
                  nsteps=200,
                  verbose=T, 
                  out_file = here("fishery_output/age_dists_pred.csv"))
+
+
+pt <- l$res_ibm |>
+  mutate(t=1:n()) |>
+  pivot_longer(-t) |>
+  ggplot(aes(x=t, y=value)) +
+  geom_line(col="seagreen") +
+  facet_wrap(~name, scales="free_y")
+
+print(pt)
 
 age_dists_pred = readr::read_csv(here("fishery_output/age_dists_pred.csv")) 
 
@@ -330,3 +342,16 @@ print(pa)
 # pa/q1 + plot_layout(widths=c(5,1))
 # )
 # dev.off()
+
+# 
+# for (i in 1:100){
+#   cat(i, "-----------------------------------------\n")
+#   l = simulate_pop(par = par_opt, 
+#                    params_file_fish = here("params/cod_params.ini"), 
+#                    params_file_fleet = here("params/fleet_1_params.ini"), 
+#                    nsup=1e6, 
+#                    nsteps=200,
+#                    verbose=T, 
+#                    out_file = here("fishery_output/age_dists_pred.csv"))
+#   
+# }
