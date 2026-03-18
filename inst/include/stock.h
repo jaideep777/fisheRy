@@ -110,6 +110,8 @@ class Stock{
 	std::vector<Fish> fishes;      ///< Vector of all fish in the population
 	double superfish_size = 5e6;	               ///< superfish size
 
+	bool debug = false;
+
 	public:
 	Stock(Fish f);
 

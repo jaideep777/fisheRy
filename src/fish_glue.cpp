@@ -256,6 +256,7 @@ RCPP_MODULE(population_module){
 		.constructor<Fish>()
 		.field("par", &Stock::par)
 		.field("superfish_size", &Stock::superfish_size)
+		.field("debug", &Stock::debug)
 		
 		.method("readParams", &Stock::readParams)
 		.method("init", &Stock::init)
@@ -290,6 +291,7 @@ RCPP_MODULE(fleet_module){
 		.constructor()
 		.field("chi", &Fleet::chi)
 		.field("par", &Fleet::par)
+		.field("debug", &Fleet::debug)
 
 		.method("readParams", &Fleet::readParams) 
 
@@ -332,6 +334,7 @@ RCPP_MODULE(simulator_module){
 		.constructor<std::string, Fish>()
 		.field("par", &Fishery::par)
 		.field("pop", &Fishery::pop) // Use updated getter and setter
+		.field("debug", &Fishery::debug)
 
 		// Wrappers for population functions exposed from Fishery because they modify population state
 		.method("set_superFishSize", &Fishery::set_superFishSize)

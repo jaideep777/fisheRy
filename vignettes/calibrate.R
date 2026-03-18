@@ -53,36 +53,50 @@ age_dist_obs = N_v_age_obs %>%
 #### Function to simulate population given parameters vector #-------------------
 # params_file_fish = here("params/cod_params.ini")
 
-simulate_pop = function(par, nsup = 1e6, verbose=F, nsteps=500, nymax=50, params_file_fish, params_file_fleet, out_file = ""){
+simulate_pop = function(par, nsup = 1e6, verbose=F, nsteps=500, nymax=50, params_file_fish, params_file_fleet, out_file = "", using_empirical_mort = TRUE){
   h = 0.22
   lf = 45
   
   fish = new(Fish, params_file_fish)
-  fish$natural_mort_scalar = 1  # Can be set from par 
-  fish$setMortalityCurveEmpirical(here::here("data/naturalmort.spline.csv"))
   
   fish$par$s0 = par[1] #0.07
   if (length(par) > 1){
-    fish$setMortalityParams(par[2], par[3], par[4])
+    if (using_empirical_mort){
+      fish$natural_mort_scalar = par[2]  # Can be set from par 
+      fish$setMortalityCurveEmpirical(here::here("data/naturalmort.spline.csv"))
+      fish$setMortalityParams(0, par[3], 0)
+    } else {
+      fish$setMortalityParams(par[2], par[3], par[4])
+    }
   }
     
   fleet = new(Fleet)
-  fleet$readParams(params_file_fleet, T)
-  fleet$par$print();
+  fleet$readParams(params_file_fleet, FALSE)
+  # fleet$par$print();
+  fleet$debug = FALSE
+  cat(">>> Fleet initialized --------------\n")
 
   fishery = new(Fishery, params_file_fish, fish);
-  fishery$par$print();
+  fishery$debug = FALSE
+  # fishery$par$print();
+  cat(">>> Fishery Created --------------\n")
 
   fishery$set_harvestProp(h)
   fishery$set_minSizeLimit(lf)
-  fishery$addFleet(params_file_fleet, T);
+  fishery$addFleet(params_file_fleet, FALSE);
+  fishery$pop$debug = FALSE
+  cat(">>> Fleet added to fishery --------------\n")
 
   v = fishery$equilibriateNaturalPopulation(5.61, 2e6);
 
   fishery$init(1000, 0, 5.61);
+  cat(">>> Fishery init with 1000 fish --------------\n")
   v2 = fishery$equilibriateWithoutFishing(5.61)
-  
+  cat(">>> Stock equilibriated --------------\n")
+  # print(fishery$pop$get_state())
+
   res_ibm <- fishery$simulate(lf, h, nsteps, 1.93e3, 5.61, F, out_file)
+  cat(">>> Stock Simulated with fishing --------------\n")
   res_ibm |> 
     mutate(t = 1:n()) |>
     ggplot(aes(x=t, y=ssb/1e9)) +
@@ -163,14 +177,17 @@ setwd(here("vignettes"))
 
 # par_opt = c(0.02, 0.0275, 0.06, 1)
 par_opt = c(0.02924969, 0.03239047, 0.17911014, 1.7)
+par_opt_empirical = c(0.02924969, 0.5, 0.2)
 # par_opt = c(0.01924969, 0.062994, 0.07911014, 2.455715)
-l = simulate_pop(par = par_opt, 
+l = simulate_pop(par = par_opt_empirical, 
                  params_file_fish = here("params/cod_params.ini"), 
                  params_file_fleet = here("params/fleet_1_params.ini"), 
                  nsup=1e6, 
                  nsteps=200,
                  verbose=T, 
-                 out_file = here("fishery_output/age_dists_pred.csv"))
+                 out_file = here("fishery_output/age_dists_pred.csv"),
+                 using_empirical_mort = TRUE
+                 )
 
 
 pt <- l$res_ibm |>
@@ -343,15 +360,16 @@ print(pa)
 # )
 # dev.off()
 
-# 
-# for (i in 1:100){
-#   cat(i, "-----------------------------------------\n")
-#   l = simulate_pop(par = par_opt, 
-#                    params_file_fish = here("params/cod_params.ini"), 
-#                    params_file_fleet = here("params/fleet_1_params.ini"), 
-#                    nsup=1e6, 
-#                    nsteps=200,
-#                    verbose=T, 
-#                    out_file = here("fishery_output/age_dists_pred.csv"))
-#   
-# }
+
+for (i in 1:100){
+  cat(i, "-----------------------------------------\n")
+  l = simulate_pop(par = par_opt_empirical, 
+                  params_file_fish = here("params/cod_params.ini"), 
+                  params_file_fleet = here("params/fleet_1_params.ini"), 
+                  nsup=1e6, 
+                  nsteps=200,
+                  verbose=T, 
+                  out_file = here("fishery_output/age_dists_pred.csv"),
+                  using_empirical_mort = TRUE
+                  )  
+}

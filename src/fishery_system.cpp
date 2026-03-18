@@ -68,7 +68,7 @@ Fishery::Fishery(std::string _params_file, const Fish& f) : I(), no_fishing_pop(
 	params_file = _params_file;
 	// I.parse(params_file, false, true);
 	no_fishing_pop.readParams(params_file);
-	this->readParams(params_file, true);
+	this->readParams(params_file, false);
 }
 
 void Fishery::set_referenceFishingMortalityCurve(Fleet &fleet){
@@ -85,7 +85,7 @@ void Fishery::set_referenceFishingMortalityCurve(Fleet &fleet){
 // ---------------------------------------------------------
 int Fishery::readParams(std::string filename, bool verbose) {
 	// update parameters
-	par.initFromFile(filename, true);
+	par.initFromFile(filename, verbose);
 
 	// update population based on new parameters
 	pop.readParams(filename, verbose);

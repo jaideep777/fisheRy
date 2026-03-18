@@ -149,7 +149,7 @@ inline double runif(double rmin=0, double rmax=1){
 }
 
 inline double rnorm(double mu=0, double sd=1){
-	double u = runif(), v = runif();		// uniform rn's [0,1] for box-muller
+	double u = runif(1e-12, 1), v = runif();		// uniform rn's [0,1] for box-muller
 	double x = sqrt(-2.0*log(u)) * cos(2*M_PI*v);
 	return mu + sd*x;
 }
@@ -179,7 +179,10 @@ vector<Fish> Stock::spawn(double ssb_now, double tsb_now, double temp, StockSumm
 		}
 	}
 
-	nrecruits_total *= exp(rnorm(-par.sigmaf*par.sigmaf/2, par.sigmaf));
+	double nrecruits_before_noise = nrecruits_total;
+	double noise_multiplier = exp(rnorm(-par.sigmaf*par.sigmaf/2, par.sigmaf));
+	noise_multiplier = clamp(noise_multiplier, 1e-3, 10);
+	nrecruits_total *= noise_multiplier;
 	stock_summary.nrecruits_real = std::clamp(nrecruits_total, 1.0, par.rmax);
 	//	for (auto& nn : nrecruits_vec) nn = nn*nrecruits_real/(nrecruits_total+1e-20); 
 
@@ -193,7 +196,14 @@ vector<Fish> Stock::spawn(double ssb_now, double tsb_now, double temp, StockSumm
 	int n_super_recruits = std::ceil(stock_summary.nrecruits_real / superfish_size);
 
 	vector<Fish> recruits;
-	recruits.reserve(n_super_recruits);
+	try{
+		recruits.reserve(n_super_recruits);
+	}
+	catch(std::exception &e){
+		std::cout << "Could not reserve recruits vec - required size: " << n_super_recruits << " / " << e.what() << std::endl;
+		std::cout << "nrecruits_before_noise / nrecruits_total = " << nrecruits_before_noise << " / " << nrecruits_total << std::endl;
+		throw e;
+	}
 
 	++proto_fish.t_birth;
 	std::discrete_distribution<size_t> fitness_dist(nrecruits_vec.begin(), nrecruits_vec.end());

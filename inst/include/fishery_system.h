@@ -48,7 +48,7 @@ class Fishery {
 										};
 
 	public:
-	bool debug = true; // Should debugging calculations be done?
+	bool debug = false; // Should debugging calculations be done?
 	bool update_env = false;
 	bool simulate_bio_only = false;
 
