@@ -181,7 +181,7 @@ vector<Fish> Stock::spawn(double ssb_now, double tsb_now, double temp, StockSumm
 
 	double nrecruits_before_noise = nrecruits_total;
 	double noise_multiplier = exp(rnorm(-par.sigmaf*par.sigmaf/2, par.sigmaf));
-	noise_multiplier = clamp(noise_multiplier, 1e-3, 10);
+	noise_multiplier = clamp(noise_multiplier, 1e-3, 10.0);
 	nrecruits_total *= noise_multiplier;
 	stock_summary.nrecruits_real = std::clamp(nrecruits_total, 1.0, par.rmax);
 	//	for (auto& nn : nrecruits_vec) nn = nn*nrecruits_real/(nrecruits_total+1e-20); 
