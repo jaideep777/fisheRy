@@ -51,7 +51,8 @@ Configure the fishery:
 - Initialize the fishery - this creates fish in the real fish population.
 
 ```{r configure-fishery}
-fishery$set_harvestProp(0.22);
+h = 0.22
+fishery$set_harvestProp(h);
 fishery$addFleet(params_file_fleet, T);
 
 # Verify added fleet's fishing mortality curve
@@ -156,7 +157,7 @@ dat |>
   ggplot(aes(x=tsb, y=quota)) +
   geom_point() +
   geom_smooth(method="lm", se=F, formula = y ~ x-1) +
-  geom_abline(slope=0.5, intercept=0, color="red")
+  geom_abline(slope=h, intercept=0, color="red")
 ```
 
 ## SSB Over Simulation
