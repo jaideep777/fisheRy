@@ -140,6 +140,7 @@ double Fish::naturalMortalityRate(double temp) const{
 					) * pow(temp/par.Tref, par.cT);
 		}
 		else if (par.mortality_model == MortalityModel::Empirical){
+			if (mort_fn_spline.npoints == 0) throw std::runtime_error("Natural mortility function is set to empirical but spline is not set.");
 			return natural_mort_scalar * (mort_fn_spline.eval(length) - mort_fn_spline.eval(1000)) + par.M0;
 		}
 		else{
@@ -208,11 +209,10 @@ void Fish::grow(double tsb, double temp){
 			lnew_pot = fish::length_juvenile(length, dl_pot, par.gamma1, par.gamma2);
 		}
 
-		// ------ This is linear increment, just for analysis --------
+		// Calculate linear increment (real and potential)
 		dl_real      = lnew     - length;
 		dl_potential = lnew_pot - length;
 		//cout << "tsb_ano = " << tsb << " / " << par.tsbmean << ", fac = " << dl_real << " / " << dl_potential << endl; 
-		// -----------------------------------------------------------
 
 		gsi_effective = fish::gsi(lnew, length, dl, par.gamma1, par.gamma2, par.alpha1, par.alpha2);
 		set_length(lnew);

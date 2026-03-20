@@ -3,11 +3,14 @@
 
 #include <cmath>
 #include <algorithm>
+#include <numeric>
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <cassert>
 #include "stock.h"
+#include "fleet.h"
+#include "random_utils.h"
 
 using namespace std;
 
@@ -229,14 +232,13 @@ vector<Fish> Stock::spawn(double ssb_now, double tsb_now, double temp, StockSumm
 
 
 
-vector<double> Stock::equilibriate_without_fishing(double temp){
+vector<double> Stock::equilibriate_without_fishing(double temp, int nsteps){
 	// start with 1000 age-1 superfish created under the specified temperature
 	init(1000, 0, temp); 
 	StockSummary stock_summary;
-
+	
 	std::vector<double> state_t;
-	// run 200 years of population dynamics
-	int nsteps = 200;
+	// run nsteps years of population dynamics
 	for (int t=0; t<nsteps; ++t){
 		stock_summary = StockSummary(); // reset stock summary for each year
 
@@ -257,7 +259,6 @@ vector<double> Stock::equilibriate_without_fishing(double temp){
 		for (auto& f: fishes) {
 			double mortality_rate = f.naturalMortalityRate(temp);
 			double survival_prob = exp(-mortality_rate*1.0);
-
 			f.isAlive = f.isAlive && (runif() <= survival_prob);	// set the fish to die probabilistically, if not dead already.
 		}
 
@@ -284,6 +285,165 @@ vector<double> Stock::equilibriate_without_fishing(double temp){
 	return state_t;
 }
 
+std::vector<double> Stock::get_fished(std::vector<Fleet>& fleets, const std::vector<double> &quotas, double temp, bool use_average_weight, bool return_progress){
+	double window_dt = 0.1;
+	Fleet& ref_fleet = fleets[0];
+
+	// Calculate total quota
+	double quota = std::accumulate(quotas.begin(), quotas.end(), 0.0);
+
+	// Live fish to sample per window
+	int n_alive = std::accumulate(fishes.begin(), fishes.end(), 0, 
+		[this](int sum, const Fish& f) { return sum + ((f.isAlive) ? 1 : 0); }
+	);
+	int window_n = std::ceil(window_dt*n_alive);
+
+	// Randomize fishes vector
+	std::shuffle(fishes.begin(), fishes.end(), g);
+
+	// Total available biomass to be sampled
+	double B = ref_fleet.biomassFishable(*this, 0, use_average_weight);
+
+	// Clear window properties in all fleets
+	for (auto& fl : fleets)	fl.window_props_vec.clear(); // clear old data in windows 
+
+	double B_sampled = 0, yield_expected = 0;
+	double yield = 0, to_sea_bed = 0;
+	int windows_sampled = 0;
+
+	// fleet-wise yields
+	std::vector<double> yields(fleets.size(), 0);
+
+	WindowProps wp_total_debug;
+	std::vector<WindowProps> wps_per_fleet(fleets.size()); // create a new WindowProps object for each fleet
+	std::vector<double> progress;
+
+	int live_fish_count = 0;
+	for (auto& f : fishes){
+		if (!f.isAlive) continue; // skip dead fish
+
+		++live_fish_count;
+
+		// If this is beginning of window, update start-of-window window_props
+		if (live_fish_count % window_n == 1){
+			for (int k=0; k<fleets.size(); ++k){
+				wps_per_fleet[k].B_start = B - yield - to_sea_bed; // biomass at start of window is total biomass - biomass died so far
+				wps_per_fleet[k].chi = fleets[k].chi;
+			}
+		}
+
+		double f_weight = (use_average_weight)? (f.weight - f.delta_weight/2) : f.weight;
+		double fishability_f = ref_fleet.fishability(f.length);
+
+		// fishable biomass of current fish and fishable biomass sampled until this point
+		double B_sampled_t = fishability_f * f_weight * superfish_size;
+		B_sampled += B_sampled_t;
+		wp_total_debug.B_sampled += B_sampled_t;
+		if (B_sampled > B) throw std::runtime_error("Sampled fishable biomass exceeds total fishable biomass");
+
+		// expected yield until this point
+		yield_expected = (B_sampled/B) * quota;
+
+		// fleet-wise fishing mort rates
+		std::vector<double> fishing_morts;
+		fishing_morts.reserve(fleets.size());
+		for (auto& fl : fleets) fishing_morts.emplace_back(fl.fishingMortality(f.length)); 
+
+		// total fishing mort and natural mort rates
+		double fishing_mort_rate = std::accumulate(fishing_morts.begin(), fishing_morts.end(), 0.0); // total fishing mort rate from all fleets
+		double natural_mort_rate = f.naturalMortalityRate(temp); // This does not (should not) include spawning-related mortality
+		double mortality_rate = natural_mort_rate + fishing_mort_rate; // post-spawning mortality rate is same for mature and immature individuals
+		double survival_prob = exp(-mortality_rate*1.0);	// mortality in feeding grounds (post-spawning), over full year. Note that survival prob must be annualized because this fish will be iterated over only once
+
+		if (debug && natural_mort_rate > 100) std::cout << "Unusually high M: " << f.age << " / " << f.length << " / " << natural_mort_rate << '\n';
+
+		// Set fish to die based on total mort
+		f.isAlive = f.isAlive && (runif() <= survival_prob);	// set the fish to die probabilistically, if not dead already.
+		
+		if (!f.isAlive){
+			double catch_frac = fishing_mort_rate/mortality_rate; // what fraction of the superfish goes to yield (vs seabed)?
+
+			double yield_t = catch_frac * superfish_size * f_weight; // catch_frac fraction goes to yield
+			yield += yield_t;
+			wp_total_debug.yield += yield_t;
+			to_sea_bed += (1-catch_frac) * superfish_size * f_weight;  // remaining fraction goes to sea bed
+
+			// Allot yield to each fleet
+			for (int k=0; k<fleets.size(); ++k){
+				double catch_frac_fleet = fishing_morts[k]/mortality_rate;
+				double yield_t_k = catch_frac_fleet * superfish_size * f_weight;
+				wps_per_fleet[k].yield += yield_t_k;
+				yields[k] += yield_t_k;
+			}
+		}
+
+		// Fill remaining window_props for each fleet
+		for (int k=0; k<fleets.size(); ++k){
+			wps_per_fleet[k].B_sampled += B_sampled_t;
+			wps_per_fleet[k].chi = fleets[k].chi;
+			if (f.age <= f.par.amax){ // Need to skip age 31 fish as M is 1e20
+				wps_per_fleet[k].F_fishable += fishability_f * fishing_morts[k];
+				wps_per_fleet[k].M_fishable += fishability_f * natural_mort_rate;
+				wps_per_fleet[k].n_fishable += fishability_f * 1;
+			}
+		}
+
+		// When we've sampled all live fish in this window, perform window closing operations
+		if (live_fish_count % window_n == 0){
+			++windows_sampled;
+
+			double bs_remainder = B - B_sampled;
+
+			// For each fleet
+			for (int k=0; k<fleets.size(); ++k){
+				// Compute average window properties
+				wps_per_fleet[k].F_fishable /= wps_per_fleet[k].n_fishable;
+				wps_per_fleet[k].M_fishable /= wps_per_fleet[k].n_fishable;
+				wps_per_fleet[k].C_rate = wps_per_fleet[k].yield / window_dt;
+
+				// Push window props into vector
+				fleets[k].window_props_vec.push_back(wps_per_fleet[k]);
+
+				// update chi
+				double yield_remainder = quotas[k] - yields[k];
+				fleets[k].update_chi_implicit(yield_remainder, bs_remainder);
+
+				// reset WindowProps
+				wps_per_fleet[k] = WindowProps();
+			}
+
+		}
+
+		if (return_progress){
+			progress.insert(progress.end(), 
+				{
+					static_cast<double>(f.age),
+					B,
+					B_sampled,
+					yield,
+					yield_expected,
+					fleets[0].chi,
+					wps_per_fleet[0].chi,
+					wps_per_fleet[0].B_sampled,
+					wps_per_fleet[0].B_start,
+					wps_per_fleet[0].yield,
+					wps_per_fleet[0].F_fishable
+					// ((window_props_vec.size() > 0)? catch_rate_constantF(window_props_vec.back(), B) : 0),   // TODO: Remove this eventually, meant for debugging
+					// ((window_props_vec.size() > 0)? fishing_mort_constantC(window_props_vec.back(), B) : 0)  // TODO: Remove this eventually, meant for debugging
+				});
+		}
+
+	}
+
+	if (return_progress) return progress;
+	else return yields;
+}
+
+
+std::vector<double> Stock::get_fished_dry_run(std::vector<Fleet>& fleets, const std::vector<double> &quotas, double temp, bool use_average_weight, bool return_progress){
+    Stock stock_copy = *this;
+	return stock_copy.get_fished(fleets, quotas, temp, use_average_weight, return_progress);
+}
 
 
 // /// This function simulates the annual dynamics of a fish population, including maturation, growth, reproduction, 

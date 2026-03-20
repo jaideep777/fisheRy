@@ -1,33 +1,36 @@
 #include <iostream>
 #include <fish.h>
-#include <population.h>
+#include <stock.h>
 using namespace std;
 
 int main(){
 
 	string params_file = "params/cod_params.ini";
 	Fish f(params_file);
-	f.par.s0 = 0.059;
+	f.setMortalityCurveEmpirical("data/naturalmort.spline.csv");
+	// f.par.s0 = 0.059;
 
 	// f.init(1.93e3, 5.61);
 
 	cout << "Length = " << f.length << endl;
 
-	Population pop(f);
-	pop.verbose = true;
+	Stock pop(f);
 	pop.readParams(params_file, true);
-	pop.par.n = 1e6;
+	pop.superfish_size = 2e6;
 
-	// pop.noFishingEquilibriate(1.93e3, 5.61);
+	pop.equilibriate_without_fishing(5.61);
+
+	cout << "SSB = " << pop.calcSSB() << endl;
+
 	// pop.set_harvestProp(0.1);
 
-	pop.init(1000, 5.61);
+	// pop.init(1000, 5.61);
 	
-	for (int t=0; t<200; ++t){
-		pop.update(5.61);
-	}
+	// for (int t=0; t<200; ++t){
+	// 	pop.update(5.61);
+	// }
 
-	cout << "Fishable biomass = " << pop.fishableBiomass()/1e9 << " MT" << endl;
+	// cout << "Fishable biomass = " << pop.fishableBiomass()/1e9 << " MT" << endl;
 
 }
  

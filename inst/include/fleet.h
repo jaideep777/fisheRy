@@ -79,14 +79,7 @@ class FleetParams{
 	void print();
 };
 
-extern std::random_device rd;
-
 class Fleet{
-	private:
-	std::mt19937 g;
-	
-	// double h;
-	// double Fc;
 
 	public:
 	FleetParams par;
@@ -125,7 +118,7 @@ class Fleet{
 	std::vector<double> cummulativeFishingMortalityRef(const Stock &stock, double min_age = 0);
 
     /// @brief Calculate natural mortality, maturity, and fishing mortality rates averaged over fishable individuals of Stock stock	
-	double biomassFishable(const Stock &stock, double min_age);
+	double biomassFishable(const Stock &stock, double min_age, bool use_average_weight);
 
 	/// @brief         Initialize chi, the fishing mortality scalar
 	/// @param pop     Stock to fish
@@ -133,13 +126,15 @@ class Fleet{
 	/// @param temp    Temperature
 	void init_chi(Stock &pop, double F_fgf, double temp);
 
-	void update_chi(const std::vector<double>& chi_in_windows, 
-					const std::vector<double>& yield_in_windows, 
-					const std::vector<double>& bs_in_windows,
-					double yield_remainder, double bs_remainder);
+    void update_chi_implicit(double yield_remainder, double bs_remainder);
 
-	std::vector<double> harvest_dry_run(Stock pop, double quota, double temp);
-	std::vector<double> harvest(Stock& pop, double quota, double temp, bool return_progress = false);
+    void update_chi(const std::vector<double> &chi_in_windows,
+                    const std::vector<double> &yield_in_windows,
+                    const std::vector<double> &bs_in_windows,
+                    double yield_remainder, double bs_remainder);
+
+    std::vector<double> harvest_dry_run(Stock pop, double quota, double temp, bool use_average_weight);
+	std::vector<double> harvest(Stock& pop, double quota, double temp, bool use_average_weight, bool return_progress = false);
 
 	double effort_constantC(double q, double b, double K);
 	double effort_constantF(double q, double b, double K);

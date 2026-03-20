@@ -7,70 +7,14 @@
 #include <vector>
 #include "read_csv.h"
 #include "stock.h"
+#include "linreg.h"
+#include "random_utils.h"
+
 
 inline double runif(double rmin=0, double rmax=1){
 	double r = double(rand())/RAND_MAX; 
 	return rmin + (rmax-rmin)*r;
 }
-
-struct linregresult{
-	double slope = 0;
-	double intercept = 0;
-};
-
-inline linregresult linreg(const std::vector<double> &x, const std::vector<double> &y){
-	double xMean = std::accumulate(x.begin(), x.end(), 0.0) / x.size();
-	double yMean = std::accumulate(y.begin(), y.end(), 0.0) / y.size();
-
-	// Calculate the numerator and denominator for the slope (m) using transform and accumulate
-	double numerator = std::inner_product(
-		x.begin(), x.end(), y.begin(), 0.0,
-		std::plus<>(),
-		[xMean, yMean](double xi, double yi) { return (xi - xMean) * (yi - yMean); }
-	);
-
-	double denominator = std::accumulate(
-		x.begin(), x.end(), 0.0,
-		[xMean](double acc, double xi) { return acc + (xi - xMean) * (xi - xMean); }
-	);
-
-	linregresult res;
-	res.slope = numerator / denominator;
-	res.intercept = yMean - res.slope * xMean;
-	
-	return res;
-}
-
-inline linregresult linreg0(const std::vector<double>& x, const std::vector<double>& y, bool debug = false) {
-	// Calculate the numerator and denominator for the slope (m)
-	double numerator = std::inner_product(x.begin(), x.end(), y.begin(), 0.0);
-	double denominator = std::accumulate(
-		x.begin(), x.end(), 0.0,
-		[](double acc, double xi) { return acc + (xi * xi); }
-	);
-
-	linregresult res;
-	res.slope = numerator / denominator;
-	res.intercept = 0;
-	
-	if (debug){
-		std::cout << "linreg0: \n"; 
-		std::cout << "  x = "; for (auto xx : x) std::cout << xx << " "; std::cout << '\n';
-		std::cout << "  y = "; for (auto yy : y) std::cout << yy << " "; std::cout << '\n';
-		std::cout << "  res: slope/int = " << res.slope << " / " << res.intercept << '\n';
-	}
-
-	return res;
-}
-
-inline double linreg_predict(double x_new, const linregresult& res){
-	return res.intercept + res.slope * x_new;
-}
-
-inline double linreg_predict_inverse(double y_new, const linregresult& res){
-	return (y_new - res.intercept)/res.slope;
-}
-
 
 void FleetParams::initFromFile(std::string params_file, bool verbose){
 	io::Initializer I;
@@ -79,6 +23,7 @@ void FleetParams::initFromFile(std::string params_file, bool verbose){
 	#define READ_PAR(x) x = I.get<double>("fleet", #x)
 
 	// // management / fishing selectivity parameters at status quo lmin
+	// These need to be explicitly set, not from params file
 	// READ_PAR(lmin);
 	// READ_PAR(F1);
 	// READ_PAR(F2);
@@ -163,9 +108,7 @@ void FleetParams::print(){
 	#undef PRINT_PAR
 }
 
-std::random_device rd;
-
-Fleet::Fleet() : g(rd()){
+Fleet::Fleet(){
 }
 
 void Fleet::readParams(std::string params_file, bool verbose){
@@ -174,8 +117,8 @@ void Fleet::readParams(std::string params_file, bool verbose){
 
 
 /// Dry run simply takes population by value, so that original one is not altered
-std::vector<double> Fleet::harvest_dry_run(Stock pop, double quota, double temp){
-	return harvest(pop, quota, temp, true); // harvest a copy population and return progress
+std::vector<double> Fleet::harvest_dry_run(Stock pop, double quota, double temp, bool use_average_weight){
+	return harvest(pop, quota, temp, use_average_weight, true); // harvest a copy population and return progress
 }
 
 void Fleet::set_referenceFishingMortalityCurveLogistic(double F1, double F2, double F3, double F4, double F5, double F6, double lmin){
@@ -263,13 +206,17 @@ std::vector<double> Fleet::cummulativeFishingMortalityRef(const Stock &stock, do
 
 // Calculate fishable biomass AS REALIZED during the year, hence using average weights
 // This function should always be called AFTER growth so that current weight is inclusive of dw and average is is w-dw/2
-double Fleet::biomassFishable(const Stock &stock, double min_age){
+// FIXME: Shouldnt fishability also be averaged?
+double Fleet::biomassFishable(const Stock &stock, double min_age, bool use_average_weight){
 	// std::cout << stock.fishes.size() << " fish in stock\n";
 	return 
 	std::accumulate(stock.fishes.begin(), stock.fishes.end(), 0.0, 
-		[min_age, this, &stock](double sum, const Fish& f) { 
+		[min_age, use_average_weight, this, &stock](double sum, const Fish& f) { 
 			if (f.age < min_age || !f.isAlive) return sum + 0;
-			else return sum + (fishability(f.length) * (f.weight - f.delta_weight/2) * stock.superfish_size);
+			else {
+				double f_weight = (use_average_weight)? (f.weight - f.delta_weight/2) : f.weight;
+				return sum + (fishability(f.length) * f_weight * stock.superfish_size);
+			} 
 		}
 	);
 }
@@ -277,6 +224,7 @@ double Fleet::biomassFishable(const Stock &stock, double min_age){
 
 void Fleet::init_chi(Stock &pop, double F_fgf, double temp){
 	std::vector<double> w_Fref = cummulativeFishingMortalityRef(pop, 0);
+	std::cout << "w_Fref = "; for (auto w: w_Fref) std::cout << w << " "; std::cout << "\n";
 
 	double Fref_below_lmin = w_Fref[0];
 	double Fref_above_lmin = w_Fref[1];
@@ -288,6 +236,24 @@ void Fleet::init_chi(Stock &pop, double F_fgf, double temp){
 
 	double h = 1-exp(-F_fgf);
 	chi *= exp(par.chi0_scalar_slope*(h-0.5));
+}
+
+
+void Fleet::update_chi_implicit(double yield_remainder, double bs_remainder){
+
+	int nw = window_props_vec.size();
+
+	std::vector<double> chi_in_windows(nw);
+	std::vector<double> yield_in_windows(nw);
+	std::vector<double> bs_in_windows(nw);
+
+	for (int i=0; i<nw; ++i){
+		chi_in_windows[i] = window_props_vec[i].chi;
+		yield_in_windows[i] = window_props_vec[i].yield;
+		bs_in_windows[i] = window_props_vec[i].B_sampled;
+	}
+
+	update_chi(chi_in_windows, yield_in_windows, bs_in_windows, yield_remainder, bs_remainder);
 }
 
 
@@ -328,7 +294,7 @@ void Fleet::update_chi(const std::vector<double>& chi_in_windows,
 	if (par.control_model == "exp"){
 		// exponential model: y = Bs (1-e^-kX)
 		// std::cout << "using exp model" << std::endl;
-		if (yield_remainder >= bs_remainder) chi = 25;
+		if (yield_remainder >= bs_remainder) chi = par.max_chi;
 		else chi = linreg_predict_inverse(-log(1 - (yield_remainder/bs_remainder)), res);
 	}
 	else if (par.control_model == "linear"){
@@ -348,7 +314,7 @@ void Fleet::update_chi(const std::vector<double>& chi_in_windows,
 /// Some computations are doubled in the function below, but that's ok for now as it serves to
 /// cross-check those calcs. These can be removed after sufficient testing
 /// This function must be called AFTER growth
-std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool return_progress){
+std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool use_average_weight, bool return_progress){
 	double yield = 0, to_sea_bed = 0;
 	double survival_mean = 0, n_survival_mean = 0;
 	window_props_vec.clear(); // clear old data in windows 
@@ -361,16 +327,15 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 	// shuffle fish so that all windows are statistically similar
 	shuffle(pop.fishes.begin(), pop.fishes.end(), g);
 
-	double B = biomassFishable(pop, 0);
+	double B = biomassFishable(pop, 0, use_average_weight);
 	// double quota = B*h; // Should this be fishable biomass at start of season or after SPF?
 	double B_sampled = 0;
 	double yield_expected;
-
 	// double Bsampled_debug = 0, n_fishable_debug = 0, n_debug = 0; 
 	// for (auto& f : pop.fishes){
 	// 	if (f.isAlive){
 	// 		double fishability_f = fishability(f.length);
-	//		double f_weight_avg = f.weight - f.delta_weight/2;
+	//		double f_weight_avg = (use_average_weight)? (f.weight - f.delta_weight/2) : f.weight;
 	// 		Bsampled_debug += fishability_f * f_weight_avg * pop.superfish_size;
 	// 		n_fishable_debug += fishability_f;
 	// 		n_debug += 1;
@@ -387,7 +352,7 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 	int count = 0;
 	for (auto& f : pop.fishes){
 		if (f.isAlive){
-			double f_weight_avg = f.weight - f.delta_weight/2;
+			double f_weight_avg = (use_average_weight)? (f.weight - f.delta_weight/2) : f.weight;
 			double fishability_f = fishability(f.length);
 
 			B_sampled += fishability_f * f_weight_avg * pop.superfish_size;
@@ -402,10 +367,14 @@ std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool r
 			survival_mean += survival_prob;
 			n_survival_mean += 1;
 
-			window_props.M_fishable += fishability_f * natural_mort_rate;
-			window_props.F_fishable += fishability_f * fishing_mort_rate;
+			if (debug && natural_mort_rate > 100) std::cout << "Unusually high M: " << f.age << " / " << f.length << " / " << natural_mort_rate << '\n';
+
+			if (f.age <= f.par.amax){ // Skip such fish as they have Inf natural mortality rate
+				window_props.M_fishable += fishability_f * natural_mort_rate;
+				window_props.F_fishable += fishability_f * fishing_mort_rate;
+				window_props.n_fishable += fishability_f * 1;
+			}
 			window_props.B_sampled  += fishability_f * f_weight_avg * pop.superfish_size;
-			window_props.n_fishable += fishability_f * 1;
 
 			f.isAlive = f.isAlive && (runif() <= survival_prob);	// set the fish to die probabilistically, if not dead already.
 			
@@ -531,7 +500,8 @@ double Fleet::effort_constantC(double q, double b, double K){
 		double effort_t = C/q/(pow( (N0+C/M)*exp(-M*t) - C/M, b));
 		effort += effort_t*par.window_dt;
 
-		if (debug) std::cout << "N0: " << N0 << ", C: " << C << ", M: " << M << ", t: " << t << ", effort_t: " << effort_t << std::endl;
+		if (debug) std::cout << "N0: " << N0 << ", C: " << C << ", M: " << M << ", t: " << t << ", effort_t: " << effort_t 
+		                     << ", (N0+C/M)*exp(-M*t): " << (N0+C/M)*exp(-M*t) << ", C/M: " << C/M << std::endl;
 	}
 	return effort;
 }

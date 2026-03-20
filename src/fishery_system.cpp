@@ -177,28 +177,31 @@ double Fishery::calc_quota(double temp){
 	return expected_catch;
 }
 
+std::vector<double> Fishery::harvest(double quota, double temp, bool return_progress){
+    return std::vector<double>();
+}
 
 // void Fishery::set_traitVariances(std::vector<double> var) {
 // 	pop.set_traitVariances(var);
 // }
-
-void Fishery::init(int n, double t_init, double temp){
-	pop.init(n, t_init, temp);
-}
 
 
 // ---------------------------------------------------------
 // Fishery functions
 // ---------------------------------------------------------
 
-std::vector<double> Fishery::equilibriateNaturalPopulation(double temp, double _n){
-	no_fishing_pop.superfish_size = _n;
-	// no_fishing_pop.set_traitVariances({0,0,0,0,0,0});
-	return no_fishing_pop.equilibriate_without_fishing(temp);
+void Fishery::init(int n, double t_init, double temp){
+	pop.init(n, t_init, temp);
 }
 
-std::vector<double> Fishery::equilibriateWithoutFishing(double temp){
-	return pop.equilibriate_without_fishing(temp);
+std::vector<double> Fishery::equilibriateNaturalPopulation(double temp, double _n, int nsteps){
+	no_fishing_pop.superfish_size = _n;
+	// no_fishing_pop.set_traitVariances({0,0,0,0,0,0});
+	return no_fishing_pop.equilibriate_without_fishing(temp, nsteps);
+}
+
+std::vector<double> Fishery::equilibriateWithoutFishing(double temp, int nsteps){
+	return pop.equilibriate_without_fishing(temp, nsteps);
 
 }
 
@@ -454,15 +457,15 @@ void Fishery::summarize_population_metrics(){
 }
 
 
-void Fishery::summarize_catch_metrics(){
+void Fishery::summarize_catch_metrics(bool use_average_weight){
 	// Calc by-age metrics in catch
 	stock_summary.nc_a = pop.aggregateByAge([this](const Fish &f){
 			return (!f.isAlive && f.isCaught)? pop.superfish_size : 0;
 		});
 
 	// This calc comes after growth so current weight is inclusive of dw, hence subtract dw/2 to get average weight
-	stock_summary.wc_a = pop.aggregateByAge([this](const Fish &f){
-			double f_weight_avg = f.weight - f.delta_weight/2;
+	stock_summary.wc_a = pop.aggregateByAge([use_average_weight, this](const Fish &f){
+			double f_weight_avg = (use_average_weight)? (f.weight - f.delta_weight/2) : f.weight;
 			return (!f.isAlive && f.isCaught)? pop.superfish_size*f_weight_avg : 0;
 		});
 	for (int i=0; i<stock_summary.wc_a.size(); ++i) stock_summary.wc_a[i] /= (stock_summary.nc_a[i]+1e-20);
@@ -540,13 +543,14 @@ std::vector<double> Fishery::update(double temp){
 
 	// 6. Feeding grounds fishery and natural mortality - should always come after growth to access weights before and after growth
 	double yield_fgf = 0, effort = 0;
+	bool _use_average_weight = true;  // Use average weight (pre and post growth) for yield calcs and catch summary. 
 	if (!fleets.empty()) {
 		fleets[0].init_chi(pop, -log(1-harvest_prop), temp); // initialize chi for the feeding grounds fishery
-		std::vector<double> harvest_out = fleets[0].harvest(pop, quota_fgf, temp, false);
+		std::vector<double> harvest_out = fleets[0].harvest(pop, quota_fgf, temp, _use_average_weight, false);
 		yield_fgf = harvest_out[0]; // total yield from the feeding grounds fishery
 		effort = 0; // fleets[0].effort_constantC(fleets[0].par.q, fleets[0].par.b, pop.fishableBiomass());
 	}
-	summarize_catch_metrics(); // nc~a, wc~a
+	summarize_catch_metrics(_use_average_weight); // nc~a, wc~a.  
 
 	// 7. remove dead fish from population
 	pop.fishes.erase(std::remove_if(pop.fishes.begin(), pop.fishes.end(), [](Fish &f){return !f.isAlive;}), pop.fishes.end());

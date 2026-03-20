@@ -118,7 +118,7 @@ int my_upper_bound(const T& val, T * arr, int arrlen){
 
 class Spline{
 	public:
-	int npoints;
+	int npoints = 0;
 	
 	enum Type{LINEAR, CUBIC, CONSTRAINED_CUBIC};
 	Type splineType = CUBIC;

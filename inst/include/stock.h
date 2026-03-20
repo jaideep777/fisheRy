@@ -154,9 +154,10 @@ class Stock{
 
     std::vector<Fish> spawn(double ssb_now, double tsb_now, double temp, StockSummary &stock_summary);
 
-    std::vector<double> equilibriate_without_fishing(double temp);
+    std::vector<double> equilibriate_without_fishing(double temp, int nsteps);
 
-    // std::vector<double> noFishingEquilibriate(double temp);	
+	std::vector<double> get_fished(std::vector<Fleet>& fleets, const std::vector<double>& quotas, double temp, bool use_average_weight, bool return_progress);
+	std::vector<double> get_fished_dry_run(std::vector<Fleet>& fleets, const std::vector<double>& quotas, double temp, bool use_average_weight, bool return_progress);
 
 	int nfish();
 	void summarize();

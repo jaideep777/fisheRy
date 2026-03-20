@@ -72,6 +72,7 @@ class Fishery {
 	void set_referenceFishingMortalityCurve(Fleet& fleet);
 
 	double calc_quota(double temp);
+	std::vector<double> harvest(double quota, double temp, bool return_progress);
 
 	// Wrapper functions for enabling R interface
 	void set_superFishSize(double _n);
@@ -83,12 +84,12 @@ class Fishery {
 	void init(int n, double t_init, double temp);
 
 	// Fishery functions
-	std::vector<double> equilibriateNaturalPopulation(double temp, double _n);
-	std::vector<double> equilibriateWithoutFishing(double temp);
+	std::vector<double> equilibriateNaturalPopulation(double temp, double _n, int nsteps);
+	std::vector<double> equilibriateWithoutFishing(double temp, int nsteps);
 	void addFleet(std::string params_file, bool verbose = false);
 
     void summarize_population_metrics();
-    void summarize_catch_metrics();
+    void summarize_catch_metrics(bool use_average_weight);
 	void summarize_spawner_fishery_metrics(const std::vector<double>& spf_summary_before, const std::vector<double>& spf_summary_after, double quota_spf);
 	
 	std::vector<double> spawner_fishery(double quota);

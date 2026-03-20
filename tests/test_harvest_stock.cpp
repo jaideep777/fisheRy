@@ -37,7 +37,7 @@ int main(){
 	double ssb_nf = pop.calcSSB(pop.par.recruitmentAge);
 	cout << "SSB at equilibrium without fishing: " << ssb_nf << " kg\n";
 
-	double h = 0.22;
+	double h = 0.23;
 	double F_fgf = -log(1-h);
 	double quota = h*ssb_nf;
 
@@ -53,9 +53,10 @@ int main(){
 
 	cout << "Fleet initial chi = " << fleet.chi << endl;
 
-	auto out = fleet.harvest_dry_run(pop, quota, 5.61, true);
+	vector<Fleet> fleets = {fleet};
+	auto out = pop.get_fished_dry_run(fleets, {quota}, 5.61, true, true);
 
-	double effort = fleet.effort_constantC(fleet.par.q, fleet.par.b, fleet.biomassFishable(pop,0,true))*fleet.par.dsea;
+	double effort = fleets[0].effort_constantC(fleet.par.q, fleet.par.b, fleet.biomassFishable(pop,0,true))*fleet.par.dsea;
 	cout << "Effort (constant C) = " << effort << " vessel-days\n";
 
 	double n = out.size();
