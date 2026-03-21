@@ -87,11 +87,11 @@ simulate_pop = function(par, nsup = 1e6, verbose=F, nsteps=500, nymax=50, params
   fishery$pop$debug = FALSE
   cat(">>> Fleet added to fishery --------------\n")
 
-  v = fishery$equilibriateNaturalPopulation(5.61, 2e6);
+  v = fishery$equilibriateNaturalPopulation(5.61, 2e6, 200);
 
   fishery$init(1000, 0, 5.61);
   cat(">>> Fishery init with 1000 fish --------------\n")
-  v2 = fishery$equilibriateWithoutFishing(5.61)
+  v2 = fishery$equilibriateWithoutFishing(5.61, 200)
   cat(">>> Stock equilibriated --------------\n")
   # print(fishery$pop$get_state())
 
@@ -177,7 +177,7 @@ setwd(here("vignettes"))
 
 # par_opt = c(0.02, 0.0275, 0.06, 1)
 par_opt = c(0.02924969, 0.03239047, 0.17911014, 1.7)
-par_opt_empirical = c(0.02924969, 0.5, 0.2)
+par_opt_empirical = c(0.02924969, 0.3, 0.3)
 # par_opt = c(0.01924969, 0.062994, 0.07911014, 2.455715)
 l = simulate_pop(par = par_opt_empirical, 
                  params_file_fish = here("params/cod_params.ini"), 

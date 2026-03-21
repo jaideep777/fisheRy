@@ -460,13 +460,13 @@ void Fishery::summarize_population_metrics(){
 void Fishery::summarize_catch_metrics(bool use_average_weight){
 	// Calc by-age metrics in catch
 	stock_summary.nc_a = pop.aggregateByAge([this](const Fish &f){
-			return (!f.isAlive && f.isCaught)? pop.superfish_size : 0;
+			return (!f.isAlive)? f.fraction_caught*pop.superfish_size : 0;
 		});
 
 	// This calc comes after growth so current weight is inclusive of dw, hence subtract dw/2 to get average weight
 	stock_summary.wc_a = pop.aggregateByAge([use_average_weight, this](const Fish &f){
 			double f_weight_avg = (use_average_weight)? (f.weight - f.delta_weight/2) : f.weight;
-			return (!f.isAlive && f.isCaught)? pop.superfish_size*f_weight_avg : 0;
+			return (!f.isAlive)? f.fraction_caught*pop.superfish_size*f_weight_avg : 0;
 		});
 	for (int i=0; i<stock_summary.wc_a.size(); ++i) stock_summary.wc_a[i] /= (stock_summary.nc_a[i]+1e-20);
 }
@@ -501,7 +501,7 @@ std::vector<double> Fishery::spawner_fishery(double quota){
 
 			if (f.isAlive) ssb_remaining += pop.superfish_size*f.weight; // surviving individuals contribute to SSB
 			if (!f.isAlive) yield_spf += pop.superfish_size*f.weight;   // dying individuals contribute to yield
-			if (!f.isAlive) f.isCaught = true;               // mark fish as caught
+			if (!f.isAlive) f.fraction_caught = 1;               // mark fish as caught
 		}
 	}
 	
@@ -546,7 +546,7 @@ std::vector<double> Fishery::update(double temp){
 	bool _use_average_weight = true;  // Use average weight (pre and post growth) for yield calcs and catch summary. 
 	if (!fleets.empty()) {
 		fleets[0].init_chi(pop, -log(1-harvest_prop), temp); // initialize chi for the feeding grounds fishery
-		std::vector<double> harvest_out = fleets[0].harvest(pop, quota_fgf, temp, _use_average_weight, false);
+		std::vector<double> harvest_out = pop.get_fished(fleets, {quota_fgf}, temp, _use_average_weight, false);
 		yield_fgf = harvest_out[0]; // total yield from the feeding grounds fishery
 		effort = 0; // fleets[0].effort_constantC(fleets[0].par.q, fleets[0].par.b, pop.fishableBiomass());
 	}

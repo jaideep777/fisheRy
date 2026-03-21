@@ -116,10 +116,10 @@ void Fleet::readParams(std::string params_file, bool verbose){
 }
 
 
-/// Dry run simply takes population by value, so that original one is not altered
-std::vector<double> Fleet::harvest_dry_run(Stock pop, double quota, double temp, bool use_average_weight){
-	return harvest(pop, quota, temp, use_average_weight, true); // harvest a copy population and return progress
-}
+// /// Dry run simply takes population by value, so that original one is not altered
+// std::vector<double> Fleet::harvest_dry_run(Stock pop, double quota, double temp, bool use_average_weight){
+// 	return harvest(pop, quota, temp, use_average_weight, true); // harvest a copy population and return progress
+// }
 
 void Fleet::set_referenceFishingMortalityCurveLogistic(double F1, double F2, double F3, double F4, double F5, double F6, double lmin){
 	par.using_empirical_fref = false;
@@ -224,7 +224,7 @@ double Fleet::biomassFishable(const Stock &stock, double min_age, bool use_avera
 
 void Fleet::init_chi(Stock &pop, double F_fgf, double temp){
 	std::vector<double> w_Fref = cummulativeFishingMortalityRef(pop, 0);
-	std::cout << "w_Fref = "; for (auto w: w_Fref) std::cout << w << " "; std::cout << "\n";
+	if(debug) std::cout << "w_Fref = "; for (auto w: w_Fref) std::cout << w << " "; std::cout << "\n";
 
 	double Fref_below_lmin = w_Fref[0];
 	double Fref_above_lmin = w_Fref[1];
@@ -310,182 +310,182 @@ void Fleet::update_chi(const std::vector<double>& chi_in_windows,
 }
 
 
-/// Note: this function takes pop by reference so it IS altered
-/// Some computations are doubled in the function below, but that's ok for now as it serves to
-/// cross-check those calcs. These can be removed after sufficient testing
-/// This function must be called AFTER growth
-std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool use_average_weight, bool return_progress){
-	double yield = 0, to_sea_bed = 0;
-	double survival_mean = 0, n_survival_mean = 0;
-	window_props_vec.clear(); // clear old data in windows 
+// /// Note: this function takes pop by reference so it IS altered
+// /// Some computations are doubled in the function below, but that's ok for now as it serves to
+// /// cross-check those calcs. These can be removed after sufficient testing
+// /// This function must be called AFTER growth
+// std::vector<double> Fleet::harvest(Stock& pop, double quota, double temp, bool use_average_weight, bool return_progress){
+// 	double yield = 0, to_sea_bed = 0;
+// 	double survival_mean = 0, n_survival_mean = 0;
+// 	window_props_vec.clear(); // clear old data in windows 
 
-	// count number of alive fish to calculate per-window samples
-	double n_alive = 0;
-	for (auto& f : pop.fishes) n_alive += f.isAlive? 1:0;
-	int window_n = std::ceil(par.window_dt*n_alive);
+// 	// count number of alive fish to calculate per-window samples
+// 	double n_alive = 0;
+// 	for (auto& f : pop.fishes) n_alive += f.isAlive? 1:0;
+// 	int window_n = std::ceil(par.window_dt*n_alive);
 	
-	// shuffle fish so that all windows are statistically similar
-	shuffle(pop.fishes.begin(), pop.fishes.end(), g);
+// 	// shuffle fish so that all windows are statistically similar
+// 	shuffle(pop.fishes.begin(), pop.fishes.end(), g);
 
-	double B = biomassFishable(pop, 0, use_average_weight);
-	// double quota = B*h; // Should this be fishable biomass at start of season or after SPF?
-	double B_sampled = 0;
-	double yield_expected;
-	// double Bsampled_debug = 0, n_fishable_debug = 0, n_debug = 0; 
-	// for (auto& f : pop.fishes){
-	// 	if (f.isAlive){
-	// 		double fishability_f = fishability(f.length);
-	//		double f_weight_avg = (use_average_weight)? (f.weight - f.delta_weight/2) : f.weight;
-	// 		Bsampled_debug += fishability_f * f_weight_avg * pop.superfish_size;
-	// 		n_fishable_debug += fishability_f;
-	// 		n_debug += 1;
-	// 	}
-	// }
-	// std::cout << "Check consistency: B_sampled = " << Bsampled_debug << ", B = " << B << ", TSB = " << pop.calcTSB(0) << ", fishability = " << n_fishable_debug/n_debug << '\n';
-	// return {0};
+// 	double B = biomassFishable(pop, 0, use_average_weight);
+// 	// double quota = B*h; // Should this be fishable biomass at start of season or after SPF?
+// 	double B_sampled = 0;
+// 	double yield_expected;
+// 	// double Bsampled_debug = 0, n_fishable_debug = 0, n_debug = 0; 
+// 	// for (auto& f : pop.fishes){
+// 	// 	if (f.isAlive){
+// 	// 		double fishability_f = fishability(f.length);
+// 	//		double f_weight_avg = (use_average_weight)? (f.weight - f.delta_weight/2) : f.weight;
+// 	// 		Bsampled_debug += fishability_f * f_weight_avg * pop.superfish_size;
+// 	// 		n_fishable_debug += fishability_f;
+// 	// 		n_debug += 1;
+// 	// 	}
+// 	// }
+// 	// std::cout << "Check consistency: B_sampled = " << Bsampled_debug << ", B = " << B << ", TSB = " << pop.calcTSB(0) << ", fishability = " << n_fishable_debug/n_debug << '\n';
+// 	// return {0};
 
-	std::vector<double> progress;
-	std::vector<double> chi_in_windows(1, 0), yield_in_windows(1, 0), bs_in_windows(1, 0);
-	double yield_prev = 0, bs_prev = 0, to_sea_bed_prev = 0;
-	int windows_sampled = 0;
-	WindowProps window_props;
-	int count = 0;
-	for (auto& f : pop.fishes){
-		if (f.isAlive){
-			double f_weight_avg = (use_average_weight)? (f.weight - f.delta_weight/2) : f.weight;
-			double fishability_f = fishability(f.length);
+// 	std::vector<double> progress;
+// 	std::vector<double> chi_in_windows(1, 0), yield_in_windows(1, 0), bs_in_windows(1, 0);
+// 	double yield_prev = 0, bs_prev = 0, to_sea_bed_prev = 0;
+// 	int windows_sampled = 0;
+// 	WindowProps window_props;
+// 	int count = 0;
+// 	for (auto& f : pop.fishes){
+// 		if (f.isAlive){
+// 			double f_weight_avg = (use_average_weight)? (f.weight - f.delta_weight/2) : f.weight;
+// 			double fishability_f = fishability(f.length);
 
-			B_sampled += fishability_f * f_weight_avg * pop.superfish_size;
-			if (B_sampled > B) throw std::runtime_error("Sampled fishable biomass exceeds total fishable biomass");
+// 			B_sampled += fishability_f * f_weight_avg * pop.superfish_size;
+// 			if (B_sampled > B) throw std::runtime_error("Sampled fishable biomass exceeds total fishable biomass");
 
-			yield_expected = (B_sampled/B) * quota;
+// 			yield_expected = (B_sampled/B) * quota;
 
-			double fishing_mort_rate = fishingMortality(f.length); 
-			double natural_mort_rate = f.naturalMortalityRate(temp); // This does not (should not) include spawning-related mortality
-			double mortality_rate = natural_mort_rate + fishing_mort_rate; // post-spawning mortality rate is same for mature and immature individuals
-			double survival_prob = exp(-mortality_rate*1.0);	// mortality in feeding grounds (post-spawning), over full year. Note that survival prob must be annualized because this fish will be iterated over only once
-			survival_mean += survival_prob;
-			n_survival_mean += 1;
+// 			double fishing_mort_rate = fishingMortality(f.length); 
+// 			double natural_mort_rate = f.naturalMortalityRate(temp); // This does not (should not) include spawning-related mortality
+// 			double mortality_rate = natural_mort_rate + fishing_mort_rate; // post-spawning mortality rate is same for mature and immature individuals
+// 			double survival_prob = exp(-mortality_rate*1.0);	// mortality in feeding grounds (post-spawning), over full year. Note that survival prob must be annualized because this fish will be iterated over only once
+// 			survival_mean += survival_prob;
+// 			n_survival_mean += 1;
 
-			if (debug && natural_mort_rate > 100) std::cout << "Unusually high M: " << f.age << " / " << f.length << " / " << natural_mort_rate << '\n';
+// 			if (debug && natural_mort_rate > 100) std::cout << "Unusually high M: " << f.age << " / " << f.length << " / " << natural_mort_rate << '\n';
 
-			if (f.age <= f.par.amax){ // Skip such fish as they have Inf natural mortality rate
-				window_props.M_fishable += fishability_f * natural_mort_rate;
-				window_props.F_fishable += fishability_f * fishing_mort_rate;
-				window_props.n_fishable += fishability_f * 1;
-			}
-			window_props.B_sampled  += fishability_f * f_weight_avg * pop.superfish_size;
+// 			if (f.age <= f.par.amax){ // Skip such fish as they have Inf natural mortality rate
+// 				window_props.M_fishable += fishability_f * natural_mort_rate;
+// 				window_props.F_fishable += fishability_f * fishing_mort_rate;
+// 				window_props.n_fishable += fishability_f * 1;
+// 			}
+// 			window_props.B_sampled  += fishability_f * f_weight_avg * pop.superfish_size;
 
-			f.isAlive = f.isAlive && (runif() <= survival_prob);	// set the fish to die probabilistically, if not dead already.
+// 			f.isAlive = f.isAlive && (runif() <= survival_prob);	// set the fish to die probabilistically, if not dead already.
 			
-			if (!f.isAlive){
-				f.isCaught = runif() < fishing_mort_rate/mortality_rate; // check if fish is caught or goes to sea bed!
+// 			if (!f.isAlive){
+// 				f.isCaught = runif() < fishing_mort_rate/mortality_rate; // check if fish is caught or goes to sea bed!
 				
-				if (f.isCaught){
-					yield += pop.superfish_size*f_weight_avg; // if caught, add to yield
-					window_props.yield += pop.superfish_size*f_weight_avg;
-				}
-				else to_sea_bed += pop.superfish_size*f_weight_avg;       // else, goes to sea bed
-			}
+// 				if (f.isCaught){
+// 					yield += pop.superfish_size*f_weight_avg; // if caught, add to yield
+// 					window_props.yield += pop.superfish_size*f_weight_avg;
+// 				}
+// 				else to_sea_bed += pop.superfish_size*f_weight_avg;       // else, goes to sea bed
+// 			}
 
-			++count;
+// 			++count;
 
-			if (count >= window_n){ // update chi, but not if most fish have already been sampled
-				count = 0;
-				++windows_sampled;
+// 			if (count >= window_n){ // update chi, but not if most fish have already been sampled
+// 				count = 0;
+// 				++windows_sampled;
 
-				// get parameters and outcomes realized during this window
-				double chi_window = chi;
-				double yield_window = yield - yield_prev;
-				double bs_window = B_sampled - bs_prev;
+// 				// get parameters and outcomes realized during this window
+// 				double chi_window = chi;
+// 				double yield_window = yield - yield_prev;
+// 				double bs_window = B_sampled - bs_prev;
 
-				window_props.chi = chi;
-				window_props.B_start = B - yield_prev - to_sea_bed_prev;
-				window_props.C_rate = window_props.yield/par.window_dt; // catch rate = annualized yield = yield per year
-				window_props.M_fishable /= window_props.n_fishable; 
-				window_props.F_fishable /= window_props.n_fishable; 
+// 				window_props.chi = chi;
+// 				window_props.B_start = B - yield_prev - to_sea_bed_prev;
+// 				window_props.C_rate = window_props.yield/par.window_dt; // catch rate = annualized yield = yield per year
+// 				window_props.M_fishable /= window_props.n_fishable; 
+// 				window_props.F_fishable /= window_props.n_fishable; 
 
-				if (debug){
-					std::cout << "Yield window: " << yield_window << " " << window_props.yield << '\n';
-					std::cout << "Bs window: " << bs_window << " " << window_props.B_sampled << std::endl;
-				}
+// 				if (debug){
+// 					std::cout << "Yield window: " << yield_window << " " << window_props.yield << '\n';
+// 					std::cout << "Bs window: " << bs_window << " " << window_props.B_sampled << std::endl;
+// 				}
 
-				if (fabs(1-yield_window/(window_props.yield+1e-20)) > 1e-5 && fabs(yield_window-window_props.yield) > 1e-5) 
-					throw std::runtime_error("Yield in window_props does not match yield_window");
-				if (fabs(1-bs_window/(window_props.B_sampled+1e-20)) > 1e-5 && fabs(bs_window-window_props.B_sampled) > 1e-5) 
-					throw std::runtime_error("Yield or B_sampled in window_props does not match yield_window or bs_window");
+// 				if (fabs(1-yield_window/(window_props.yield+1e-20)) > 1e-5 && fabs(yield_window-window_props.yield) > 1e-5) 
+// 					throw std::runtime_error("Yield in window_props does not match yield_window");
+// 				if (fabs(1-bs_window/(window_props.B_sampled+1e-20)) > 1e-5 && fabs(bs_window-window_props.B_sampled) > 1e-5) 
+// 					throw std::runtime_error("Yield or B_sampled in window_props does not match yield_window or bs_window");
 				
-				// push them into history
-				window_props_vec.push_back(window_props);
-				yield_in_windows.push_back(window_props.yield);
-				chi_in_windows.push_back(window_props.chi);
-				bs_in_windows.push_back(window_props.B_sampled);
-				// yield_in_windows.push_back(yield_window);
-				// chi_in_windows.push_back(chi_window);
-				// bs_in_windows.push_back(bs_window);
+// 				// push them into history
+// 				window_props_vec.push_back(window_props);
+// 				yield_in_windows.push_back(window_props.yield);
+// 				chi_in_windows.push_back(window_props.chi);
+// 				bs_in_windows.push_back(window_props.B_sampled);
+// 				// yield_in_windows.push_back(yield_window);
+// 				// chi_in_windows.push_back(chi_window);
+// 				// bs_in_windows.push_back(bs_window);
 
-				// update cumulative yield and bs 
-				yield_prev = yield;
-				to_sea_bed_prev = to_sea_bed;
-				bs_prev = B_sampled;
+// 				// update cumulative yield and bs 
+// 				yield_prev = yield;
+// 				to_sea_bed_prev = to_sea_bed;
+// 				bs_prev = B_sampled;
 
-				// remainder biomass and yield (new values to update chi)
-				double bs_remainder = fmax(B - B_sampled, 0);
-				double yield_remainder = fmax(quota - yield, 0);
+// 				// remainder biomass and yield (new values to update chi)
+// 				double bs_remainder = fmax(B - B_sampled, 0);
+// 				double yield_remainder = fmax(quota - yield, 0);
 
-				// update chi once yield goes above 0. This condition is to prevent degenerate points in regression
-				if (yield > 0 && window_props.n_fishable > 1){
-					update_chi(chi_in_windows, yield_in_windows, bs_in_windows, yield_remainder, bs_remainder);
-				}
+// 				// update chi once yield goes above 0. This condition is to prevent degenerate points in regression
+// 				if (yield > 0 && window_props.n_fishable > 1){
+// 					update_chi(chi_in_windows, yield_in_windows, bs_in_windows, yield_remainder, bs_remainder);
+// 				}
 
-				// reset window_props
-				window_props = WindowProps();
-			}
+// 				// reset window_props
+// 				window_props = WindowProps();
+// 			}
 
-			if (return_progress){
-				progress.insert(progress.end(), 
-					{
-						static_cast<double>(f.age),
-						B,
-						B_sampled,
-						yield,
-						yield_expected,
-						chi,
-						window_props.chi,
-						window_props.B_sampled,
-						window_props.B_start,
-						window_props.yield,
-						window_props.F_fishable
-						// ((window_props_vec.size() > 0)? catch_rate_constantF(window_props_vec.back(), B) : 0),   // TODO: Remove this eventually, meant for debugging
-						// ((window_props_vec.size() > 0)? fishing_mort_constantC(window_props_vec.back(), B) : 0)  // TODO: Remove this eventually, meant for debugging
-					});
-			}
+// 			if (return_progress){
+// 				progress.insert(progress.end(), 
+// 					{
+// 						static_cast<double>(f.age),
+// 						B,
+// 						B_sampled,
+// 						yield,
+// 						yield_expected,
+// 						chi,
+// 						window_props.chi,
+// 						window_props.B_sampled,
+// 						window_props.B_start,
+// 						window_props.yield,
+// 						window_props.F_fishable
+// 						// ((window_props_vec.size() > 0)? catch_rate_constantF(window_props_vec.back(), B) : 0),   // TODO: Remove this eventually, meant for debugging
+// 						// ((window_props_vec.size() > 0)? fishing_mort_constantC(window_props_vec.back(), B) : 0)  // TODO: Remove this eventually, meant for debugging
+// 					});
+// 			}
 
-		}
+// 		}
 
-		if (debug){
-			std::cout 
-				<< B/1e9 << " "
-				<< B_sampled/1e9 << " "
-				<< yield/1e9 << " "
-				<< yield_expected/1e9 << " "
-				<< chi << " "
-				<< window_props.chi << " "
-				<< window_props.B_sampled/1e9 << " "
-				<< window_props.B_start/1e9 << " "
-				<< window_props.yield/1e9 << " "
-				<< std::endl;
-		}
-	} 
-	survival_mean /= n_survival_mean;
+// 		if (debug){
+// 			std::cout 
+// 				<< B/1e9 << " "
+// 				<< B_sampled/1e9 << " "
+// 				<< yield/1e9 << " "
+// 				<< yield_expected/1e9 << " "
+// 				<< chi << " "
+// 				<< window_props.chi << " "
+// 				<< window_props.B_sampled/1e9 << " "
+// 				<< window_props.B_start/1e9 << " "
+// 				<< window_props.yield/1e9 << " "
+// 				<< std::endl;
+// 		}
+// 	} 
+// 	survival_mean /= n_survival_mean;
 
-	if (return_progress) return progress;
-	else return {
-		yield,
-		to_sea_bed,
-		survival_mean
-	};
-}
+// 	if (return_progress) return progress;
+// 	else return {
+// 		yield,
+// 		to_sea_bed,
+// 		survival_mean
+// 	};
+// }
 
 
 // FIXME: Ask Mikko: Should K here also be adjusted to K_start?

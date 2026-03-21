@@ -43,7 +43,7 @@ pop$superfish_size = 2e6  # Each superfish contains so many fish
 For simulating fishing, it is important for the population to start with a realistic state distribution. Therfore, we "spin-up" the population under no-fishing conditions. 
 
 ```{r}
-v = pop$equilibriate_without_fishing(5.61) |> matrix(nrow=200, byrow=T) |> as.data.frame() |> setNames(c("ssb", "tsb", "maturity", "nr", "dr", "nfish"))
+v = pop$equilibriate_without_fishing(5.61, 200) |> matrix(nrow=200, byrow=T) |> as.data.frame() |> setNames(c("ssb", "tsb", "maturity", "nr", "dr", "nfish"))
 ```
 
 Let's see how the population state looks after no-fishing equilibrium.

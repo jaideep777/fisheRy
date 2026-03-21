@@ -1,5 +1,5 @@
 ---
-title: "Effort control: fishing until quota is filled - stock implementation"
+title: "Effort control: fishing until quota is filled - fleet implementation"
 author: "Jaideep Joshi"
 date: "28 October 2024"
 output: html_document
@@ -45,7 +45,7 @@ pop$superfish_size
 For simulating fishing, it is important for the population to start with a realistic state distribution. Therfore, we "spin-up" the population under no-fishing conditions. 
 
 ```{r}
-v = pop$equilibriate_without_fishing(5.61, 200) |> matrix(nrow=200, byrow=T) |> as.data.frame() |> setNames(c("ssb", "tsb", "maturity", "nr", "dr", "nfish"))
+v = pop$equilibriate_without_fishing(5.61) |> matrix(nrow=200, byrow=T) |> as.data.frame() |> setNames(c("ssb", "tsb", "maturity", "nr", "dr", "nfish"))
 ```
 
 Let's see how the population state looks after no-fishing equilibrium.
@@ -98,9 +98,7 @@ progress_names = c("fish_age",
                    "b_sampled_window",
                    "b_start_window",
                    "yield_window",
-                   "fishing_mort_window",
-                   "effort_c",
-                   "effrot_f")
+                   "fishing_mort_window")
 ```
 
 ## Mock fish the population to calculate fishing mortality rate (linear model)
@@ -123,7 +121,7 @@ print(k_unfished/1e9)
 ```
 
 ```{r}
-out = get_fished_dry_run_wrapper(pop, list(fleet), quota, 5.61, TRUE, TRUE)
+out = fleet$harvest_dry_run(pop, quota, 5.61, TRUE)
 
 df = as.data.frame(matrix(data = out, ncol=length(progress_names), byrow = T))
 colnames(df) = progress_names
@@ -141,6 +139,10 @@ df %>%
 
 table(df$chi)
 
+
+fleet$effort_constantC(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
+fleet$effort_constantF(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
+
 ```
 
 
@@ -156,7 +158,7 @@ fleet$chi = 100
 fleet$init_chi(pop, F_fgf, 5.61)
 k_unfished = fleet$biomassFishable(pop, 0, FALSE)
 
-out = get_fished_dry_run_wrapper(pop, list(fleet), quota, 5.61, TRUE, TRUE)
+out = fleet$harvest_dry_run(pop, quota, 5.61, TRUE)
 
 df = as.data.frame(matrix(data = out, ncol=length(progress_names), byrow = T))
 colnames(df) = progress_names
@@ -171,6 +173,10 @@ df %>%
   facet_wrap(~name, scales="free_y")
 
 table(df$chi)
+
+
+fleet$effort_constantC(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
+fleet$effort_constantF(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
 
 ```
 
@@ -189,7 +195,7 @@ fleet$chi = 100
 fleet$init_chi(pop, F_fgf, 5.61)
 k_unfished = fleet$biomassFishable(pop, 0, FALSE)
 
-out = get_fished_dry_run_wrapper(pop, list(fleet), quota, 5.61, TRUE, TRUE)
+out = fleet$harvest_dry_run(pop, quota, 5.61, TRUE)
 
 df = as.data.frame(matrix(data = out, ncol=length(progress_names), byrow = T))
 colnames(df) = progress_names
@@ -210,8 +216,8 @@ table(df$chi)
 #   geom_point()+
 #   geom_abline(slope=1, intercept=0, col="red")
 
-# fleet$effort_constantC(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
-# fleet$effort_constantF(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
+fleet$effort_constantC(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
+fleet$effort_constantF(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
 
 ```
 
@@ -236,7 +242,7 @@ pc_error = function(i, mode, h, slope, empirical_F_file = ""){
 
   quota = h * k_unfished
 
-  out = get_fished_dry_run_wrapper(pop, list(fleet), quota, 5.61, TRUE, TRUE)
+  out = fleet$harvest_dry_run(pop, quota, 5.61, TRUE)
 
   df = as.data.frame(matrix(data = out, ncol=length(progress_names), byrow = T))
   colnames(df) = progress_names
@@ -247,8 +253,8 @@ pc_error = function(i, mode, h, slope, empirical_F_file = ""){
         mutate(yield_err_pc = (yield-yield_expected)/yield_expected*100) %>% 
         pull(yield_err_pc) %>% 
         tail(1),
-    effort_c = last(df$effort_c),
-    effort_f = last(df$effrot_f)
+    effort_c = fleet$effort_constantC(2.83e-6, 0.75, k_unfished)*fleet$par$dsea,
+    effort_f = fleet$effort_constantF(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
   )
 }
 ```

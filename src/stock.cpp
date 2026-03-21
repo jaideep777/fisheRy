@@ -304,7 +304,7 @@ std::vector<double> Stock::get_fished(std::vector<Fleet>& fleets, const std::vec
 	// Total available biomass to be sampled
 	double B = ref_fleet.biomassFishable(*this, 0, use_average_weight);
 
-	// Clear window properties in all fleets
+	// Clear window props vector in all fleets
 	for (auto& fl : fleets)	fl.window_props_vec.clear(); // clear old data in windows 
 
 	double B_sampled = 0, yield_expected = 0;
@@ -339,7 +339,10 @@ std::vector<double> Stock::get_fished(std::vector<Fleet>& fleets, const std::vec
 		double B_sampled_t = fishability_f * f_weight * superfish_size;
 		B_sampled += B_sampled_t;
 		wp_total_debug.B_sampled += B_sampled_t;
-		if (B_sampled > B) throw std::runtime_error("Sampled fishable biomass exceeds total fishable biomass");
+		if (B_sampled > B+1){
+			std::cout << "Sampled fishable biomass exceeds total fishable biomass: " << B_sampled << " / " << B << std::endl;
+			throw std::runtime_error("");
+		}
 
 		// expected yield until this point
 		yield_expected = (B_sampled/B) * quota;
@@ -361,12 +364,12 @@ std::vector<double> Stock::get_fished(std::vector<Fleet>& fleets, const std::vec
 		f.isAlive = f.isAlive && (runif() <= survival_prob);	// set the fish to die probabilistically, if not dead already.
 		
 		if (!f.isAlive){
-			double catch_frac = fishing_mort_rate/mortality_rate; // what fraction of the superfish goes to yield (vs seabed)?
+			f.fraction_caught = fishing_mort_rate/mortality_rate; // what fraction of the superfish goes to yield (vs seabed)?
 
-			double yield_t = catch_frac * superfish_size * f_weight; // catch_frac fraction goes to yield
+			double yield_t = f.fraction_caught * superfish_size * f_weight; // catch_frac fraction goes to yield
 			yield += yield_t;
 			wp_total_debug.yield += yield_t;
-			to_sea_bed += (1-catch_frac) * superfish_size * f_weight;  // remaining fraction goes to sea bed
+			to_sea_bed += (1-f.fraction_caught) * superfish_size * f_weight;  // remaining fraction goes to sea bed
 
 			// Allot yield to each fleet
 			for (int k=0; k<fleets.size(); ++k){
@@ -427,9 +430,10 @@ std::vector<double> Stock::get_fished(std::vector<Fleet>& fleets, const std::vec
 					wps_per_fleet[0].B_sampled,
 					wps_per_fleet[0].B_start,
 					wps_per_fleet[0].yield,
-					wps_per_fleet[0].F_fishable
-					// ((window_props_vec.size() > 0)? catch_rate_constantF(window_props_vec.back(), B) : 0),   // TODO: Remove this eventually, meant for debugging
-					// ((window_props_vec.size() > 0)? fishing_mort_constantC(window_props_vec.back(), B) : 0)  // TODO: Remove this eventually, meant for debugging
+					wps_per_fleet[0].F_fishable,
+					// Below effort calc is only for debugging
+					fleets[0].effort_constantC(fleets[0].par.q, fleets[0].par.b, B)*fleets[0].par.dsea,
+					fleets[0].effort_constantF(fleets[0].par.q, fleets[0].par.b, B)*fleets[0].par.dsea
 				});
 		}
 

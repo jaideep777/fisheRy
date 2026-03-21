@@ -65,11 +65,11 @@ tibble(len=seq(10,200,length.out=100)) |>
 
 ```{r}
 # Simulate the Fishery's hypothetical unfished population to equilibrium
-v = fishery$equilibriateNaturalPopulation(5.61, 2e6);
+v = fishery$equilibriateNaturalPopulation(5.61, 2e6, 200);
 fishery$set_superFishSize(2e6)
 # Initialize the 
 fishery$init(1000, 0, 5.61);
-v2 = fishery$equilibriateWithoutFishing(5.61)
+v2 = fishery$equilibriateWithoutFishing(5.61, 200)
 
 # Just a demo calc of the initial quota corresponding to the set defined harvest proportion. The Fishery will recalculate this every year.
 quota = fishery$calc_quota(5.61);

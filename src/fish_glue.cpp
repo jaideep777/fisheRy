@@ -156,10 +156,37 @@ RCPP_MODULE(fish_module) {
 
 #include "population.h"
 #include "stock.h"
+#include "fleet.h"
 
 RCPP_EXPOSED_CLASS(PopulationParams);
 RCPP_EXPOSED_CLASS(StockParams);
 RCPP_EXPOSED_CLASS(SeaEnvironment);
+
+RCPP_EXPOSED_CLASS(FleetParams);
+RCPP_EXPOSED_CLASS(Fleet);
+
+// [[Rcpp::export]]
+std::vector<double> get_fished_dry_run_wrapper(
+    SEXP stock_ptr,          // external pointer to Stock
+    Rcpp::List fleets_list,  // list of Fleet external pointers
+    const std::vector<double>& x,
+    double y,
+    bool a,
+    bool b
+) {
+    // Extract module objects properly
+    Stock* stock = Rcpp::as<Stock*>(stock_ptr);
+
+    std::vector<Fleet> fleets;
+    fleets.reserve(fleets_list.size());
+
+    for (int i = 0; i < fleets_list.size(); ++i) {
+        Fleet* fptr = Rcpp::as<Fleet*>(fleets_list[i]);
+        fleets.push_back(*fptr);  // copy
+    }
+
+    return stock->get_fished_dry_run(fleets, x, y, a, b);
+}
 
 ////RCPP_EXPOSED_AS(Population);
 RCPP_MODULE(population_module){
@@ -268,13 +295,14 @@ RCPP_MODULE(population_module){
 		.method("get_traits", &Stock::get_traits)
 
 		.method("equilibriate_without_fishing", &Stock::equilibriate_without_fishing)
-		;
+
+		// .method("get_fished_dry_run", &Stock::get_fished_dry_run)
+		// .method("get_fished", &Stock::get_fished)
+	;
+
+	function("get_fished_dry_run_wrapper", &get_fished_dry_run_wrapper);
 }
 
-#include "fleet.h"
-
-RCPP_EXPOSED_CLASS(FleetParams);
-RCPP_EXPOSED_CLASS(Fleet);
 
 RCPP_MODULE(fleet_module){
 	class_ <FleetParams>("FleetParams")
@@ -307,8 +335,8 @@ RCPP_MODULE(fleet_module){
 		.method("biomassFishable", &Fleet::biomassFishable)
 		.method("fishingMortality", &Fleet::fishingMortality)
 		.method("update_chi", &Fleet::update_chi)
-		.method("harvest_dry_run", &Fleet::harvest_dry_run)
-		.method("harvest", &Fleet::harvest)
+		// .method("harvest_dry_run", &Fleet::harvest_dry_run)
+		// .method("harvest", &Fleet::harvest)
 		.method("effort_constantC", &Fleet::effort_constantC)
 		.method("effort_constantF", &Fleet::effort_constantF)
 	;

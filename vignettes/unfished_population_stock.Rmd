@@ -149,7 +149,7 @@ For example, let is simulate a population for 200 years.
 #   nfish[i] = pop$nfish()
 # }
 
-v = pop$equilibriate_without_fishing(5.61) |> 
+v = pop$equilibriate_without_fishing(5.61, 200) |> 
       matrix(nrow=200, byrow=T) |> 
       as.data.frame() |> 
       setNames(c("ssb", "tsb", "maturity", "nr", "dr", "nfish"))
@@ -269,12 +269,13 @@ params_file = here::here("params/cod_params.ini")
 
 fish = new(Fish, params_file)
 fish$par$s0 = 0.0192
+fish$setMortalityCurveEmpirical(here::here("data/naturalmort.spline.csv"))
 
 pop = new(Stock, fish)
 pop$readParams(params_file, F)
 pop$superfish_size = 1e6  # Each superfish contains so many fish
 
-v = pop$equilibriate_without_fishing(5.61) |> matrix(nrow=200, byrow=T) |> as.data.frame() |> setNames(c("ssb", "tsb", "maturity", "nr", "dr", "nfish"))
+v = pop$equilibriate_without_fishing(5.61, 200) |> matrix(nrow=200, byrow=T) |> as.data.frame() |> setNames(c("ssb", "tsb", "maturity", "nr", "dr", "nfish"))
 
 d = pop$get_state()
 dist = table(d$age, d$length)
