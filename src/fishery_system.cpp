@@ -482,7 +482,7 @@ void Fishery::summarize_spawner_fishery_metrics(const std::vector<double>& spf_s
 	stock_summary.ssbn = spf_summary_after[1]; // ssb_remaining  ///< Final SSB after all mortality
 
 	double ssb0 = stock_summary.ssb0;
-	double h_spf_ref = quota_spf/ssb0;
+	double h_spf_ref = (ssb0 == 0)? 0 : quota_spf/ssb0;
 	double p_survival_spf_before = 1 - par.f_spf_before*h_spf_ref;
 	stock_summary.ssb_spawning_ref = ssb0*p_survival_spf_before;  ///< Reference SSB at spawning 
 	stock_summary.ssb_after_spawning_ref = ssb0*exp(-pop.proto_fish.par.Mspawning)*(1-par.f_spf_before*h_spf_ref); ///< Reference SSB after spawning
@@ -571,6 +571,7 @@ std::vector<double> Fishery::update(double temp){
 	double yield = yield_fgf + yield_spf;
 	double employment_sea = 0, employment_shore = 0;
 	double profit_sea = 0, profit_shore = 0;
+	for (int k=0; k<fleets.size(); ++k) fleet_efforts.push_back(0);
 
 	std::vector<double> out = {
 		ssb, 
@@ -607,65 +608,55 @@ double Fishery::get_fref(int fleet_id, double len){
 	else return fleets[fleet_id].fishingMortalityRef(len);
 }
 
-// Tensor<double> Simulator::scan(vector<double> Tvec, vector<double> lminvec, vector<double> hvec, int nyears, double tsb0, int niters, bool re_init){
-// 	Tensor<double> res({niters, static_cast<int>(colnames.size()), static_cast<int>(Tvec.size()), static_cast<int>(lminvec.size()), static_cast<int>(hvec.size()), nyears});
-// 	Stock pop_ref = pop;
+Tensor<double> Fishery::scan(std::vector<double> Tvec, std::vector<double> lminvec, std::vector<double> hvec, int nyears, double tsb0, int niters, bool re_init){
+	Tensor<double> res({niters, static_cast<int>(colnames.size()), static_cast<int>(Tvec.size()), static_cast<int>(lminvec.size()), static_cast<int>(hvec.size()), nyears});
+	Stock pop_ref = pop;
 
-// 	for (int iter = 0; iter < niters; ++iter){  // loop over iterations
-// 	for (int it=0; it<Tvec.size(); ++it){       // loop over parameter 3 (temperature)
-// 	for (int il=0; il<lminvec.size(); ++il){    // loop over control parameter 2 (lmin)
-// 	for (int ih=0; ih<hvec.size(); ++ih){       // loop over control parameter 1 (h)
-// 		pop = pop_ref;
-// 		// if (hvec[ih] > 0.5) pop.set_superFishSize(1e0);
+	if (fleets.empty()) throw std::runtime_error("No fleets present in Fishery");
+
+	for (int iter = 0; iter < niters; ++iter){  // loop over iterations
+	for (int it=0; it<Tvec.size(); ++it){       // loop over parameter 3 (temperature)
+	for (int il=0; il<lminvec.size(); ++il){    // loop over control parameter 2 (lmin)
+	for (int ih=0; ih<hvec.size(); ++ih){       // loop over control parameter 1 (h)
+		pop = pop_ref;
+		// if (hvec[ih] > 0.5) pop.set_superFishSize(1e0);
 		
-// 		noFishingPop.set_harvestProp(hvec[ih]);
-// 		noFishingPop.set_minSizeLimit(lminvec[il]);
-// 		double K_fishable = noFishingPop.fishableBiomass();
-// 		double K_ssb      = noFishingPop.calcSSB();
-// 		cout << "h = " << hvec[ih] << ", L50 = " << noFishingPop.par.F3 << ", T = " << Tvec[it] << ", n = " << pop.par.n << " | K_fishable = " << K_fishable << ", K_ssb = " << K_ssb << endl;
+		set_harvestProp(hvec[ih]);
+		set_minSizeLimit(lminvec[il]);
+		
+		double K_fishable = fleets[0].biomassFishable(no_fishing_pop, no_fishing_pop.par.recruitmentAge, false);
+		double K_ssb      = no_fishing_pop.calcSSB(no_fishing_pop.par.recruitmentAge);
+		std::cout << "h = " << hvec[ih] << ", L50 = " << fleets[0].par.lmin << ", T = " << Tvec[it] << ", n = " << pop.superfish_size << " | K_fishable = " << K_fishable << ", K_ssb = " << K_ssb << std::endl;
 
-// 		pop.K_fishableBiomass = K_fishable;
-// 		pop.K_ssb = K_ssb;
-
-// 		pop.set_harvestProp(hvec[ih]);
-// 		pop.set_minSizeLimit(lminvec[il]);
-
-// 		if (re_init) pop.init(1000, Tvec[it]);
-// 		// pop.print_summary();
+		if (re_init) pop.init(1000, 0, Tvec[it]);
 	
-// 		for (int t=0; t<nyears; ++t){
-// 			double Tnow;
-// 			if (pop.par.update_env){
-// 				// cout << "t = " << t << "pop.current_year = " << pop.current_year;
-// 				pop.updateEnv(pop.current_year);
-// 				Tnow = pop.env.temperature;
-// 				// cout << " | env.t = " << pop.env.year << ", T = " << pop.env.temperature << "\n";
-// 			}
-// 			else{
-// 				Tnow = Tvec[it];
-// 			}
+		for (int t=0; t<nyears; ++t){
+			double Tnow;
+			// if (pop.par.update_env){
+			// 	// cout << "t = " << t << "pop.current_year = " << pop.current_year;
+			// 	pop.updateEnv(pop.current_year);
+			// 	Tnow = pop.env.temperature;
+			// 	// cout << " | env.t = " << pop.env.year << ", T = " << pop.env.temperature << "\n";
+			// }
+			// else{
+				Tnow = Tvec[it];
+			// }
 
-// 			std::vector<double> state_now = pop.update(Tnow);
+			std::vector<double> state_now = update(Tnow);
 			
-// 			for (int col=0; col<state_now.size(); ++col){
-// 				res({iter, col, it, il, ih, t}) = state_now[col];
-// 			}
-// 			// res({iter, 0, il, ih, t}) = state_now[0];  // ssb
-// 			// res({iter, 1, il, ih, t}) = state_now[1];  // yield
-// 			// res({iter, 2, il, ih, t}) = state_now[2];  // employment sea
-// 			// res({iter, 3, il, ih, t}) = state_now[3];  // employment shore
-// 			// res({iter, 4, il, ih, t}) = state_now[4];  // profit sea
-// 			// res({iter, 5, il, ih, t}) = state_now[5];  // profit shore
-// 		}
-// 		}
-// 		}
-// 		}
-// 	}
-// 	//res.print();
+			for (int col=0; col<state_now.size(); ++col){
+				res({iter, col, it, il, ih, t}) = state_now[col];
+			}
+		}
+	}
+	}
+	}
+	}
+	//res.print();
 	
-// 	return res.avg_dim(5);	// average over iterations
+	return res.avg_dim(5);	// average over iterations
 
-// }
+}
 
 
 /*
@@ -744,6 +735,19 @@ Rcpp::DataFrame Fishery::simulate_r(double lf, double h, int nyears, double tsb0
 	if (writestate) fout.close();
 
 	return df;
+}
+
+Rcpp::NumericVector tensor2array(Tensor<double>& v){
+	Rcpp::NumericVector out(v.vec.begin(), v.vec.end()); 
+	std::vector<int> dims = v.dim;
+	std::reverse(dims.begin(), dims.end());
+	out.attr("dim") = dims;
+	return out;
+}
+
+Rcpp::NumericVector Fishery::simulate_multi_r(std::vector<double> Tvec, std::vector<double> lminvec, std::vector<double> hvec, int nyears, double tsb0, int niters, bool re_init){
+	Tensor<double> res = scan(Tvec, lminvec, hvec, nyears, tsb0, niters, re_init);
+	return tensor2array(res);
 }
 
 #endif

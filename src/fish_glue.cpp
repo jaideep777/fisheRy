@@ -344,7 +344,7 @@ RCPP_MODULE(fleet_module){
 
 
 #include "fishery_system.h"
-#include "simulator.h"
+// #include "simulator.h"
 
 RCPP_EXPOSED_CLASS(Population);
 RCPP_EXPOSED_CLASS(Stock);
@@ -385,28 +385,29 @@ RCPP_MODULE(simulator_module){
 		.method("update", &Fishery::update)
 
 		.method("simulate", &Fishery::simulate_r)
+		.method("simulate_multi", &Fishery::simulate_multi_r)
 	;
 
-	class_ <Simulator>("Simulator")
-		.constructor<Fish>()
+	// class_ <Simulator>("Simulator")
+	// 	.constructor<Fish>()
 
-		.field_readonly("noFishingPop", &Simulator::noFishingPop)
+	// 	.field_readonly("noFishingPop", &Simulator::noFishingPop)
 
-		.method("setNaturalPopulation", &Simulator::setNaturalPopulation)
-		.method("equilibriateNaturalPopulation", &Simulator::equilibriateNaturalPopulation)
+	// 	.method("setNaturalPopulation", &Simulator::setNaturalPopulation)
+	// 	.method("equilibriateNaturalPopulation", &Simulator::equilibriateNaturalPopulation)
 		
-		.method("simulate", &Simulator::simulate_r)
+	// 	.method("simulate", &Simulator::simulate_r)
 		
-		// .method("simulate_multi", &Simulator::simulate_multi_r)
-		// .method("max_avg_utils", &Simulator::max_avg_utils)
-		// .method("stakeholder_satisfaction", &Simulator::stakeholder_satisfaction)
+	// 	// .method("simulate_multi", &Simulator::simulate_multi_r)
+	// 	// .method("max_avg_utils", &Simulator::max_avg_utils)
+	// 	// .method("stakeholder_satisfaction", &Simulator::stakeholder_satisfaction)
 		
-		.method("simulate_multi_2d", &Simulator::simulate_multi_2d_r)
-		.method("max_avg_utils_2d", &Simulator::max_avg_utils_2d)
-		.method("stakeholder_satisfaction_2d", &Simulator::stakeholder_satisfaction_2d)
+	// 	.method("simulate_multi_2d", &Simulator::simulate_multi_2d_r)
+	// 	.method("max_avg_utils_2d", &Simulator::max_avg_utils_2d)
+	// 	.method("stakeholder_satisfaction_2d", &Simulator::stakeholder_satisfaction_2d)
 
-		.method("stakeholder_satisfaction_2d_t", &Simulator::stakeholder_satisfaction_2d_t)
-	;
+	// 	.method("stakeholder_satisfaction_2d_t", &Simulator::stakeholder_satisfaction_2d_t)
+	// ;
 }
 
 

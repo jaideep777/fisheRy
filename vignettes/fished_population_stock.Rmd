@@ -8,6 +8,8 @@ output: html_document
 ```{r setup, include=FALSE}
 library(tidyverse)
 library(fisheRy)
+
+setwd(here::here("vignettes"))
 ```
 
 
@@ -24,11 +26,6 @@ Let us now set up the fishery system using parameter files for fleet and fish, a
 # define parameter files
 params_file_fleet = here::here("params/fleet_1_params.ini")
 params_file_fish  = here::here("params/cod_params.ini")
-
-# Create a fleet and read parameters
-fleet = new(Fleet)
-fleet$readParams(params_file_fleet, F)
-fleet$par$print()
 
 # Create a prototype fish to construct the population
 fish = new(Fish, params_file_fish)
@@ -51,7 +48,7 @@ Configure the fishery:
 - Initialize the fishery - this creates fish in the real fish population.
 
 ```{r configure-fishery}
-h = 0.22
+h = 0.6
 fishery$set_harvestProp(h);
 fishery$addFleet(params_file_fleet, T);
 
@@ -166,7 +163,16 @@ This plot tracks spawning stock biomass over the course of the simulation.
 
 ```{r plot-ssb-simulation}
 dat |> 
-  ggplot(aes(x=1:nrow(dat), y=ssb/1e9)) +
+  mutate(t = 1:n()) |> 
+  # filter(t > 200) |>
+  ggplot(aes(x=t, y=ssb/1e9)) +
   geom_line()
+
+dat |> 
+  mutate(t = 1:n()) |> 
+  filter(t > 200) |>
+  ggplot() +
+  geom_line(aes(x=t, y=quota_fgf/1e9)) +
+  geom_line(aes(x=t, y=yield/1e9), col="red") 
 ```
 

@@ -112,11 +112,11 @@ double Stock::calcMaturity(double min_age){
 			return sum + ((f.isAlive && f.isMature && f.age >= min_age) ? 1 : 0); 
 		}
 	) / 
-	std::accumulate(fishes.begin(), fishes.end(), 0.0, 
+	(std::accumulate(fishes.begin(), fishes.end(), 0.0, 
 		[min_age, this](double sum, const Fish& f) { 
 			return sum + ((f.isAlive && f.age >= min_age) ? 1 : 0); 
 		}
-	);
+	)+1e-12);
 } 
 
 

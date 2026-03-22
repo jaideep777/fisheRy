@@ -6,6 +6,7 @@
 #include "stock.h"
 #include "fleet.h"
 #include "initializer_v2.h"
+#include "tensor.h"
 
 #ifndef NATIVE_CPP
 #include <Rcpp.h>
@@ -97,8 +98,12 @@ class Fishery {
     std::vector<double> update(double temp);
 
 	double get_fref(int fleet_id, double len); // debug function to verify reference fishing mortality rate in R
+
+	Tensor<double> scan(std::vector<double> Tvec, std::vector<double> lminvec, std::vector<double> hvec, int nyears, double tsb0, int niters, bool re_init);
+
 #ifndef NATIVE_CPP	
 	Rcpp::DataFrame simulate_r(double lf, double h, int nyears, double tsb0, double temp, bool re_init, std::string output_file);
+    Rcpp::NumericVector simulate_multi_r(std::vector<double> Tvec, std::vector<double> lminvec, std::vector<double> hvec, int nyears, double tsb0, int niters, bool re_init);
 #endif
 
 };

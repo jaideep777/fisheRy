@@ -1,0 +1,112 @@
+---
+title: "Scan over harvest rate"
+author: "Jaideep"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(fisheRy)
+
+setwd(here::here("vignettes"))
+```
+
+
+
+```{r setup-fishery}
+# define parameter files
+params_file_fleet = here::here("params/fleet_1_params.ini")
+params_file_fish  = here::here("params/cod_params.ini")
+
+# Create a fleet and read parameters
+fleet = new(Fleet)
+fleet$readParams(params_file_fleet, F)
+fleet$par$print()
+
+# Create a prototype fish to construct the population
+fish = new(Fish, params_file_fish)
+fish$natural_mort_scalar = 1
+fish$setMortalityCurveEmpirical(here::here("data/naturalmort.spline.csv"))
+fish$par$print()
+```
+
+# Fishery Simulation
+
+```{r configure-fishery}
+hvec = seq(0.1, 0.99, length.out = 25)
+lminvec = c(45)
+Tvec = c(5.61)
+```
+
+```{r}
+# Craeate the fishery. Note that we do not need to explicitly create a population - it is contained within the fishery
+fishery = new(Fishery, params_file_fish, fish);
+fishery$par$print()
+
+fishery$addFleet(params_file_fleet, T);
+
+v = fishery$equilibriateNaturalPopulation(5.61, 2e6, 200);
+fishery$set_superFishSize(2e6)
+
+# Initialize the 
+fishery$init(1000, 0, 5.61);
+v2 = fishery$equilibriateWithoutFishing(5.61, 200)
+
+df = as.data.frame(matrix(data=v2, nrow=200, byrow=T))
+df = df |> setNames(c(			
+      "ssb", 
+			"tsb",
+			"maturity",
+			"nrecruits",
+			"factor_dr",
+			"n_superfish"))
+
+df |> 
+  slice(-1) |>
+  mutate(t = 1:n()) |> 
+  pivot_longer(-t) |>
+  ggplot(aes(x=t, y=value)) +
+  geom_line()+
+  facet_wrap(~name, scales="free")
+
+```
+
+# Running and Visualizing Simulation
+
+Simulate the fishery over time and visualize key outputs.
+
+```{r}
+colnames=c("ssb", "tsb", "maturity", "quota", "quota_fgf", "quota_spf", "yield", "yield_fgf", "yield_spf", "effort", "recruits", 
+		                                 "ssb0", "ssb_spawning", "ssb_spawning_ref", "ssb_after_spawning", "ssb_after_spawning_ref", "ssbn", "ssbn_ref", "yield0", "effort0")
+										
+```
+
+
+```{r run-simulation}
+v3 = fishery$simulate_multi(Tvec, lminvec, hvec, 200, 0, 1, F)
+
+v3_avg = apply(v3, MARGIN=c(2,5), FUN=mean)
+
+v3_avg |> 
+  as.data.frame() |> 
+  setNames(colnames) |> 
+  mutate(h = hvec) |> 
+  select(h, ssb, yield) |>
+  pivot_longer(-h) |> 
+  ggplot(aes(x=h, y=value/1e9)) +
+  geom_line() + 
+  facet_wrap(~name, scales="free")
+
+v3 |> dim()
+
+v3[,16,1,1,] |> 
+  as.data.frame() |>
+  setNames(colnames) |>
+  mutate(t = 1:n()) |>
+  pivot_longer(-t) |> 
+  ggplot(aes(x=t, y=value)) +
+  geom_line() + 
+  facet_wrap(~name, scales="free")
+
+```
