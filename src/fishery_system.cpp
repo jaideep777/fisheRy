@@ -209,6 +209,9 @@ void Fishery::addFleet(std::string params_file, bool verbose){
 	fleets.emplace_back();
 	fleets.back().readParams(params_file, verbose);
 	set_referenceFishingMortalityCurve(fleets.back());
+
+	colnames.push_back("yield_"+std::to_string(fleets.size()));
+	colnames.push_back("effort_"+std::to_string(fleets.size()));
 }
 
 
@@ -542,13 +545,16 @@ std::vector<double> Fishery::update(double temp){
 	for (auto& f: pop.fishes) f.grow(tsb/1e6, temp); // convert tsb to kT
 
 	// 6. Feeding grounds fishery and natural mortality - should always come after growth to access weights before and after growth
+	std::vector<double> harvest_out, fleet_efforts;
 	double yield_fgf = 0, effort = 0;
 	bool _use_average_weight = true;  // Use average weight (pre and post growth) for yield calcs and catch summary. 
 	if (!fleets.empty()) {
-		fleets[0].init_chi(pop, -log(1-harvest_prop), temp); // initialize chi for the feeding grounds fishery
-		std::vector<double> harvest_out = pop.get_fished(fleets, {quota_fgf}, temp, _use_average_weight, false);
-		yield_fgf = harvest_out[0]; // total yield from the feeding grounds fishery
-		effort = 0; // fleets[0].effort_constantC(fleets[0].par.q, fleets[0].par.b, pop.fishableBiomass());
+		// Calculate initial chi for all fleets
+		for (auto& fl: fleets) fl.init_chi(pop, -log(1-fl.par.quota*harvest_prop), temp); // initialize chi for the feeding grounds fishery
+		
+		// harvest stock (by all fleets)
+		harvest_out = pop.get_fished(fleets, {quota_fgf}, temp, _use_average_weight, false);
+		yield_fgf = std::accumulate(harvest_out.begin(), harvest_out.end(), 0.0, std::plus<double>()); // total yield from the feeding grounds fishery
 	}
 	summarize_catch_metrics(_use_average_weight); // nc~a, wc~a.  
 
@@ -561,10 +567,12 @@ std::vector<double> Fishery::update(double temp){
 	// 9. Finally, add recruits to population 
 	pop.fishes.insert(pop.fishes.end(), recruits.begin(), recruits.end());
 	
-	// 10. Calculate metrics for analysis
+	// 10. Calculate socioeconomic metrics for analysis
 	double yield = yield_fgf + yield_spf;
+	double employment_sea = 0, employment_shore = 0;
+	double profit_sea = 0, profit_shore = 0;
 
-	return {
+	std::vector<double> out = {
 		ssb, 
 		tsb,
 		maturity,
@@ -585,6 +593,13 @@ std::vector<double> Fishery::update(double temp){
 		stock_summary.ssbn,
 		stock_summary.ssbn_ref
 	};
+
+	for (int k=0; k<fleets.size(); ++k){
+		out.push_back(harvest_out[k]);
+		out.push_back(fleet_efforts[k]);
+	}
+
+	return out;
 }
 
 double Fishery::get_fref(int fleet_id, double len){

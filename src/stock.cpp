@@ -424,17 +424,23 @@ std::vector<double> Stock::get_fished(std::vector<Fleet>& fleets, const std::vec
 					B,
 					B_sampled,
 					yield,
-					yield_expected,
-					fleets[0].chi,
-					wps_per_fleet[0].chi,
-					wps_per_fleet[0].B_sampled,
-					wps_per_fleet[0].B_start,
-					wps_per_fleet[0].yield,
-					wps_per_fleet[0].F_fishable,
-					// Below effort calc is only for debugging
-					fleets[0].effort_constantC(fleets[0].par.q, fleets[0].par.b, B)*fleets[0].par.dsea,
-					fleets[0].effort_constantF(fleets[0].par.q, fleets[0].par.b, B)*fleets[0].par.dsea
+					yield_expected
 				});
+			
+			for (int k=0; k<fleets.size(); ++k){
+				progress.insert(progress.end(), 
+				{
+					fleets[k].chi,
+					wps_per_fleet[k].chi,
+					wps_per_fleet[k].B_sampled,
+					wps_per_fleet[k].B_start,
+					wps_per_fleet[k].yield,
+					wps_per_fleet[k].F_fishable,
+					// Below effort calc is only for debugging
+					fleets[k].effort_constantC(fleets[k].par.q, fleets[k].par.b, B)*fleets[k].par.dsea,
+					fleets[k].effort_constantF(fleets[k].par.q, fleets[k].par.b, B)*fleets[k].par.dsea
+				});
+			}
 		}
 
 	}
