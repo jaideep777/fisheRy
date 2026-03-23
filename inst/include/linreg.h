@@ -62,8 +62,7 @@ inline double linreg_predict(double x_new, const linregresult& res){
 }
 
 inline double linreg_predict_inverse(double y_new, const linregresult& res){
-	if (res.slope == 0) return 1e-12;
-	else return (y_new - res.intercept)/res.slope;
+	return (y_new - res.intercept)/res.slope;
 }
 
 #endif

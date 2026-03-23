@@ -297,7 +297,7 @@ void Fleet::update_chi(const std::vector<double>& chi_in_windows,
 		// exponential model: y = Bs (1-e^-kX)
 		// std::cout << "using exp model" << std::endl;
 		if (yield_remainder >= bs_remainder) chi = par.max_chi;
-		else if (res.slope == 0) chi = par.max_chi; // yield is consistently zero if B is very low. Then model slope will be 0. In that case, set chi to max so that we can recover at least some yield
+		else if (res.slope == 0) chi = par.max_chi; // yield is consistently zero if B is very low. Then model slope will be 0. In that case, chi will be NaN. Set chi to max so that we can recover at least some yield later
 		else chi = linreg_predict_inverse(-log(1 - (yield_remainder/bs_remainder)), res);
 	}
 	else if (par.control_model == "linear"){
