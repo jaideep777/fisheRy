@@ -50,7 +50,7 @@ int main(){
     // }
     // fout.close();
 
-    fishery.scan({5.61}, {45.0}, {0.1, 0.5, 0.8}, 200, 0, 1, false);
+    fishery.scan({5.61}, {45.0}, {0.5}, 500, 0, 1, false);
 
     return 0;
 }

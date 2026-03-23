@@ -443,6 +443,19 @@ std::vector<double> Stock::get_fished(std::vector<Fleet>& fleets, const std::vec
 			}
 		}
 
+		if (std::isnan(yield)){
+			std::cout << "Yield is NaN. Dump = \n";
+			for (int i=0; i<progress.size(); ++i){
+				if (i > 0 & i % (5 + 8*fleets.size()) == 0) std::cout << "\n";
+				cout << progress[i] << " "; 
+			}
+			std::cout << std::endl;
+
+			std::cout << "Window props = \n";
+			for (auto& w : fleets[0].window_props_vec){
+				cout << w.B_sampled << " " << w.yield << " " << w.chi << std::endl;
+			}
+		}
 	}
 
 	if (return_progress) return progress;

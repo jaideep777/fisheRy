@@ -224,7 +224,9 @@ double Fleet::biomassFishable(const Stock &stock, double min_age, bool use_avera
 
 void Fleet::init_chi(Stock &pop, double F_fgf, double temp){
 	std::vector<double> w_Fref = cummulativeFishingMortalityRef(pop, 0);
-	if(debug) std::cout << "w_Fref = "; for (auto w: w_Fref) std::cout << w << " "; std::cout << "\n";
+	if(debug) {
+		std::cout << "w_Fref = "; for (auto w: w_Fref) std::cout << w << " "; std::cout << "\n";
+	}
 
 	double Fref_below_lmin = w_Fref[0];
 	double Fref_above_lmin = w_Fref[1];
@@ -295,12 +297,15 @@ void Fleet::update_chi(const std::vector<double>& chi_in_windows,
 		// exponential model: y = Bs (1-e^-kX)
 		// std::cout << "using exp model" << std::endl;
 		if (yield_remainder >= bs_remainder) chi = par.max_chi;
+		else if (res.slope == 0) chi = par.max_chi; // yield is consistently zero if B is very low. Then model slope will be 0. In that case, set chi to max so that we can recover at least some yield
 		else chi = linreg_predict_inverse(-log(1 - (yield_remainder/bs_remainder)), res);
 	}
 	else if (par.control_model == "linear"){
 		// linear model: y = Bs k X
 		// std::cout << "using linear model" << std::endl;
-		chi = linreg_predict_inverse((yield_remainder/bs_remainder), res);
+		if (yield_remainder >= bs_remainder) chi = par.max_chi;
+		else if (res.slope == 0) chi = par.max_chi;
+		else chi = linreg_predict_inverse((yield_remainder/bs_remainder), res);
 	}
 
 	// if (std::isinf(chi) || std::isnan(chi) || chi > 1e20) throw std::runtime_error("Regressed chi is Inf or NA or extremely large");

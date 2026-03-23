@@ -37,7 +37,7 @@ int main(){
 	double ssb_nf = pop.calcSSB(pop.par.recruitmentAge);
 	cout << "SSB at equilibrium without fishing: " << ssb_nf << " kg\n";
 
-	double h = 0.23;
+	double h = 0.6;
 	double F_fgf = -log(1-h);
 	double quota = h*ssb_nf;
 
@@ -47,7 +47,7 @@ int main(){
 	fleet.par.print();
 	// fleet.set_harvestProportion(0.99);
 
-	fleet.debug = true;
+	fleet.debug = false;
 	fleet.chi = 100;
 	fleet.init_chi(pop, F_fgf, 5.61);
 
@@ -56,14 +56,39 @@ int main(){
 	vector<Fleet> fleets = {fleet};
 	auto out = pop.get_fished_dry_run(fleets, {quota}, 5.61, true, true);
 
+	vector<std::string> colnames = {
+		"age",
+		"B",
+		"B_sampled",
+		"yield",
+		"yield_expected",
+		"chi",
+		"chi_w",
+		"B_sampled",
+		"B_start",
+		"yield",
+		"F_fishable",
+		// Below effort calc is only for debugging
+		"effort_C",
+		"effort_F"
+	};
+	for (int i=0; i<colnames.size(); ++i) cout << colnames[i] << " "; cout << endl;
+	
+	for(int nrow=0; nrow < out.size()/colnames.size(); ++nrow){
+		for (int i=0; i<colnames.size(); ++i) cout << out[nrow*colnames.size() + i] << " ";
+		cout << "\n";
+	}
+
 	double effort = fleets[0].effort_constantC(fleet.par.q, fleet.par.b, fleet.biomassFishable(pop,0,true))*fleet.par.dsea;
 	cout << "Effort (constant C) = " << effort << " vessel-days\n";
 
-	double n = out.size();
-	cout << "Yield expected = " << out[n-7] << " kg\n";
-	cout << "Yield          = " << out[n-8] << " kg\n";
+	int nrow = out.size()/colnames.size();
+	int i_yield = (nrow-1)*colnames.size()+3;
+	int i_yield_exp = (nrow-1)*colnames.size()+4;
+	cout << "Yield expected = " << out[i_yield_exp] << " kg\n";
+	cout << "Yield          = " << out[i_yield] << " kg\n";
 	
-	double yield_error = (out[n-7] - out[n-8])/out[n-8]*100;
+	double yield_error = (out[i_yield] - out[i_yield_exp])/out[i_yield_exp]*100;
 	cout << "Yield error    = " << yield_error << "%\n";
 
 	return 0;
