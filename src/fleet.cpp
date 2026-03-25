@@ -496,10 +496,12 @@ double Fleet::effort_constantC(double q, double b, double K){
 		double M  = w.M_fishable;
 		double t = par.window_dt/2;
 
-		double effort_t = C/q/(pow( (N0+C/M)*exp(-M*t) - C/M, b));
+		double effort_t;
+		if (C == 0 || M == 0 || N0 == 0 || std::isnan(M)) effort_t = 0;
+		else effort_t = C/q/(pow( (N0+C/M)*exp(-M*t) - C/M, b));
 		effort += effort_t*par.window_dt;
 
-		if (debug) std::cout << "N0: " << N0 << ", C: " << C << ", M: " << M << ", t: " << t << ", effort_t: " << effort_t 
+		if (debug || std::isnan(effort_t)) std::cout << "N0: " << N0 << ", C: " << C << ", M: " << M << ", t: " << t << ", effort_t: " << effort_t 
 		                     << ", (N0+C/M)*exp(-M*t): " << (N0+C/M)*exp(-M*t) << ", C/M: " << C/M << std::endl;
 	}
 	return effort;

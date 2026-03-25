@@ -175,6 +175,8 @@ error_fun_emd = function(par, nsteps = 200, nsup = 5e6, bplot=F, nymax=50){
 ##### Run and plot @@@ ---------------------------
 setwd(here("vignettes"))
 
+fmort = read.csv(here::here("data/selection.spline.reduced.csv"))
+
 # par_opt = c(0.02, 0.0275, 0.06, 1)
 par_opt = c(0.02924969, 0.03239047, 0.17911014, 1.7)
 par_opt_empirical = c(0.01924969, 0.2, 0.25)
@@ -189,6 +191,10 @@ l = simulate_pop(par = par_opt_empirical,
                  using_empirical_mort = TRUE
                  )
 
+l$d |> 
+  ggplot(aes(x=age, y=length)) +
+  geom_point() + 
+  geom_point(data=fmort, aes(x=F*10, y=length), col="red")
 
 pt <- l$res_ibm |>
   mutate(t=1:n()) |>
@@ -201,6 +207,10 @@ print(pt)
 
 age_dists_pred = readr::read_csv(here("fishery_output/age_dists_pred.csv")) 
 
+# age_dists_pred |> 
+#   select(age, len) |>
+#   filter(age == 6) 
+
 pa = age_dists_pred %>% filter(Year > max(Year)-50) %>% 
   pivot_longer(-c(age, Year)) %>% 
   # Filter out non-existent age classes in avergaed quantities, but retain everything in summed quantities (N and catch_N)
@@ -212,12 +222,12 @@ pa = age_dists_pred %>% filter(Year > max(Year)-50) %>%
   group_by(age, name) %>% 
   summarize(value = mean(value)) %>% 
   pivot_wider() %>% 
-  mutate(N = log10(N),
-         catch_N = log10(catch_N)) %>% 
+  # mutate(N = log10(N),
+  #        catch_N = log10(catch_N)) %>% 
   pivot_longer(-age, values_to="pred") %>%  
   full_join(age_dist_obs %>% 
-              mutate(N = log10(N),
-                     catch_N = log10(catch_N)) %>% 
+              # mutate(N = log10(N),
+              #        catch_N = log10(catch_N)) %>% 
               pivot_longer(-c(age, Year_age), values_to="obs")) %>% 
   drop_na() %>% 
   ggplot(aes(x=age)) +

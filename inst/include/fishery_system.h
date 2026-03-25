@@ -95,7 +95,7 @@ class Fishery {
 	
 	std::vector<double> spawner_fishery(double quota);
 
-    std::vector<double> update(double temp);
+    std::vector<double> update(double temp, double K);
 
 	double get_fref(int fleet_id, double len); // debug function to verify reference fishing mortality rate in R
 

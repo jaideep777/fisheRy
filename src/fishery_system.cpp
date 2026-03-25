@@ -513,7 +513,7 @@ std::vector<double> Fishery::spawner_fishery(double quota){
 //   Census     Spawner fishery   Maturation        Growth     FGF / Mortality     Age/Year increment
 //    1 Jan ---->   1 Jan    ------> 1 May -----> June-Aug ----> Year round  ----->   31 Dec
 //    Quota                                                  yield = avg weight
-std::vector<double> Fishery::update(double temp){
+std::vector<double> Fishery::update(double temp, double K){
 	stock_summary = StockSummary(); // reset stock summary for each year. FIXME: Maybe better to do outside 
 
 	// 1. Stock assessment (census) happens here at the beginning of the year, based on which quotas are decided
@@ -541,7 +541,7 @@ std::vector<double> Fishery::update(double temp){
 	for (auto& f: pop.fishes) f.grow(tsb/1e6, temp); // convert tsb to kT
 
 	// 6. Feeding grounds fishery and natural mortality - should always come after growth to access weights before and after growth
-	std::vector<double> harvest_out, fleet_efforts;
+	std::vector<double> harvest_out;
 	double yield_fgf = 0, effort = 0;
 	bool _use_average_weight = true;  // Use average weight (pre and post growth) for yield calcs and catch summary. 
 	if (!fleets.empty()) {
@@ -565,9 +565,14 @@ std::vector<double> Fishery::update(double temp){
 	
 	// 10. Calculate socioeconomic metrics for analysis
 	double yield = yield_fgf + yield_spf;
-	double employment_sea = 0, employment_shore = 0;
-	double profit_sea = 0, profit_shore = 0;
-	for (int k=0; k<fleets.size(); ++k) fleet_efforts.push_back(0);
+	std::vector<double>  fleet_efforts(fleets.size()), employments_sea(fleets.size()), employment_shore(fleets.size());
+	std::vector<double> profit_sea(fleets.size()), profit_shore(fleets.size());
+	
+	for (int k=0; k<fleets.size(); ++k){
+		auto& fl = fleets[k];
+		double effortC = fl.effort_constantC(fl.par.q, fl.par.b, K)*fl.par.dsea;
+		fleet_efforts[k] = effortC;
+	}
 
 	std::vector<double> out = {
 		ssb, 
@@ -638,7 +643,7 @@ Tensor<double> Fishery::scan(std::vector<double> Tvec, std::vector<double> lminv
 				Tnow = Tvec[it];
 			// }
 
-			std::vector<double> state_now = update(Tnow);
+			std::vector<double> state_now = update(Tnow, K_fishable);
 			
 			for (int col=0; col<state_now.size(); ++col){
 				res({iter, col, it, il, ih, t}) = state_now[col];
@@ -686,7 +691,7 @@ Rcpp::DataFrame Fishery::simulate_r(double lf, double h, int nyears, double tsb0
 
 	// no_fishing_pop.set_harvestProp(h);
 	// no_fishing_pop.set_minSizeLimit(lf);
-	// double K = no_fishing_pop.fishableBiomass();
+	double K_fishable = fleets[0].biomassFishable(no_fishing_pop, no_fishing_pop.par.recruitmentAge, false);
 	// std::cout << "h/lf = " << h << " / " << lf << " | K = " << K << std::endl;
 
 	// pop.K_fishableBiomass = K;
@@ -700,7 +705,7 @@ Rcpp::DataFrame Fishery::simulate_r(double lf, double h, int nyears, double tsb0
 	Rcpp::DataFrame df = Rcpp::DataFrame::create();
 
 	for (int i=0; i<nyears; ++i){
-		std::vector<double> state_now = update(temp);
+		std::vector<double> state_now = update(temp, K_fishable);
 		
 		for (int col=0; col<state_now.size(); ++col){
 			columns[col].push_back(state_now[col]);
