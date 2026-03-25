@@ -96,6 +96,7 @@ v3_avg |>
   pivot_longer(-h) |> 
   ggplot(aes(x=h, y=value)) +
   geom_line() + 
+  expand_limits(y=0) + 
   facet_wrap(~name, scales="free")
 
 v3 |> dim()
@@ -107,6 +108,7 @@ v3[,16,1,1,] |>
   pivot_longer(-t) |> 
   ggplot(aes(x=t, y=value)) +
   geom_line() + 
+  expand_limits(y=0) + 
   facet_wrap(~name, scales="free")
 
 ```
