@@ -10,12 +10,6 @@
 #include "linreg.h"
 #include "random_utils.h"
 
-
-inline double runif(double rmin=0, double rmax=1){
-	double r = double(rand())/RAND_MAX; 
-	return rmin + (rmax-rmin)*r;
-}
-
 void FleetParams::initFromFile(std::string params_file, bool verbose){
 	io::Initializer I;
 	I.parse(params_file, false, verbose);

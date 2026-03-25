@@ -9,6 +9,7 @@
 #endif
 
 #include "fish.h"
+#include "random_utils.h"
 
 class Fleet; // Forward declaration of Fleet class needed by fishable_X() functions
 
@@ -88,8 +89,6 @@ class Stock{
 	private:
 	double std_missing_value = -1e20;
 
-	std::default_random_engine generator;
-	std::normal_distribution<double> normal_dist;
 	std::vector<double> nrecruits_vec;
 	
 	public:

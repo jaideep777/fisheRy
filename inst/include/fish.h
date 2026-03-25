@@ -46,6 +46,7 @@ class FishParams {
 	double pmrn_slope;    ///< PMRN slope
 	double pmrn_envelope; ///< PMRN envelope
 	double Lref;          ///< Reference length in mortality function
+	double growth_noise_sd;
 	
 //	// Pure power law
 //	double Mref = 0.20775; // ////0.1421; //<--old value from file

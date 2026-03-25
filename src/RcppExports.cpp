@@ -11,6 +11,22 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// get_fished_dry_run_wrapper
+std::vector<double> get_fished_dry_run_wrapper(SEXP stock_ptr, Rcpp::List fleets_list, const std::vector<double>& x, double y, bool a, bool b);
+RcppExport SEXP _fisheRy_get_fished_dry_run_wrapper(SEXP stock_ptrSEXP, SEXP fleets_listSEXP, SEXP xSEXP, SEXP ySEXP, SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type stock_ptr(stock_ptrSEXP);
+    Rcpp::traits::input_parameter< Rcpp::List >::type fleets_list(fleets_listSEXP);
+    Rcpp::traits::input_parameter< const std::vector<double>& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< double >::type y(ySEXP);
+    Rcpp::traits::input_parameter< bool >::type a(aSEXP);
+    Rcpp::traits::input_parameter< bool >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_fished_dry_run_wrapper(stock_ptr, fleets_list, x, y, a, b));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 RcppExport SEXP _rcpp_module_boot_fish_module();
 RcppExport SEXP _rcpp_module_boot_population_module();
@@ -18,6 +34,7 @@ RcppExport SEXP _rcpp_module_boot_fleet_module();
 RcppExport SEXP _rcpp_module_boot_simulator_module();
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_fisheRy_get_fished_dry_run_wrapper", (DL_FUNC) &_fisheRy_get_fished_dry_run_wrapper, 6},
     {"_rcpp_module_boot_fish_module", (DL_FUNC) &_rcpp_module_boot_fish_module, 0},
     {"_rcpp_module_boot_population_module", (DL_FUNC) &_rcpp_module_boot_population_module, 0},
     {"_rcpp_module_boot_fleet_module", (DL_FUNC) &_rcpp_module_boot_fleet_module, 0},

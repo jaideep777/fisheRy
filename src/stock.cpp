@@ -146,18 +146,6 @@ double Stock::avgOverAges(const std::vector<double> &Qa, int amin, int amax, dou
 }
 
 
-inline double runif(double rmin=0, double rmax=1){
-	double r = double(rand())/RAND_MAX; 
-	return rmin + (rmax-rmin)*r;
-}
-
-inline double rnorm(double mu=0, double sd=1){
-	double u = runif(1e-12, 1), v = runif();		// uniform rn's [0,1] for box-muller
-	double x = sqrt(-2.0*log(u)) * cos(2*M_PI*v);
-	return mu + sd*x;
-}
-
-
 vector<Fish> Stock::spawn(double ssb_now, double tsb_now, double temp, StockSummary &stock_summary) {
 	// 3.b.1: Get the number of recruits for each fish 
 	// -------------------------------------------------
@@ -212,11 +200,11 @@ vector<Fish> Stock::spawn(double ssb_now, double tsb_now, double temp, StockSumm
 	std::discrete_distribution<size_t> fitness_dist(nrecruits_vec.begin(), nrecruits_vec.end());
 
 	for (int i=0; i<n_super_recruits; ++i){
-		vector<double> mother_traits = fishes[fitness_dist(generator)].get_traits();
-		vector<double> father_traits = fishes[fitness_dist(generator)].get_traits();
+		vector<double> mother_traits = fishes[fitness_dist(rng)].get_traits();
+		vector<double> father_traits = fishes[fitness_dist(rng)].get_traits();
 		vector<double> offspring_traits(mother_traits.size());
 		for (int k=0; k<mother_traits.size(); ++k){
-			offspring_traits[k] = (mother_traits[k] + father_traits[k])/2 + sqrt(proto_fish.trait_variances[k])*proto_fish.trait_scalars[k]*normal_dist(generator);
+			offspring_traits[k] = (mother_traits[k] + father_traits[k])/2 + sqrt(proto_fish.trait_variances[k])*proto_fish.trait_scalars[k]*rnorm();
 		}
 		proto_fish.set_traits(offspring_traits);
 		proto_fish.init(tsb_now/1e6, temp);
@@ -299,7 +287,7 @@ std::vector<double> Stock::get_fished(std::vector<Fleet>& fleets, const std::vec
 	int window_n = std::ceil(window_dt*n_alive);
 
 	// Randomize fishes vector
-	std::shuffle(fishes.begin(), fishes.end(), g);
+	std::shuffle(fishes.begin(), fishes.end(), rng);
 
 	// Total available biomass to be sampled
 	double B = ref_fleet.biomassFishable(*this, 0, use_average_weight);

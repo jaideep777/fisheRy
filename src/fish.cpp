@@ -3,6 +3,7 @@
 #include <cmath>
 #include <stdexcept>
 #include "read_csv.h"
+#include "random_utils.h"
 
 using namespace std;
 
@@ -214,6 +215,9 @@ void Fish::grow(double tsb, double temp){
 		dl_potential = lnew_pot - length;
 		//cout << "tsb_ano = " << tsb << " / " << par.tsbmean << ", fac = " << dl_real << " / " << dl_potential << endl; 
 
+		// add environmental noise on real growth
+		// dl_real *= exp(rnorm(-par.growth_noise_sd*par.growth_noise_sd/2, par.growth_noise_sd));
+
 		gsi_effective = fish::gsi(lnew, length, dl, par.gamma1, par.gamma2, par.alpha1, par.alpha2);
 		set_length(lnew);
 	}
@@ -346,7 +350,8 @@ void FishParams::initFromFile(std::string params_file){
 	READ_PAR(pmrn_slope); // = -6.609008;
 	READ_PAR(pmrn_envelope); // = 0.25;
 	READ_PAR(Lref); // = 70.48712; //80;
-	
+	READ_PAR(growth_noise_sd);
+
 	// Power law + offset
 	READ_PAR(Mref); // = 0.062994; // 0.20775; // ////0.1421; //<--old value from file
 	READ_PAR(b); //    = 2.455715; // 1.58127; //////1.8131;
@@ -417,6 +422,7 @@ void FishParams::print(){
 	PRINT_PAR(pmrn_slope); // = -6.609008;
 	PRINT_PAR(pmrn_envelope); // = 0.25;
 	PRINT_PAR(Lref); // = 70.48712; //80;
+	PRINT_PAR(growth_noise_sd);
 	
 	// Power law + offset
 	PRINT_PAR(Mref); // = 0.062994; // 0.20775; // ////0.1421; //<--old value from file

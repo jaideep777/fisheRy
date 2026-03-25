@@ -177,7 +177,7 @@ setwd(here("vignettes"))
 
 # par_opt = c(0.02, 0.0275, 0.06, 1)
 par_opt = c(0.02924969, 0.03239047, 0.17911014, 1.7)
-par_opt_empirical = c(0.02924969, 0.3, 0.3)
+par_opt_empirical = c(0.01924969, 0.2, 0.25)
 # par_opt = c(0.01924969, 0.062994, 0.07911014, 2.455715)
 l = simulate_pop(par = par_opt_empirical, 
                  params_file_fish = here("params/cod_params.ini"), 

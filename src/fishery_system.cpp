@@ -1,10 +1,6 @@
 #include <fishery_system.h>
 #include <fstream>
-
-inline double runif(double rmin=0, double rmax=1){
-	double r = double(rand())/RAND_MAX; 
-	return rmin + (rmax-rmin)*r;
-}
+#include "random_utils.h"
 
 int FisheryParams::initFromFile(std::string filename, bool verbose){
 	io::Initializer I;
