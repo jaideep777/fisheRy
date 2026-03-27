@@ -216,7 +216,8 @@ void Fish::grow(double tsb, double temp){
 		//cout << "tsb_ano = " << tsb << " / " << par.tsbmean << ", fac = " << dl_real << " / " << dl_potential << endl; 
 
 		// add environmental noise on real growth
-		// dl_real *= exp(rnorm(-par.growth_noise_sd*par.growth_noise_sd/2, par.growth_noise_sd));
+		dl_real *= std::clamp(exp(rnorm(-par.growth_noise_sd*par.growth_noise_sd/2, par.growth_noise_sd)), 0.0, 5.0);
+		lnew = length + dl_real;
 
 		gsi_effective = fish::gsi(lnew, length, dl, par.gamma1, par.gamma2, par.alpha1, par.alpha2);
 		set_length(lnew);

@@ -125,27 +125,29 @@ plot(dw~years, xlab="Age", ylab="dw", type="o", lwd=2)
 Now, since the growth trajectory of a fish depends on the age at which it matures, and since maturation is a random process, let us simulate lots of fish and look at the possible growth trajectories. 
 
 ```{r fig.width=4, fig.height=4}
-growth_trajectories = function(beta1=NULL, beta2=NULL, N=50){
+growth_trajectories = function(beta1=NULL, beta2=NULL, N=50, temp_sd = 3, tsb_min = 0, tsb_max=1.93e3, growth_noise_sd = NULL){
   names = c("t_birth",	"age",	"isMature",	"isAlive",	"length",	"weight", "mort", "temp", "fec", "ssb")
   dat_full = data.frame(data=matrix(nrow=0, ncol=length(names)))
   colnames(dat_full) = names
-  plot(x=1, y=NA, xlim=c(0,31), ylim=c(0,250), xlab="Age", ylab = "Length")
+  plot(x=1, y=NA, xlim=c(0,31), ylim=c(0,300), xlab="Age", ylab = "Length")
   for (f in 1:N){
     fish = new(Fish, params_file)
+    fish$setMortalityCurveEmpirical(here::here("data/naturalmort.spline.csv"))
+    if (!is.null(growth_noise_sd)) fish$par$growth_noise_sd = growth_noise_sd
     if (!is.null(beta1)) fish$par$beta1 = beta1
     if (!is.null(beta2)) fish$par$beta2 = beta2
   
     dat = data.frame(data=matrix(nrow=0, ncol=length(names)))
     colnames(dat) = names
   
-    temp0 = rnorm(1, mean=5.61, sd=3)
-    tsb0 = runif(1, min = 0, max = 1.93e3*3)
+    temp0 = rnorm(1, mean=5.61, sd=temp_sd)
+    tsb0 = runif(1, min = tsb_min, max = tsb_max)
     fish$init(tsb0, temp0)
     dat[1,] = c(fish$get_state(), fish$naturalMortalityRate(5.61), 5.61, 0, 0.8*tsb0) # Assuming SSB is 80% of TSB, since we are not simulating a population
     
     for (i in 2:30){
-      temp = rnorm(1, mean=5.61, sd=3)
-      tsb = runif(1, min = 0, max = 1.93e3*3)
+      temp = rnorm(1, mean=5.61, sd=temp_sd)
+      tsb = runif(1, min = tsb_min, max = tsb_max)
       fish$updateMaturity(temp)
       fish$grow(tsb, temp)
       fish$set_age(fish$age+1)
@@ -158,9 +160,28 @@ growth_trajectories = function(beta1=NULL, beta2=NULL, N=50){
 }
 ```
 
+### Growth trajectories with fixed temp, variable TSB (+density effect), and no growth stochasticity
+
 ```{r}
-dat_full = growth_trajectories(N=50)
+dat_full = growth_trajectories(N=50, temp_sd=0, growth_noise_sd = 0)
+
+dat_full |>
+  filter(age <= 15) |>
+  ggplot(aes(x=length, group=age, color=age))+
+  geom_density()
 ```
+
+### Growth trajectories with fixed temp, variable TSB (+density effect), and + growth stochasticity
+
+```{r}
+dat_full2 = growth_trajectories(N=50, temp_sd=0, growth_noise_sd = 0.5)
+
+dat_full2 |>
+  filter(age <= 15) |>
+  ggplot(aes(x=length, group=age, color=age))+
+  geom_density()
+```
+
 
 ## Decision to mature
 
@@ -183,6 +204,7 @@ lvec = seq(0,200, length.out = 100)
 avec = seq(1,31, length.out = 31)
 
 fish = new(Fish, params_file)
+fish$setMortalityCurveEmpirical(here::here("data/naturalmort.spline.csv"))
 fish$init(0, 5.61)
 
 calc_maturation_prob1 = function(a,l, temp=5.61){
@@ -349,6 +371,7 @@ dat_full %>%
   #facet_grid(cols=vars(isMature), labeller = as_labeller(c(`0`="Immature", `1`="Mature")))
 ```
 
+<!-- 
 Instantaneous fishing mortality rate depends on the harvest proportion $h$ and fishing selectivity $\sigma$, and acts on top of natural mortality. Thus, for a given harvest proportion $h$ and minimum size limit $L_{50}$, fishing mortality rate is given by 
 
 $$
@@ -370,7 +393,7 @@ fleet$par$print()
 
 fleet2 = new(Fleet)
 fleet2$readParams(fleet_params_file, F)
-fleet2$set_minSizeLimit(65)
+# fleet2$set_minSizeLimit(65)
 
 bind_rows(
   tibble(length = seq(0,200,length.out=100)) %>%
@@ -401,4 +424,4 @@ $$
 where $F$ is the fishing mortality rate.
 
 
-
+ -->

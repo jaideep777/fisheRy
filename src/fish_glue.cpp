@@ -93,6 +93,7 @@ RCPP_MODULE(fish_module) {
 		.field("c", &FishParams::c)
 		.field("beta1", &FishParams::beta1)
 		.field("beta2", &FishParams::beta2)
+		.field("growth_noise_sd", &FishParams::growth_noise_sd)
 		.field("s0", &FishParams::s0)
 		.field("Bhalf", &FishParams::Bhalf)
 		.field("pmrn_lp50", &FishParams::pmrn_lp50)

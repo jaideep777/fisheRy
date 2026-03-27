@@ -208,6 +208,10 @@ void Fishery::addFleet(std::string params_file, bool verbose){
 
 	colnames.push_back("yield_"+std::to_string(fleets.size()));
 	colnames.push_back("effort_"+std::to_string(fleets.size()));
+	colnames.push_back("employment_sea_"+std::to_string(fleets.size()));
+	colnames.push_back("employment_shore_"+std::to_string(fleets.size()));
+	colnames.push_back("profit_sea_"+std::to_string(fleets.size()));
+	colnames.push_back("profit_shore_"+std::to_string(fleets.size()));
 }
 
 
@@ -541,7 +545,7 @@ std::vector<double> Fishery::update(double temp, double K){
 	for (auto& f: pop.fishes) f.grow(tsb/1e6, temp); // convert tsb to kT
 
 	// 6. Feeding grounds fishery and natural mortality - should always come after growth to access weights before and after growth
-	std::vector<double> harvest_out;
+	std::vector<double> fleet_harvests;
 	double yield_fgf = 0, effort = 0;
 	bool _use_average_weight = true;  // Use average weight (pre and post growth) for yield calcs and catch summary. 
 	if (!fleets.empty()) {
@@ -549,8 +553,8 @@ std::vector<double> Fishery::update(double temp, double K){
 		for (auto& fl: fleets) fl.init_chi(pop, -log(1-fl.par.quota*harvest_prop), temp); // initialize chi for the feeding grounds fishery
 		
 		// harvest stock (by all fleets)
-		harvest_out = pop.get_fished(fleets, {quota_fgf}, temp, _use_average_weight, false);
-		yield_fgf = std::accumulate(harvest_out.begin(), harvest_out.end(), 0.0, std::plus<double>()); // total yield from the feeding grounds fishery
+		fleet_harvests = pop.get_fished(fleets, {quota_fgf}, temp, _use_average_weight, false);
+		yield_fgf = std::accumulate(fleet_harvests.begin(), fleet_harvests.end(), 0.0, std::plus<double>()); // total yield from the feeding grounds fishery
 	}
 	summarize_catch_metrics(_use_average_weight); // nc~a, wc~a.  
 
@@ -564,15 +568,21 @@ std::vector<double> Fishery::update(double temp, double K){
 	pop.fishes.insert(pop.fishes.end(), recruits.begin(), recruits.end());
 	
 	// 10. Calculate socioeconomic metrics for analysis
-	double yield = yield_fgf + yield_spf;
-	std::vector<double>  fleet_efforts(fleets.size()), employments_sea(fleets.size()), employment_shore(fleets.size());
-	std::vector<double> profit_sea(fleets.size()), profit_shore(fleets.size());
+	std::vector<double> fleet_efforts(fleets.size()), employments_sea(fleets.size()), employments_shore(fleets.size());
+	std::vector<double> profits_sea(fleets.size()), profits_shore(fleets.size());
 	
 	for (int k=0; k<fleets.size(); ++k){
 		auto& fl = fleets[k];
-		double effortC = fl.effort_constantC(fl.par.q, fl.par.b, K)*fl.par.dsea;
+		double effortC = fl.effort_constantC(fl.par.q, fl.par.b, K);
 		fleet_efforts[k] = effortC;
+		employments_sea[k] = effortC*fl.par.dsea;
+		employments_shore[k] = fl.par.dshr * fleet_harvests[k];
+		// FIXME: These computations need to be verified with Mikko 
+		profits_sea[k] = fleet_harvests[k]*fl.par.price_sea*(1-fl.par.fee_ratio) - fl.par.scale_catch*(employments_sea[k]*fl.par.salary_sea + fleet_efforts[k]*fl.par.variable_costs_sea + fl.par.fixed_costs_sea);
+		profits_shore[k] = fleet_harvests[k]*(fl.par.price_shore - fl.par.price_sea) - fleet_harvests[k]*fl.par.dshr * fl.par.salary_shore - fl.par.scale_catch*fl.par.fixed_costs_shore;
 	}
+
+	double yield = yield_fgf + yield_spf;
 
 	std::vector<double> out = {
 		ssb, 
@@ -597,8 +607,12 @@ std::vector<double> Fishery::update(double temp, double K){
 	};
 
 	for (int k=0; k<fleets.size(); ++k){
-		out.push_back(harvest_out[k]);
+		out.push_back(fleet_harvests[k]);
 		out.push_back(fleet_efforts[k]);
+		out.push_back(employments_sea[k]);
+		out.push_back(employments_shore[k]);
+		out.push_back(profits_sea[k]);
+		out.push_back(profits_shore[k]);
 	}
 
 	return out;
