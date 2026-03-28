@@ -77,10 +77,12 @@ df |>
 Simulate the fishery over time and visualize key outputs.
 
 ```{r}
-colnames=c("ssb", "tsb", "maturity", "quota", "quota_fgf", "quota_spf", "yield", "yield_fgf", "yield_spf", "effort", "recruits", 
-		                                 "ssb0", "ssb_spawning", "ssb_spawning_ref", "ssb_after_spawning", "ssb_after_spawning_ref", "ssbn", "ssbn_ref", 
-                                     "yield0", "effort0", "employment_sea0", "employment_shore0", "profit_sea0", "profit_shore0")
-										
+colnames=c(
+		"ssb", "yield", "employment", "profit", "effort",
+		"tsb", "maturity", "quota", "quota_fgf", "quota_spf", "yield_fgf", "yield_spf", "recruits", 
+		"ssb0", "ssb_spawning", "ssb_spawning_ref", "ssb_after_spawning", "ssb_after_spawning_ref", "ssbn", "ssbn_ref", 
+    "yield0", "effort0", "employment_sea0", "employment_shore0", "profit_sea0", "profit_shore0"
+)
 ```
 
 

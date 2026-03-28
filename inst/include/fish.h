@@ -167,7 +167,8 @@ class Fish{
 	double gsi_effective = 0;  ///< Effective GSI (saved from previous growth calculation)
 
 	double dl_real,            ///< Linear length increment (\f$l_a-l_{a-1}\f$) calculated with actual density. 
-	       dl_potential;       ///< Linear length increment (\f$l_a-l_{a-1}\f$) calculated with 0 density (tsb = 0). 
+	       dl_potential,       ///< Linear length increment (\f$l_a-l_{a-1}\f$) calculated with 0 density (tsb = 0). 
+	       dl_real_stochastic; ///< Linear length increement after growth noise
 
 	// physiological variables
 	double weight;	           ///< weight in kg

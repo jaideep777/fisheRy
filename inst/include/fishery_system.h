@@ -44,9 +44,11 @@ class Fishery {
 	io::Initializer I;
 	Stock no_fishing_pop;
 
-	std::vector<std::string> colnames = {"ssb", "tsb", "maturity", "quota", "quota_fgf", "quota_spf", "yield", "yield_fgf", "yield_spf", "effort", "recruits", 
-		                                 "ssb0", "ssb_spawning", "ssb_spawning_ref", "ssb_after_spawning", "ssb_after_spawning_ref", "ssbn", "ssbn_ref"
-										};
+	std::vector<std::string> colnames = {
+		"ssb", "yield", "employment", "profit", "effort",
+		"tsb", "maturity", "quota", "quota_fgf", "quota_spf", "yield_fgf", "yield_spf", "recruits", 
+		"ssb0", "ssb_spawning", "ssb_spawning_ref", "ssb_after_spawning", "ssb_after_spawning_ref", "ssbn", "ssbn_ref"
+	};
 
 	public:
 	bool debug = false; // Should debugging calculations be done?

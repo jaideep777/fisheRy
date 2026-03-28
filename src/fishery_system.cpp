@@ -546,7 +546,6 @@ std::vector<double> Fishery::update(double temp, double K){
 
 	// 6. Feeding grounds fishery and natural mortality - should always come after growth to access weights before and after growth
 	std::vector<double> fleet_harvests;
-	double yield_fgf = 0, effort = 0;
 	bool _use_average_weight = true;  // Use average weight (pre and post growth) for yield calcs and catch summary. 
 	if (!fleets.empty()) {
 		// Calculate initial chi for all fleets
@@ -554,7 +553,6 @@ std::vector<double> Fishery::update(double temp, double K){
 		
 		// harvest stock (by all fleets)
 		fleet_harvests = pop.get_fished(fleets, {quota_fgf}, temp, _use_average_weight, false);
-		yield_fgf = std::accumulate(fleet_harvests.begin(), fleet_harvests.end(), 0.0, std::plus<double>()); // total yield from the feeding grounds fishery
 	}
 	summarize_catch_metrics(_use_average_weight); // nc~a, wc~a.  
 
@@ -582,19 +580,30 @@ std::vector<double> Fishery::update(double temp, double K){
 		profits_shore[k] = fleet_harvests[k]*(fl.par.price_shore - fl.par.price_sea) - fleet_harvests[k]*fl.par.dshr * fl.par.salary_shore - fl.par.scale_catch*fl.par.fixed_costs_shore;
 	}
 
+	double employment = std::accumulate(employments_sea.begin(), employments_sea.end(), 0.0, std::plus<double>())
+	                  + std::accumulate(employments_shore.begin(), employments_shore.end(), 0.0, std::plus<double>())
+					  + 0; // employment from SPF
+	double profit = std::accumulate(profits_sea.begin(), profits_sea.end(), 0.0, std::plus<double>())
+	              + std::accumulate(profits_shore.begin(), profits_shore.end(), 0.0, std::plus<double>())
+				  + 0; // employment from SPF
+	double yield_fgf = std::accumulate(fleet_harvests.begin(), fleet_harvests.end(), 0.0, std::plus<double>()); // total yield from the feeding grounds fishery
+	double effort = 0;
 	double yield = yield_fgf + yield_spf;
 
 	std::vector<double> out = {
 		ssb, 
+		yield,
+		employment,
+		profit,
+		effort,
+
 		tsb,
 		maturity,
 		quota,
 		quota_fgf,
 		quota_spf,
-		yield,
 		yield_fgf,
 		yield_spf,
-		effort,
 		stock_summary.nfish_ra,
 
 		stock_summary.ssb0,

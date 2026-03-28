@@ -197,30 +197,37 @@ void Fish::grow(double tsb, double temp){
 		double temp_ano = temp - par.Tmean;
 		
 		// This is generalized increment l2^y1y2 - l1^y1y2
-		double dl     = fish::dl_power(tsb_ano,      temp_ano, par.gamma1, par.gamma2, par.alpha1, par.alpha2, par.beta1, par.beta2);
-		double dl_pot = fish::dl_power(-par.tsbmean, temp_ano, par.gamma1, par.gamma2, par.alpha1, par.alpha2, par.beta1, par.beta2);
+		double dl_nonlinear     = fish::dl_power(tsb_ano,      temp_ano, par.gamma1, par.gamma2, par.alpha1, par.alpha2, par.beta1, par.beta2);
+		double dl_pot_nonlinear = fish::dl_power(-par.tsbmean, temp_ano, par.gamma1, par.gamma2, par.alpha1, par.alpha2, par.beta1, par.beta2);
 		
-		double lnew, lnew_pot;
-		if (isMature){
-			lnew     = fish::length_adult(length, dl,     par.gamma1, par.gamma2, par.gsi);
-			lnew_pot = fish::length_adult(length, dl_pot, par.gamma1, par.gamma2, par.gsi);
-		}
-		else{
-			lnew     = fish::length_juvenile(length, dl,     par.gamma1, par.gamma2);
-			lnew_pot = fish::length_juvenile(length, dl_pot, par.gamma1, par.gamma2);
-		}
+		// Calculate new length if there was no reproductive investment
+		double lnew, lnew_pot; // Real and potential increments are with and without density effects
+		lnew     = fish::length_juvenile(length, dl_nonlinear,     par.gamma1, par.gamma2);
+		lnew_pot = fish::length_juvenile(length, dl_pot_nonlinear, par.gamma1, par.gamma2);
 
 		// Calculate linear increment (real and potential)
 		dl_real      = lnew     - length;
-		dl_potential = lnew_pot - length;
+		dl_potential = lnew_pot - length; // This is only for assessing density effect
 		//cout << "tsb_ano = " << tsb << " / " << par.tsbmean << ", fac = " << dl_real << " / " << dl_potential << endl; 
 
 		// add environmental noise on real growth
-		dl_real *= std::clamp(exp(rnorm(-par.growth_noise_sd*par.growth_noise_sd/2, par.growth_noise_sd)), 0.0, 5.0);
-		lnew = length + dl_real;
+		dl_real_stochastic = dl_real*std::clamp(rnorm(1, par.growth_noise_sd), 0.0, 5.0);
 
-		gsi_effective = fish::gsi(lnew, length, dl, par.gamma1, par.gamma2, par.alpha1, par.alpha2);
-		set_length(lnew);
+		// Recalculate new length based on linear length increment
+		double lnew_stochastic = length + dl_real_stochastic;
+		double dl_juvenile_nonlinear_stochastic = pow(lnew_stochastic, par.gamma1*par.gamma2) - pow(length, par.gamma1*par.gamma2);
+
+		// If fish is mature, length increment is reduced due to reproductive investment
+		if (isMature){
+			lnew_stochastic /= pow(1 + par.gamma1*par.gsi, 1/(par.gamma1*par.gamma2));
+			lnew_stochastic = std::max(lnew_stochastic, length);
+		}
+
+		// Effective gsi - should be 0 for juveniles and par.gsi for adults
+		gsi_effective = fish::gsi(lnew_stochastic, length, dl_juvenile_nonlinear_stochastic, par.gamma1, par.gamma2, par.alpha1, par.alpha2);
+
+		// Set new length
+		set_length(lnew_stochastic);
 	}
 	else{
 		throw std::runtime_error("Invalid growth model specified");

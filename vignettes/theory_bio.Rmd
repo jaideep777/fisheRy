@@ -101,24 +101,35 @@ Let us now simulate the growth of a fish starting at age 1 upto age 30 under con
 
 ```{r}
 fish = new(Fish, params_file)
+# fish$par$growth_noise_sd = 0
 fish$init(0, 5.61)
 
 years = 1:31
 length = numeric(31)
 weight = numeric(31)
 dw = numeric(31)
+gsi = numeric(31)
+dl_real = numeric(31)
+dl_real_s = numeric(31)
 for (i in years){
   length[i] = fish$length
   weight[i] = fish$weight
   fish$updateMaturity(5.61)
   fish$grow(0, 5.61)
   dw[i] = fish$delta_weight
+  gsi[i] = fish$gsi_effective
+  dl_real[i] = fish$dl_real
+  dl_real_s[i] = fish$dl_real_stochastic
   fish$set_age(fish$age+1)
 }
 
-plot(length~years, xlab="Age", ylab="Length", type="o", lwd=2)
-plot(weight~years, xlab="Age", ylab="Weight", type="o", lwd=2)
-plot(dw~years, xlab="Age", ylab="dw", type="o", lwd=2)
+tibble(years, length, weight, dw, gsi, dl_factor = dl_real_s/dl_real) |>
+  pivot_longer(-years) |> 
+  ggplot(aes(x=years, y=value))+
+  geom_point()+
+  geom_line()+
+  facet_wrap(~name, scales="free")
+
 ```
 
 
@@ -181,6 +192,17 @@ dat_full2 |>
   ggplot(aes(x=length, group=age, color=age))+
   geom_density()
 ```
+
+
+```{r}
+dat_full3 = growth_trajectories(N=50, temp_sd=0, growth_noise_sd = 0.2347)
+
+dat_full3 |>
+  filter(age <= 15) |>
+  ggplot(aes(x=length, group=age, color=age))+
+  geom_density()
+```
+
 
 
 ## Decision to mature
