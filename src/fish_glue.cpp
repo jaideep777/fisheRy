@@ -158,11 +158,9 @@ RCPP_MODULE(fish_module) {
 }	
 
 
-#include "population.h"
 #include "stock.h"
 #include "fleet.h"
 
-RCPP_EXPOSED_CLASS(PopulationParams);
 RCPP_EXPOSED_CLASS(StockParams);
 RCPP_EXPOSED_CLASS(SeaEnvironment);
 
@@ -194,95 +192,20 @@ std::vector<double> get_fished_dry_run_wrapper(
 
 ////RCPP_EXPOSED_AS(Population);
 RCPP_MODULE(population_module){
-	class_ <SeaEnvironment>("SeaEnvironment")
-		.constructor()
-		.field("temperature", &SeaEnvironment::temperature)
-		.field("recruitment_noise_multiplier", &SeaEnvironment::recruitment_noise_multiplier)
-	;
+	// class_ <SeaEnvironment>("SeaEnvironment")
+	// 	.constructor()
+	// 	.field("temperature", &SeaEnvironment::temperature)
+	// 	.field("recruitment_noise_multiplier", &SeaEnvironment::recruitment_noise_multiplier)
+	// ;
 
-	class_ <PopulationParams>("PopulationParams")
-		.constructor()
-		.field("n", &PopulationParams::n)
-		.field("rmax", &PopulationParams::rmax)
-		.field_readonly("h", &PopulationParams::h)
-		.field_readonly("Fc", &PopulationParams::Fc)
-		.field_readonly("lf50", &PopulationParams::F3)
-		.field_readonly("lmin", &PopulationParams::lmin)
-		.field_readonly("lmin_sq", &PopulationParams::lmin_sq)
-		.field_readonly("F1", &PopulationParams::F1)
-		.field_readonly("F2", &PopulationParams::F2)
-		.field_readonly("F3", &PopulationParams::F3)
-		.field_readonly("F4", &PopulationParams::F4)
-		.field_readonly("F5", &PopulationParams::F5)
-		.field_readonly("F6", &PopulationParams::F6)
-		.field_readonly("F5_sq", &PopulationParams::F5_sq)
-//		.field("mort_fishing_mature", &PopulationParams::mort_fishing_mature) 
-//		.field("mort_fishing_immature", &PopulationParams::mort_fishing_immature) 
-		// .field("F_spf", &PopulationParams::F_spf)
-		.field("f_spf_before", &PopulationParams::f_spf_before)
-		.field("dsea", &PopulationParams::dsea)
-		.field("dmax", &PopulationParams::dmax)
-		.field("recruitmentAge", &PopulationParams::recruitmentAge)
-		.field("rho", &PopulationParams::rho)
-
-		.field("update_env", &PopulationParams::update_env)
-		.field("simulate_bio_only", &PopulationParams::simulate_bio_only)
-
-		.method("initFromFile", &PopulationParams::initFromFile)
-		.method("print", &PopulationParams::print)
-	;
-	
-	class_ <Population>("Population")
-		.constructor<Fish>()
-		.field("par", &Population::par)
-		.field("env", &Population::env)
-		.field("verbose", &Population::verbose)
-		.field("K_fishableBiomass", &Population::K_fishableBiomass)
-		.field("K_ssb", &Population::K_ssb)
-		.field("colnames", &Population::colnames)
-		.field("current_year", &Population::current_year)
-
-		// ALL FUNCTIONS THAT MODIFTY POPULATION ARE NOW EXPOSED VIA FISHERY CLASS
-		// ------------------------------------------------
-		// These are retained for transitioning/debugging purposes (DO NOT USE in production code)
-		.method("readParams", &Population::readParams) 
-		.method("set_superFishSize", &Population::set_superFishSize) 
-		.method("set_traitVariances", &Population::set_traitVariances) 
-		.method("set_harvestProp", &Population::set_harvestProp) 
-		.method("set_minSizeLimit", &Population::set_minSizeLimit) 
-		.method("init", &Population::init) 
-		.method("update", &Population::update)
-		.method("noFishingEquilibriate", &Population::noFishingEquilibriate)
-		.method("summarize", &Population::summarize)
-		.method("readEnvironmentFile", &Population::readEnvironmentFile)
-		.method("updateEnv", &Population::updateEnv)
-		// -----------------------------------------------
-
-		.method("calcSSB", &Population::calcSSB)
-		.method("fishableBiomass", &Population::fishableBiomass)
-		.method("fishingMortalityRef", &Population::fishingMortalityRef)
-		.method("fishingMortRefByAge", &Population::fishingMortRefByAge)
-		.method("maturityByAge", &Population::maturityByAge)
-		.method("naturalMortByAge", &Population::naturalMortByAge)
-		.method("avgOverAges", &Population::avgOverAges)
-
-		.method("fishingMortRefByAge", &Population::fishingMortRefByAge)
-		.method("maturityByAge", &Population::maturityByAge)
-		.method("naturalMortByAge", &Population::naturalMortByAge)
-		.method("avgOverAges", &Population::avgOverAges)
-
-		.method("get_state", &Population::get_state)
-		.method("get_traits", &Population::get_traits)
-		.method("print_summary", &Population::print_summary)
-		.method("nfish", &Population::nfish)
-	;
-	
 	class_ <StockParams>("StockParams")
 		.constructor()
 		.field("recruitmentAge", &StockParams::recruitmentAge)
 		.field("rmax", &StockParams::rmax)
 	;
 
+	// FIXME: Makse sure ALL FUNCTIONS THAT MODIFTY POPULATION ARE NOW EXPOSED VIA FISHERY CLASS
+	// ------------------------------------------------
 	class_ <Stock>("Stock")
 		.constructor<Fish>()
 		.field("par", &Stock::par)
@@ -350,7 +273,6 @@ RCPP_MODULE(fleet_module){
 #include "fishery_system.h"
 // #include "simulator.h"
 
-RCPP_EXPOSED_CLASS(Population);
 RCPP_EXPOSED_CLASS(Stock);
 RCPP_EXPOSED_CLASS(FisheryParams);
 

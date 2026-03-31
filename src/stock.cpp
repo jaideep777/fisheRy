@@ -1,4 +1,3 @@
-#include "population.h"
 #include "pn_zero.h"
 
 #include <cmath>

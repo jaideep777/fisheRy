@@ -5,7 +5,6 @@ TARGET := libfishery.a
 # files
 SRCFILES  :=  src/fish.cpp \
               src/random_utils.cpp \
-              src/population.cpp \
 			  src/stock.cpp \
 			  src/fleet.cpp \
 		      src/fishery_system.cpp  # $(filter-out src/RcppExports.cpp src/fish_glue.cpp, $(wildcard src/*.cpp))

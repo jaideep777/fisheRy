@@ -87,7 +87,7 @@ colnames=c(
 
 
 ```{r run-simulation}
-v3 = fishery$simulate_multi(Tvec, lminvec, hvec, 200, 0, 1, F)
+v3 = fishery$simulate_multi(Tvec, lminvec, hvec, 200, 0, 5, F)
 
 v3_avg = apply(v3, MARGIN=c(2,5), FUN=mean)
 

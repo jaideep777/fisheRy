@@ -141,6 +141,7 @@ library(patchwork)
 
 ```{r}
 weights =c(  
+#   ssb  yiel empl profit
     0.0, 0.3, 0.0, 0.7,	  # industrial
     0.3, 0.5, 0.1, 0.1,	  # artisanal
     0.3, 0.2, 0.5, 0.0,	  # employment-maximizing policymakers
