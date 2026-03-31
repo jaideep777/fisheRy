@@ -683,6 +683,98 @@ Tensor<double> Fishery::scan(std::vector<double> Tvec, std::vector<double> lminv
 }
 
 
+// std::vector<double> Fishery::max_avg_utils(std::vector<int> dims, std::vector<double> data){
+// 	Tensor<double> res(dims);
+// 	res.vec = data;		// res is {u, T, c2, c1, t}
+
+// 	profit_mask = res.slice(4, 3, 3).avg_dim(0); // Dim 4 is u, index 3 is profit --> {Profit, T, c2, c1, t}. average over t --> {Profit, T, c2, c1}
+// 	profit_mask.mask([](double x){return x > 0;});   // {profit_mask, T, c2, c1}
+// 	profit_mask.print();
+
+// 	// profit_mask.repeat_outer(dims[4]);  // Repeat mask over all utils
+
+// 	Tensor<double> res2 = res.avg_dim(0).max_dim(0).max_dim(0).max_dim(0);	// avg over t, then max over c1, then max over c2, then max over T
+// 	res2.print();
+
+// 	res.transform(4, std::divides<double>(), res2.vec); // divide u dimension by res2
+
+// 	return res.avg_dim(0).vec; // average over t
+// }
+
+
+// std::vector<double> Fishery::stakeholder_satisfaction(std::vector<int> dims, std::vector<double> data){
+// 	Tensor<double> res(dims);
+// 	res.vec = data;		// res is {u, T, c2, c1, t}
+
+// 	Tensor<double> res2 = res.avg_dim(0).max_dim(0).max_dim(0).max_dim(0);	// avg over t, then max over c1, then max over c2, then max over T
+// 	res.transform(4, std::divides<double>(), res2.vec); // divide u dimension by res2
+
+// 	Tensor<double> sp({5,4});	// spvec is {s, u}
+// 	//        ssb yield emp  profit  
+// 	sp.vec = {0.0, 0.3, 0.0, 0.7,	// industrial
+// 			  0.3, 0.5, 0.1, 0.1,	// artisanal
+// 			  0.3, 0.2, 0.5, 0.0,	// employment-maximizing policymakers
+// 			  0.2, 0.2, 0.0, 0.6,	// profit-maximizing policymakers
+// 			  0.5, 0.1, 0.2, 0.2	// conservationists
+// 			 };
+
+// 	sp.print();
+
+// 	Tensor<double> Ssucy = sp.repeat_inner(res.dim[1]).repeat_inner(res.dim[2]).repeat_inner(res.dim[3]).repeat_inner(res.dim[4]) * res.repeat_outer(sp.dim[0]);
+// 	//                        ^ {s, u, T}             ^ {s, u, T, c2}           ^ {s, u, T, c2, c1}      ^ {s, u, T, c2, c1, y}         ^ {s, u, T, c2, c1, y}
+
+// 	Tensor<double> Sscy = Ssucy.accumulate(0.0, 4, std::plus<double>());	// aggregate along u dim to get {s, T, c2, c1, y}
+
+// 	Tensor<double> Ssc = Sscy.avg_dim(0);
+// 	//                        ^ {s, T, c2, c1}
+// 	Ssc.transform(3, std::divides<double>(), Ssc.max_dim(0).max_dim(0).max_dim(0).vec);
+// 	//			  ^ s                            ^ {s,T,c2} ^ {s,T}    ^ {s}
+	
+// 	return Ssc.vec;
+
+// }
+
+
+// std::vector<double> Fishery::stakeholder_satisfaction_t(std::vector<int> dims, std::vector<double> data){
+// 	Tensor<double> res(dims);
+// 	res.vec = data;		// res is {u, T, c2, c1, t}
+
+// 	// here t is also treated as a control parameter
+// 	Tensor<double> res2 = res.max_dim(0).max_dim(0).max_dim(0).max_dim(0);	// max over t, then max over c1, then max over c2, then max over T
+// 	res.transform(4, std::divides<double>(), res2.vec); // divide u dimension by u_max vector
+
+// 	Tensor<double> sp({5,4});	// spvec is {s, u}
+// 	//        ssb yield emp  profit  
+// 	sp.vec = {0.0, 0.3, 0.0, 0.7,	// industrial
+// 			  0.3, 0.5, 0.1, 0.1,	// artisanal
+// 			  0.3, 0.2, 0.5, 0.0,	// employment-maximizing policymakers
+// 			  0.2, 0.2, 0.0, 0.6,	// profit-maximizing policymakers
+// 			  0.5, 0.1, 0.2, 0.2	// conservationists
+// 			 };
+
+// 	sp.print();
+
+// 	// stakeholder preferences {s,u} repeated to get same dim as res, then multiplied with utilities to get  {s,u}*u
+// 	Tensor<double> Ssucy = sp.repeat_inner(res.dim[1]).repeat_inner(res.dim[2]).repeat_inner(res.dim[3]).repeat_inner(res.dim[4]) * res.repeat_outer(sp.dim[0]);
+// 	//                        ^ {s, u, T}             ^ {s, u, T, c2}           ^ {s, u, T, c2, c1}      ^ {s, u, T, c2, c1, y}         ^ {s, u, T, c2, c1, y}
+
+// 	// aggregate along u dim to get {s, T, c2, c1, y}
+// 	Tensor<double> Sscy = Ssucy.accumulate(0.0, 4, std::plus<double>());	
+
+// 	// no time average, since we need time-explicit JSS
+// 	//Tensor<double> Ssc = Sscy.avg_dim(0);
+// 	//                        ^ {s, T, c2, c1}
+	
+// 	Sscy.transform(4, std::divides<double>(), Sscy.max_dim(0).max_dim(0).max_dim(0).max_dim(0).vec);
+// 	//			  ^ s                            ^ {s,T,c2,c1} ^ {s,T,c2}  ^ {s,T}   ^ {s}
+	
+// 	return Sscy.vec;
+
+// }
+
+
+
+
 /*
 Questions:
 1. Should lmin a fleet-specific parameter?
@@ -695,8 +787,9 @@ Questions:
 // ************ R stuff *****************
 #ifndef NATIVE_CPP
 
-Rcpp::DataFrame Fishery::simulate_r(double lf, double h, int nyears, double tsb0, double temp, bool re_init, std::string output_file){
-	bool writestate = (output_file != "");
+Rcpp::DataFrame Fishery::simulate_r(double lf, double h, int nyears, double tsb0, double temp, bool re_init, std::string output_file)
+{
+    bool writestate = (output_file != "");
 
 	std::ofstream fout;
 	if (writestate){
@@ -773,6 +866,11 @@ Rcpp::NumericVector Fishery::simulate_multi_r(std::vector<double> Tvec, std::vec
 	Tensor<double> res = scan(Tvec, lminvec, hvec, nyears, tsb0, niters, re_init);
 	return tensor2array(res);
 }
+
+// Rcpp::NumericVector Fishery::get_profit_mask(){
+//     return tensor2array(profit_mask);
+// }
+
 
 #endif
 

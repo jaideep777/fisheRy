@@ -390,6 +390,12 @@ RCPP_MODULE(simulator_module){
 
 		.method("simulate", &Fishery::simulate_r)
 		.method("simulate_multi", &Fishery::simulate_multi_r)
+
+		// .method("max_avg_utils", &Fishery::max_avg_utils)
+		// .method("stakeholder_satisfaction", &Fishery::stakeholder_satisfaction)
+		// .method("stakeholder_satisfaction_t", &Fishery::stakeholder_satisfaction_t)
+		// .method("get_profit_mask", &Fishery::get_profit_mask)
+		
 	;
 
 	// class_ <Simulator>("Simulator")

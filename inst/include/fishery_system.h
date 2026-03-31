@@ -65,6 +65,7 @@ class Fishery {
 	double min_size_limit;
 
 	StockSummary stock_summary;	
+	// Tensor<double> profit_mask;
 
 	public:
 	Fishery(std::string _params_file, const Fish& f);
@@ -103,8 +104,13 @@ class Fishery {
 
 	Tensor<double> scan(std::vector<double> Tvec, std::vector<double> lminvec, std::vector<double> hvec, int nyears, double tsb0, int niters, bool re_init);
 
-#ifndef NATIVE_CPP	
-	Rcpp::DataFrame simulate_r(double lf, double h, int nyears, double tsb0, double temp, bool re_init, std::string output_file);
+    // std::vector<double> max_avg_utils(std::vector<int> dims, std::vector<double> data);
+    // std::vector<double> stakeholder_satisfaction(std::vector<int> dims, std::vector<double> data);
+    // std::vector<double> stakeholder_satisfaction_t(std::vector<int> dims, std::vector<double> data);
+
+#ifndef NATIVE_CPP
+	// Rcpp::NumericVector get_profit_mask();
+    Rcpp::DataFrame simulate_r(double lf, double h, int nyears, double tsb0, double temp, bool re_init, std::string output_file);
     Rcpp::NumericVector simulate_multi_r(std::vector<double> Tvec, std::vector<double> lminvec, std::vector<double> hvec, int nyears, double tsb0, int niters, bool re_init);
 #endif
 
