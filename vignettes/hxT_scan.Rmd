@@ -114,44 +114,11 @@ library(patchwork)
 ### Max avg utils with profit masking
 
 ```{r}
-dimsizes = dim(v3)
-dimnames = c("t", "h", "lmin", "T", "u")
-names(dimsizes) = dimnames
-dims = 1:length(dimsizes)
-names(dims) = dimnames
-dims_tavg = dims[dimnames != "t"]
-dims_nou = dims[dimnames != "u"]
-profit_index = which(colnames == "profit")
-
-## Utils with profit masking
-utils_r = v3 |> 
-  apply(MARGIN=dims_tavg, FUN=mean) # averge over t
-
-profit_mask = utils_r[,,,profit_index] < 0
-profit_mask = profit_mask |>
-    rep(dimsizes[dims["u"]]) |>
-    array(dim=dimsizes[dims_tavg])
-
-v3_masked = v3 |>
-  apply(MARGIN=dims_tavg, FUN=mean) # averge over t
-
-v3_masked[profit_mask] = NA
-
-utils_max_avg_masked = v3_masked |> 
-  apply(MARGIN=which(names(dims_tavg) == "u"), FUN=max, na.rm=T)  # max over c1, c2, T / retain u dim
-
-utils_r_rep = utils_max_avg_masked |> 
-    rep(each = prod(dimsizes[dims_nou])) |> 
-    array(dim=dimsizes)
-
-utils_std = (v3/utils_r_rep)
-
-utils_std_tavg = utils_std |> 
-  apply(MARGIN=dims_tavg, FUN=mean)
+utils = standardized_utils(v3, colnames)
 
 plots = list()
 for (i in 1:4){
-  plots[[i]] = utils_std_tavg[,,,i] |> 
+  plots[[i]] = utils$utils_std_tavg[,,,i] |> 
     as.data.frame() |> 
     setNames(Tvec) |> 
     mutate(h = hvec) |> 
@@ -173,52 +140,19 @@ library(patchwork)
 ### Stakeholder satisfaction
 
 ```{r}
-nstake = 5
-nu = 4
+weights =c(  
+    0.0, 0.3, 0.0, 0.7,	  # industrial
+    0.3, 0.5, 0.1, 0.1,	  # artisanal
+    0.3, 0.2, 0.5, 0.0,	  # employment-maximizing policymakers
+    0.2, 0.2, 0.0, 0.6,	  # profit-maximizing policymakers
+    0.5, 0.1, 0.2, 0.2	  # conservationists
+)
 
-wvec = c(0.0, 0.3, 0.0, 0.7,	# industrial
-			  0.3, 0.5, 0.1, 0.1,	  # artisanal
-			  0.3, 0.2, 0.5, 0.0,	  # employment-maximizing policymakers
-			  0.2, 0.2, 0.0, 0.6,	  # profit-maximizing policymakers
-			  0.5, 0.1, 0.2, 0.2	  # conservationists
-) |> array(dim = c(nu,nstake))
-
-dimsizes_st = c(dimsizes[dims_nou], u=nu, S=nstake)
-dimnames_st = names(dimsizes_st)
-dims_st = 1:length(dimsizes_st)
-names(dims_st) = dimnames_st
-dims_st_tavg = dims_st[names(dims_st) != "t"]
-
-wvec_rep = wvec |> 
-  rep(each = prod(dimsizes[dims_nou])) |> 
-  array(dim = dimsizes_st)
-
-profit_mask_t = profit_mask |> 
-  rep(each = dimsizes["t"]) |> 
-  array(dim = dimsizes)
-
-utils_std[profit_mask] = NA
-
-utils_S = utils_std[,,,,1:4, drop = FALSE] |> 
-  rep(times=5) |> 
-  array(dim = dimsizes_st) 
-
-stakeholder_utility_t = (wvec_rep*utils_S) |> 
-  apply(MARGIN=which(names(dimsizes_st) != "u"), sum, na.rm=T) 
-
-stakeholder_utility = stakeholder_utility_t |>
-  apply(MARGIN=which(names(dim(stakeholder_utility_t)) != "t"), mean, na.rm=T) 
-
-su_max_c = stakeholder_utility |> 
-  apply(MARGIN=which(names(dim(stakeholder_utility)) == "S"), FUN=max, na.rm=T) |>   # max over c1, c2, T / retain S dim
-  rep(each = prod(dimsizes_st[c("h","lmin","T")])) |> 
-  array(dim = dimsizes_st[c("h","lmin","T", "S")])
-
-stakeholder_satisfaction = (stakeholder_utility/su_max_c)
+ss = stakeholder_satisfaction(utils_std=utils$utils_std, weights = weights, profit_mask=utils$profit_mask, utilnames = colnames, nstake=5, nu=4)
 
 plots = list()
 for (i in 1:5){
-  plots[[i]] = stakeholder_satisfaction[,,,i] |> 
+  plots[[i]] = ss[,,,i] |> 
     as.data.frame() |> 
     setNames(Tvec) |> 
     mutate(h = hvec) |> 
