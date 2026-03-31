@@ -1,0 +1,237 @@
+---
+title: "Scan over harvest rate"
+author: "Jaideep"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(fisheRy)
+
+setwd(here::here("vignettes"))
+```
+
+
+
+```{r setup-fishery}
+# define parameter files
+params_file_fleet = here::here("params/fleet_1_params.ini")
+params_file_fish  = here::here("params/cod_params.ini")
+
+# Create a fleet and read parameters
+fleet = new(Fleet)
+fleet$readParams(params_file_fleet, F)
+fleet$par$print()
+
+# Create a prototype fish to construct the population
+fish = new(Fish, params_file_fish)
+fish$natural_mort_scalar = 1
+fish$setMortalityCurveEmpirical(here::here("data/naturalmort.spline.csv"))
+fish$par$print()
+```
+
+# Fishery Simulation
+
+```{r configure-fishery}
+hvec = seq(0.1, 0.99, length.out = 10)
+lminvec = c(45)
+Tvec = seq(3, 7, length.out=7)
+```
+
+```{r}
+# Craeate the fishery. Note that we do not need to explicitly create a population - it is contained within the fishery
+fishery = new(Fishery, params_file_fish, fish);
+fishery$par$print()
+
+fishery$addFleet(params_file_fleet, T);
+
+v = fishery$equilibriateNaturalPopulation(5.61, 2e6, 200);
+fishery$set_superFishSize(2e6)
+
+# Initialize the 
+fishery$init(1000, 0, 5.61);
+v2 = fishery$equilibriateWithoutFishing(5.61, 200)
+
+df = as.data.frame(matrix(data=v2, nrow=200, byrow=T))
+df = df |> setNames(c(			
+      "ssb", 
+			"tsb",
+			"maturity",
+			"nrecruits",
+			"factor_dr",
+			"n_superfish"))
+
+df |> 
+  slice(-1) |>
+  mutate(t = 1:n()) |> 
+  pivot_longer(-t) |>
+  ggplot(aes(x=t, y=value)) +
+  geom_line()+
+  facet_wrap(~name, scales="free")
+
+```
+
+# Running and Visualizing Simulation
+
+Simulate the fishery over time and visualize key outputs.
+
+```{r}
+colnames=c(
+		"ssb", "yield", "employment", "profit", "effort",
+		"tsb", "maturity", "quota", "quota_fgf", "quota_spf", "yield_fgf", "yield_spf", "recruits", 
+		"ssb0", "ssb_spawning", "ssb_spawning_ref", "ssb_after_spawning", "ssb_after_spawning_ref", "ssbn", "ssbn_ref", 
+    "yield0", "effort0", "employment_sea0", "employment_shore0", "profit_sea0", "profit_shore0"
+)
+```
+
+
+```{r run-simulation}
+v3 = fishery$simulate_multi(Tvec, lminvec, hvec, 200, 0, 1, F)
+
+v3_avg = apply(v3, MARGIN=c(2,3,4,5), FUN=mean)
+
+plots = list()
+for (i in 1:4){
+  plots[[i]] = v3_avg[,,,i] |> 
+    as.data.frame() |> 
+    setNames(Tvec) |> 
+    mutate(h = hvec) |> 
+    pivot_longer(-h, names_to = "T") |> 
+    mutate(T = as.numeric(T)) |>
+    ggplot(aes(x=h, y=T, fill=value)) +
+    geom_raster() +
+    scale_fill_viridis_c() + 
+    ggtitle(c("SSB", "Yield", "Employment", "Profit")[i])
+}
+
+library(patchwork)
+(plots[[1]]+plots[[2]])/(plots[[3]]+plots[[4]])
+
+```
+
+
+### Max avg utils with profit masking
+
+```{r}
+dimsizes = dim(v3)
+dimnames = c("t", "h", "lmin", "T", "u")
+names(dimsizes) = dimnames
+dims = 1:length(dimsizes)
+names(dims) = dimnames
+dims_tavg = dims[dimnames != "t"]
+dims_nou = dims[dimnames != "u"]
+profit_index = which(colnames == "profit")
+
+## Utils with profit masking
+utils_r = v3 |> 
+  apply(MARGIN=dims_tavg, FUN=mean) # averge over t
+
+profit_mask = utils_r[,,,profit_index] < 0
+profit_mask = profit_mask |>
+    rep(dimsizes[dims["u"]]) |>
+    array(dim=dimsizes[dims_tavg])
+
+v3_masked = v3 |>
+  apply(MARGIN=dims_tavg, FUN=mean) # averge over t
+
+v3_masked[profit_mask] = NA
+
+utils_max_avg_masked = v3_masked |> 
+  apply(MARGIN=which(names(dims_tavg) == "u"), FUN=max, na.rm=T)  # max over c1, c2, T / retain u dim
+
+utils_r_rep = utils_max_avg_masked |> 
+    rep(each = prod(dimsizes[dims_nou])) |> 
+    array(dim=dimsizes)
+
+utils_std = (v3/utils_r_rep)
+
+utils_std_tavg = utils_std |> 
+  apply(MARGIN=dims_tavg, FUN=mean)
+
+plots = list()
+for (i in 1:4){
+  plots[[i]] = utils_std_tavg[,,,i] |> 
+    as.data.frame() |> 
+    setNames(Tvec) |> 
+    mutate(h = hvec) |> 
+    pivot_longer(-h, names_to = "T") |> 
+    mutate(T = as.numeric(T)) |>
+    ggplot(aes(x=h, y=T, fill=value)) +
+    geom_raster() +
+    scale_fill_viridis_c() + 
+    ggtitle(c("SSB", "Yield", "Employment", "Profit")[i])
+}
+
+library(patchwork)
+(plots[[1]]+plots[[2]])/(plots[[3]]+plots[[4]])
+
+
+```
+
+
+### Stakeholder satisfaction
+
+```{r}
+nstake = 5
+nu = 4
+
+wvec = c(0.0, 0.3, 0.0, 0.7,	# industrial
+			  0.3, 0.5, 0.1, 0.1,	  # artisanal
+			  0.3, 0.2, 0.5, 0.0,	  # employment-maximizing policymakers
+			  0.2, 0.2, 0.0, 0.6,	  # profit-maximizing policymakers
+			  0.5, 0.1, 0.2, 0.2	  # conservationists
+) |> array(dim = c(nu,nstake))
+
+dimsizes_st = c(dimsizes[dims_nou], u=nu, S=nstake)
+dimnames_st = names(dimsizes_st)
+dims_st = 1:length(dimsizes_st)
+names(dims_st) = dimnames_st
+dims_st_tavg = dims_st[names(dims_st) != "t"]
+
+wvec_rep = wvec |> 
+  rep(each = prod(dimsizes[dims_nou])) |> 
+  array(dim = dimsizes_st)
+
+profit_mask_t = profit_mask |> 
+  rep(each = dimsizes["t"]) |> 
+  array(dim = dimsizes)
+
+utils_std[profit_mask] = NA
+
+utils_S = utils_std[,,,,1:4, drop = FALSE] |> 
+  rep(times=5) |> 
+  array(dim = dimsizes_st) 
+
+stakeholder_utility_t = (wvec_rep*utils_S) |> 
+  apply(MARGIN=which(names(dimsizes_st) != "u"), sum, na.rm=T) 
+
+stakeholder_utility = stakeholder_utility_t |>
+  apply(MARGIN=which(names(dim(stakeholder_utility_t)) != "t"), mean, na.rm=T) 
+
+su_max_c = stakeholder_utility |> 
+  apply(MARGIN=which(names(dim(stakeholder_utility)) == "S"), FUN=max, na.rm=T) |>   # max over c1, c2, T / retain S dim
+  rep(each = prod(dimsizes_st[c("h","lmin","T")])) |> 
+  array(dim = dimsizes_st[c("h","lmin","T", "S")])
+
+stakeholder_satisfaction = (stakeholder_utility/su_max_c)
+
+plots = list()
+for (i in 1:5){
+  plots[[i]] = stakeholder_satisfaction[,,,i] |> 
+    as.data.frame() |> 
+    setNames(Tvec) |> 
+    mutate(h = hvec) |> 
+    pivot_longer(-h, names_to = "T") |> 
+    mutate(T = as.numeric(T)) |>
+    ggplot(aes(x=h, y=T, fill=value)) +
+    geom_raster() +
+    scale_fill_viridis_c() + 
+    ggtitle(c("industrial", "artisanal", "employment", "profit", "conservationists")[i])
+}
+
+library(patchwork)
+(plots[[1]]+plots[[3]])/(plots[[4]]+plots[[5]])
+
+```
+
