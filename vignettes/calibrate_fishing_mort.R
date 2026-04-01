@@ -39,7 +39,7 @@ growth_trajectories = function(beta1=NULL, beta2=NULL, N=50, temp_sd = 3, tsb_mi
   dat_full
 }
 
-dat_full3 = growth_trajectories(N=50, temp_sd=0, growth_noise_sd = 0.2347)
+dat_full3 = growth_trajectories(N=500, temp_sd=0, growth_noise_sd = 0.2347)
 
 dat_full3 |>
   filter(age <= 15) |>
@@ -53,7 +53,7 @@ length_chars_by_age = dat_full3 |>
             sd_l = sd(length))
 
 get_weights = function(nl){
-  d = expand_grid(age=3:14, length=seq(9,160,length.out=nl)) |>
+  d = expand_grid(age=3:14, length=seq(20,160,length.out=nl)) |>
     left_join(length_chars_by_age) |> 
     rowwise() |> 
     mutate(weight = purrr::pmap_dbl(list(x=length, mean=mean_l, sd=sd_l), ~dnorm(x=..1, mean=..2, sd=..3)))
@@ -118,28 +118,21 @@ F_length1 = solve(weights_mat, F_age1)
 read.csv(here::here("data/selection.spline.reduced.csv")) |> 
   ggplot() +
   geom_line(aes(y=F, x=length)) + 
-  geom_point(data=tibble(f=F_length1, length=as.numeric(names(F_length1))) |> 
-               filter(length > 40 & length < 140),
+  geom_point(data=tibble(f=F_length1, length=as.numeric(names(F_length1))),
              aes(x=length, y=f),
-             col="cyan3")
+             col="cyan3")+ 
+  ylim(0,1)
 
 F_length2 = solve(weights_mat, F_age2)
 
 read.csv(here::here("data/selection.spline.reduced.csv")) |> 
   ggplot() +
   geom_line(aes(y=F, x=length)) + 
-  geom_point(data=tibble(f=F_length2, length=as.numeric(names(F_length2))) |> 
-               filter(length > 40 & length < 140),
+  geom_point(data=tibble(f=F_length2, length=as.numeric(names(F_length2))),
              aes(x=length, y=f),
-             col="cyan3")
+             col="cyan3") + 
+  ylim(0,1)
 
-
-  
-
-tibble(f=F_length, length=as.numeric(names(F_length))) |> 
-  filter(length > 40 & length < 140) |> 
-  with(points(f~length, col="red"))
-  
 
 ### BASED ON REGRESSION
 
@@ -150,30 +143,33 @@ F_age_df = read.csv(here::here("data/new_calibration_files/F-AFWG2024.csv")) |>
                values_to = "F") |>
   mutate(age = as.numeric(gsub("X","", age)))
 
+nyears = length(unique(F_age_df$Year_age))
+
 weights_long = get_weights(12)
 
-design_df = F_age_df |>
-  inner_join(weights_long, by = "age")
+weights_mat = weights_long |>  
+  select(age, length, weight_norm) |> 
+  pivot_wider(names_from=length, values_from=weight_norm) |> 
+  select(-age) |> 
+  as.matrix()
 
-design_wide = design_df |>
-  mutate(length = paste0("L", length)) |>
-  select(Year_age, age, "F", length, weight_norm) |>
-  pivot_wider(names_from = length, values_from = weight_norm) 
+res <- list()
+for(t in 1:nyears){
+  res[[t]] <- weights_mat
+}
+weights_mat_rep <- do.call("rbind", res)
 
-X = as.matrix(design_wide |> select(starts_with("L")))
-y = design_wide$F
-
-fit = lm(y ~ X)
+fit = lm(F_age_df$F ~ weights_mat_rep-1)
 
 F_length = coef(fit)
-length_Flength = as.numeric(gsub(pattern = "XL",replacement = "", x = names(coef(fit))))
+length_Flength = as.numeric(gsub(pattern = "weights_mat_rep",replacement = "", x = names(coef(fit))))
 
 read.csv(here::here("data/selection.spline.reduced.csv")) |> 
   ggplot() +
   geom_line(aes(y=F, x=length)) + 
-  geom_point(data=tibble(f=F_length, length=length_Flength) |> 
-               filter(length > 40 & length < 140),
+  geom_point(data=tibble(f=F_length, length=length_Flength),
              aes(x=length, y=f),
-             col="red")
+             col="red")+
+  ylim(0,1)
 
 
