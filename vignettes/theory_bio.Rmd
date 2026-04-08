@@ -1,7 +1,7 @@
 ---
 title: 'Fisheries model theory: biological model'
-author: "Jaideep Joshi, Anna Shchiptsova"
-date: "28 March 2022"
+author: "Jaideep Joshi"
+date: "8 April 2026"
 output:
   html_document: default
 editor_options:
@@ -16,8 +16,8 @@ rm(list=ls())
 ```{r, include = F, echo = F}
 library(fisheRy)
 library(tidyverse)
-source("../tests/ref/parameters.cod.R")
-source("../tests/ref/simulator.7.R")
+source(here::here("tests/ref/parameters.cod.R"))
+source(here::here("tests/ref/simulator.7.R"))
 ```
 
 ## Introduction
@@ -32,68 +32,13 @@ A fish goes through four life-history processes every year:
 
 4. Mortality - This is natural and fishing-induced death 
 
-A fish is characterized by its age $a \in \{1,a_{\max}\}$ and length $l$, where $a_{\max}$ is the maximum considered age. Below, we present our model formulations for these four life-history processes. For comparison, we also present corresponding formulations from a simpler age-structured model as in Dankel et al. XXXX.
-
-## Growth
-
-Let us define a generalized length increment ($\Delta l_p$) from age $a-1$ to age $a$ as
-
-$$
-\Delta l_p = l_a^{\gamma_1 \gamma_2} - l_{a-1}^{\gamma_1 \gamma_2},
-$$
-
-where $\gamma_{1}$ is the allometric exponent of relationship between energy-acquisition rate and body weight, and $\gamma_{2}$ is the allometric exponent of length-weight relationship.
-
-In our model, growth depends on the fish's length, temperature, the total stock biomass of the population, such that the geneneralized length increment is given by
-
-$$
-\Delta l_p = \gamma_{1}\alpha_{1}\alpha_{2}^{- \gamma_{1}} e^{(\beta_1\Delta B +\beta_2 \Delta T)},
-$$
-where $\alpha_{1}$ is the mean weight-specific energy-acquisition rate, 
-$\alpha_{2}$ is the allometric coefficient of the length-weight relationship, and $\Delta B = B - \bar B$ and $\Delta T = T - \bar T$ are the anomalies of total stock biomass (TSB) and temperature, respectively. Setting $\beta_1 = \beta_2 = 0$ removes the temperature and density effects on growth.
-
-In the absence of reproductive investment, i.e., for juvenile fish, the new length is therefore 
-
-$$
-l'_{a} = \left(l_{a - 1}^{\gamma_{1}\gamma_{2}} + \Delta l_p\right)^{\frac{1}{{\gamma_{1}\gamma_{2}}}}
-$$
-
-Mature fish (adults) invest energy into reproduction, such that the new length is downregulated. Thus, the length increment is
-
-$$
-l_{a} = \left\{ 
-\begin{matrix}          
-  l'_{a}, & \mathrm{\text{if juvenile}}, \\   
-  \text{max}\left\{\frac{l'_{a}}{(1 + \gamma_{1}g)^{\frac{1}{{\gamma_{1}\gamma_{2}}}}},\ l_{a-1}\right\} &  \mathrm{\text{if adult}} \\
-\end{matrix} 
-\right.\ 
-$$                                                                                                      
-where $g$ is the gonadosomatic index (GSI), i.e., the ratio of reproductive investment and somatic weight for mature individuals.
-
-Symbols are summarized in the table below:
-
-Parameter          Description
------------------- ----------------------------------------------------
-$\gamma_{1}$       allometric exponent of relationship between energy-acquisition rate and body weight
-$\gamma_{2}$       allometric exponent of length-weight relationship
-$\alpha_{1}$       mean weight-specific energy-acquisition rate
-$\alpha_{2}$       allometric coefficient of length-weight relationship
-$g$                gonadosomatic index (ratio of reproductive investment and somatic weight for mature individuals)
-
-We use the maximum of current and new length for adults to ensure that body size does not shrink.
-
-The effective GSI of the fish during this growth year can be calculated from the difference between the potential length increment and the realized length increment,
-
-$$
-g_{a}^{'} = \frac{ \Delta l_p - (l_{a}^{\gamma_{1}\gamma_{2}} - l_{a - 1}^{\gamma_{1}\gamma_{2}})}{\gamma_{1}l_{a}^{\gamma_{1}\gamma_{2}}}.
-$$ 
-
 
 ### Simulating growth
 
 
 ```{r}
-params_file = "../params/cod_params.ini"
+params_file = here::here("params/cod_params.ini")
+fleet_params_file = here::here("params/fleet_1_params.ini")
 ```
 
 Let us now simulate the growth of a fish starting at age 1 upto age 30 under constant temperature and TSB. The fish will perform maturation, growth, and age increment, every year in that order. We will record the fish length at each timestep so that we can plot the growth trajectory.
@@ -104,41 +49,58 @@ fish$init(0, 5.61)
 
 years = 1:31
 length = numeric(31)
+weight = numeric(31)
+dw = numeric(31)
+gsi = numeric(31)
+dl_real = numeric(31)
+dl_real_s = numeric(31)
 for (i in years){
   length[i] = fish$length
+  weight[i] = fish$weight
   fish$updateMaturity(5.61)
   fish$grow(0, 5.61)
+  dw[i] = fish$delta_weight
+  gsi[i] = fish$gsi_effective
+  dl_real[i] = fish$dl_real
+  dl_real_s[i] = fish$dl_real_stochastic
   fish$set_age(fish$age+1)
 }
 
-plot(length~years, xlab="Age", ylab="Length", type="l", lwd=2)
+tibble(years, length, weight, dw, gsi, dl_factor = dl_real_s/dl_real) |>
+  pivot_longer(-years) |> 
+  ggplot(aes(x=years, y=value))+
+  geom_point()+
+  geom_line()+
+  facet_wrap(~name, scales="free")
+
 ```
 
 
 Now, since the growth trajectory of a fish depends on the age at which it matures, and since maturation is a random process, let us simulate lots of fish and look at the possible growth trajectories. 
 
 ```{r fig.width=4, fig.height=4}
-growth_trajectories = function(beta1=NULL, beta2=NULL, N=50){
+growth_trajectories = function(beta1=NULL, beta2=NULL, N=50, temp_sd = 3, tsb_min = 0, tsb_max=1.93e3, growth_noise_sd = NULL){
   names = c("t_birth",	"age",	"isMature",	"isAlive",	"length",	"weight", "mort", "temp", "fec", "ssb")
   dat_full = data.frame(data=matrix(nrow=0, ncol=length(names)))
   colnames(dat_full) = names
-  plot(x=1, y=NA, xlim=c(0,31), ylim=c(0,250), xlab="Age", ylab = "Length")
+  plot(x=1, y=NA, xlim=c(0,31), ylim=c(0,300), xlab="Age", ylab = "Length")
   for (f in 1:N){
     fish = new(Fish, params_file)
+    if (!is.null(growth_noise_sd)) fish$par$growth_noise_sd = growth_noise_sd
     if (!is.null(beta1)) fish$par$beta1 = beta1
     if (!is.null(beta2)) fish$par$beta2 = beta2
   
     dat = data.frame(data=matrix(nrow=0, ncol=length(names)))
     colnames(dat) = names
   
-    temp0 = rnorm(1, mean=5.61, sd=3)
-    tsb0 = runif(1, min = 0, max = 1.93e3*3)
+    temp0 = rnorm(1, mean=5.61, sd=temp_sd)
+    tsb0 = runif(1, min = tsb_min, max = tsb_max)
     fish$init(tsb0, temp0)
     dat[1,] = c(fish$get_state(), fish$naturalMortalityRate(5.61), 5.61, 0, 0.8*tsb0) # Assuming SSB is 80% of TSB, since we are not simulating a population
     
     for (i in 2:30){
-      temp = rnorm(1, mean=5.61, sd=3)
-      tsb = runif(1, min = 0, max = 1.93e3*3)
+      temp = rnorm(1, mean=5.61, sd=temp_sd)
+      tsb = runif(1, min = tsb_min, max = tsb_max)
       fish$updateMaturity(temp)
       fish$grow(tsb, temp)
       fish$set_age(fish$age+1)
@@ -151,25 +113,52 @@ growth_trajectories = function(beta1=NULL, beta2=NULL, N=50){
 }
 ```
 
+### Growth trajectories with fixed temp, variable TSB (+density effect), and no growth stochasticity
+
 ```{r}
-dat_full = growth_trajectories(N=50)
+dat_full1 = growth_trajectories(N=50, temp_sd=0, growth_noise_sd = 0)
+
+dat_full1 |>
+  filter(age <= 15) |>
+  ggplot(aes(x=length, group=age, color=age))+
+  geom_density()
 ```
+
+### Growth trajectories with fixed temp, variable TSB (+density effect), and + growth stochasticity
+
+```{r}
+dat_full2 = growth_trajectories(N=50, temp_sd=0, growth_noise_sd = 0.5)
+
+dat_full2 |>
+  filter(age <= 15) |>
+  ggplot(aes(x=length, group=age, color=age))+
+  geom_density()
+```
+
+
+```{r}
+dat_full3 = growth_trajectories(N=50, temp_sd=0, growth_noise_sd = 0.2347)
+
+dat_full3 |>
+  filter(age <= 15) |>
+  ggplot(aes(x=length, group=age, color=age))+
+  geom_density()
+```
+
+
+```{r}
+dat_full = growth_trajectories(N=50, growth_noise_sd = 0.2347)
+
+dat_full |>
+  filter(age <= 15) |>
+  ggplot(aes(x=length, group=age, color=age))+
+  geom_density()
+```
+
 
 ## Decision to mature
 
-Decision to mature is defined by a probabilistic maturation reaction norm (PMRN), with a probability of maturing in the next year depending on age $a$, length $l$, and temperature $T$, given by the following equation,
-
-$$
-m(a,l_a,T) = \frac{1}{1 + e^{-\left(\frac{l_{a} - (s_{m}a + i_{m})}{d_{m}} + \beta_3 \Delta T\right)}},
-$$
-
-with the steepness of the curve $d_m$ calculated as
-
-$$
-d_{m} = \frac{\Delta l_{50}}{\ln{\left( \frac{1 - p}{p} \right) - \ln\left( \frac{p}{1 - p} \right)}}.
-$$
-
-Let us visualize the PMRN.
+Decision to mature is defined by a probabilistic maturation reaction norm (PMRN). Let us visualize the PMRN.
 
 ```{r}
 lvec = seq(0,200, length.out = 100)
@@ -213,62 +202,34 @@ dat_full %>% group_by(age) %>% summarize(maturity = mean(isMature)) %>% with(plo
 dat_full %>% mutate(length_class = cut(length, breaks=20)) %>% group_by(length_class) %>% summarize(maturity = mean(isMature), length=mean(length)) %>% with(plot(maturity~length, ylab="Maturity", xlab="Length", type="l", col="cyan3", lwd=2))
 ```
 
-<!-- ```{r} -->
-<!-- dat_full %>% mutate(length_class = ave(length, cut(length, breaks=20)), temp_class = ave(temp, cut(temp, breaks=10))) %>% group_by(length_class, temp_class) %>% summarize(maturity = mean(isMature)) %>% ggplot() + geom_line(aes(y=maturity, x=length_class, group=temp_class, colour=temp_class))+scale_colour_viridis_c()+theme_classic(base_size = 20)+labs(x="Length", y="Maturity", colour="T") -->
-<!-- ``` -->
-
-Parameters for maturation process are listed in the following
-table:
-
-Parameter          Description
------------------- ---------------------------------------------------
-$\Delta l_{p}$     PMRN width (length range of maturation envelope)
-$p$                probability at lower bound of maturation envelope
-$s_{m}$            PMRN slope
-$i_{m}$            PMRN intercept
-
 
 ## Reproduction and recruitment
 
-Cumulative reproductive investment translates into production of eggs. The fecundity rate (number of eggs produced per year) is given by the following equation:
-
-$$
-f(a,l_a) = \delta g_{a}^{'} \cdot w(l_a)
-$$
-
-where $w(l_a)$ is the weight of the fish of length $l_a$,
-
-$$
-w(l_a) =  \alpha_{2}l_{a}^{\gamma_{2}},
-$$
-
-and $\delta$ is the mass-specific oocyte density of the mature pre-spawning ovary.
-
-Eggs survive the first year with a probability $s_0$ to become recruits.
-Number of recruits additionally also follows a temperature dependence with parameter $\beta_4$ and a Ricker density dependence with parameter $B_{1/2}$,
-
-$$
-n_\text{recruits} = n_\text{eggs}\cdot s_0 \cdot e^{\beta_4 \Delta T} \cdot 2^{-S/B_{1/2}},
-$$  
-
-where $S$ is the spawning stock biomass of the population
-
-$$
-S = \sum_{\text{a >= 3}} w_a I_\text{mature},
-$$
-
-
-
-Parameter                   Description
---------------------------- --------------------------------------------
-$s_0$                       Maximum survival probability of offspring, 
-$B_{1/2}$                   SSB at which survival probability drops to half 
-
-
-
+Cumulative reproductive investment translates into production of eggs. 
 ```{r}
-list(x = seq(0,10, length.out=100), temp = c(4.61, 5.61, 6.61)) %>% cross_df() %>% mutate(y = exp(0.5135*(temp-5.61)) * 2^(-x/0.530)) %>% 
-ggplot(aes(y=y,x=x, col=temp, group=temp)) + geom_line(size=1) + labs(x="Spawning stock biomass (Mt)", y = "Recruits / Recruits_0") + theme_classic(base_size = 20) + scale_colour_viridis_c()
+get_recruits = function(ssb, temp){
+  fish = new(Fish, params_file)
+  # fish$par$growth_noise_sd = 0
+  fish$init(0, temp)
+  for (i in 1:15){
+    fish$updateMaturity(temp*100)
+    fish$grow(ssb/1e6, temp)
+    fish$set_age(fish$age+1)
+    # print(fish$length)
+  }
+  fish$print()
+  fish$produceRecruits(ssb, temp)
+}
+
+list(ssb = seq(0, 5e9, length.out=100), temp = c(4.61, 5.61, 6.61)) %>% 
+  cross_df() %>% 
+  mutate(eggs = purrr::map2_dbl(ssb, temp, ~get_recruits(.x, .y) )) %>% 
+  mutate(eggs0 = purrr::map2_dbl(0, temp, ~get_recruits(.x, .y) )) %>% 
+  ggplot(aes(y=eggs/eggs0,x=ssb, col=temp, group=temp)) + 
+  geom_point(size=2) + 
+  labs(x="Spawning stock biomass (Mt)", y = "Recruits / Recruits_0") + 
+  theme_classic(base_size = 20) + 
+  scale_colour_viridis_c(end=0.9)
 ```
 
 Here is the number of recruits per fish as a function of spawning stock biomass obtained from the growth trajectories above.
@@ -284,64 +245,21 @@ dat_full %>% mutate(ssb_class = ave(ssb, cut(ssb, breaks = 30))) %>% group_by(ag
 
 ## Mortality
 
-We define the mortality rate of juvenile fish at reference temperature $T_\text{ref}$ as
-
-$$
-M_\text{ref} = \mu_0 + \alpha_{3}\left( \frac{l_{a}}{l_{\text{ref}}} \right)^{\gamma_{3}} + \alpha_{4}\left(\alpha_1^2-\alpha_{1,\text{ref}}^2\right) +  \alpha_{5}\left(g_a-g_{a,\text{ref}}\right)
-$$
-
-where parameters have the following meanings
-
-Parameter                   Description
---------------------------- --------------------------------------------
-$\mu_0$                     Length independent intrinsic mortality rate
-$\gamma_{3}$                Allometric exponent of relationship between instantaneous natural mortality rate and body length
-$\alpha_{3}$                Instantaneous natural mortality rate at reference length
-$l_{\text{ref}}$            Reference length for natural mortality
-$\alpha_{4}$                Coefficient of growth-dependent mortality rate
-$\alpha_{1,\text{ref}}$     Reference length of growth-dependent mortality
-$\alpha_{5}$                Coefficient of GSI-dependent mortality rate
-$g_{a,\text{ref}}$          Reference GSI for GSI-dependent mortality
-
-The term $\alpha_4 \alpha_1^2$ represents the additional mortality associated with greater energy acquisition rates (encoding a growth-mortality tradeoff), resulting, for e.g., from greater predation during foraging. Likewise, the term $\alpha_5 g_a$ represents additional mortality related to overinvesting in reproduction, encoding a reproduction-mortality tradeoff. Also, note that these terms essentially guide evolution of life-history strategies, and disappear if traits are fixed at their reference values. 
-
-Then, the juvenile and adult instantaneous natural
-mortality rate is given by the following equation:
-
-$$
-M(a,l_a) = \left\{ 
-\begin{matrix}          
-  M_\text{ref}\left(\frac{T}{T_\text{ref}}\right)^{c_T}, & \mathrm{\text{if juvenile}}, \\   
-  \left(\mu_s\left(\frac{l_0}{l_a}\right) + M_\text{ref} \right)\left(\frac{T}{T_\text{ref}}\right)^{c_T}, &  \mathrm{\text{if mature}} \\
-\end{matrix} 
-\right.\ 
-$$
-
-where the coefficient $\mu_s$ relates to the additional mortality experienced by mature fish in the spawing grounds, and symbols have the following meanings
-
-<!-- QUESTION: Shouldn't we weigh the spawing and feeding grounds terms by the relative time spent in feeding and spawing grounds? -->
-
-Parameter                   Description
---------------------------- --------------------------------------------
-$T_{\text{ref}}$            Reference temperature for natural mortality
-$c_T$                       Exponent of the temperature dependence of mortality
-$\mu_s$                     Mortality rate experienced by mature individuals in the spawning grounds
-$l_0$                       Body length at age 0
-
 
 ```{r fig.height=5, fig.width=6}
 dat_full %>% 
   ggplot(aes(y=mort, x=length, col=temp))+
-  geom_point(alpha=0.5)+
+  geom_point(aes(shape=factor(isMature)), alpha=0.5)+
   geom_jitter()+
   labs(x="Length", y=expression("Inst. natural mortality rate (yr"^"-1"*")"), col="Temp", )+
   theme_classic(base_size = 20)+
   scale_color_viridis_c()+
   scale_y_log10()+
-  scale_x_log10()+
-  facet_grid(cols=vars(isMature), labeller = as_labeller(c(`0`="Immature", `1`="Mature")))
+  scale_x_log10()#+
+  #facet_grid(cols=vars(isMature), labeller = as_labeller(c(`0`="Immature", `1`="Mature")))
 ```
 
+<!-- 
 Instantaneous fishing mortality rate depends on the harvest proportion $h$ and fishing selectivity $\sigma$, and acts on top of natural mortality. Thus, for a given harvest proportion $h$ and minimum size limit $L_{50}$, fishing mortality rate is given by 
 
 $$
@@ -351,15 +269,37 @@ $$
 where $\sigma(l_a)$ is the fishing selectivity,
 
 $$
-\sigma(l_a) = \frac{1}{1+e^{-s(l_a-L_{50})}},
+\sigma(l_a) = \frac{F_1}{1+e^{-F_2(l_a-L_{50})}} - \frac{F_6}{1+e^{-F_4(l_a-F_5)}},
 $$
 
 where $s$ is the Slope of the fishing selectivity curve.
 
 ```{r}
-tibble(length = seq(0,200,length.out=100)) %>% mutate(mort = 1/(1+exp(-0.1222*(length-45)))) %>% ggplot(aes(y=mort, x=length))+geom_line(col="red", size=2)+labs(x="Length", y="Fishing selectivity", col="Temp")+theme_classic(base_size = 20)
+fleet = new(Fleet)
+fleet$readParams(fleet_params_file, F)
+fleet$par$print()
 
-dat_full %>% mutate(sel = 1/(1+exp(-0.1222*(length-45)))) %>% ggplot(aes(y=mort-log(1-0.4)*sel, x=length, col=temp))+geom_point(alpha=0.5)+geom_jitter()+labs(x="Length", y=expression("Inst. total mortality rate (yr"^"-1"*")"), col="Temp")+theme_classic(base_size = 20)+scale_color_viridis_c()+scale_y_log10()+scale_x_log10()
+fleet2 = new(Fleet)
+fleet2$readParams(fleet_params_file, F)
+# fleet2$set_minSizeLimit(65)
+
+bind_rows(
+  tibble(length = seq(0,200,length.out=100)) %>%
+    mutate(mort = purrr::map_dbl(length, ~fleet$fishingMortalityRef(.x))  ) |> 
+    mutate(lmin = 45),
+  tibble(length = seq(0,200,length.out=100)) %>%
+    mutate(mort = purrr::map_dbl(length, ~fleet2$fishingMortalityRef(.x)) ) |>
+    mutate(lmin = 65)
+  ) %>% 
+  ggplot(aes(y=mort, x=length, group=lmin, col=factor(lmin)))+
+  geom_line(size=2)+
+  labs(x="Length", y="Ref fishing mortality rate", col="Lmin")+
+  theme_classic(base_size = 20)
+
+
+dat_full %>% 
+  mutate(sel = purrr::map_dbl(length, ~fleet$fishingMortalityRef(.x))  ) |> 
+  ggplot(aes(y=mort-log(1-0.4)*sel, x=length, col=temp))+geom_point(alpha=0.5)+geom_jitter()+labs(x="Length", y=expression("Inst. total mortality rate (yr"^"-1"*")"), col="Temp")+theme_classic(base_size = 20)+scale_color_viridis_c()+scale_y_log10()+scale_x_log10()
 ```
 
 ### Survival probability
@@ -372,4 +312,4 @@ $$
 where $F$ is the fishing mortality rate.
 
 
-
+ -->

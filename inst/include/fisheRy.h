@@ -2,6 +2,5 @@
 #define FISHERY_FISHERY_H
 
 #include "fish.h"
-#include "population.h"
 
 #endif

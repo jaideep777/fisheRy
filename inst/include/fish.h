@@ -5,10 +5,11 @@
 #include <map>
 #include "functions.h"
 #include "initializer_v2.h"
+#include "cubic_spline.h"
 
 enum class GrowthModel       {Dankel22, Bioenergetic};
 enum class MaturationModel   {Dankel22, Bioenergetic};
-enum class MortalityModel    {Dankel22, Bioenergetic};
+enum class MortalityModel    {Dankel22, Bioenergetic, Empirical};
 enum class RecruitmentModel  {BevertonHoltDirect, BevertonHoltBioenergetic, RickerDirect, RickerBioenergetic};
 
 class FishParams {
@@ -23,7 +24,8 @@ class FishParams {
 
 	std::map<std::string, MortalityModel> mortality_names_map{
 		{"Dankel22",     MortalityModel::Dankel22}, 
-	    {"Bioenergetic", MortalityModel::Bioenergetic}};
+	    {"Bioenergetic", MortalityModel::Bioenergetic},
+		{"Empirical", MortalityModel::Empirical}};
 
 	std::map<std::string, RecruitmentModel> recruitment_names_map{
 		{"BevertonHoltDirect",       RecruitmentModel::BevertonHoltDirect}, 
@@ -32,20 +34,19 @@ class FishParams {
 	    {"RickerBioenergetic",       RecruitmentModel::RickerBioenergetic}};
 	
 	public:
-	// Original parameters (from file) North Arctic cod
-	//double amax = 20;
-	double beta; // = 0.655793; // 0.648728;   
-	double r; // = 0.090367; // 0.077281;
-	double c; // = 6.519584; // 6.318308; //6.51559;
-	double q; // = 1;
-	double k; // = 0.00674;
-	double alpha; // = 3.056863227;
-	double E1; // = 2500;
-	double pmrn_lp50; // = 148.6918; //118.122779;
-	double pmrn_width; // = 47.532614;
-	double pmrn_slope; // = -6.609008;
-	double pmrn_envelope; // = 0.25;
-	double Lref; // = 70.48712; //80;
+	double beta;          ///< Exponent of energy acquisition,estimated,growth and reproduction 
+	double r;             ///< Energetic GSI,estimated,growth and reproduction
+	double c;             ///< Energy acquisition parameter,estimated,growth and reproduction
+	double q;             ///< Energy density of soma compared to gonads,assumed,growth and reproduction
+	double k;             ///< Length-weight coefficient,estimated,growth and reproduction
+	double alpha;         ///< Length-weight exponent,estimated,growth and reproduction
+	double E1;            ///< Number of eggs per unit weight of gonad ,Enberg et al. 2009,growth and reproduction
+	double pmrn_lp50;     ///< PMRN midpoint
+	double pmrn_width;    ///< PMRN width
+	double pmrn_slope;    ///< PMRN slope
+	double pmrn_envelope; ///< PMRN envelope
+	double Lref;          ///< Reference length in mortality function
+	double growth_noise_sd;
 	
 //	// Pure power law
 //	double Mref = 0.20775; // ////0.1421; //<--old value from file
@@ -53,14 +54,14 @@ class FishParams {
 //	double M0   = 0; //
 	
 	// Power law + offset
-	double Mref; // = 0.062994; // 0.20775; // ////0.1421; //<--old value from file
-	double b; //    = 2.455715; // 1.58127; //////1.8131;
-	double M0; //   = 0.162126; //  0; //
+	double Mref; ///< Coefficient of length-dependent mortality rate
+	double b;    ///< Exponent of length-dependent mortality rate
+	double M0;   ///< Length independent mortality rate
 
 	// Juvenile length and survival probability 
-	double L0; // = 9.1;
-	double s0; // = 0.08094733; // 0.02; // 0.09637
-	double Bhalf; // = 187837572; //3.65e8;  // Bhalf for recruitment 
+	double L0;    ///< Length at initial age
+	double s0;    ///< Egg survival probability
+	double Bhalf; ///< SSB at which recruitment falls by 50% 
 
 	// temperature and density dependence of growth
 	double beta1; // = -7.07e-5;
@@ -71,34 +72,33 @@ class FishParams {
 	// temperature dependence of mortality
 	double cT; // = 0.196;
 	double Tref; // = 5.61;
-		
+
 	// growth 
-	double gamma1; // = 0.33333;
-	double gamma2; // = 3.519072971;
-	double alpha1; // = 3.464594;
-	double alpha2; // = 0.00156;
-	double gsi; // = 0.464097;
+	double gamma1; ///< = 1-beta
+	double gamma2; ///< = alpha
+	double alpha1; ///< = c
+	double alpha2; ///< = k
+	double gsi;    ///< = r/q
 
 	// maturation
-	double pmrn_intercept; // = 18.399575;
-	double steepness;  // calculated by constructor
+	double pmrn_intercept; ///< = pmrn_lp50
+	double steepness;      ///< steepness of the PMRN, calculated during initialization
 	double beta3;
 
 	// reproducttion
-	double delta; // = 1820;
-	double beta4;
+	double delta; ///< = E1
+	double beta4; ///< 
 	
 	// mortality
-	double gamma3; // = -1.20565;
-	double alpha3; // = 0.57792;
-//	double lref   = 18.25037;
+	double gamma3; ///< = -b
+	double alpha3; ///< = Mref
 	double alpha4;
 	double alpha1_ref;
 	double alpha5;
 	double gsi_ref;
-	double Mspawning;
+	double Mspawning; ///< Natural mortality rate due to spawning
 
-	// *********** OLD MODEL *****************
+	// *********** OLD MODEL (dankel) *****************
 	// biology
 	double theta = 8.10e-6; // kg/cm 
 	double zeta  = 3.01; 
@@ -156,6 +156,9 @@ class Fish{
 
 	public:
 	FishParams par;   ///< Parameters object that holds all necessary fish parameters
+
+	double natural_mort_scalar = 1;
+	static Spline mort_fn_spline; // Spline to store empirical mortality function, if using it
 	
 	// state variables
 	// TODO: age and length should be made private with getter/setters
@@ -164,13 +167,17 @@ class Fish{
 	double gsi_effective = 0;  ///< Effective GSI (saved from previous growth calculation)
 
 	double dl_real,            ///< Linear length increment (\f$l_a-l_{a-1}\f$) calculated with actual density. 
-	       dl_potential;       ///< Linear length increment (\f$l_a-l_{a-1}\f$) calculated with 0 density (tsb = 0). 
+	       dl_potential,       ///< Linear length increment (\f$l_a-l_{a-1}\f$) calculated with 0 density (tsb = 0). 
+	       dl_real_stochastic; ///< Linear length increement after growth noise
 
 	// physiological variables
 	double weight;	           ///< weight in kg
+	double delta_weight = 0;   ///< weight increment in kg due to growth
 
 	bool isMature = false;     ///< Flag indicating whether the fish is mature
 	bool isAlive = true;       ///< Flag indicating whether the fish is alive
+	bool isCaught = false;      ///< Flag indicating whether the fish was caught during fishing or died of natural mortality (to be used in conjunction with !isAlive)
+	double fraction_caught = 0; ///< What fraction of this (super)fish is caught? Needed for computing catch metrics
 
 	double t_birth;            ///< Year of birth (not used)
 
@@ -181,9 +188,11 @@ class Fish{
 	// Fish(double tb = 0);
 	
 	/// Construct a fish and initialize parameters using a parameters file
-	Fish(std::string params_file); 
+	Fish(std::string params_file);
+	void setMortalityParams(double _Mref, double _M0, double _b);
+    void setMortalityCurveEmpirical(std::string mort_file);
 
-	/// @brief Set fish age and other variables that scale directly with age
+    /// @brief Set fish age and other variables that scale directly with age
 	void set_age(int _a);      
 	/// @brief Set fish length and other variables that scale directly with length
 	void set_length(double s); 
@@ -192,12 +201,12 @@ class Fish{
 	std::vector<double> get_traits();
 
 	/// @brief Initializes the fish, i.e., initializes parameters and sets the initial state (age = 1, length)
-	/// @param tsb Total stock biomass at birth (kT i.e. 10^6 kg)
+	/// @param tsb Total stock biomass (in the environment) at birth [kT i.e. 10^6 kg]
 	/// @param temp Temperature at birth (deg C)
 	void init(double tsb, double temp);
 	
 	/// @brief Implement growth, i.e., set new length and effective GSI after 1 year of growth.
-	/// @param tsb Total stock biomass during the growing season (kT i.e. 10^6 kg)
+	/// @param tsb Total stock biomass during the growing season [kT i.e. 10^6 kg]
 	/// @param temp Temperature during the growing season (deg C)
 	void grow(double tsb, double temp);
 
@@ -209,7 +218,9 @@ class Fish{
 	void updateMaturity(double temp);	
 	
 	/// @brief Calculate the instantaneous matural mortality rate
-	double naturalMortalityRate(double temp);
+	/// @param temp The environmental temperature.
+	/// @return The natural mortality rate of the fish.
+	double naturalMortalityRate(double temp) const;
 
 	/// @brief Calculate the number of surviving recruits produced based on egg production and offspring survival until recruitment.
 	/// @param ssb Total spawning stock biomass \f$S\f$ of the population (kg)

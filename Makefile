@@ -1,10 +1,13 @@
 #-------------------------------------------------------------------------------
 # executable name
-TARGET := 1
+TARGET := libfishery.a
 
 # files
 SRCFILES  :=  src/fish.cpp \
-              src/population.cpp  # $(filter-out src/RcppExports.cpp src/fish_glue.cpp, $(wildcard src/*.cpp))
+              src/random_utils.cpp \
+			  src/stock.cpp \
+			  src/fleet.cpp \
+		      src/fishery_system.cpp  # $(filter-out src/RcppExports.cpp src/fish_glue.cpp, $(wildcard src/*.cpp))
 HEADERS := $(wildcard inst/include/*.h) $(wildcard tests/*.h)
 # ------------------------------------------------------------------------------
 
@@ -16,7 +19,7 @@ INC_PATH :=  -I./inst/include #-I./CppNumericalSolvers-1.0.0
 LIB_PATH :=  
 
 # flags
-CPPFLAGS = -O3 -g -pg -std=c++11 -Wno-sign-compare -Wno-unused-variable -Wno-unused-but-set-variable -DNATIVE_CPP
+CPPFLAGS = -O3 -g -pg -std=c++17 -Wno-sign-compare -Wno-unused-variable -Wno-unused-but-set-variable -DNATIVE_CPP
 LDFLAGS =  -g -pg
 
 # libs
@@ -33,7 +36,7 @@ dir:
 	mkdir -p lib build tests/build
 
 $(TARGET): $(OBJECTS) 
-	g++ $(LDFLAGS) -o $(TARGET) $(LIB_PATH) $(OBJECTS) $(LIBS) 
+#	g++ $(LDFLAGS) -o $(TARGET) $(LIB_PATH) $(OBJECTS) $(LIBS)
 
 $(OBJECTS): build/%.o : src/%.cpp $(HEADERS)
 	g++ -c $(CPPFLAGS) $(INC_PATH) $< -o $@ 
@@ -46,8 +49,8 @@ re: clean all
 superclean: clean testclean
 
 website:
-	# R -e "Sys.setenv(RSTUDIO_PANDOC='/usr/lib/rstudio/resources/app/bin/quarto/bin/tools'); print(Sys.getenv('RSTUDIO_PANDOC')); pkgdown::clean_site(); pkgdown::init_site(); pkgdown::build_home(); pkgdown::build_articles(); pkgdown::build_tutorials(); pkgdown::build_news()"
 	doxygen	doxygen/Doxyfile
+	R -e "Sys.setenv(RSTUDIO_PANDOC='/usr/lib/rstudio/resources/app/bin/quarto/bin/tools'); print(Sys.getenv('RSTUDIO_PANDOC')); pkgdown::clean_site(); pkgdown::init_site(); pkgdown::build_home(); pkgdown::build_articles(); pkgdown::build_tutorials(); pkgdown::build_news()"
 
 ## TESTING SUITE ##
 

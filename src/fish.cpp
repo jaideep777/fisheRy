@@ -2,10 +2,15 @@
 #include <iostream>
 #include <cmath>
 #include <stdexcept>
+#include "read_csv.h"
+#include "random_utils.h"
+
 using namespace std;
 
 
 // ************************ Fish ***************************
+
+Spline Fish::mort_fn_spline; // Spline to store empirical mortality function, if using it
 
 // Fish::Fish(double tb){
 // 	t_birth = tb;
@@ -19,12 +24,21 @@ Fish::Fish(string params_file){
 	//par.print();
 }
 
-//Fish::Fish(double xb, double tb){
-	//set_age(
-	//set_length(xb);
-	//t_birth = tb;
-	//age = 0;
-//}
+
+void Fish::setMortalityParams(double _Mref, double _M0, double _b){
+	par.Mref = _Mref;
+	par.M0 = _M0;
+	par.b = _b;
+	par.alpha3 = _Mref;
+	par.gamma3 = -_b;
+}
+
+void Fish::setMortalityCurveEmpirical(std::string filename){
+	auto v = read_csv_numeric(filename);
+
+	mort_fn_spline.splineType = Spline::LINEAR;
+	mort_fn_spline.set_points(v[0], v[1]);
+}
 
 
 void Fish::init(double tsb, double temp){
@@ -33,14 +47,18 @@ void Fish::init(double tsb, double temp){
 	/// - Initialization sets age to 1. In Dankel et al model, this will also set length.
 	set_age(1);
 	
-	/// - In Joshi et al model, length at age 1 is explicitly calculated using length, temperature, and TSB, at birth.
+	/// - In Joshi et al model, length at age 1 needs to be explicitly calculated
+	/// - According to email communication with Mikko (dated 26/2/2024):
+	///     At the time of the survey from where the data originated, the youngest cohort are about 1/2 year old. 
+	///     If we break year at the survey time, then they have integer age of 1 year.
+	///     Therefore, the parameter par.L0 is the length of age 1 individuals
 	if (par.growth_model == GrowthModel::Bioenergetic){
-		// calc length at age 1
-		double tsb_ano = tsb - par.tsbmean;
-		double temp_ano = temp - par.Tmean;
-		double dl = fish::dl_power(tsb_ano, temp_ano, par.gamma1, par.gamma2, par.alpha1, par.alpha2, par.beta1, par.beta2);
-		double l1 = fish::length_juvenile(par.L0, dl, par.gamma1, par.gamma2);
-
+		// // calc length at age 1
+		// double tsb_ano = tsb - par.tsbmean;
+		// double temp_ano = temp - par.Tmean;
+		// double dl = fish::dl_power(tsb_ano, temp_ano, par.gamma1, par.gamma2, par.alpha1, par.alpha2, par.beta1, par.beta2);
+		// double l1 = fish::length_juvenile(par.L0, dl, par.gamma1, par.gamma2);
+		double l1 = par.L0;
 		set_length(l1);
 	}
 }
@@ -54,6 +72,8 @@ void Fish::set_age(int _a){
 		length = par.l8*(1-exp(-par.kappa*(age-par.a0)));
 		set_length(length);
 	}
+
+	delta_weight = 0;
 }
 
 void Fish::set_length(double s){
@@ -92,7 +112,17 @@ vector<double> Fish::get_traits(){
 }
 
 
-double Fish::naturalMortalityRate(double temp){
+/// Formulas:
+/// For the `Bioenergetic` model:
+/// \f[
+/// \text{rate} = \left( M_0 + 
+///                      \alpha_3 \left( \frac{L}{L_{\text{ref}}} \right)^{\gamma_3} + 
+///                      \alpha_4 \left( \alpha_1^2 - \alpha_{1,\text{ref}}^2 \right) + 
+///                      \alpha_5 \left( \text{GSI} - \text{GSI}_{\text{ref}} \right) 
+///                    \right) \left( \frac{T}{T_{\text{ref}}} \right)^{c_T}
+/// \f]
+/// @throws std::runtime_error If an invalid mortality model is specified.
+double Fish::naturalMortalityRate(double temp) const{
 	double rate;
 	if (age > par.amax) return 1e20; // FIXME: use inf
 	else {
@@ -103,12 +133,16 @@ double Fish::naturalMortalityRate(double temp){
 		}
 		else if (par.mortality_model == MortalityModel::Bioenergetic){
 			//return fish::natural_mortality(length, temp, par.M0, par.gamma3, par.alpha3, par.Lref, par.Tref, par.cT);
-			return (par.Mspawning*double(isMature)*(par.L0/length) + 
-			        par.M0 + 
+			// Note: Mortality due to spawning is not included here, it is treated separately in the reproduction part of the population update.
+			return (par.M0 + 
 					par.alpha3 * pow(length / par.Lref, par.gamma3) + 
 					par.alpha4*(par.alpha1*par.alpha1 - par.alpha1_ref*par.alpha1_ref) + 
 					par.alpha5*(par.gsi - par.gsi_ref)
 					) * pow(temp/par.Tref, par.cT);
+		}
+		else if (par.mortality_model == MortalityModel::Empirical){
+			if (mort_fn_spline.npoints == 0) throw std::runtime_error("Natural mortility function is set to empirical but spline is not set.");
+			return natural_mort_scalar * (mort_fn_spline.eval(length) - mort_fn_spline.eval(1000)) + par.M0;
 		}
 		else{
 			throw std::runtime_error("Invalid mortality model specified");
@@ -153,6 +187,7 @@ void Fish::updateMaturity(double temp){
 /// i.e., there is not density constraint on growth. real increment is calculated using the actual tsb.
 /// Actual length increment is based on the real increment. Potential increment is for analysis purposes.
 void Fish::grow(double tsb, double temp){
+	double weight_before = weight;
 	if (par.growth_model == GrowthModel::Dankel22){
 		// do nothing. age is incremented by population update
 		gsi_effective = par.gsi; // required if new fecundity model is used in combination with old growth model
@@ -162,31 +197,42 @@ void Fish::grow(double tsb, double temp){
 		double temp_ano = temp - par.Tmean;
 		
 		// This is generalized increment l2^y1y2 - l1^y1y2
-		double dl     = fish::dl_power(tsb_ano,      temp_ano, par.gamma1, par.gamma2, par.alpha1, par.alpha2, par.beta1, par.beta2);
-		double dl_pot = fish::dl_power(-par.tsbmean, temp_ano, par.gamma1, par.gamma2, par.alpha1, par.alpha2, par.beta1, par.beta2);
+		double dl_nonlinear     = fish::dl_power(tsb_ano,      temp_ano, par.gamma1, par.gamma2, par.alpha1, par.alpha2, par.beta1, par.beta2);
+		double dl_pot_nonlinear = fish::dl_power(-par.tsbmean, temp_ano, par.gamma1, par.gamma2, par.alpha1, par.alpha2, par.beta1, par.beta2);
 		
-		double lnew, lnew_pot;
-		if (isMature){
-			lnew     = fish::length_adult(length, dl,     par.gamma1, par.gamma2, par.gsi);
-			lnew_pot = fish::length_adult(length, dl_pot, par.gamma1, par.gamma2, par.gsi);
-		}
-		else{
-			lnew     = fish::length_juvenile(length, dl,     par.gamma1, par.gamma2);
-			lnew_pot = fish::length_juvenile(length, dl_pot, par.gamma1, par.gamma2);
-		}
+		// Calculate new length if there was no reproductive investment
+		double lnew, lnew_pot; // Real and potential increments are with and without density effects
+		lnew     = fish::length_juvenile(length, dl_nonlinear,     par.gamma1, par.gamma2);
+		lnew_pot = fish::length_juvenile(length, dl_pot_nonlinear, par.gamma1, par.gamma2);
 
-		// ------ This is linear increment, just for analysis --------
+		// Calculate linear increment (real and potential)
 		dl_real      = lnew     - length;
-		dl_potential = lnew_pot - length;
+		dl_potential = lnew_pot - length; // This is only for assessing density effect
 		//cout << "tsb_ano = " << tsb << " / " << par.tsbmean << ", fac = " << dl_real << " / " << dl_potential << endl; 
-		// -----------------------------------------------------------
 
-		gsi_effective = fish::gsi(lnew, length, dl, par.gamma1, par.gamma2, par.alpha1, par.alpha2);
-		set_length(lnew);
+		// add environmental noise on real growth
+		dl_real_stochastic = dl_real*std::clamp(rnorm(1, par.growth_noise_sd), 0.0, 5.0);
+
+		// Recalculate new length based on linear length increment
+		double lnew_stochastic = length + dl_real_stochastic;
+		double dl_juvenile_nonlinear_stochastic = pow(lnew_stochastic, par.gamma1*par.gamma2) - pow(length, par.gamma1*par.gamma2);
+
+		// If fish is mature, length increment is reduced due to reproductive investment
+		if (isMature){
+			lnew_stochastic /= pow(1 + par.gamma1*par.gsi, 1/(par.gamma1*par.gamma2));
+			lnew_stochastic = std::max(lnew_stochastic, length);
+		}
+
+		// Effective gsi - should be 0 for juveniles and par.gsi for adults
+		gsi_effective = fish::gsi(lnew_stochastic, length, dl_juvenile_nonlinear_stochastic, par.gamma1, par.gamma2, par.alpha1, par.alpha2);
+
+		// Set new length
+		set_length(lnew_stochastic);
 	}
 	else{
 		throw std::runtime_error("Invalid growth model specified");
 	}
+	delta_weight = weight - weight_before;
 	/// This function does not increment age as growth can happen during the beginning of the year. 
 	/// Age is incremented separately in the population update at the end of the year.
 }
@@ -198,6 +244,36 @@ void Fish::grow(double tsb, double temp){
 /// The number of surviving eggs is then calculated by applying two survival probabilities:
 /// - \f$s_0\f$ is the survival probability of offspring until recruitment
 /// - \f$1/(1+S/B_{1/2})\f$ is the probability of survival during recruitment. This is modelled as a Beverton-Holt function.
+///
+/// Formulas:
+///
+/// For the `BevertonHoltDirect` model:
+/// \f[
+/// \text{recruits} = r_0 \cdot w \cdot \frac{1}{1 + \frac{\text{ssb}}{B_{\text{half}}}}
+/// \f]
+///
+/// For the `RickerDirect` model:
+/// \f[
+/// \text{recruits} = r_0 \cdot w \cdot \exp(\beta_4 \cdot (T - T_{\text{ref}})) \cdot 2^{-\frac{\text{ssb}}{B_{\text{half}}}}
+/// \f]
+///
+/// For the `BevertonHoltBioenergetic` model:
+/// \f[
+/// \text{eggs} = \text{fecundity}(w, \delta, \text{gsi}_{\text{effective}})
+/// \f]
+/// \f[
+/// \text{recruits} = \text{eggs} \cdot s_0 \cdot \frac{1}{1 + \frac{\text{ssb}}{B_{\text{half}}}}
+/// \f]
+///
+/// For the `RickerBioenergetic` model:
+/// \f[
+/// \text{eggs} = \text{fecundity}(w, \delta, \text{gsi}_{\text{effective}})
+/// \f]
+/// \f[
+/// \text{recruits} = \text{eggs} \cdot s_0 \cdot \exp(\beta_4 \cdot (T - T_{\text{ref}})) \cdot 2^{-\frac{\text{ssb}}{B_{\text{half}}}}
+/// \f]
+///
+/// @throws std::runtime_error If an invalid recruitment model is specified.
 double Fish::produceRecruits(double ssb, double temp){
 	double temp_ano = temp - par.Tref;
 	if (par.recruitment_model == RecruitmentModel::BevertonHoltDirect){
@@ -282,7 +358,8 @@ void FishParams::initFromFile(std::string params_file){
 	READ_PAR(pmrn_slope); // = -6.609008;
 	READ_PAR(pmrn_envelope); // = 0.25;
 	READ_PAR(Lref); // = 70.48712; //80;
-	
+	READ_PAR(growth_noise_sd);
+
 	// Power law + offset
 	READ_PAR(Mref); // = 0.062994; // 0.20775; // ////0.1421; //<--old value from file
 	READ_PAR(b); //    = 2.455715; // 1.58127; //////1.8131;
@@ -353,6 +430,7 @@ void FishParams::print(){
 	PRINT_PAR(pmrn_slope); // = -6.609008;
 	PRINT_PAR(pmrn_envelope); // = 0.25;
 	PRINT_PAR(Lref); // = 70.48712; //80;
+	PRINT_PAR(growth_noise_sd);
 	
 	// Power law + offset
 	PRINT_PAR(Mref); // = 0.062994; // 0.20775; // ////0.1421; //<--old value from file

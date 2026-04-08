@@ -1,0 +1,407 @@
+---
+title: "Effort control: fishing until quota is filled - fleet implementation"
+author: "Jaideep Joshi"
+date: "28 October 2024"
+output: html_document
+editor_options:
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include = F, echo = F}
+library(fisheRy)
+library(tidyverse)
+source(here::here("tests/ref/parameters.cod.R"))
+source(here::here("tests/ref/simulator.7.R"))
+```
+
+
+```{r}
+params_file = here::here("params/cod_params.ini")
+params_file_fleet = here::here("params/fleet_1_params.ini")
+```
+
+## Initialize a population
+
+To simulate a fished population, we start with creating a fish and constructing a population from it, as usual.
+
+```{r }
+fish = new(Fish, params_file)
+fish$setMortalityCurveEmpirical(here::here("data/naturalmort.spline.csv"))
+
+pop = new(Stock, fish)
+pop$readParams(params_file, F)
+pop$superfish_size = 1e6  # Each superfish contains so many fish
+
+pop$superfish_size
+
+```
+
+## Perform Spinup
+
+For simulating fishing, it is important for the population to start with a realistic state distribution. Therfore, we "spin-up" the population under no-fishing conditions. 
+
+```{r}
+v = pop$equilibriate_without_fishing(5.61) |> matrix(nrow=200, byrow=T) |> as.data.frame() |> setNames(c("ssb", "tsb", "maturity", "nr", "dr", "nfish"))
+```
+
+Let's see how the population state looks after no-fishing equilibrium.
+
+```{r fig.height=9}
+d = pop$get_state()
+dist = table(d$age, d$length)
+
+par(mfrow = c(5,1), mar=c(5,5,1,1), oma=c(1,1,1,1), cex.lab=1.5, cex.axis=1.5)
+plot(v$nfish~seq(1,200,1), ylab="No. of superfish", xlab="Year", type="l", col=c("cyan3"))
+plot(v$maturity~seq(1,200,1), ylab="Maturity", xlab="Year", type="l", col=c("cyan3"))
+plot(I(v$nr/1e9)~seq(1,200,1), ylab="Recruitment", xlab="Year", type="l", col=c("cyan3"))
+plot(v$dr~seq(1,200,1), ylab="actual/potential", xlab="Year", type="l", col=c("cyan3"))
+
+res = simulate(0, 45, F)
+matplot(cbind(v$ssb/1e9, res$summaries$SSB[1:200]/1e9), ylab="SSB (MT)", xlab="Year", col=c("cyan3", "black"), lty=1, type=c("p","l"), pch=1)
+
+```
+
+
+### Set fishing parameters
+
+Set a harvest proportion that will determine the fishing quota.
+
+```{r}
+# selectivity
+F1 = 0.6901
+F2 = 0.06517
+F3 = 68.81
+F4 = 0.4151
+F5 = 112.8
+F6 = 0.4381674
+lmin = 45
+```
+
+
+```{r}
+h = 0.2
+F_fgf = -log(1-h)
+ssb_nf = pop$calcSSB(3)
+quota = h*ssb_nf
+
+progress_names = c("fish_age",
+                   "B",
+                   "B_sampled",
+                   "yield",
+                   "yield_expected",
+                   "chi",
+                   "chi_window",
+                   "b_sampled_window",
+                   "b_start_window",
+                   "yield_window",
+                   "fishing_mort_window")
+```
+
+## Mock fish the population to calculate fishing mortality rate (linear model)
+
+Using the linear control model
+
+$Y/B_s = k \chi$
+
+```{r}
+fleet = new(Fleet)
+fleet$readParams(params_file_fleet, F) 
+fleet$set_referenceFishingMortalityCurveLogistic(F1,F2,F3,F4,F5,F6,lmin)
+fleet$par$print()
+fleet$par$control_model = "linear"
+fleet$chi = 100
+fleet$init_chi(pop, F_fgf, 5.61)
+k_unfished = fleet$biomassFishable(pop, 0, FALSE)
+
+print(k_unfished/1e9)
+```
+
+```{r}
+out = fleet$harvest_dry_run(pop, quota, 5.61, TRUE)
+
+df = as.data.frame(matrix(data = out, ncol=length(progress_names), byrow = T))
+colnames(df) = progress_names
+
+print((df$B |> first())/1e9)
+
+df %>% 
+  mutate(fish = 1:n()) %>% 
+  mutate(yield_err_pc = (yield-yield_expected)/yield_expected*100) %>%
+  select(-B) %>% 
+  pivot_longer(-fish) %>% 
+  ggplot(aes(x=fish, y=value))+
+  geom_line()+
+  facet_wrap(~name, scales="free_y")
+
+table(df$chi)
+
+
+fleet$effort_constantC(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
+fleet$effort_constantF(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
+
+```
+
+
+Try one more time
+
+```{r}
+fleet = new(Fleet)
+fleet$readParams(params_file_fleet, F) 
+fleet$set_referenceFishingMortalityCurveLogistic(F1,F2,F3,F4,F5,F6,lmin)
+fleet$par$print()
+fleet$par$control_model = "linear"
+fleet$chi = 100
+fleet$init_chi(pop, F_fgf, 5.61)
+k_unfished = fleet$biomassFishable(pop, 0, FALSE)
+
+out = fleet$harvest_dry_run(pop, quota, 5.61, TRUE)
+
+df = as.data.frame(matrix(data = out, ncol=length(progress_names), byrow = T))
+colnames(df) = progress_names
+
+df %>% 
+  mutate(fish = 1:n()) %>% 
+  mutate(yield_err_pc = (yield-yield_expected)/yield_expected*100) %>%
+  select(-B) %>% 
+  pivot_longer(-fish) %>% 
+  ggplot(aes(x=fish, y=value))+
+  geom_line()+
+  facet_wrap(~name, scales="free_y")
+
+table(df$chi)
+
+
+fleet$effort_constantC(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
+fleet$effort_constantF(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
+
+```
+
+
+## Mock fish the population to calculate fishing mortality rate (exp model)
+
+Using the exponential control model
+
+```{r}
+fleet = new(Fleet)
+fleet$readParams(params_file_fleet, F) 
+fleet$set_referenceFishingMortalityCurveLogistic(F1,F2,F3,F4,F5,F6,lmin)
+fleet$par$print()
+fleet$par$control_model = "exp"
+fleet$chi = 100
+fleet$init_chi(pop, F_fgf, 5.61)
+k_unfished = fleet$biomassFishable(pop, 0, FALSE)
+
+out = fleet$harvest_dry_run(pop, quota, 5.61, TRUE)
+
+df = as.data.frame(matrix(data = out, ncol=length(progress_names), byrow = T))
+colnames(df) = progress_names
+
+df %>% 
+  mutate(fish = 1:n()) %>% 
+  mutate(yield_err_pc = (yield-yield_expected)/yield_expected*100) %>%
+  select(-B) %>% 
+  pivot_longer(-fish) %>% 
+  ggplot(aes(x=fish, y=value))+
+  geom_line()+
+  facet_wrap(~name, scales="free_y")
+
+table(df$chi)
+
+# df %>% 
+#   ggplot(aes(x=yield/k_unfished, y=catch_rate_constantF)) +
+#   geom_point()+
+#   geom_abline(slope=1, intercept=0, col="red")
+
+fleet$effort_constantC(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
+fleet$effort_constantF(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
+
+```
+
+## Calculate error characteristics 
+
+```{r}
+pc_error = function(i, mode, h, slope, empirical_F_file = ""){
+  # quota = h*ssb_nf
+  F_fgf = -log(1-h)
+
+  fleet = new(Fleet)
+  fleet$readParams(params_file_fleet, F) 
+  if (empirical_F_file == ""){
+    fleet$set_referenceFishingMortalityCurveLogistic(F1,F2,F3,F4,F5,F6,lmin)
+  } else {
+    fleet$set_referenceFishingMortalityCurveEmpirical(empirical_F_file, lmin)
+  } 
+  fleet$par$control_model = mode
+  fleet$par$chi0_scalar_slope = slope
+  fleet$init_chi(pop, F_fgf, 5.61)
+  k_unfished = fleet$biomassFishable(pop, 0, FALSE)
+
+  quota = h * k_unfished
+
+  out = fleet$harvest_dry_run(pop, quota, 5.61, TRUE)
+
+  df = as.data.frame(matrix(data = out, ncol=length(progress_names), byrow = T))
+  colnames(df) = progress_names
+
+
+  data.frame(
+    err = df %>% 
+        mutate(yield_err_pc = (yield-yield_expected)/yield_expected*100) %>% 
+        pull(yield_err_pc) %>% 
+        tail(1),
+    effort_c = fleet$effort_constantC(2.83e-6, 0.75, k_unfished)*fleet$par$dsea,
+    effort_f = fleet$effort_constantF(2.83e-6, 0.75, k_unfished)*fleet$par$dsea
+  )
+}
+```
+
+### Try exponential model
+
+$Y/B_s = 1-e^{-k \chi}$
+
+```{r}
+niterations = 100
+
+res_exp = tibble(i = 1:niterations) %>%
+  mutate(res = map(i, ~pc_error(.x, mode="exp", h=h, slope=0))) %>%
+  unnest(res)
+
+print(
+res_exp %>%
+  ggplot(aes(x=err)) +
+  geom_histogram(bins=20) +
+  labs(title="Exp model", x="Error (%)", y="Frequency")
+)
+```
+
+```{r}
+res = expand.grid(h = seq(0.1, 0.99, length.out=10), i = 1:niterations) |>
+  mutate(res = purrr::pmap(list(i, mode="exp", h, slope=0), pc_error)) |>
+  unnest(res)
+
+res |>
+  ggplot(aes(x=factor(h), y=err)) +
+  geom_violin() +
+  stat_summary(fun=mean, geom="point", shape=23, size=2, fill="red") +
+  labs(x="Harvest rate (h)", y="Error (%)", title="Error distribution (Exp model)")
+
+res |> 
+  ggplot(aes(x=effort_c, y=effort_f)) +
+  geom_point()+
+  geom_abline(slope = 1, intercept = 0, col="red")
+```
+
+
+### Try linear model
+
+$Y/B_s = k \chi$
+
+
+```{r}
+res_linear = tibble(i = 1:niterations) %>%
+  mutate(res = map(i, ~pc_error(.x, mode="linear", h=h, slope=0.8))) %>%
+  unnest(res)
+
+res_linear %>%
+  ggplot(aes(x=err)) +
+  geom_histogram(bins=20) +
+  labs(title="linear model", x="Error (%)", y="Frequency")
+```
+
+```{r}
+res = expand.grid(h = seq(0.1, 0.99, length.out=10), i = 1:niterations) |>
+  mutate(res = purrr::pmap(list(i, mode="linear", h, slope=0.8), pc_error)) |>
+  unnest(res)
+
+res |>
+  ggplot(aes(x=factor(h), y=err)) +
+  geom_violin() +
+  stat_summary(fun=mean, geom="point", shape=23, size=2, fill="red") +
+  labs(x="Harvest rate (h)", y="Error (%)", title="Error distribution (Linear model)")
+
+res |> 
+  ggplot(aes(x=effort_c, y=effort_f)) +
+  geom_point()+
+  geom_abline(slope = 1, intercept = 0, col="red")
+```
+
+
+### Exponential model with empirical fishing mortality
+
+$Y/B_s = 1-e^{-k \chi}$
+
+```{r}
+niterations = 100
+
+res_exp = tibble(i = 1:niterations) %>%
+  mutate(res = map(i, ~pc_error(.x, mode="exp", h=h, slope=0, empirical_F_file = here::here("data/selection.spline.csv")))) %>%
+  unnest(res)
+
+print(
+res_exp %>%
+  ggplot(aes(x=err)) +
+  geom_histogram(bins=20) +
+  labs(title="Exp model", x="Error (%)", y="Frequency")
+)
+```
+
+```{r}
+res = expand.grid(h = seq(0.1, 0.99, length.out=10), i = 1:niterations) |>
+  mutate(res = purrr::pmap(list(i, mode="exp", h, slope=0, empirical_F_file = here::here("data/selection.spline.csv")), pc_error)) |>
+  unnest(res)
+
+res |>
+  ggplot(aes(x=factor(h), y=err)) +
+  geom_violin() +
+  stat_summary(fun=mean, geom="point", shape=23, size=2, fill="red") +
+  labs(x="Harvest rate (h)", y="Error (%)", title="Error distribution (Exp model)")
+
+res |> 
+  ggplot(aes(x=effort_c, y=effort_f)) +
+  geom_point()+
+  geom_abline(slope = 1, intercept = 0, col="red")
+```
+
+
+### Exponential model with REDUCED empirical fishing mortality
+
+$Y/B_s = 1-e^{-k \chi}$
+
+```{r}
+niterations = 100
+
+res_exp = tibble(i = 1:niterations) %>%
+  mutate(res = map(i, ~pc_error(.x, mode="exp", h=h, slope=0, empirical_F_file = here::here("data/selection.spline.reduced.csv")))) %>%
+  unnest(res)
+
+print(
+res_exp %>%
+  ggplot(aes(x=err)) +
+  geom_histogram(bins=20) +
+  labs(title="Exp model", x="Error (%)", y="Frequency")
+)
+```
+
+```{r}
+res = expand.grid(h = seq(0.1, 0.99, length.out=10), i = 1:niterations) |>
+  mutate(res = purrr::pmap(list(i, mode="exp", h, slope=0, empirical_F_file = here::here("data/selection.spline.reduced.csv")), pc_error)) |>
+  unnest(res)
+
+res |>
+  ggplot(aes(x=factor(h), y=err)) +
+  geom_violin() +
+  stat_summary(fun=mean, geom="point", shape=23, size=2, fill="red") +
+  labs(x="Harvest rate (h)", y="Error (%)", title="Error distribution (Exp model)")
+
+res |> 
+  ggplot(aes(x=effort_c, y=effort_f)) +
+  geom_point()+
+  geom_abline(slope = 1, intercept = 0, col="red")
+```
+
+
+

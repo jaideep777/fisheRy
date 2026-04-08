@@ -1,0 +1,199 @@
+---
+title: "Fleet based fishing: fishing selectivity and fishing mortality curve"
+author: "Jaideep Joshi"
+date: "28 October 2024"
+output: html_document
+editor_options:
+  chunk_output_type: inline
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include = F, echo = F}
+library(fisheRy)
+library(tidyverse)
+source(here::here("tests/ref/parameters.cod.R"))
+source(here::here("tests/ref/simulator.7.R"))
+```
+
+
+```{r}
+params_file = here::here("params/cod_params.ini")
+params_file_fleet = here::here("params/fleet_1_params.ini")
+```
+
+## Initialize a population
+
+To simulate a fished population, we start with creating a fish and constructing a population from it, as usual.
+
+```{r }
+fish = new(Fish, params_file)
+# fish$setMortalityCurveEmpirical(here::here("data/naturalmort.spline.csv"))
+
+pop = new(Stock, fish)
+pop$readParams(params_file, F)
+pop$superfish_size = 2e6  # Each superfish contains so many fish
+
+```
+
+## Perform Spinup
+
+For simulating fishing, it is important for the population to start with a realistic state distribution. Therfore, we "spin-up" the population under no-fishing conditions. 
+
+```{r}
+v = pop$equilibriate_without_fishing(5.61, 200) |> matrix(nrow=200, byrow=T) |> as.data.frame() |> setNames(c("ssb", "tsb", "maturity", "nr", "dr", "nfish"))
+```
+
+Let's see how the population state looks after no-fishing equilibrium.
+
+```{r fig.height=9}
+d = pop$get_state()
+dist = table(d$age, d$length)
+
+par(mfrow = c(5,1), mar=c(5,5,1,1), oma=c(1,1,1,1), cex.lab=1.5, cex.axis=1.5)
+plot(v$nfish~seq(1,200,1), ylab="No. of superfish", xlab="Year", type="l", col=c("cyan3"))
+plot(v$maturity~seq(1,200,1), ylab="Maturity", xlab="Year", type="l", col=c("cyan3"))
+plot(I(v$nr/1e9)~seq(1,200,1), ylab="Recruitment", xlab="Year", type="l", col=c("cyan3"))
+plot(v$dr~seq(1,200,1), ylab="actual/potential", xlab="Year", type="l", col=c("cyan3"))
+
+res = simulate(0, 45, F)
+matplot(cbind(v$ssb/1e9, res$summaries$SSB[1:200]/1e9), ylab="SSB (MT)", xlab="Year", col=c("cyan3", "black"), lty=1, type=c("p","l"), pch=1)
+
+```
+
+# Reference fishing mortality curve
+
+```{r}
+F1 = 0.6901
+F2 = 0.06517
+F3 = 68.81
+F4 = 0.4151
+F5 = 112.8
+F6 = 0.4381674
+lmin = 45
+
+file = here::here("data/selection.spline.csv")
+```
+
+
+```{r}
+fleet = new(Fleet)
+fleet$readParams(params_file_fleet, F)
+fleet$set_referenceFishingMortalityCurveLogistic(F1,F2,F3,F4,F5,F6,lmin)
+fleet$par$print()
+fleet$par$control_model = "linear"
+fleet$chi = 100
+
+print(
+tibble(length = seq(0, 200, length.out=100)) |>
+  mutate(f = purrr::map_dbl(length, ~fleet$fishingMortalityRef(.))) |>
+  ggplot(aes(x=length, y=f)) +
+  geom_line() +
+  labs(x="Length (cm)", y="Ref Fishing mortality (F)")
+)
+```
+
+Fishability: values used as weights for computing averages over fishable population
+
+```{r}
+print(
+tibble(length = seq(0, 200, length.out=100)) |>
+  mutate(
+    f = purrr::map_dbl(length, ~fleet$fishingMortalityRef(.)),
+    p_death = 1-exp(-f),
+    fishability = purrr::map_dbl(length, ~fleet$fishability(.))
+    ) |>
+  ggplot() +
+  geom_line(aes(x=length, y=p_death), col="black") +
+  geom_line(aes(x=length, y=fishability), col="red") +
+  labs(x="Length (cm)", y="p_death and fishability")
+)
+```
+
+```{r}
+get_fishing_mortality = function(length, chi) {
+  fleet$chi = chi
+  fleet$fishingMortality(length)
+}
+
+print(
+list(length = seq(0, 200, length.out=200),
+     chi = exp(seq(log(0.05), log(2), length.out=20))) |>
+     cross_df() |>
+  mutate(f = purrr::map2_dbl(length, chi, ~get_fishing_mortality(.x, .y))) |>
+  mutate(fref = purrr::map_dbl(length, ~fleet$fishingMortalityRef(.))) |>
+  ggplot() +
+  geom_line(aes(x=length, y=f, group=chi, col=chi)) +
+  geom_line(aes(x=length, y=fref), col="red") +
+  labs(x="Length (cm)", y="Ref Fishing mortality (F)")
+)
+```
+
+# Initial chi
+
+```{r}
+init_chi = function(F_fgf){
+  fleet$init_chi(pop, F_fgf, 5.61)
+  fleet$chi
+}
+
+print(
+tibble(h = seq(0.01, 0.99, length.out=50)) |>
+  mutate(F_fgf = -log(1-h)) |> 
+  mutate(chi = purrr::map_dbl(F_fgf, ~init_chi(.))) |>
+  ggplot() +
+  geom_line(aes(x=h, y=chi)) +
+  labs(x="Harvest prop (h)", y="Initial chi (chi)")
+)
+
+```
+
+## Fleet with empirical fishing mortality (used for calibration)
+
+Now we try to create a fleet with an empirical fishing mortality function.
+
+```{r}
+fleet2 = new(Fleet)
+fleet2$readParams(params_file_fleet, F)
+fleet2$set_referenceFishingMortalityCurveEmpirical(file,lmin)
+fleet2$par$print()
+fleet2$par$control_model = "linear"
+fleet2$chi = 100
+
+print(
+tibble(length = seq(0, 200, length.out=100)) |>
+  mutate(f = purrr::map_dbl(length, ~fleet2$fishingMortalityRef(.))) |>
+  mutate(f_logistic = purrr::map_dbl(length, ~fleet$fishingMortalityRef(.))) |>
+  ggplot() +
+  geom_line(aes(x=length, y=f), col="black") +
+  geom_line(aes(x=length, y=f_logistic), col="cyan4") +
+  labs(x="Length (cm)", y="Ref Fishing mortality (F)")
+)
+
+```
+
+
+## Visualize the effect of changing min size limit
+
+```{r}
+fleet = new(Fleet)
+fleet$readParams(params_file_fleet, F)
+fleet$set_referenceFishingMortalityCurveLogistic(F1,F2,F3,F4,F5,F6,lmin)
+fleet$par$print()
+fleet$par$control_model = "linear"
+fleet$chi = 1
+
+get_fishing_mortality = function(length, lminx) {
+  fleet$set_referenceFishingMortalityCurveLogistic(F1,F2,F3+lminx-lmin,F4,F5+lminx-lmin,F6,lminx)
+  fleet$fishingMortality(length)
+}
+
+expand.grid(lmin=seq(25, 65, by=10), length=seq(0,200, length.out=100)) |> 
+  mutate(F = purrr::map2_dbl(length, lmin, ~get_fishing_mortality(.x, .y))) |> 
+  ggplot(aes(x=length, y=F, col=lmin, group=lmin)) +
+  geom_line()
+
+
+```

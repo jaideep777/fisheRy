@@ -125,3 +125,77 @@ for (ih in 1:length(hvec)){
 Bfishable_h0.1 = K[1,1:10]/1e9
 
 # matplot(x = l50vec, y= cbind(Bfishable_nonfished, Bfishable_h0.1), col=c("black", "blue"), type="l", lty=1, ylab="Fishable Biomass (MT)", xlab="L50")
+
+
+library(tidyverse)
+library(fisheRy)
+
+dat = read.csv(here::here("test_fisherysystem.csv"), header=F)
+dat = dat |> setNames(c("i", "ssb", "tsb", "maturity", "quota", "yield", "effort")) |> 
+  mutate(ssb = ssb/1e9, tsb = tsb/1e9, quota = quota/1e9, yield = yield/1e9, effort = effort)
+
+dat |> head()
+
+dat |> 
+  ggplot(aes(x=quota, y=yield)) +
+  geom_line() +
+  geom_abline(slope=1, intercept=0, color="red")
+
+dat |> 
+  ggplot(aes(x=tsb, y=quota)) +
+  geom_line() +
+  geom_abline(slope=0.5, intercept=0, color="red")
+
+dat |> 
+  ggplot(aes(x=i, y=ssb)) +
+  geom_line() 
+
+
+############ 24 Sept 2025 trials ############
+
+library(tidyverse)
+library(fisheRy)
+
+params_file_fleet = here::here("params/fleet_1_params.ini")
+params_file_fish  = here::here("params/cod_params.ini")
+
+fleet = new(Fleet)
+fleet$readParams(params_file_fleet, T)
+fleet$par$print();
+
+fish = new(Fish, params_file_fish)
+
+fishery = new(Fishery, params_file_fish, fish);
+fishery$par$print();
+
+fishery$set_harvestProp(0.5);
+fishery$addFleet(params_file_fleet, T);
+
+fishery$equilibriateNaturalPopulation(5.61, 2e6);
+
+fishery$init(1000, 0, 5.61);
+
+quota = fishery$calc_quota(5.61);
+cat("Quota: ", quota, '\n')
+
+dat <- fishery$simulate(45, 0.55, 300, 0, 5.61, T, here::here("fishery_output/age_dist_pred.csv"))
+
+dat |> head()
+
+dat |> 
+  slice(-(1:10)) |>
+  ggplot(aes(x=quota_fgf, y=yield)) +
+  geom_point() +
+  geom_abline(slope=1, intercept=0, color="red")
+
+dat |> 
+  slice(-(1:10)) |>
+  ggplot(aes(x=tsb, y=quota_fgf)) +
+  geom_point() +
+  geom_smooth(method="lm", se=F, formula = y ~ x-1) +
+  geom_abline(slope=0.5, intercept=0, color="red")
+
+dat |> 
+  ggplot(aes(x=1:nrow(dat), y=ssb/1e9)) +
+  geom_line() 
+

@@ -26,41 +26,52 @@ navbar:
       text: Home
       icon: fa-home fa-lg
       href: index.html
-    theory:
-      text: Theory
-      icon: fa-pencil fa-lg
-      menu:
-        - text: Biological model
-          icon: fa-fish
-          href: articles/theory_bio.html
-        - text: Socioeconomic model
-          icon: fa-fish
-          href: articles/theory_eco.html
+    # theory:
+    #   text: Theory
+    #   icon: fa-pencil fa-lg
+    #   menu:
+    #     - text: Biological model
+    #       icon: fa-fish
+    #       href: articles/theory_bio.html
+    #     # - text: Socioeconomic model
+    #     #   icon: fa-fish
+    #     #   href: articles/theory_eco.html
     tutorials:
       text: Tutorials
-      icon: fa-book fa-lg
       menu:
-        # - text: Simulating a single fish
-        #   icon: fa-fish
-        #   href: articles/single_fish.html
-        - text: Simulating an unfished population
+        - text: Biological model of a single fish
           icon: fa-fish
-          href: articles/unfished_population.html
-        - text: Simulating an unfished fished population with evolution
+          href: articles/theory_bio.html
+        - text: Simulating an Unfished Population
           icon: fa-fish
-          href: articles/evolving_unfished_population.html
-        - text: Simulating a fished population (biological model only)
+          href: articles/unfished_population_stock.html
+        - text: Calibrate Fishing Mortality
           icon: fa-fish
-          href: articles/fished_population.html
-        - text: Simulating multiple populations at once
+          href: articles/calibrate_fishing_mort.html
+        - text: Fishability and Selectivity
           icon: fa-fish
-          href: articles/compare_hscans.html
-        - text: Calculating JSS
+          href: articles/fishability_selectivity.html
+        - text: Effort Control - 1 Stock 1 Fleet
           icon: fa-fish
-          href: articles/jss_calcs_h.html
-        - text: Calculating 2D JSS with evolution
+          href: articles/effort_control_stock.html
+        - text: Effort Control - 1 Stock 2 Fleets
           icon: fa-fish
-          href: articles/jss_calcs_hxL_evol.html
+          href: articles/effort_control_stock_2fleets.html
+        - text: Simulating a fished population
+          icon: fa-fish
+          href: articles/fished_population_stock.html
+        - text: Plot Calibration
+          icon: fa-fish
+          href: articles/plot_calibration.html
+        - text: Quota Calculation Debug
+          icon: fa-fish
+          href: articles/quota_calc_debug.html
+        - text: Scan over harvest rate
+          icon: fa-fish
+          href: articles/h_scan.html
+        - text: Scan over harvest rate and temperature
+          icon: fa-fish
+          href: articles/hxT_scan.html
     api:
       text: API
       icon: fa-code fa-lg
@@ -73,5 +84,5 @@ navbar:
       text: GitHub
       icon: fa-github fa-lg
       href: https://jaideep777.github.io/fisheRy
-      
+
 

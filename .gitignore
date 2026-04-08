@@ -20,3 +20,6 @@ docs
 *.xlsx
 .vscode
 *.pdf
+*.html
+*.htm
+*_files
