@@ -30,7 +30,7 @@ To simulate a fished population, we start with creating a fish and constructing 
 
 ```{r }
 fish = new(Fish, params_file)
-fish$setMortalityCurveEmpirical(here::here("data/naturalmort.spline.csv"))
+# fish$setMortalityCurveEmpirical(here::here("data/naturalmort.spline.csv"))
 
 pop = new(Stock, fish)
 pop$readParams(params_file, F)

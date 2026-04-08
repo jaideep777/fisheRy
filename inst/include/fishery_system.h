@@ -62,7 +62,6 @@ class Fishery {
 	FisheryParams par;
 
 	double harvest_prop;
-	double min_size_limit;
 
 	StockSummary stock_summary;	
 	// Tensor<double> profit_mask;

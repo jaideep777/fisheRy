@@ -48,8 +48,9 @@ Configure the fishery:
 - Initialize the fishery - this creates fish in the real fish population.
 
 ```{r configure-fishery}
-h = 0.22
+h = 0.6
 fishery$set_harvestProp(h);
+fishery$set_minSizeLimit(45);
 fishery$addFleet(params_file_fleet, T);
 
 # Verify added fleet's fishing mortality curve
@@ -66,113 +67,20 @@ v = fishery$equilibriateNaturalPopulation(5.61, 2e6, 200);
 fishery$set_superFishSize(2e6)
 # Initialize the 
 fishery$init(1000, 0, 5.61);
-v2 = fishery$equilibriateWithoutFishing(5.61, 200)
+v2 = fishery$equilibriateWithoutFishing(5.61, 200) |> 
+      matrix(nrow=200, byrow=T) |> 
+      as.data.frame() |> 
+      setNames(c("ssb", "tsb", "maturity", "nr", "dr", "nfish"))
+
+v2 |> 
+  mutate(t = 1:200) |> 
+  pivot_longer(-t) |>
+  ggplot(aes(x=t, y=value)) + 
+  geom_line()+ 
+  facet_wrap(~name, scales="free")
+
 
 # Just a demo calc of the initial quota corresponding to the set defined harvest proportion. The Fishery will recalculate this every year.
 quota = fishery$calc_quota(5.61);
 cat("Quota: ", quota, '\n')
 ```
-
-# Running and Visualizing Simulation
-
-Simulate the fishery over time and visualize key outputs.
-
-```{r run-simulation}
-dat <- fishery$simulate(45, 0.22, 300, 1.93e3, 5.61, F, here::here("fishery_output/age_dist_pred.csv"))
-dat |> head()
-```
-## Plot all output variables
-
-```{r plot-all}
-p1 <- dat |>
-  mutate(t=1:n()) |>
-  pivot_longer(-t) |>
-  ggplot(aes(x=t, y=value)) +
-  geom_line(col="seagreen") +
-  facet_wrap(~name, scales="free_y")
-
-p2 <- dplyr::bind_rows( 
-  dat |> select(
-    sim = ssb_spawning, ref = ssb_spawning_ref, 
-  ) |> 
-  mutate(group = "before spawning"),
-
-  dat |> select(
-    sim = ssb_after_spawning, ref = ssb_after_spawning_ref, 
-  ) |> 
-  mutate(group = "after_spawning"),
-
-  dat |> select(
-    sim = ssbn, ref = ssbn_ref
-  ) |> 
-  mutate(group = "after_spawning_&_spf"),
-) |> 
-  as_tibble() |> 
-  ggplot(aes(x=ref, y=sim)) + 
-  geom_point() + 
-  geom_abline(slope=1,intercept=1,col="red")+
-  facet_wrap(~group)
-
-print(p1)
-print(p2)
-```
-
-
-## Quota (FGF) vs Yield
-
-This plot compares the feeding ground fishery quota to the yield, excluding the first 10 iterations.
-
-```{r plot-quota-fgf-yield}
-dat |> 
-  slice(-(1:10)) |>
-  ggplot(aes(x=quota, y=yield)) +
-  geom_point() +
-  geom_abline(slope=1, intercept=0, color="red")
-
-dat |> 
-  slice(-(1:10)) |>
-  ggplot(aes(x=quota_fgf, y=yield_fgf)) +
-  geom_point() +
-  geom_abline(slope=1, intercept=0, color="red")
-
-dat |> 
-  slice(-(1:10)) |>
-  ggplot(aes(x=quota_spf, y=yield_spf)) +
-  geom_point() +
-  geom_abline(slope=1, intercept=0, color="red")
-
-
-```
-
-## TSB vs Quota (FGF)
-
-This plot shows the relationship between total stock biomass and feeding ground fishery quota. Slope should be equal to harvest proportion.
-
-```{r plot-tsb-quota-fgf}
-dat |> 
-  slice(-(1:10)) |>
-  ggplot(aes(x=tsb, y=quota)) +
-  geom_point() +
-  geom_smooth(method="lm", se=F, formula = y ~ x-1) +
-  geom_abline(slope=h, intercept=0, color="red")
-```
-
-## SSB Over Simulation
-
-This plot tracks spawning stock biomass over the course of the simulation.
-
-```{r plot-ssb-simulation}
-dat |> 
-  mutate(t = 1:n()) |> 
-  # filter(t > 200) |>
-  ggplot(aes(x=t, y=ssb/1e9)) +
-  geom_line()
-
-dat |> 
-  mutate(t = 1:n()) |> 
-  filter(t > 200) |>
-  ggplot() +
-  geom_line(aes(x=t, y=quota_fgf/1e9)) +
-  geom_line(aes(x=t, y=yield/1e9), col="red") 
-```
-

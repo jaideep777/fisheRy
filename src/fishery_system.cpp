@@ -150,6 +150,8 @@ double Fishery::calc_quota(double temp){
 	// Calculate expected Catch with the given chi
 	// Note: Be careful to not modify the fishes vector here
 	double expected_catch = 0, to_sea_bed = 0;
+	// int count = 0;
+	// std::cout << "Start catch: min size limit = " << par.lmin << '\n';
 	for (const auto& f: pop.fishes) {  // const auto& ensures we do not modify the fish 
 		if (!f.isAlive) continue; // Skip already dead fishes
 
@@ -163,11 +165,19 @@ double Fishery::calc_quota(double temp){
 		bool f_isAlive = f.isAlive && (runif() <= survival_prob);	// set the fish to die probabilistically, if not dead already.
 
 		if (!f_isAlive){
-			if (f.length >= min_size_limit){
+			if (f.length >= par.lmin){
 				expected_catch += catch_prob * pop.superfish_size * f.weight; // fraction catch_prob of this superfish goes to yield
 			}
 		}
-			
+		
+		// ++count;
+		// std::cout << "Sr. / age / length / mu / F / f_isAlive / catch_prob / expt_catch: " << count << " / " << f.age << " / " << f.length << " / " << natural_mort_rate << " / " << fishing_mort_rate << " / " << f_isAlive << " / " << catch_prob << " / " << expected_catch << '\n';
+	}
+
+	if (pop.fishes.size() > 500 && Fc > 0 && expected_catch < 1e-6){
+		std::cout << "Quota is 0 - probably spurious" << std::endl;
+		std::cout << "  - nFish = " << pop.fishes.size() << std::endl;
+		std::cout << "  - chi = " << fl.chi << std::endl;
 	}
 
 	return expected_catch;
