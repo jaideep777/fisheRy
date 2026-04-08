@@ -39,7 +39,7 @@ growth_trajectories = function(beta1=NULL, beta2=NULL, N=50, temp_sd = 3, tsb_mi
   dat_full
 }
 
-dat_full3 = growth_trajectories(N=500, temp_sd=0, growth_noise_sd = 0.2347)
+dat_full3 = growth_trajectories(N=200, temp_sd=0, growth_noise_sd = 0.2347)
 
 dat_full3 |>
   filter(age <= 15) |>
@@ -100,6 +100,7 @@ weights_mat = get_weights(12) |>
 ### BASED ON LINEAR SYSTEM
 
 F_age1 = read.csv(here::here("data/new_calibration_files/F-AFWG2024.csv")) |> 
+  filter(Year_age >= 2001 & Year_age <= 2020) |> 
   select(X3:X14) |>
   colMeans()
 
@@ -125,13 +126,54 @@ read.csv(here::here("data/selection.spline.reduced.csv")) |>
 
 F_length2 = solve(weights_mat, F_age2)
 
+
+fleet = new(Fleet)
+fleet$readParams(params_file_fleet, F) 
+fleet$set_referenceFishingMortalityCurveLogistic(F1 = 0.6901, F2 = 0.23,    F3 = 52,    F4 = 0.4151, F5=112.8,   F6 = 0.4381674, lmin = 45)
+# fleet$set_referenceFishingMortalityCurveLogistic(F1 = 0.6901, F2 = 0.06517, F3 = 68.81, F4 = 0.4151, F5 = 112.8, F6 = 0.4381674, lmin = 45)
+df_logistic = tibble(len=seq(0,200, 1)) |> 
+  mutate(F_logistic = purrr::map_dbl(len, ~fleet$fishingMortality(.x)))
+
 read.csv(here::here("data/selection.spline.reduced.csv")) |> 
   ggplot() +
   geom_line(aes(y=F, x=length)) + 
   geom_point(data=tibble(f=F_length2, length=as.numeric(names(F_length2))),
              aes(x=length, y=f),
              col="cyan3") + 
+  geom_line(data=df_logistic, aes(x=len, y=F_logistic), col="magenta") +
   ylim(0,1)
+
+
+
+eigs = eigen(weights_mat)
+
+library(patchwork)
+
+p1 = tibble(values = eigs$values, 
+       vector = 1:12) |> 
+  ggplot(aes(x=vector, y=values)) + 
+  geom_point()
+
+p2 = eigs$vectors |> 
+  as.data.frame() |> 
+  setNames(1:12) |> 
+  mutate(component = paste0("c", 1:12)) |> 
+  pivot_longer(-component, names_to = "vector") |> 
+  mutate(vector = as.numeric(vector)) |> 
+  ggplot() + 
+  geom_raster(aes(y=component, x=vector, fill=value))
+
+p1/p2 
+
+# Check if the matrix is orthogonal
+weights_mat %*% t(weights_mat) |> 
+  as.data.frame() |> 
+  setNames(1:12) |> 
+  mutate(row = 1:12) |> 
+  pivot_longer(-row, names_to = "col") |> 
+  mutate(col=as.numeric(col)) |> 
+  ggplot() + 
+  geom_raster(aes(y=row, x=col, fill=value))
 
 
 ### BASED ON REGRESSION
