@@ -31,6 +31,7 @@ var classFishParams =
     [ "growth_model", "classFishParams.html#a4af98d0d5fd588c58002e7d89c1ade5c", null ],
     [ "growth_model_name", "classFishParams.html#adf5630e1f322cbaf8508463a17dc3e38", null ],
     [ "growth_names_map", "classFishParams.html#a95e0a794fb0383236700e8c38a31bfd0", null ],
+    [ "growth_noise_sd", "classFishParams.html#afb08e689068a8cfd836cc42c8a2cdf31", null ],
     [ "gsi", "classFishParams.html#acf01d19ab76737f5bf5696da262c0b8e", null ],
     [ "gsi_ref", "classFishParams.html#aa70b2a9ff90395d68ef4811e94498d53", null ],
     [ "k", "classFishParams.html#a89828f361ac67d8c273571340aa20a39", null ],

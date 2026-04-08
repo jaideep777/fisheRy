@@ -162,6 +162,8 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:a7fbc71a035f3b3558e255c76ebf66440" id="r_a7fbc71a035f3b3558e255c76ebf66440"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFishParams.html#a7fbc71a035f3b3558e255c76ebf66440">Lref</a></td></tr>
 <tr class="memdesc:a7fbc71a035f3b3558e255c76ebf66440"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reference length in mortality function.  <br /></td></tr>
 <tr class="separator:a7fbc71a035f3b3558e255c76ebf66440"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb08e689068a8cfd836cc42c8a2cdf31" id="r_afb08e689068a8cfd836cc42c8a2cdf31"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFishParams.html#afb08e689068a8cfd836cc42c8a2cdf31">growth_noise_sd</a></td></tr>
+<tr class="separator:afb08e689068a8cfd836cc42c8a2cdf31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52c9c6430b195053e84c96d417d2ff13" id="r_a52c9c6430b195053e84c96d417d2ff13"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFishParams.html#a52c9c6430b195053e84c96d417d2ff13">Mref</a></td></tr>
 <tr class="memdesc:a52c9c6430b195053e84c96d417d2ff13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Coefficient of length-dependent mortality rate.  <br /></td></tr>
 <tr class="separator:a52c9c6430b195053e84c96d417d2ff13"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -291,7 +293,7 @@ Private Attributes</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00014">14</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00015">15</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a897bd02c9634c93cb817341a77ca50ec" name="a897bd02c9634c93cb817341a77ca50ec"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a897bd02c9634c93cb817341a77ca50ec">&#9670;&#160;</a></span>FishParams()</h2>
@@ -316,10 +318,10 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00144">144</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  144</span>                {</div>
-<div class="line"><span class="lineno">  145</span>        <span class="comment">// init();</span></div>
-<div class="line"><span class="lineno">  146</span>    }</div>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00147">147</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  147</span>                {</div>
+<div class="line"><span class="lineno">  148</span>        <span class="comment">// init();</span></div>
+<div class="line"><span class="lineno">  149</span>    }</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -339,33 +341,33 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8cpp_source.html#l00301">301</a> of file <a class="el" href="fish_8cpp_source.html">fish.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  301</span>                     {</div>
-<div class="line"><span class="lineno">  302</span>    <a class="code hl_variable" href="classFishParams.html#abd9ae2686bbe953a6b96cc830999ff8b">steepness</a> = <a class="code hl_function" href="namespacefish.html#a79ee7b63f43f9e9bda95cc04deb3a082">fish::maturation_steepness</a>(<a class="code hl_variable" href="classFishParams.html#a84c83547b83e0fe5af8b815c27b48c92">pmrn_width</a>, <a class="code hl_variable" href="classFishParams.html#af59ea8ffaa61f20d3a6b02e783889161">pmrn_envelope</a>);</div>
-<div class="line"><span class="lineno">  303</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="classFishParams.html#abd9ae2686bbe953a6b96cc830999ff8b">steepness</a> &lt;= 0) <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;Calculated steepness values is &lt;= 0&quot;</span>);</div>
-<div class="line"><span class="lineno">  304</span> </div>
-<div class="line"><span class="lineno">  305</span>    <a class="code hl_variable" href="classFishParams.html#a4af98d0d5fd588c58002e7d89c1ade5c">growth_model</a> = <a class="code hl_variable" href="classFishParams.html#a95e0a794fb0383236700e8c38a31bfd0">growth_names_map</a>.at(<a class="code hl_variable" href="classFishParams.html#adf5630e1f322cbaf8508463a17dc3e38">growth_model_name</a>);</div>
-<div class="line"><span class="lineno">  306</span>    <a class="code hl_variable" href="classFishParams.html#a3ab457de2ee4baf129178e3b4bf07041">maturation_model</a> = <a class="code hl_variable" href="classFishParams.html#a027f60bfaa74b01d81da6926aec64801">maturation_names_map</a>.at(<a class="code hl_variable" href="classFishParams.html#a6450ea1f58e9575445f87aac0c29162e">maturation_model_name</a>);</div>
-<div class="line"><span class="lineno">  307</span>    <a class="code hl_variable" href="classFishParams.html#a64929bbb9f725cce58831c3aacab6562">mortality_model</a> = <a class="code hl_variable" href="classFishParams.html#a717938ccda6ea8234580457baf4a8d74">mortality_names_map</a>.at(<a class="code hl_variable" href="classFishParams.html#aa7d25900f889e8ddf7503bf19951502c">mortality_model_name</a>);</div>
-<div class="line"><span class="lineno">  308</span>    <a class="code hl_variable" href="classFishParams.html#a1638f4313f3ffc1acf03f5e903342b55">recruitment_model</a> = <a class="code hl_variable" href="classFishParams.html#a5defa3d5c146c77672b6046509cbe9ab">recruitment_names_map</a>.at(<a class="code hl_variable" href="classFishParams.html#ae8e31dc8125fe8882026fcf815e024ea">recruitment_model_name</a>);</div>
-<div class="line"><span class="lineno">  309</span>    </div>
-<div class="line"><span class="lineno">  310</span><span class="comment">//      s0 = (growth_model == Joshi23)? 0.02 : 0.09637;</span></div>
-<div class="line"><span class="lineno">  311</span>}</div>
-<div class="ttc" id="aclassFishParams_html_a027f60bfaa74b01d81da6926aec64801"><div class="ttname"><a href="classFishParams.html#a027f60bfaa74b01d81da6926aec64801">FishParams::maturation_names_map</a></div><div class="ttdeci">std::map&lt; std::string, MaturationModel &gt; maturation_names_map</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00020">fish.h:20</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a1638f4313f3ffc1acf03f5e903342b55"><div class="ttname"><a href="classFishParams.html#a1638f4313f3ffc1acf03f5e903342b55">FishParams::recruitment_model</a></div><div class="ttdeci">RecruitmentModel recruitment_model</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00131">fish.h:131</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a3ab457de2ee4baf129178e3b4bf07041"><div class="ttname"><a href="classFishParams.html#a3ab457de2ee4baf129178e3b4bf07041">FishParams::maturation_model</a></div><div class="ttdeci">MaturationModel maturation_model</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00129">fish.h:129</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a4af98d0d5fd588c58002e7d89c1ade5c"><div class="ttname"><a href="classFishParams.html#a4af98d0d5fd588c58002e7d89c1ade5c">FishParams::growth_model</a></div><div class="ttdeci">GrowthModel growth_model</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00128">fish.h:128</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a5defa3d5c146c77672b6046509cbe9ab"><div class="ttname"><a href="classFishParams.html#a5defa3d5c146c77672b6046509cbe9ab">FishParams::recruitment_names_map</a></div><div class="ttdeci">std::map&lt; std::string, RecruitmentModel &gt; recruitment_names_map</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00028">fish.h:28</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a6450ea1f58e9575445f87aac0c29162e"><div class="ttname"><a href="classFishParams.html#a6450ea1f58e9575445f87aac0c29162e">FishParams::maturation_model_name</a></div><div class="ttdeci">std::string maturation_model_name</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00124">fish.h:124</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a64929bbb9f725cce58831c3aacab6562"><div class="ttname"><a href="classFishParams.html#a64929bbb9f725cce58831c3aacab6562">FishParams::mortality_model</a></div><div class="ttdeci">MortalityModel mortality_model</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00130">fish.h:130</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a717938ccda6ea8234580457baf4a8d74"><div class="ttname"><a href="classFishParams.html#a717938ccda6ea8234580457baf4a8d74">FishParams::mortality_names_map</a></div><div class="ttdeci">std::map&lt; std::string, MortalityModel &gt; mortality_names_map</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00024">fish.h:24</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a84c83547b83e0fe5af8b815c27b48c92"><div class="ttname"><a href="classFishParams.html#a84c83547b83e0fe5af8b815c27b48c92">FishParams::pmrn_width</a></div><div class="ttdeci">double pmrn_width</div><div class="ttdoc">PMRN width.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00043">fish.h:43</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a95e0a794fb0383236700e8c38a31bfd0"><div class="ttname"><a href="classFishParams.html#a95e0a794fb0383236700e8c38a31bfd0">FishParams::growth_names_map</a></div><div class="ttdeci">std::map&lt; std::string, GrowthModel &gt; growth_names_map</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00016">fish.h:16</a></div></div>
-<div class="ttc" id="aclassFishParams_html_aa7d25900f889e8ddf7503bf19951502c"><div class="ttname"><a href="classFishParams.html#aa7d25900f889e8ddf7503bf19951502c">FishParams::mortality_model_name</a></div><div class="ttdeci">std::string mortality_model_name</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00125">fish.h:125</a></div></div>
-<div class="ttc" id="aclassFishParams_html_abd9ae2686bbe953a6b96cc830999ff8b"><div class="ttname"><a href="classFishParams.html#abd9ae2686bbe953a6b96cc830999ff8b">FishParams::steepness</a></div><div class="ttdeci">double steepness</div><div class="ttdoc">steepness of the PMRN, calculated during initialization</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00082">fish.h:82</a></div></div>
-<div class="ttc" id="aclassFishParams_html_adf5630e1f322cbaf8508463a17dc3e38"><div class="ttname"><a href="classFishParams.html#adf5630e1f322cbaf8508463a17dc3e38">FishParams::growth_model_name</a></div><div class="ttdeci">std::string growth_model_name</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00123">fish.h:123</a></div></div>
-<div class="ttc" id="aclassFishParams_html_ae8e31dc8125fe8882026fcf815e024ea"><div class="ttname"><a href="classFishParams.html#ae8e31dc8125fe8882026fcf815e024ea">FishParams::recruitment_model_name</a></div><div class="ttdeci">std::string recruitment_model_name</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00126">fish.h:126</a></div></div>
-<div class="ttc" id="aclassFishParams_html_af59ea8ffaa61f20d3a6b02e783889161"><div class="ttname"><a href="classFishParams.html#af59ea8ffaa61f20d3a6b02e783889161">FishParams::pmrn_envelope</a></div><div class="ttdeci">double pmrn_envelope</div><div class="ttdoc">PMRN envelope.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00045">fish.h:45</a></div></div>
+<p class="definition">Definition at line <a class="el" href="fish_8cpp_source.html#l00331">331</a> of file <a class="el" href="fish_8cpp_source.html">fish.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  331</span>                     {</div>
+<div class="line"><span class="lineno">  332</span>    <a class="code hl_variable" href="classFishParams.html#abd9ae2686bbe953a6b96cc830999ff8b">steepness</a> = <a class="code hl_function" href="namespacefish.html#a79ee7b63f43f9e9bda95cc04deb3a082">fish::maturation_steepness</a>(<a class="code hl_variable" href="classFishParams.html#a84c83547b83e0fe5af8b815c27b48c92">pmrn_width</a>, <a class="code hl_variable" href="classFishParams.html#af59ea8ffaa61f20d3a6b02e783889161">pmrn_envelope</a>);</div>
+<div class="line"><span class="lineno">  333</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="classFishParams.html#abd9ae2686bbe953a6b96cc830999ff8b">steepness</a> &lt;= 0) <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;Calculated steepness values is &lt;= 0&quot;</span>);</div>
+<div class="line"><span class="lineno">  334</span> </div>
+<div class="line"><span class="lineno">  335</span>    <a class="code hl_variable" href="classFishParams.html#a4af98d0d5fd588c58002e7d89c1ade5c">growth_model</a> = <a class="code hl_variable" href="classFishParams.html#a95e0a794fb0383236700e8c38a31bfd0">growth_names_map</a>.at(<a class="code hl_variable" href="classFishParams.html#adf5630e1f322cbaf8508463a17dc3e38">growth_model_name</a>);</div>
+<div class="line"><span class="lineno">  336</span>    <a class="code hl_variable" href="classFishParams.html#a3ab457de2ee4baf129178e3b4bf07041">maturation_model</a> = <a class="code hl_variable" href="classFishParams.html#a027f60bfaa74b01d81da6926aec64801">maturation_names_map</a>.at(<a class="code hl_variable" href="classFishParams.html#a6450ea1f58e9575445f87aac0c29162e">maturation_model_name</a>);</div>
+<div class="line"><span class="lineno">  337</span>    <a class="code hl_variable" href="classFishParams.html#a64929bbb9f725cce58831c3aacab6562">mortality_model</a> = <a class="code hl_variable" href="classFishParams.html#a717938ccda6ea8234580457baf4a8d74">mortality_names_map</a>.at(<a class="code hl_variable" href="classFishParams.html#aa7d25900f889e8ddf7503bf19951502c">mortality_model_name</a>);</div>
+<div class="line"><span class="lineno">  338</span>    <a class="code hl_variable" href="classFishParams.html#a1638f4313f3ffc1acf03f5e903342b55">recruitment_model</a> = <a class="code hl_variable" href="classFishParams.html#a5defa3d5c146c77672b6046509cbe9ab">recruitment_names_map</a>.at(<a class="code hl_variable" href="classFishParams.html#ae8e31dc8125fe8882026fcf815e024ea">recruitment_model_name</a>);</div>
+<div class="line"><span class="lineno">  339</span>    </div>
+<div class="line"><span class="lineno">  340</span><span class="comment">//      s0 = (growth_model == Joshi23)? 0.02 : 0.09637;</span></div>
+<div class="line"><span class="lineno">  341</span>}</div>
+<div class="ttc" id="aclassFishParams_html_a027f60bfaa74b01d81da6926aec64801"><div class="ttname"><a href="classFishParams.html#a027f60bfaa74b01d81da6926aec64801">FishParams::maturation_names_map</a></div><div class="ttdeci">std::map&lt; std::string, MaturationModel &gt; maturation_names_map</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00021">fish.h:21</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a1638f4313f3ffc1acf03f5e903342b55"><div class="ttname"><a href="classFishParams.html#a1638f4313f3ffc1acf03f5e903342b55">FishParams::recruitment_model</a></div><div class="ttdeci">RecruitmentModel recruitment_model</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00134">fish.h:134</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a3ab457de2ee4baf129178e3b4bf07041"><div class="ttname"><a href="classFishParams.html#a3ab457de2ee4baf129178e3b4bf07041">FishParams::maturation_model</a></div><div class="ttdeci">MaturationModel maturation_model</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00132">fish.h:132</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a4af98d0d5fd588c58002e7d89c1ade5c"><div class="ttname"><a href="classFishParams.html#a4af98d0d5fd588c58002e7d89c1ade5c">FishParams::growth_model</a></div><div class="ttdeci">GrowthModel growth_model</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00131">fish.h:131</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a5defa3d5c146c77672b6046509cbe9ab"><div class="ttname"><a href="classFishParams.html#a5defa3d5c146c77672b6046509cbe9ab">FishParams::recruitment_names_map</a></div><div class="ttdeci">std::map&lt; std::string, RecruitmentModel &gt; recruitment_names_map</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00030">fish.h:30</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a6450ea1f58e9575445f87aac0c29162e"><div class="ttname"><a href="classFishParams.html#a6450ea1f58e9575445f87aac0c29162e">FishParams::maturation_model_name</a></div><div class="ttdeci">std::string maturation_model_name</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00127">fish.h:127</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a64929bbb9f725cce58831c3aacab6562"><div class="ttname"><a href="classFishParams.html#a64929bbb9f725cce58831c3aacab6562">FishParams::mortality_model</a></div><div class="ttdeci">MortalityModel mortality_model</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00133">fish.h:133</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a717938ccda6ea8234580457baf4a8d74"><div class="ttname"><a href="classFishParams.html#a717938ccda6ea8234580457baf4a8d74">FishParams::mortality_names_map</a></div><div class="ttdeci">std::map&lt; std::string, MortalityModel &gt; mortality_names_map</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00025">fish.h:25</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a84c83547b83e0fe5af8b815c27b48c92"><div class="ttname"><a href="classFishParams.html#a84c83547b83e0fe5af8b815c27b48c92">FishParams::pmrn_width</a></div><div class="ttdeci">double pmrn_width</div><div class="ttdoc">PMRN width.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00045">fish.h:45</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a95e0a794fb0383236700e8c38a31bfd0"><div class="ttname"><a href="classFishParams.html#a95e0a794fb0383236700e8c38a31bfd0">FishParams::growth_names_map</a></div><div class="ttdeci">std::map&lt; std::string, GrowthModel &gt; growth_names_map</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00017">fish.h:17</a></div></div>
+<div class="ttc" id="aclassFishParams_html_aa7d25900f889e8ddf7503bf19951502c"><div class="ttname"><a href="classFishParams.html#aa7d25900f889e8ddf7503bf19951502c">FishParams::mortality_model_name</a></div><div class="ttdeci">std::string mortality_model_name</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00128">fish.h:128</a></div></div>
+<div class="ttc" id="aclassFishParams_html_abd9ae2686bbe953a6b96cc830999ff8b"><div class="ttname"><a href="classFishParams.html#abd9ae2686bbe953a6b96cc830999ff8b">FishParams::steepness</a></div><div class="ttdeci">double steepness</div><div class="ttdoc">steepness of the PMRN, calculated during initialization</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00085">fish.h:85</a></div></div>
+<div class="ttc" id="aclassFishParams_html_adf5630e1f322cbaf8508463a17dc3e38"><div class="ttname"><a href="classFishParams.html#adf5630e1f322cbaf8508463a17dc3e38">FishParams::growth_model_name</a></div><div class="ttdeci">std::string growth_model_name</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00126">fish.h:126</a></div></div>
+<div class="ttc" id="aclassFishParams_html_ae8e31dc8125fe8882026fcf815e024ea"><div class="ttname"><a href="classFishParams.html#ae8e31dc8125fe8882026fcf815e024ea">FishParams::recruitment_model_name</a></div><div class="ttdeci">std::string recruitment_model_name</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00129">fish.h:129</a></div></div>
+<div class="ttc" id="aclassFishParams_html_af59ea8ffaa61f20d3a6b02e783889161"><div class="ttname"><a href="classFishParams.html#af59ea8ffaa61f20d3a6b02e783889161">FishParams::pmrn_envelope</a></div><div class="ttdeci">double pmrn_envelope</div><div class="ttdoc">PMRN envelope.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00047">fish.h:47</a></div></div>
 <div class="ttc" id="anamespacefish_html_a79ee7b63f43f9e9bda95cc04deb3a082"><div class="ttname"><a href="namespacefish.html#a79ee7b63f43f9e9bda95cc04deb3a082">fish::maturation_steepness</a></div><div class="ttdeci">double maturation_steepness(double pmrn_width, double pmrn_envelope)</div><div class="ttdoc">Calculate the steepness of the probabilistic maturation reaction norm (PMRN)</div><div class="ttdef"><b>Definition</b> <a href="functions_8h_source.html#l00059">functions.h:59</a></div></div>
 </div><!-- fragment -->
 </div>
@@ -386,118 +388,120 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8cpp_source.html#l00313">313</a> of file <a class="el" href="fish_8cpp_source.html">fish.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  313</span>                                                  {</div>
-<div class="line"><span class="lineno">  314</span>    <a class="code hl_class" href="classio_1_1Initializer.html">io::Initializer</a> I;</div>
-<div class="line"><span class="lineno">  315</span>    I.<a class="code hl_function" href="classio_1_1Initializer.html#a6c174190ba99677aac35c5c7e92b69b8">parse</a>(params_file, <span class="keyword">false</span>, <a class="code hl_variable" href="classFishParams.html#a77cbf2e268531fbce8a423a77d33f330">verbose</a>);</div>
-<div class="line"><span class="lineno">  316</span> </div>
-<div class="line"><span class="lineno">  317</span><span class="preprocessor">    #define READ_PAR(x) x = I.get&lt;double&gt;(&quot;fish&quot;, #x)</span></div>
-<div class="line"><span class="lineno">  318</span> </div>
-<div class="line"><span class="lineno">  319</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a4e82b65817170d95fddf8fb1ec7f2c2f">beta</a>); <span class="comment">// = 0.655793; // 0.648728;</span></div>
-<div class="line"><span class="lineno">  320</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a8d96f0461d3e606777a310fd41ed6427">r</a>); <span class="comment">// = 0.090367; // 0.077281;</span></div>
-<div class="line"><span class="lineno">  321</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a9b953d7f9a6bf05398c2d08fd92d3b6b">c</a>); <span class="comment">// = 6.519584; // 6.318308; //6.51559;</span></div>
-<div class="line"><span class="lineno">  322</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a0ef616f4111943915671a63d977dada0">q</a>); <span class="comment">// = 1;</span></div>
-<div class="line"><span class="lineno">  323</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a89828f361ac67d8c273571340aa20a39">k</a>); <span class="comment">// = 0.00674;</span></div>
-<div class="line"><span class="lineno">  324</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a5037f8b88a066532da0395848519916c">alpha</a>); <span class="comment">// = 3.056863227;</span></div>
-<div class="line"><span class="lineno">  325</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a274a3ea6e9ab15454c620394263f8bbb">E1</a>); <span class="comment">// = 2500;</span></div>
-<div class="line"><span class="lineno">  326</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a55d0ab02b554013f849d4967120f9cd3">pmrn_lp50</a>); <span class="comment">// = 148.6918; //118.122779;</span></div>
-<div class="line"><span class="lineno">  327</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a84c83547b83e0fe5af8b815c27b48c92">pmrn_width</a>); <span class="comment">// = 47.532614;</span></div>
-<div class="line"><span class="lineno">  328</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ad6cf8c1243515d9149351b8da4be36ef">pmrn_slope</a>); <span class="comment">// = -6.609008;</span></div>
-<div class="line"><span class="lineno">  329</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#af59ea8ffaa61f20d3a6b02e783889161">pmrn_envelope</a>); <span class="comment">// = 0.25;</span></div>
-<div class="line"><span class="lineno">  330</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a7fbc71a035f3b3558e255c76ebf66440">Lref</a>); <span class="comment">// = 70.48712; //80;</span></div>
-<div class="line"><span class="lineno">  331</span>    </div>
-<div class="line"><span class="lineno">  332</span>    <span class="comment">// Power law + offset</span></div>
-<div class="line"><span class="lineno">  333</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a52c9c6430b195053e84c96d417d2ff13">Mref</a>); <span class="comment">// = 0.062994; // 0.20775; // ////0.1421; //&lt;--old value from file</span></div>
-<div class="line"><span class="lineno">  334</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a9cb42eed8cfea7a412947daed1371fb9">b</a>); <span class="comment">//    = 2.455715; // 1.58127; //////1.8131;</span></div>
-<div class="line"><span class="lineno">  335</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a8c776b33636b05b1c8541db09ca57bda">M0</a>); <span class="comment">//   = 0.162126; //  0; //</span></div>
-<div class="line"><span class="lineno">  336</span> </div>
-<div class="line"><span class="lineno">  337</span>    <span class="comment">// Juvenile length and survival probability </span></div>
-<div class="line"><span class="lineno">  338</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a1fcb998085ecb598dc4ffd1b8ac5aa0e">L0</a>); <span class="comment">// = 9.1;</span></div>
-<div class="line"><span class="lineno">  339</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a2569ba98253c5c963d2e510c97229dea">s0</a>); <span class="comment">// = 0.08094733; // 0.02; // 0.09637</span></div>
-<div class="line"><span class="lineno">  340</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#aac12f457c42496d0253c1d952d75af5a">Bhalf</a>); <span class="comment">// = 187837572; //3.65e8;  // Bhalf for recruitment </span></div>
-<div class="line"><span class="lineno">  341</span> </div>
-<div class="line"><span class="lineno">  342</span>    <span class="comment">// temperature and density dependence of growth</span></div>
-<div class="line"><span class="lineno">  343</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a45175b3105a481ae7376338a5905674c">beta1</a>); <span class="comment">// = -7.07e-5;</span></div>
-<div class="line"><span class="lineno">  344</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ae946e956d2580924cf36cf08afdd3a6a">beta2</a>); <span class="comment">// = 0.178;</span></div>
-<div class="line"><span class="lineno">  345</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a5d563677fd23c73a65d9c41cbe7e67d8">Tmean</a>); <span class="comment">// = 5.61;</span></div>
-<div class="line"><span class="lineno">  346</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ac1ea5c6b6678a0fcd5cbc26c14696f46">tsbmean</a>); <span class="comment">// = 1.93e9/1e6; // convert kg to kT</span></div>
-<div class="line"><span class="lineno">  347</span>    </div>
-<div class="line"><span class="lineno">  348</span>    <span class="comment">// temperature dependence of mortality</span></div>
-<div class="line"><span class="lineno">  349</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#acefe46e8f3cbe68ffd259c3ae45c8f47">cT</a>); <span class="comment">// = 0.196;</span></div>
-<div class="line"><span class="lineno">  350</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ad68da47e7ca40a27abc3f02f2032872d">Tref</a>); <span class="comment">// = 5.6;</span></div>
-<div class="line"><span class="lineno">  351</span> </div>
-<div class="line"><span class="lineno">  352</span>    <span class="comment">// temperature dependence of maturation and recruitment</span></div>
-<div class="line"><span class="lineno">  353</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a46eba78b9b118ac16e6e28ae987d951a">beta3</a>); <span class="comment">// = 0.196;</span></div>
-<div class="line"><span class="lineno">  354</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#aa309fcfd288ec7aa6d48b6d92dbc7e18">beta4</a>); <span class="comment">// = 0.196;</span></div>
-<div class="line"><span class="lineno">  355</span> </div>
-<div class="line"><span class="lineno">  356</span>    <span class="comment">// Trait dependence of mortality</span></div>
-<div class="line"><span class="lineno">  357</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ad9fa005ce697653259cb806c5bf98bf7">alpha4</a>);</div>
-<div class="line"><span class="lineno">  358</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a72bc687996096dc025a384720183ff1e">alpha1_ref</a>);</div>
-<div class="line"><span class="lineno">  359</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ae992a7e92f9ca9d870814879621edb29">alpha5</a>);</div>
-<div class="line"><span class="lineno">  360</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#aa70b2a9ff90395d68ef4811e94498d53">gsi_ref</a>);</div>
-<div class="line"><span class="lineno">  361</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a3da344c71d083c37266a81f433b86957">Mspawning</a>);</div>
+<p class="definition">Definition at line <a class="el" href="fish_8cpp_source.html#l00343">343</a> of file <a class="el" href="fish_8cpp_source.html">fish.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  343</span>                                                  {</div>
+<div class="line"><span class="lineno">  344</span>    <a class="code hl_class" href="classio_1_1Initializer.html">io::Initializer</a> I;</div>
+<div class="line"><span class="lineno">  345</span>    I.<a class="code hl_function" href="classio_1_1Initializer.html#a6c174190ba99677aac35c5c7e92b69b8">parse</a>(params_file, <span class="keyword">false</span>, <a class="code hl_variable" href="classFishParams.html#a77cbf2e268531fbce8a423a77d33f330">verbose</a>);</div>
+<div class="line"><span class="lineno">  346</span> </div>
+<div class="line"><span class="lineno">  347</span><span class="preprocessor">    #define READ_PAR(x) x = I.get&lt;double&gt;(&quot;fish&quot;, #x)</span></div>
+<div class="line"><span class="lineno">  348</span> </div>
+<div class="line"><span class="lineno">  349</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a4e82b65817170d95fddf8fb1ec7f2c2f">beta</a>); <span class="comment">// = 0.655793; // 0.648728;</span></div>
+<div class="line"><span class="lineno">  350</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a8d96f0461d3e606777a310fd41ed6427">r</a>); <span class="comment">// = 0.090367; // 0.077281;</span></div>
+<div class="line"><span class="lineno">  351</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a9b953d7f9a6bf05398c2d08fd92d3b6b">c</a>); <span class="comment">// = 6.519584; // 6.318308; //6.51559;</span></div>
+<div class="line"><span class="lineno">  352</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a0ef616f4111943915671a63d977dada0">q</a>); <span class="comment">// = 1;</span></div>
+<div class="line"><span class="lineno">  353</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a89828f361ac67d8c273571340aa20a39">k</a>); <span class="comment">// = 0.00674;</span></div>
+<div class="line"><span class="lineno">  354</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a5037f8b88a066532da0395848519916c">alpha</a>); <span class="comment">// = 3.056863227;</span></div>
+<div class="line"><span class="lineno">  355</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a274a3ea6e9ab15454c620394263f8bbb">E1</a>); <span class="comment">// = 2500;</span></div>
+<div class="line"><span class="lineno">  356</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a55d0ab02b554013f849d4967120f9cd3">pmrn_lp50</a>); <span class="comment">// = 148.6918; //118.122779;</span></div>
+<div class="line"><span class="lineno">  357</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a84c83547b83e0fe5af8b815c27b48c92">pmrn_width</a>); <span class="comment">// = 47.532614;</span></div>
+<div class="line"><span class="lineno">  358</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ad6cf8c1243515d9149351b8da4be36ef">pmrn_slope</a>); <span class="comment">// = -6.609008;</span></div>
+<div class="line"><span class="lineno">  359</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#af59ea8ffaa61f20d3a6b02e783889161">pmrn_envelope</a>); <span class="comment">// = 0.25;</span></div>
+<div class="line"><span class="lineno">  360</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a7fbc71a035f3b3558e255c76ebf66440">Lref</a>); <span class="comment">// = 70.48712; //80;</span></div>
+<div class="line"><span class="lineno">  361</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#afb08e689068a8cfd836cc42c8a2cdf31">growth_noise_sd</a>);</div>
 <div class="line"><span class="lineno">  362</span> </div>
-<div class="line"><span class="lineno">  363</span> </div>
-<div class="line"><span class="lineno">  364</span><span class="preprocessor">    #undef READ_PAR</span></div>
-<div class="line"><span class="lineno">  365</span> </div>
-<div class="line"><span class="lineno">  366</span>    <a class="code hl_variable" href="classFishParams.html#a5e59df1ea52a21113c419f9d56a90f89">gamma1</a> = 1-<a class="code hl_variable" href="classFishParams.html#a4e82b65817170d95fddf8fb1ec7f2c2f">beta</a>;</div>
-<div class="line"><span class="lineno">  367</span>    <a class="code hl_variable" href="classFishParams.html#a6b09291a01273b79eaeef272ed570dfc">gamma2</a> = <a class="code hl_variable" href="classFishParams.html#a5037f8b88a066532da0395848519916c">alpha</a>;</div>
-<div class="line"><span class="lineno">  368</span>    <a class="code hl_variable" href="classFishParams.html#a93a4b8af845f7e94b1dc06dd721444fc">alpha1</a> = <a class="code hl_variable" href="classFishParams.html#a9b953d7f9a6bf05398c2d08fd92d3b6b">c</a>;</div>
-<div class="line"><span class="lineno">  369</span>    <a class="code hl_variable" href="classFishParams.html#a4c806eceec4df41860a531cb3e311079">alpha2</a> = <a class="code hl_variable" href="classFishParams.html#a89828f361ac67d8c273571340aa20a39">k</a>;</div>
-<div class="line"><span class="lineno">  370</span>    <a class="code hl_variable" href="classFishParams.html#acf01d19ab76737f5bf5696da262c0b8e">gsi</a> = <a class="code hl_variable" href="classFishParams.html#a8d96f0461d3e606777a310fd41ed6427">r</a>/<a class="code hl_variable" href="classFishParams.html#a0ef616f4111943915671a63d977dada0">q</a>;</div>
-<div class="line"><span class="lineno">  371</span>    <a class="code hl_variable" href="classFishParams.html#a30d34856cb658a2460575c9e8c314c08">pmrn_intercept</a> = <a class="code hl_variable" href="classFishParams.html#a55d0ab02b554013f849d4967120f9cd3">pmrn_lp50</a>;  <span class="comment">// The variable name in params file provided by Mikko is lp50, but the description says &quot;Intercept of the PMRN midpoint curve&quot;. So I&#39;m treating this as the intercept - anyway, lp50 is age-dependent</span></div>
-<div class="line"><span class="lineno">  372</span>    <a class="code hl_variable" href="classFishParams.html#a2084b25f04afae11e36bff84ecb1e086">delta</a> = <a class="code hl_variable" href="classFishParams.html#a274a3ea6e9ab15454c620394263f8bbb">E1</a>;</div>
-<div class="line"><span class="lineno">  373</span>    <a class="code hl_variable" href="classFishParams.html#a3f0d6ed1351f845c052222823a8c507f">alpha3</a> = <a class="code hl_variable" href="classFishParams.html#a52c9c6430b195053e84c96d417d2ff13">Mref</a>;</div>
-<div class="line"><span class="lineno">  374</span>    <a class="code hl_variable" href="classFishParams.html#a317c5fd82470a283e7a001603220072e">gamma3</a> = -<a class="code hl_variable" href="classFishParams.html#a9cb42eed8cfea7a412947daed1371fb9">b</a>;</div>
-<div class="line"><span class="lineno">  375</span>    </div>
-<div class="line"><span class="lineno">  376</span> </div>
-<div class="line"><span class="lineno">  377</span>    <a class="code hl_variable" href="classFishParams.html#adf5630e1f322cbaf8508463a17dc3e38">growth_model_name</a> = I.<a class="code hl_function" href="classio_1_1Initializer.html#a098a8511a950a4449925c8315af36bdb">get</a>&lt;<span class="keywordtype">string</span>&gt;(<span class="stringliteral">&quot;fish&quot;</span>, <span class="stringliteral">&quot;growth_model_name&quot;</span>);</div>
-<div class="line"><span class="lineno">  378</span>    <a class="code hl_variable" href="classFishParams.html#ae8e31dc8125fe8882026fcf815e024ea">recruitment_model_name</a> = I.<a class="code hl_function" href="classio_1_1Initializer.html#a098a8511a950a4449925c8315af36bdb">get</a>&lt;<span class="keywordtype">string</span>&gt;(<span class="stringliteral">&quot;fish&quot;</span>, <span class="stringliteral">&quot;recruitment_model_name&quot;</span>);</div>
-<div class="line"><span class="lineno">  379</span>    <a class="code hl_variable" href="classFishParams.html#aa7d25900f889e8ddf7503bf19951502c">mortality_model_name</a> = I.<a class="code hl_function" href="classio_1_1Initializer.html#a098a8511a950a4449925c8315af36bdb">get</a>&lt;<span class="keywordtype">string</span>&gt;(<span class="stringliteral">&quot;fish&quot;</span>, <span class="stringliteral">&quot;mortality_model_name&quot;</span>);</div>
-<div class="line"><span class="lineno">  380</span>    <a class="code hl_variable" href="classFishParams.html#a6450ea1f58e9575445f87aac0c29162e">maturation_model_name</a> = I.<a class="code hl_function" href="classio_1_1Initializer.html#a098a8511a950a4449925c8315af36bdb">get</a>&lt;<span class="keywordtype">string</span>&gt;(<span class="stringliteral">&quot;fish&quot;</span>, <span class="stringliteral">&quot;maturation_model_name&quot;</span>);</div>
-<div class="line"><span class="lineno">  381</span> </div>
-<div class="line"><span class="lineno">  382</span>    <a class="code hl_function" href="classFishParams.html#a9f2eb8f9cba3f7cc9b1d187e28a0e566">init</a>(); </div>
-<div class="line"><span class="lineno">  383</span>}</div>
-<div class="ttc" id="aclassFishParams_html_a0ef616f4111943915671a63d977dada0"><div class="ttname"><a href="classFishParams.html#a0ef616f4111943915671a63d977dada0">FishParams::q</a></div><div class="ttdeci">double q</div><div class="ttdoc">Energy density of soma compared to gonads,assumed,growth and reproduction.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00038">fish.h:38</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a1fcb998085ecb598dc4ffd1b8ac5aa0e"><div class="ttname"><a href="classFishParams.html#a1fcb998085ecb598dc4ffd1b8ac5aa0e">FishParams::L0</a></div><div class="ttdeci">double L0</div><div class="ttdoc">Length at initial age.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00059">fish.h:59</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a2084b25f04afae11e36bff84ecb1e086"><div class="ttname"><a href="classFishParams.html#a2084b25f04afae11e36bff84ecb1e086">FishParams::delta</a></div><div class="ttdeci">double delta</div><div class="ttdoc">= E1</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00086">fish.h:86</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a2569ba98253c5c963d2e510c97229dea"><div class="ttname"><a href="classFishParams.html#a2569ba98253c5c963d2e510c97229dea">FishParams::s0</a></div><div class="ttdeci">double s0</div><div class="ttdoc">Egg survival probability.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00060">fish.h:60</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a274a3ea6e9ab15454c620394263f8bbb"><div class="ttname"><a href="classFishParams.html#a274a3ea6e9ab15454c620394263f8bbb">FishParams::E1</a></div><div class="ttdeci">double E1</div><div class="ttdoc">Number of eggs per unit weight of gonad ,Enberg et al. 2009,growth and reproduction.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00041">fish.h:41</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a30d34856cb658a2460575c9e8c314c08"><div class="ttname"><a href="classFishParams.html#a30d34856cb658a2460575c9e8c314c08">FishParams::pmrn_intercept</a></div><div class="ttdeci">double pmrn_intercept</div><div class="ttdoc">= pmrn_lp50</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00081">fish.h:81</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a317c5fd82470a283e7a001603220072e"><div class="ttname"><a href="classFishParams.html#a317c5fd82470a283e7a001603220072e">FishParams::gamma3</a></div><div class="ttdeci">double gamma3</div><div class="ttdoc">= -b</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00090">fish.h:90</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a3da344c71d083c37266a81f433b86957"><div class="ttname"><a href="classFishParams.html#a3da344c71d083c37266a81f433b86957">FishParams::Mspawning</a></div><div class="ttdeci">double Mspawning</div><div class="ttdoc">Natural mortality rate due to spawning.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00096">fish.h:96</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a3f0d6ed1351f845c052222823a8c507f"><div class="ttname"><a href="classFishParams.html#a3f0d6ed1351f845c052222823a8c507f">FishParams::alpha3</a></div><div class="ttdeci">double alpha3</div><div class="ttdoc">= Mref</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00091">fish.h:91</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a45175b3105a481ae7376338a5905674c"><div class="ttname"><a href="classFishParams.html#a45175b3105a481ae7376338a5905674c">FishParams::beta1</a></div><div class="ttdeci">double beta1</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00064">fish.h:64</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a46eba78b9b118ac16e6e28ae987d951a"><div class="ttname"><a href="classFishParams.html#a46eba78b9b118ac16e6e28ae987d951a">FishParams::beta3</a></div><div class="ttdeci">double beta3</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00083">fish.h:83</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a4c806eceec4df41860a531cb3e311079"><div class="ttname"><a href="classFishParams.html#a4c806eceec4df41860a531cb3e311079">FishParams::alpha2</a></div><div class="ttdeci">double alpha2</div><div class="ttdoc">= k</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00077">fish.h:77</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a4e82b65817170d95fddf8fb1ec7f2c2f"><div class="ttname"><a href="classFishParams.html#a4e82b65817170d95fddf8fb1ec7f2c2f">FishParams::beta</a></div><div class="ttdeci">double beta</div><div class="ttdoc">Exponent of energy acquisition,estimated,growth and reproduction.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00035">fish.h:35</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a5037f8b88a066532da0395848519916c"><div class="ttname"><a href="classFishParams.html#a5037f8b88a066532da0395848519916c">FishParams::alpha</a></div><div class="ttdeci">double alpha</div><div class="ttdoc">Length-weight exponent,estimated,growth and reproduction.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00040">fish.h:40</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a52c9c6430b195053e84c96d417d2ff13"><div class="ttname"><a href="classFishParams.html#a52c9c6430b195053e84c96d417d2ff13">FishParams::Mref</a></div><div class="ttdeci">double Mref</div><div class="ttdoc">Coefficient of length-dependent mortality rate.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00054">fish.h:54</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a55d0ab02b554013f849d4967120f9cd3"><div class="ttname"><a href="classFishParams.html#a55d0ab02b554013f849d4967120f9cd3">FishParams::pmrn_lp50</a></div><div class="ttdeci">double pmrn_lp50</div><div class="ttdoc">PMRN midpoint.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00042">fish.h:42</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a5d563677fd23c73a65d9c41cbe7e67d8"><div class="ttname"><a href="classFishParams.html#a5d563677fd23c73a65d9c41cbe7e67d8">FishParams::Tmean</a></div><div class="ttdeci">double Tmean</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00066">fish.h:66</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a5e59df1ea52a21113c419f9d56a90f89"><div class="ttname"><a href="classFishParams.html#a5e59df1ea52a21113c419f9d56a90f89">FishParams::gamma1</a></div><div class="ttdeci">double gamma1</div><div class="ttdoc">= 1-beta</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00074">fish.h:74</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a6b09291a01273b79eaeef272ed570dfc"><div class="ttname"><a href="classFishParams.html#a6b09291a01273b79eaeef272ed570dfc">FishParams::gamma2</a></div><div class="ttdeci">double gamma2</div><div class="ttdoc">= alpha</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00075">fish.h:75</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a72bc687996096dc025a384720183ff1e"><div class="ttname"><a href="classFishParams.html#a72bc687996096dc025a384720183ff1e">FishParams::alpha1_ref</a></div><div class="ttdeci">double alpha1_ref</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00093">fish.h:93</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a77cbf2e268531fbce8a423a77d33f330"><div class="ttname"><a href="classFishParams.html#a77cbf2e268531fbce8a423a77d33f330">FishParams::verbose</a></div><div class="ttdeci">bool verbose</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00137">fish.h:137</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a7fbc71a035f3b3558e255c76ebf66440"><div class="ttname"><a href="classFishParams.html#a7fbc71a035f3b3558e255c76ebf66440">FishParams::Lref</a></div><div class="ttdeci">double Lref</div><div class="ttdoc">Reference length in mortality function.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00046">fish.h:46</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a89828f361ac67d8c273571340aa20a39"><div class="ttname"><a href="classFishParams.html#a89828f361ac67d8c273571340aa20a39">FishParams::k</a></div><div class="ttdeci">double k</div><div class="ttdoc">Length-weight coefficient,estimated,growth and reproduction.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00039">fish.h:39</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a8c776b33636b05b1c8541db09ca57bda"><div class="ttname"><a href="classFishParams.html#a8c776b33636b05b1c8541db09ca57bda">FishParams::M0</a></div><div class="ttdeci">double M0</div><div class="ttdoc">Length independent mortality rate.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00056">fish.h:56</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a8d96f0461d3e606777a310fd41ed6427"><div class="ttname"><a href="classFishParams.html#a8d96f0461d3e606777a310fd41ed6427">FishParams::r</a></div><div class="ttdeci">double r</div><div class="ttdoc">Energetic GSI,estimated,growth and reproduction.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00036">fish.h:36</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a93a4b8af845f7e94b1dc06dd721444fc"><div class="ttname"><a href="classFishParams.html#a93a4b8af845f7e94b1dc06dd721444fc">FishParams::alpha1</a></div><div class="ttdeci">double alpha1</div><div class="ttdoc">= c</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00076">fish.h:76</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a9b953d7f9a6bf05398c2d08fd92d3b6b"><div class="ttname"><a href="classFishParams.html#a9b953d7f9a6bf05398c2d08fd92d3b6b">FishParams::c</a></div><div class="ttdeci">double c</div><div class="ttdoc">Energy acquisition parameter,estimated,growth and reproduction.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00037">fish.h:37</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a9cb42eed8cfea7a412947daed1371fb9"><div class="ttname"><a href="classFishParams.html#a9cb42eed8cfea7a412947daed1371fb9">FishParams::b</a></div><div class="ttdeci">double b</div><div class="ttdoc">Exponent of length-dependent mortality rate.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00055">fish.h:55</a></div></div>
-<div class="ttc" id="aclassFishParams_html_a9f2eb8f9cba3f7cc9b1d187e28a0e566"><div class="ttname"><a href="classFishParams.html#a9f2eb8f9cba3f7cc9b1d187e28a0e566">FishParams::init</a></div><div class="ttdeci">void init()</div><div class="ttdef"><b>Definition</b> <a href="fish_8cpp_source.html#l00301">fish.cpp:301</a></div></div>
-<div class="ttc" id="aclassFishParams_html_aa309fcfd288ec7aa6d48b6d92dbc7e18"><div class="ttname"><a href="classFishParams.html#aa309fcfd288ec7aa6d48b6d92dbc7e18">FishParams::beta4</a></div><div class="ttdeci">double beta4</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00087">fish.h:87</a></div></div>
-<div class="ttc" id="aclassFishParams_html_aa70b2a9ff90395d68ef4811e94498d53"><div class="ttname"><a href="classFishParams.html#aa70b2a9ff90395d68ef4811e94498d53">FishParams::gsi_ref</a></div><div class="ttdeci">double gsi_ref</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00095">fish.h:95</a></div></div>
-<div class="ttc" id="aclassFishParams_html_aac12f457c42496d0253c1d952d75af5a"><div class="ttname"><a href="classFishParams.html#aac12f457c42496d0253c1d952d75af5a">FishParams::Bhalf</a></div><div class="ttdeci">double Bhalf</div><div class="ttdoc">SSB at which recruitment falls by 50%.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00061">fish.h:61</a></div></div>
-<div class="ttc" id="aclassFishParams_html_ac1ea5c6b6678a0fcd5cbc26c14696f46"><div class="ttname"><a href="classFishParams.html#ac1ea5c6b6678a0fcd5cbc26c14696f46">FishParams::tsbmean</a></div><div class="ttdeci">double tsbmean</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00067">fish.h:67</a></div></div>
-<div class="ttc" id="aclassFishParams_html_acefe46e8f3cbe68ffd259c3ae45c8f47"><div class="ttname"><a href="classFishParams.html#acefe46e8f3cbe68ffd259c3ae45c8f47">FishParams::cT</a></div><div class="ttdeci">double cT</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00070">fish.h:70</a></div></div>
-<div class="ttc" id="aclassFishParams_html_acf01d19ab76737f5bf5696da262c0b8e"><div class="ttname"><a href="classFishParams.html#acf01d19ab76737f5bf5696da262c0b8e">FishParams::gsi</a></div><div class="ttdeci">double gsi</div><div class="ttdoc">= r/q</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00078">fish.h:78</a></div></div>
-<div class="ttc" id="aclassFishParams_html_ad68da47e7ca40a27abc3f02f2032872d"><div class="ttname"><a href="classFishParams.html#ad68da47e7ca40a27abc3f02f2032872d">FishParams::Tref</a></div><div class="ttdeci">double Tref</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00071">fish.h:71</a></div></div>
-<div class="ttc" id="aclassFishParams_html_ad6cf8c1243515d9149351b8da4be36ef"><div class="ttname"><a href="classFishParams.html#ad6cf8c1243515d9149351b8da4be36ef">FishParams::pmrn_slope</a></div><div class="ttdeci">double pmrn_slope</div><div class="ttdoc">PMRN slope.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00044">fish.h:44</a></div></div>
-<div class="ttc" id="aclassFishParams_html_ad9fa005ce697653259cb806c5bf98bf7"><div class="ttname"><a href="classFishParams.html#ad9fa005ce697653259cb806c5bf98bf7">FishParams::alpha4</a></div><div class="ttdeci">double alpha4</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00092">fish.h:92</a></div></div>
-<div class="ttc" id="aclassFishParams_html_ae946e956d2580924cf36cf08afdd3a6a"><div class="ttname"><a href="classFishParams.html#ae946e956d2580924cf36cf08afdd3a6a">FishParams::beta2</a></div><div class="ttdeci">double beta2</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00065">fish.h:65</a></div></div>
-<div class="ttc" id="aclassFishParams_html_ae992a7e92f9ca9d870814879621edb29"><div class="ttname"><a href="classFishParams.html#ae992a7e92f9ca9d870814879621edb29">FishParams::alpha5</a></div><div class="ttdeci">double alpha5</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00094">fish.h:94</a></div></div>
+<div class="line"><span class="lineno">  363</span>    <span class="comment">// Power law + offset</span></div>
+<div class="line"><span class="lineno">  364</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a52c9c6430b195053e84c96d417d2ff13">Mref</a>); <span class="comment">// = 0.062994; // 0.20775; // ////0.1421; //&lt;--old value from file</span></div>
+<div class="line"><span class="lineno">  365</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a9cb42eed8cfea7a412947daed1371fb9">b</a>); <span class="comment">//    = 2.455715; // 1.58127; //////1.8131;</span></div>
+<div class="line"><span class="lineno">  366</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a8c776b33636b05b1c8541db09ca57bda">M0</a>); <span class="comment">//   = 0.162126; //  0; //</span></div>
+<div class="line"><span class="lineno">  367</span> </div>
+<div class="line"><span class="lineno">  368</span>    <span class="comment">// Juvenile length and survival probability </span></div>
+<div class="line"><span class="lineno">  369</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a1fcb998085ecb598dc4ffd1b8ac5aa0e">L0</a>); <span class="comment">// = 9.1;</span></div>
+<div class="line"><span class="lineno">  370</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a2569ba98253c5c963d2e510c97229dea">s0</a>); <span class="comment">// = 0.08094733; // 0.02; // 0.09637</span></div>
+<div class="line"><span class="lineno">  371</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#aac12f457c42496d0253c1d952d75af5a">Bhalf</a>); <span class="comment">// = 187837572; //3.65e8;  // Bhalf for recruitment </span></div>
+<div class="line"><span class="lineno">  372</span> </div>
+<div class="line"><span class="lineno">  373</span>    <span class="comment">// temperature and density dependence of growth</span></div>
+<div class="line"><span class="lineno">  374</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a45175b3105a481ae7376338a5905674c">beta1</a>); <span class="comment">// = -7.07e-5;</span></div>
+<div class="line"><span class="lineno">  375</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ae946e956d2580924cf36cf08afdd3a6a">beta2</a>); <span class="comment">// = 0.178;</span></div>
+<div class="line"><span class="lineno">  376</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a5d563677fd23c73a65d9c41cbe7e67d8">Tmean</a>); <span class="comment">// = 5.61;</span></div>
+<div class="line"><span class="lineno">  377</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ac1ea5c6b6678a0fcd5cbc26c14696f46">tsbmean</a>); <span class="comment">// = 1.93e9/1e6; // convert kg to kT</span></div>
+<div class="line"><span class="lineno">  378</span>    </div>
+<div class="line"><span class="lineno">  379</span>    <span class="comment">// temperature dependence of mortality</span></div>
+<div class="line"><span class="lineno">  380</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#acefe46e8f3cbe68ffd259c3ae45c8f47">cT</a>); <span class="comment">// = 0.196;</span></div>
+<div class="line"><span class="lineno">  381</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ad68da47e7ca40a27abc3f02f2032872d">Tref</a>); <span class="comment">// = 5.6;</span></div>
+<div class="line"><span class="lineno">  382</span> </div>
+<div class="line"><span class="lineno">  383</span>    <span class="comment">// temperature dependence of maturation and recruitment</span></div>
+<div class="line"><span class="lineno">  384</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a46eba78b9b118ac16e6e28ae987d951a">beta3</a>); <span class="comment">// = 0.196;</span></div>
+<div class="line"><span class="lineno">  385</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#aa309fcfd288ec7aa6d48b6d92dbc7e18">beta4</a>); <span class="comment">// = 0.196;</span></div>
+<div class="line"><span class="lineno">  386</span> </div>
+<div class="line"><span class="lineno">  387</span>    <span class="comment">// Trait dependence of mortality</span></div>
+<div class="line"><span class="lineno">  388</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ad9fa005ce697653259cb806c5bf98bf7">alpha4</a>);</div>
+<div class="line"><span class="lineno">  389</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a72bc687996096dc025a384720183ff1e">alpha1_ref</a>);</div>
+<div class="line"><span class="lineno">  390</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ae992a7e92f9ca9d870814879621edb29">alpha5</a>);</div>
+<div class="line"><span class="lineno">  391</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#aa70b2a9ff90395d68ef4811e94498d53">gsi_ref</a>);</div>
+<div class="line"><span class="lineno">  392</span>    <a class="code hl_define" href="fish_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a3da344c71d083c37266a81f433b86957">Mspawning</a>);</div>
+<div class="line"><span class="lineno">  393</span> </div>
+<div class="line"><span class="lineno">  394</span> </div>
+<div class="line"><span class="lineno">  395</span><span class="preprocessor">    #undef READ_PAR</span></div>
+<div class="line"><span class="lineno">  396</span> </div>
+<div class="line"><span class="lineno">  397</span>    <a class="code hl_variable" href="classFishParams.html#a5e59df1ea52a21113c419f9d56a90f89">gamma1</a> = 1-<a class="code hl_variable" href="classFishParams.html#a4e82b65817170d95fddf8fb1ec7f2c2f">beta</a>;</div>
+<div class="line"><span class="lineno">  398</span>    <a class="code hl_variable" href="classFishParams.html#a6b09291a01273b79eaeef272ed570dfc">gamma2</a> = <a class="code hl_variable" href="classFishParams.html#a5037f8b88a066532da0395848519916c">alpha</a>;</div>
+<div class="line"><span class="lineno">  399</span>    <a class="code hl_variable" href="classFishParams.html#a93a4b8af845f7e94b1dc06dd721444fc">alpha1</a> = <a class="code hl_variable" href="classFishParams.html#a9b953d7f9a6bf05398c2d08fd92d3b6b">c</a>;</div>
+<div class="line"><span class="lineno">  400</span>    <a class="code hl_variable" href="classFishParams.html#a4c806eceec4df41860a531cb3e311079">alpha2</a> = <a class="code hl_variable" href="classFishParams.html#a89828f361ac67d8c273571340aa20a39">k</a>;</div>
+<div class="line"><span class="lineno">  401</span>    <a class="code hl_variable" href="classFishParams.html#acf01d19ab76737f5bf5696da262c0b8e">gsi</a> = <a class="code hl_variable" href="classFishParams.html#a8d96f0461d3e606777a310fd41ed6427">r</a>/<a class="code hl_variable" href="classFishParams.html#a0ef616f4111943915671a63d977dada0">q</a>;</div>
+<div class="line"><span class="lineno">  402</span>    <a class="code hl_variable" href="classFishParams.html#a30d34856cb658a2460575c9e8c314c08">pmrn_intercept</a> = <a class="code hl_variable" href="classFishParams.html#a55d0ab02b554013f849d4967120f9cd3">pmrn_lp50</a>;  <span class="comment">// The variable name in params file provided by Mikko is lp50, but the description says &quot;Intercept of the PMRN midpoint curve&quot;. So I&#39;m treating this as the intercept - anyway, lp50 is age-dependent</span></div>
+<div class="line"><span class="lineno">  403</span>    <a class="code hl_variable" href="classFishParams.html#a2084b25f04afae11e36bff84ecb1e086">delta</a> = <a class="code hl_variable" href="classFishParams.html#a274a3ea6e9ab15454c620394263f8bbb">E1</a>;</div>
+<div class="line"><span class="lineno">  404</span>    <a class="code hl_variable" href="classFishParams.html#a3f0d6ed1351f845c052222823a8c507f">alpha3</a> = <a class="code hl_variable" href="classFishParams.html#a52c9c6430b195053e84c96d417d2ff13">Mref</a>;</div>
+<div class="line"><span class="lineno">  405</span>    <a class="code hl_variable" href="classFishParams.html#a317c5fd82470a283e7a001603220072e">gamma3</a> = -<a class="code hl_variable" href="classFishParams.html#a9cb42eed8cfea7a412947daed1371fb9">b</a>;</div>
+<div class="line"><span class="lineno">  406</span>    </div>
+<div class="line"><span class="lineno">  407</span> </div>
+<div class="line"><span class="lineno">  408</span>    <a class="code hl_variable" href="classFishParams.html#adf5630e1f322cbaf8508463a17dc3e38">growth_model_name</a> = I.<a class="code hl_function" href="classio_1_1Initializer.html#a098a8511a950a4449925c8315af36bdb">get</a>&lt;<span class="keywordtype">string</span>&gt;(<span class="stringliteral">&quot;fish&quot;</span>, <span class="stringliteral">&quot;growth_model_name&quot;</span>);</div>
+<div class="line"><span class="lineno">  409</span>    <a class="code hl_variable" href="classFishParams.html#ae8e31dc8125fe8882026fcf815e024ea">recruitment_model_name</a> = I.<a class="code hl_function" href="classio_1_1Initializer.html#a098a8511a950a4449925c8315af36bdb">get</a>&lt;<span class="keywordtype">string</span>&gt;(<span class="stringliteral">&quot;fish&quot;</span>, <span class="stringliteral">&quot;recruitment_model_name&quot;</span>);</div>
+<div class="line"><span class="lineno">  410</span>    <a class="code hl_variable" href="classFishParams.html#aa7d25900f889e8ddf7503bf19951502c">mortality_model_name</a> = I.<a class="code hl_function" href="classio_1_1Initializer.html#a098a8511a950a4449925c8315af36bdb">get</a>&lt;<span class="keywordtype">string</span>&gt;(<span class="stringliteral">&quot;fish&quot;</span>, <span class="stringliteral">&quot;mortality_model_name&quot;</span>);</div>
+<div class="line"><span class="lineno">  411</span>    <a class="code hl_variable" href="classFishParams.html#a6450ea1f58e9575445f87aac0c29162e">maturation_model_name</a> = I.<a class="code hl_function" href="classio_1_1Initializer.html#a098a8511a950a4449925c8315af36bdb">get</a>&lt;<span class="keywordtype">string</span>&gt;(<span class="stringliteral">&quot;fish&quot;</span>, <span class="stringliteral">&quot;maturation_model_name&quot;</span>);</div>
+<div class="line"><span class="lineno">  412</span> </div>
+<div class="line"><span class="lineno">  413</span>    <a class="code hl_function" href="classFishParams.html#a9f2eb8f9cba3f7cc9b1d187e28a0e566">init</a>(); </div>
+<div class="line"><span class="lineno">  414</span>}</div>
+<div class="ttc" id="aclassFishParams_html_a0ef616f4111943915671a63d977dada0"><div class="ttname"><a href="classFishParams.html#a0ef616f4111943915671a63d977dada0">FishParams::q</a></div><div class="ttdeci">double q</div><div class="ttdoc">Energy density of soma compared to gonads,assumed,growth and reproduction.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00040">fish.h:40</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a1fcb998085ecb598dc4ffd1b8ac5aa0e"><div class="ttname"><a href="classFishParams.html#a1fcb998085ecb598dc4ffd1b8ac5aa0e">FishParams::L0</a></div><div class="ttdeci">double L0</div><div class="ttdoc">Length at initial age.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00062">fish.h:62</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a2084b25f04afae11e36bff84ecb1e086"><div class="ttname"><a href="classFishParams.html#a2084b25f04afae11e36bff84ecb1e086">FishParams::delta</a></div><div class="ttdeci">double delta</div><div class="ttdoc">= E1</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00089">fish.h:89</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a2569ba98253c5c963d2e510c97229dea"><div class="ttname"><a href="classFishParams.html#a2569ba98253c5c963d2e510c97229dea">FishParams::s0</a></div><div class="ttdeci">double s0</div><div class="ttdoc">Egg survival probability.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00063">fish.h:63</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a274a3ea6e9ab15454c620394263f8bbb"><div class="ttname"><a href="classFishParams.html#a274a3ea6e9ab15454c620394263f8bbb">FishParams::E1</a></div><div class="ttdeci">double E1</div><div class="ttdoc">Number of eggs per unit weight of gonad ,Enberg et al. 2009,growth and reproduction.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00043">fish.h:43</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a30d34856cb658a2460575c9e8c314c08"><div class="ttname"><a href="classFishParams.html#a30d34856cb658a2460575c9e8c314c08">FishParams::pmrn_intercept</a></div><div class="ttdeci">double pmrn_intercept</div><div class="ttdoc">= pmrn_lp50</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00084">fish.h:84</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a317c5fd82470a283e7a001603220072e"><div class="ttname"><a href="classFishParams.html#a317c5fd82470a283e7a001603220072e">FishParams::gamma3</a></div><div class="ttdeci">double gamma3</div><div class="ttdoc">= -b</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00093">fish.h:93</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a3da344c71d083c37266a81f433b86957"><div class="ttname"><a href="classFishParams.html#a3da344c71d083c37266a81f433b86957">FishParams::Mspawning</a></div><div class="ttdeci">double Mspawning</div><div class="ttdoc">Natural mortality rate due to spawning.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00099">fish.h:99</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a3f0d6ed1351f845c052222823a8c507f"><div class="ttname"><a href="classFishParams.html#a3f0d6ed1351f845c052222823a8c507f">FishParams::alpha3</a></div><div class="ttdeci">double alpha3</div><div class="ttdoc">= Mref</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00094">fish.h:94</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a45175b3105a481ae7376338a5905674c"><div class="ttname"><a href="classFishParams.html#a45175b3105a481ae7376338a5905674c">FishParams::beta1</a></div><div class="ttdeci">double beta1</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00067">fish.h:67</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a46eba78b9b118ac16e6e28ae987d951a"><div class="ttname"><a href="classFishParams.html#a46eba78b9b118ac16e6e28ae987d951a">FishParams::beta3</a></div><div class="ttdeci">double beta3</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00086">fish.h:86</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a4c806eceec4df41860a531cb3e311079"><div class="ttname"><a href="classFishParams.html#a4c806eceec4df41860a531cb3e311079">FishParams::alpha2</a></div><div class="ttdeci">double alpha2</div><div class="ttdoc">= k</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00080">fish.h:80</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a4e82b65817170d95fddf8fb1ec7f2c2f"><div class="ttname"><a href="classFishParams.html#a4e82b65817170d95fddf8fb1ec7f2c2f">FishParams::beta</a></div><div class="ttdeci">double beta</div><div class="ttdoc">Exponent of energy acquisition,estimated,growth and reproduction.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00037">fish.h:37</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a5037f8b88a066532da0395848519916c"><div class="ttname"><a href="classFishParams.html#a5037f8b88a066532da0395848519916c">FishParams::alpha</a></div><div class="ttdeci">double alpha</div><div class="ttdoc">Length-weight exponent,estimated,growth and reproduction.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00042">fish.h:42</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a52c9c6430b195053e84c96d417d2ff13"><div class="ttname"><a href="classFishParams.html#a52c9c6430b195053e84c96d417d2ff13">FishParams::Mref</a></div><div class="ttdeci">double Mref</div><div class="ttdoc">Coefficient of length-dependent mortality rate.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00057">fish.h:57</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a55d0ab02b554013f849d4967120f9cd3"><div class="ttname"><a href="classFishParams.html#a55d0ab02b554013f849d4967120f9cd3">FishParams::pmrn_lp50</a></div><div class="ttdeci">double pmrn_lp50</div><div class="ttdoc">PMRN midpoint.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00044">fish.h:44</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a5d563677fd23c73a65d9c41cbe7e67d8"><div class="ttname"><a href="classFishParams.html#a5d563677fd23c73a65d9c41cbe7e67d8">FishParams::Tmean</a></div><div class="ttdeci">double Tmean</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00069">fish.h:69</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a5e59df1ea52a21113c419f9d56a90f89"><div class="ttname"><a href="classFishParams.html#a5e59df1ea52a21113c419f9d56a90f89">FishParams::gamma1</a></div><div class="ttdeci">double gamma1</div><div class="ttdoc">= 1-beta</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00077">fish.h:77</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a6b09291a01273b79eaeef272ed570dfc"><div class="ttname"><a href="classFishParams.html#a6b09291a01273b79eaeef272ed570dfc">FishParams::gamma2</a></div><div class="ttdeci">double gamma2</div><div class="ttdoc">= alpha</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00078">fish.h:78</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a72bc687996096dc025a384720183ff1e"><div class="ttname"><a href="classFishParams.html#a72bc687996096dc025a384720183ff1e">FishParams::alpha1_ref</a></div><div class="ttdeci">double alpha1_ref</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00096">fish.h:96</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a77cbf2e268531fbce8a423a77d33f330"><div class="ttname"><a href="classFishParams.html#a77cbf2e268531fbce8a423a77d33f330">FishParams::verbose</a></div><div class="ttdeci">bool verbose</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00140">fish.h:140</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a7fbc71a035f3b3558e255c76ebf66440"><div class="ttname"><a href="classFishParams.html#a7fbc71a035f3b3558e255c76ebf66440">FishParams::Lref</a></div><div class="ttdeci">double Lref</div><div class="ttdoc">Reference length in mortality function.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00048">fish.h:48</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a89828f361ac67d8c273571340aa20a39"><div class="ttname"><a href="classFishParams.html#a89828f361ac67d8c273571340aa20a39">FishParams::k</a></div><div class="ttdeci">double k</div><div class="ttdoc">Length-weight coefficient,estimated,growth and reproduction.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00041">fish.h:41</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a8c776b33636b05b1c8541db09ca57bda"><div class="ttname"><a href="classFishParams.html#a8c776b33636b05b1c8541db09ca57bda">FishParams::M0</a></div><div class="ttdeci">double M0</div><div class="ttdoc">Length independent mortality rate.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00059">fish.h:59</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a8d96f0461d3e606777a310fd41ed6427"><div class="ttname"><a href="classFishParams.html#a8d96f0461d3e606777a310fd41ed6427">FishParams::r</a></div><div class="ttdeci">double r</div><div class="ttdoc">Energetic GSI,estimated,growth and reproduction.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00038">fish.h:38</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a93a4b8af845f7e94b1dc06dd721444fc"><div class="ttname"><a href="classFishParams.html#a93a4b8af845f7e94b1dc06dd721444fc">FishParams::alpha1</a></div><div class="ttdeci">double alpha1</div><div class="ttdoc">= c</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00079">fish.h:79</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a9b953d7f9a6bf05398c2d08fd92d3b6b"><div class="ttname"><a href="classFishParams.html#a9b953d7f9a6bf05398c2d08fd92d3b6b">FishParams::c</a></div><div class="ttdeci">double c</div><div class="ttdoc">Energy acquisition parameter,estimated,growth and reproduction.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00039">fish.h:39</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a9cb42eed8cfea7a412947daed1371fb9"><div class="ttname"><a href="classFishParams.html#a9cb42eed8cfea7a412947daed1371fb9">FishParams::b</a></div><div class="ttdeci">double b</div><div class="ttdoc">Exponent of length-dependent mortality rate.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00058">fish.h:58</a></div></div>
+<div class="ttc" id="aclassFishParams_html_a9f2eb8f9cba3f7cc9b1d187e28a0e566"><div class="ttname"><a href="classFishParams.html#a9f2eb8f9cba3f7cc9b1d187e28a0e566">FishParams::init</a></div><div class="ttdeci">void init()</div><div class="ttdef"><b>Definition</b> <a href="fish_8cpp_source.html#l00331">fish.cpp:331</a></div></div>
+<div class="ttc" id="aclassFishParams_html_aa309fcfd288ec7aa6d48b6d92dbc7e18"><div class="ttname"><a href="classFishParams.html#aa309fcfd288ec7aa6d48b6d92dbc7e18">FishParams::beta4</a></div><div class="ttdeci">double beta4</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00090">fish.h:90</a></div></div>
+<div class="ttc" id="aclassFishParams_html_aa70b2a9ff90395d68ef4811e94498d53"><div class="ttname"><a href="classFishParams.html#aa70b2a9ff90395d68ef4811e94498d53">FishParams::gsi_ref</a></div><div class="ttdeci">double gsi_ref</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00098">fish.h:98</a></div></div>
+<div class="ttc" id="aclassFishParams_html_aac12f457c42496d0253c1d952d75af5a"><div class="ttname"><a href="classFishParams.html#aac12f457c42496d0253c1d952d75af5a">FishParams::Bhalf</a></div><div class="ttdeci">double Bhalf</div><div class="ttdoc">SSB at which recruitment falls by 50%.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00064">fish.h:64</a></div></div>
+<div class="ttc" id="aclassFishParams_html_ac1ea5c6b6678a0fcd5cbc26c14696f46"><div class="ttname"><a href="classFishParams.html#ac1ea5c6b6678a0fcd5cbc26c14696f46">FishParams::tsbmean</a></div><div class="ttdeci">double tsbmean</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00070">fish.h:70</a></div></div>
+<div class="ttc" id="aclassFishParams_html_acefe46e8f3cbe68ffd259c3ae45c8f47"><div class="ttname"><a href="classFishParams.html#acefe46e8f3cbe68ffd259c3ae45c8f47">FishParams::cT</a></div><div class="ttdeci">double cT</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00073">fish.h:73</a></div></div>
+<div class="ttc" id="aclassFishParams_html_acf01d19ab76737f5bf5696da262c0b8e"><div class="ttname"><a href="classFishParams.html#acf01d19ab76737f5bf5696da262c0b8e">FishParams::gsi</a></div><div class="ttdeci">double gsi</div><div class="ttdoc">= r/q</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00081">fish.h:81</a></div></div>
+<div class="ttc" id="aclassFishParams_html_ad68da47e7ca40a27abc3f02f2032872d"><div class="ttname"><a href="classFishParams.html#ad68da47e7ca40a27abc3f02f2032872d">FishParams::Tref</a></div><div class="ttdeci">double Tref</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00074">fish.h:74</a></div></div>
+<div class="ttc" id="aclassFishParams_html_ad6cf8c1243515d9149351b8da4be36ef"><div class="ttname"><a href="classFishParams.html#ad6cf8c1243515d9149351b8da4be36ef">FishParams::pmrn_slope</a></div><div class="ttdeci">double pmrn_slope</div><div class="ttdoc">PMRN slope.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00046">fish.h:46</a></div></div>
+<div class="ttc" id="aclassFishParams_html_ad9fa005ce697653259cb806c5bf98bf7"><div class="ttname"><a href="classFishParams.html#ad9fa005ce697653259cb806c5bf98bf7">FishParams::alpha4</a></div><div class="ttdeci">double alpha4</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00095">fish.h:95</a></div></div>
+<div class="ttc" id="aclassFishParams_html_ae946e956d2580924cf36cf08afdd3a6a"><div class="ttname"><a href="classFishParams.html#ae946e956d2580924cf36cf08afdd3a6a">FishParams::beta2</a></div><div class="ttdeci">double beta2</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00068">fish.h:68</a></div></div>
+<div class="ttc" id="aclassFishParams_html_ae992a7e92f9ca9d870814879621edb29"><div class="ttname"><a href="classFishParams.html#ae992a7e92f9ca9d870814879621edb29">FishParams::alpha5</a></div><div class="ttdeci">double alpha5</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00097">fish.h:97</a></div></div>
+<div class="ttc" id="aclassFishParams_html_afb08e689068a8cfd836cc42c8a2cdf31"><div class="ttname"><a href="classFishParams.html#afb08e689068a8cfd836cc42c8a2cdf31">FishParams::growth_noise_sd</a></div><div class="ttdeci">double growth_noise_sd</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00049">fish.h:49</a></div></div>
 <div class="ttc" id="aclassio_1_1Initializer_html"><div class="ttname"><a href="classio_1_1Initializer.html">io::Initializer</a></div><div class="ttdef"><b>Definition</b> <a href="initializer__v2_8h_source.html#l00047">initializer_v2.h:47</a></div></div>
 <div class="ttc" id="aclassio_1_1Initializer_html_a098a8511a950a4449925c8315af36bdb"><div class="ttname"><a href="classio_1_1Initializer.html#a098a8511a950a4449925c8315af36bdb">io::Initializer::get</a></div><div class="ttdeci">T get(const std::string &amp;sectionname, const std::string &amp;keyname) const</div><div class="ttdef"><b>Definition</b> <a href="initializer__v2_8h_source.html#l00118">initializer_v2.h:118</a></div></div>
 <div class="ttc" id="aclassio_1_1Initializer_html_a6c174190ba99677aac35c5c7e92b69b8"><div class="ttname"><a href="classio_1_1Initializer.html#a6c174190ba99677aac35c5c7e92b69b8">io::Initializer::parse</a></div><div class="ttdeci">void parse(std::istream &amp;in, bool add=false, bool verbose=true)</div><div class="ttdef"><b>Definition</b> <a href="initializer__v2_8h_source.html#l00069">initializer_v2.h:69</a></div></div>
@@ -520,79 +524,80 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8cpp_source.html#l00386">386</a> of file <a class="el" href="fish_8cpp_source.html">fish.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  386</span>                      {</div>
-<div class="line"><span class="lineno">  387</span> </div>
-<div class="line"><span class="lineno">  388</span><span class="preprocessor">    #define PRINT_PAR(x) std::cout &lt;&lt; #x &lt;&lt; &quot; = &quot; &lt;&lt; x &lt;&lt; &quot;\n&quot;</span></div>
-<div class="line"><span class="lineno">  389</span> </div>
-<div class="line"><span class="lineno">  390</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a4e82b65817170d95fddf8fb1ec7f2c2f">beta</a>); <span class="comment">// = 0.655793; // 0.648728;</span></div>
-<div class="line"><span class="lineno">  391</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a8d96f0461d3e606777a310fd41ed6427">r</a>); <span class="comment">// = 0.090367; // 0.077281;</span></div>
-<div class="line"><span class="lineno">  392</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a9b953d7f9a6bf05398c2d08fd92d3b6b">c</a>); <span class="comment">// = 6.519584; // 6.318308; //6.51559;</span></div>
-<div class="line"><span class="lineno">  393</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a0ef616f4111943915671a63d977dada0">q</a>); <span class="comment">// = 1;</span></div>
-<div class="line"><span class="lineno">  394</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a89828f361ac67d8c273571340aa20a39">k</a>); <span class="comment">// = 0.00674;</span></div>
-<div class="line"><span class="lineno">  395</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a5037f8b88a066532da0395848519916c">alpha</a>); <span class="comment">// = 3.056863227;</span></div>
-<div class="line"><span class="lineno">  396</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a274a3ea6e9ab15454c620394263f8bbb">E1</a>); <span class="comment">// = 2500;</span></div>
-<div class="line"><span class="lineno">  397</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a55d0ab02b554013f849d4967120f9cd3">pmrn_lp50</a>); <span class="comment">// = 148.6918; //118.122779;</span></div>
-<div class="line"><span class="lineno">  398</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a84c83547b83e0fe5af8b815c27b48c92">pmrn_width</a>); <span class="comment">// = 47.532614;</span></div>
-<div class="line"><span class="lineno">  399</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ad6cf8c1243515d9149351b8da4be36ef">pmrn_slope</a>); <span class="comment">// = -6.609008;</span></div>
-<div class="line"><span class="lineno">  400</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#af59ea8ffaa61f20d3a6b02e783889161">pmrn_envelope</a>); <span class="comment">// = 0.25;</span></div>
-<div class="line"><span class="lineno">  401</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a7fbc71a035f3b3558e255c76ebf66440">Lref</a>); <span class="comment">// = 70.48712; //80;</span></div>
-<div class="line"><span class="lineno">  402</span>    </div>
-<div class="line"><span class="lineno">  403</span>    <span class="comment">// Power law + offset</span></div>
-<div class="line"><span class="lineno">  404</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a52c9c6430b195053e84c96d417d2ff13">Mref</a>); <span class="comment">// = 0.062994; // 0.20775; // ////0.1421; //&lt;--old value from file</span></div>
-<div class="line"><span class="lineno">  405</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a9cb42eed8cfea7a412947daed1371fb9">b</a>); <span class="comment">//    = 2.455715; // 1.58127; //////1.8131;</span></div>
-<div class="line"><span class="lineno">  406</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a8c776b33636b05b1c8541db09ca57bda">M0</a>); <span class="comment">//   = 0.162126; //  0; //</span></div>
-<div class="line"><span class="lineno">  407</span> </div>
-<div class="line"><span class="lineno">  408</span>    <span class="comment">// Juvenile length and survival probability </span></div>
-<div class="line"><span class="lineno">  409</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a1fcb998085ecb598dc4ffd1b8ac5aa0e">L0</a>); <span class="comment">// = 9.1;</span></div>
-<div class="line"><span class="lineno">  410</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a2569ba98253c5c963d2e510c97229dea">s0</a>); <span class="comment">// = 0.08094733; // 0.02; // 0.09637</span></div>
-<div class="line"><span class="lineno">  411</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#aac12f457c42496d0253c1d952d75af5a">Bhalf</a>); <span class="comment">// = 187837572; //3.65e8;  // Bhalf for recruitment </span></div>
-<div class="line"><span class="lineno">  412</span> </div>
-<div class="line"><span class="lineno">  413</span>    <span class="comment">// temperature and density dependence of growth</span></div>
-<div class="line"><span class="lineno">  414</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a45175b3105a481ae7376338a5905674c">beta1</a>); <span class="comment">// = -7.07e-5;</span></div>
-<div class="line"><span class="lineno">  415</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ae946e956d2580924cf36cf08afdd3a6a">beta2</a>); <span class="comment">// = 0.178;</span></div>
-<div class="line"><span class="lineno">  416</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a5d563677fd23c73a65d9c41cbe7e67d8">Tmean</a>); <span class="comment">// = 5.61;</span></div>
-<div class="line"><span class="lineno">  417</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ac1ea5c6b6678a0fcd5cbc26c14696f46">tsbmean</a>); <span class="comment">// = 1.93e9/1e6; // convert kg to kT</span></div>
-<div class="line"><span class="lineno">  418</span>    </div>
-<div class="line"><span class="lineno">  419</span>    <span class="comment">// temperature dependence of mortality</span></div>
-<div class="line"><span class="lineno">  420</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#acefe46e8f3cbe68ffd259c3ae45c8f47">cT</a>); <span class="comment">// = 0.196;</span></div>
-<div class="line"><span class="lineno">  421</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ad68da47e7ca40a27abc3f02f2032872d">Tref</a>); <span class="comment">// = 5.6;</span></div>
-<div class="line"><span class="lineno">  422</span> </div>
-<div class="line"><span class="lineno">  423</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a5e59df1ea52a21113c419f9d56a90f89">gamma1</a>); <span class="comment">// = 0.33333;</span></div>
-<div class="line"><span class="lineno">  424</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a6b09291a01273b79eaeef272ed570dfc">gamma2</a>); <span class="comment">// = 3.519072971;</span></div>
-<div class="line"><span class="lineno">  425</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a93a4b8af845f7e94b1dc06dd721444fc">alpha1</a>); <span class="comment">// = 3.464594;</span></div>
-<div class="line"><span class="lineno">  426</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a4c806eceec4df41860a531cb3e311079">alpha2</a>); <span class="comment">// = 0.00156;</span></div>
-<div class="line"><span class="lineno">  427</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#acf01d19ab76737f5bf5696da262c0b8e">gsi</a>); <span class="comment">// = 0.464097;</span></div>
-<div class="line"><span class="lineno">  428</span> </div>
-<div class="line"><span class="lineno">  429</span>    <span class="comment">// maturation</span></div>
-<div class="line"><span class="lineno">  430</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a30d34856cb658a2460575c9e8c314c08">pmrn_intercept</a>); <span class="comment">// = 18.399575;</span></div>
-<div class="line"><span class="lineno">  431</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#abd9ae2686bbe953a6b96cc830999ff8b">steepness</a>);  <span class="comment">// calculated by constructor</span></div>
-<div class="line"><span class="lineno">  432</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a46eba78b9b118ac16e6e28ae987d951a">beta3</a>);  <span class="comment">// calculated by constructor</span></div>
-<div class="line"><span class="lineno">  433</span> </div>
-<div class="line"><span class="lineno">  434</span>    <span class="comment">// reproducttion</span></div>
-<div class="line"><span class="lineno">  435</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a2084b25f04afae11e36bff84ecb1e086">delta</a>); <span class="comment">// = 1820;</span></div>
-<div class="line"><span class="lineno">  436</span>    </div>
-<div class="line"><span class="lineno">  437</span>    <span class="comment">// mortality</span></div>
-<div class="line"><span class="lineno">  438</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a317c5fd82470a283e7a001603220072e">gamma3</a>); <span class="comment">// = -1.20565;</span></div>
-<div class="line"><span class="lineno">  439</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a3f0d6ed1351f845c052222823a8c507f">alpha3</a>); <span class="comment">// = 0.57792;</span></div>
-<div class="line"><span class="lineno">  440</span> </div>
-<div class="line"><span class="lineno">  441</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ad9fa005ce697653259cb806c5bf98bf7">alpha4</a>);</div>
-<div class="line"><span class="lineno">  442</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a72bc687996096dc025a384720183ff1e">alpha1_ref</a>);</div>
-<div class="line"><span class="lineno">  443</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ae992a7e92f9ca9d870814879621edb29">alpha5</a>);</div>
-<div class="line"><span class="lineno">  444</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#aa70b2a9ff90395d68ef4811e94498d53">gsi_ref</a>);</div>
-<div class="line"><span class="lineno">  445</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a3da344c71d083c37266a81f433b86957">Mspawning</a>);</div>
-<div class="line"><span class="lineno">  446</span> </div>
-<div class="line"><span class="lineno">  447</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#aa309fcfd288ec7aa6d48b6d92dbc7e18">beta4</a>);  <span class="comment">// calculated by constructor</span></div>
-<div class="line"><span class="lineno">  448</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a77cbf2e268531fbce8a423a77d33f330">verbose</a>);  <span class="comment">// calculated by constructor</span></div>
-<div class="line"><span class="lineno">  449</span> </div>
-<div class="line"><span class="lineno">  450</span>    cout &lt;&lt; <span class="stringliteral">&quot;growth_model = &quot;</span> &lt;&lt; <a class="code hl_variable" href="classFishParams.html#adf5630e1f322cbaf8508463a17dc3e38">growth_model_name</a> &lt;&lt; <span class="stringliteral">&quot; (&quot;</span> &lt;&lt; int(<a class="code hl_variable" href="classFishParams.html#a4af98d0d5fd588c58002e7d89c1ade5c">growth_model</a>) &lt;&lt; <span class="stringliteral">&quot;)\n&quot;</span>;</div>
-<div class="line"><span class="lineno">  451</span>    cout &lt;&lt; <span class="stringliteral">&quot;recruitment_model = &quot;</span> &lt;&lt; <a class="code hl_variable" href="classFishParams.html#ae8e31dc8125fe8882026fcf815e024ea">recruitment_model_name</a> &lt;&lt; <span class="stringliteral">&quot; (&quot;</span> &lt;&lt; int(<a class="code hl_variable" href="classFishParams.html#a1638f4313f3ffc1acf03f5e903342b55">recruitment_model</a>) &lt;&lt; <span class="stringliteral">&quot;)\n&quot;</span>;</div>
-<div class="line"><span class="lineno">  452</span>    cout &lt;&lt; <span class="stringliteral">&quot;mortality_model = &quot;</span> &lt;&lt; <a class="code hl_variable" href="classFishParams.html#aa7d25900f889e8ddf7503bf19951502c">mortality_model_name</a> &lt;&lt; <span class="stringliteral">&quot; (&quot;</span> &lt;&lt; int(<a class="code hl_variable" href="classFishParams.html#a64929bbb9f725cce58831c3aacab6562">mortality_model</a>) &lt;&lt; <span class="stringliteral">&quot;)\n&quot;</span>;</div>
-<div class="line"><span class="lineno">  453</span>    cout &lt;&lt; <span class="stringliteral">&quot;maturation_model = &quot;</span> &lt;&lt; <a class="code hl_variable" href="classFishParams.html#a6450ea1f58e9575445f87aac0c29162e">maturation_model_name</a> &lt;&lt; <span class="stringliteral">&quot; (&quot;</span> &lt;&lt; int(<a class="code hl_variable" href="classFishParams.html#a3ab457de2ee4baf129178e3b4bf07041">maturation_model</a>) &lt;&lt; <span class="stringliteral">&quot;)\n&quot;</span>;</div>
+<p class="definition">Definition at line <a class="el" href="fish_8cpp_source.html#l00417">417</a> of file <a class="el" href="fish_8cpp_source.html">fish.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  417</span>                      {</div>
+<div class="line"><span class="lineno">  418</span> </div>
+<div class="line"><span class="lineno">  419</span><span class="preprocessor">    #define PRINT_PAR(x) std::cout &lt;&lt; #x &lt;&lt; &quot; = &quot; &lt;&lt; x &lt;&lt; &quot;\n&quot;</span></div>
+<div class="line"><span class="lineno">  420</span> </div>
+<div class="line"><span class="lineno">  421</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a4e82b65817170d95fddf8fb1ec7f2c2f">beta</a>); <span class="comment">// = 0.655793; // 0.648728;</span></div>
+<div class="line"><span class="lineno">  422</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a8d96f0461d3e606777a310fd41ed6427">r</a>); <span class="comment">// = 0.090367; // 0.077281;</span></div>
+<div class="line"><span class="lineno">  423</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a9b953d7f9a6bf05398c2d08fd92d3b6b">c</a>); <span class="comment">// = 6.519584; // 6.318308; //6.51559;</span></div>
+<div class="line"><span class="lineno">  424</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a0ef616f4111943915671a63d977dada0">q</a>); <span class="comment">// = 1;</span></div>
+<div class="line"><span class="lineno">  425</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a89828f361ac67d8c273571340aa20a39">k</a>); <span class="comment">// = 0.00674;</span></div>
+<div class="line"><span class="lineno">  426</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a5037f8b88a066532da0395848519916c">alpha</a>); <span class="comment">// = 3.056863227;</span></div>
+<div class="line"><span class="lineno">  427</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a274a3ea6e9ab15454c620394263f8bbb">E1</a>); <span class="comment">// = 2500;</span></div>
+<div class="line"><span class="lineno">  428</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a55d0ab02b554013f849d4967120f9cd3">pmrn_lp50</a>); <span class="comment">// = 148.6918; //118.122779;</span></div>
+<div class="line"><span class="lineno">  429</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a84c83547b83e0fe5af8b815c27b48c92">pmrn_width</a>); <span class="comment">// = 47.532614;</span></div>
+<div class="line"><span class="lineno">  430</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ad6cf8c1243515d9149351b8da4be36ef">pmrn_slope</a>); <span class="comment">// = -6.609008;</span></div>
+<div class="line"><span class="lineno">  431</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#af59ea8ffaa61f20d3a6b02e783889161">pmrn_envelope</a>); <span class="comment">// = 0.25;</span></div>
+<div class="line"><span class="lineno">  432</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a7fbc71a035f3b3558e255c76ebf66440">Lref</a>); <span class="comment">// = 70.48712; //80;</span></div>
+<div class="line"><span class="lineno">  433</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#afb08e689068a8cfd836cc42c8a2cdf31">growth_noise_sd</a>);</div>
+<div class="line"><span class="lineno">  434</span>    </div>
+<div class="line"><span class="lineno">  435</span>    <span class="comment">// Power law + offset</span></div>
+<div class="line"><span class="lineno">  436</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a52c9c6430b195053e84c96d417d2ff13">Mref</a>); <span class="comment">// = 0.062994; // 0.20775; // ////0.1421; //&lt;--old value from file</span></div>
+<div class="line"><span class="lineno">  437</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a9cb42eed8cfea7a412947daed1371fb9">b</a>); <span class="comment">//    = 2.455715; // 1.58127; //////1.8131;</span></div>
+<div class="line"><span class="lineno">  438</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a8c776b33636b05b1c8541db09ca57bda">M0</a>); <span class="comment">//   = 0.162126; //  0; //</span></div>
+<div class="line"><span class="lineno">  439</span> </div>
+<div class="line"><span class="lineno">  440</span>    <span class="comment">// Juvenile length and survival probability </span></div>
+<div class="line"><span class="lineno">  441</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a1fcb998085ecb598dc4ffd1b8ac5aa0e">L0</a>); <span class="comment">// = 9.1;</span></div>
+<div class="line"><span class="lineno">  442</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a2569ba98253c5c963d2e510c97229dea">s0</a>); <span class="comment">// = 0.08094733; // 0.02; // 0.09637</span></div>
+<div class="line"><span class="lineno">  443</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#aac12f457c42496d0253c1d952d75af5a">Bhalf</a>); <span class="comment">// = 187837572; //3.65e8;  // Bhalf for recruitment </span></div>
+<div class="line"><span class="lineno">  444</span> </div>
+<div class="line"><span class="lineno">  445</span>    <span class="comment">// temperature and density dependence of growth</span></div>
+<div class="line"><span class="lineno">  446</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a45175b3105a481ae7376338a5905674c">beta1</a>); <span class="comment">// = -7.07e-5;</span></div>
+<div class="line"><span class="lineno">  447</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ae946e956d2580924cf36cf08afdd3a6a">beta2</a>); <span class="comment">// = 0.178;</span></div>
+<div class="line"><span class="lineno">  448</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a5d563677fd23c73a65d9c41cbe7e67d8">Tmean</a>); <span class="comment">// = 5.61;</span></div>
+<div class="line"><span class="lineno">  449</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ac1ea5c6b6678a0fcd5cbc26c14696f46">tsbmean</a>); <span class="comment">// = 1.93e9/1e6; // convert kg to kT</span></div>
+<div class="line"><span class="lineno">  450</span>    </div>
+<div class="line"><span class="lineno">  451</span>    <span class="comment">// temperature dependence of mortality</span></div>
+<div class="line"><span class="lineno">  452</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#acefe46e8f3cbe68ffd259c3ae45c8f47">cT</a>); <span class="comment">// = 0.196;</span></div>
+<div class="line"><span class="lineno">  453</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ad68da47e7ca40a27abc3f02f2032872d">Tref</a>); <span class="comment">// = 5.6;</span></div>
 <div class="line"><span class="lineno">  454</span> </div>
-<div class="line"><span class="lineno">  455</span> </div>
-<div class="line"><span class="lineno">  456</span><span class="preprocessor">    #undef PRINT_PAR    </span></div>
-<div class="line"><span class="lineno">  457</span>}</div>
+<div class="line"><span class="lineno">  455</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a5e59df1ea52a21113c419f9d56a90f89">gamma1</a>); <span class="comment">// = 0.33333;</span></div>
+<div class="line"><span class="lineno">  456</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a6b09291a01273b79eaeef272ed570dfc">gamma2</a>); <span class="comment">// = 3.519072971;</span></div>
+<div class="line"><span class="lineno">  457</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a93a4b8af845f7e94b1dc06dd721444fc">alpha1</a>); <span class="comment">// = 3.464594;</span></div>
+<div class="line"><span class="lineno">  458</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a4c806eceec4df41860a531cb3e311079">alpha2</a>); <span class="comment">// = 0.00156;</span></div>
+<div class="line"><span class="lineno">  459</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#acf01d19ab76737f5bf5696da262c0b8e">gsi</a>); <span class="comment">// = 0.464097;</span></div>
+<div class="line"><span class="lineno">  460</span> </div>
+<div class="line"><span class="lineno">  461</span>    <span class="comment">// maturation</span></div>
+<div class="line"><span class="lineno">  462</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a30d34856cb658a2460575c9e8c314c08">pmrn_intercept</a>); <span class="comment">// = 18.399575;</span></div>
+<div class="line"><span class="lineno">  463</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#abd9ae2686bbe953a6b96cc830999ff8b">steepness</a>);  <span class="comment">// calculated by constructor</span></div>
+<div class="line"><span class="lineno">  464</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a46eba78b9b118ac16e6e28ae987d951a">beta3</a>);  <span class="comment">// calculated by constructor</span></div>
+<div class="line"><span class="lineno">  465</span> </div>
+<div class="line"><span class="lineno">  466</span>    <span class="comment">// reproducttion</span></div>
+<div class="line"><span class="lineno">  467</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a2084b25f04afae11e36bff84ecb1e086">delta</a>); <span class="comment">// = 1820;</span></div>
+<div class="line"><span class="lineno">  468</span>    </div>
+<div class="line"><span class="lineno">  469</span>    <span class="comment">// mortality</span></div>
+<div class="line"><span class="lineno">  470</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a317c5fd82470a283e7a001603220072e">gamma3</a>); <span class="comment">// = -1.20565;</span></div>
+<div class="line"><span class="lineno">  471</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a3f0d6ed1351f845c052222823a8c507f">alpha3</a>); <span class="comment">// = 0.57792;</span></div>
+<div class="line"><span class="lineno">  472</span> </div>
+<div class="line"><span class="lineno">  473</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ad9fa005ce697653259cb806c5bf98bf7">alpha4</a>);</div>
+<div class="line"><span class="lineno">  474</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a72bc687996096dc025a384720183ff1e">alpha1_ref</a>);</div>
+<div class="line"><span class="lineno">  475</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#ae992a7e92f9ca9d870814879621edb29">alpha5</a>);</div>
+<div class="line"><span class="lineno">  476</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#aa70b2a9ff90395d68ef4811e94498d53">gsi_ref</a>);</div>
+<div class="line"><span class="lineno">  477</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a3da344c71d083c37266a81f433b86957">Mspawning</a>);</div>
+<div class="line"><span class="lineno">  478</span> </div>
+<div class="line"><span class="lineno">  479</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#aa309fcfd288ec7aa6d48b6d92dbc7e18">beta4</a>);  <span class="comment">// calculated by constructor</span></div>
+<div class="line"><span class="lineno">  480</span>    <a class="code hl_define" href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(<a class="code hl_variable" href="classFishParams.html#a77cbf2e268531fbce8a423a77d33f330">verbose</a>);  <span class="comment">// calculated by constructor</span></div>
+<div class="line"><span class="lineno">  481</span> </div>
+<div class="line"><span class="lineno">  482</span>    cout &lt;&lt; <span class="stringliteral">&quot;growth_model = &quot;</span> &lt;&lt; <a class="code hl_variable" href="classFishParams.html#adf5630e1f322cbaf8508463a17dc3e38">growth_model_name</a> &lt;&lt; <span class="stringliteral">&quot; (&quot;</span> &lt;&lt; int(<a class="code hl_variable" href="classFishParams.html#a4af98d0d5fd588c58002e7d89c1ade5c">growth_model</a>) &lt;&lt; <span class="stringliteral">&quot;)\n&quot;</span>;</div>
+<div class="line"><span class="lineno">  483</span>    cout &lt;&lt; <span class="stringliteral">&quot;recruitment_model = &quot;</span> &lt;&lt; <a class="code hl_variable" href="classFishParams.html#ae8e31dc8125fe8882026fcf815e024ea">recruitment_model_name</a> &lt;&lt; <span class="stringliteral">&quot; (&quot;</span> &lt;&lt; int(<a class="code hl_variable" href="classFishParams.html#a1638f4313f3ffc1acf03f5e903342b55">recruitment_model</a>) &lt;&lt; <span class="stringliteral">&quot;)\n&quot;</span>;</div>
+<div class="line"><span class="lineno">  484</span>    cout &lt;&lt; <span class="stringliteral">&quot;mortality_model = &quot;</span> &lt;&lt; <a class="code hl_variable" href="classFishParams.html#aa7d25900f889e8ddf7503bf19951502c">mortality_model_name</a> &lt;&lt; <span class="stringliteral">&quot; (&quot;</span> &lt;&lt; int(<a class="code hl_variable" href="classFishParams.html#a64929bbb9f725cce58831c3aacab6562">mortality_model</a>) &lt;&lt; <span class="stringliteral">&quot;)\n&quot;</span>;</div>
+<div class="line"><span class="lineno">  485</span>    cout &lt;&lt; <span class="stringliteral">&quot;maturation_model = &quot;</span> &lt;&lt; <a class="code hl_variable" href="classFishParams.html#a6450ea1f58e9575445f87aac0c29162e">maturation_model_name</a> &lt;&lt; <span class="stringliteral">&quot; (&quot;</span> &lt;&lt; int(<a class="code hl_variable" href="classFishParams.html#a3ab457de2ee4baf129178e3b4bf07041">maturation_model</a>) &lt;&lt; <span class="stringliteral">&quot;)\n&quot;</span>;</div>
+<div class="line"><span class="lineno">  486</span> </div>
+<div class="line"><span class="lineno">  487</span> </div>
+<div class="line"><span class="lineno">  488</span><span class="preprocessor">    #undef PRINT_PAR    </span></div>
+<div class="line"><span class="lineno">  489</span>}</div>
 <div class="ttc" id="afish_8cpp_html_a28d234c610d7d5cbde8b32bf664a7129"><div class="ttname"><a href="fish_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a></div><div class="ttdeci">#define PRINT_PAR(x)</div></div>
 </div><!-- fragment -->
 </div>
@@ -610,7 +615,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00115">115</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00118">118</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -628,7 +633,7 @@ Private Attributes</h2></td></tr>
 
 <p>Length-weight exponent,estimated,growth and reproduction. </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00040">40</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00042">42</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -646,7 +651,7 @@ Private Attributes</h2></td></tr>
 
 <p>= c </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00076">76</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00079">79</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -662,7 +667,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00093">93</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00096">96</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -680,7 +685,7 @@ Private Attributes</h2></td></tr>
 
 <p>= k </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00077">77</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00080">80</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -698,7 +703,7 @@ Private Attributes</h2></td></tr>
 
 <p>= Mref </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00091">91</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00094">94</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -714,7 +719,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00092">92</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00095">95</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -730,7 +735,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00094">94</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00097">97</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -746,7 +751,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00103">103</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00106">106</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -764,7 +769,7 @@ Private Attributes</h2></td></tr>
 
 <p>Exponent of length-dependent mortality rate. </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00055">55</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00058">58</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -782,7 +787,7 @@ Private Attributes</h2></td></tr>
 
 <p>Exponent of energy acquisition,estimated,growth and reproduction. </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00035">35</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00037">37</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -798,7 +803,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00064">64</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00067">67</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -814,7 +819,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00065">65</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00068">68</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -830,7 +835,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00083">83</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00086">86</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -846,7 +851,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00087">87</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00090">90</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -864,7 +869,7 @@ Private Attributes</h2></td></tr>
 
 <p>SSB at which recruitment falls by 50%. </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00061">61</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00064">64</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -882,7 +887,7 @@ Private Attributes</h2></td></tr>
 
 <p>Energy acquisition parameter,estimated,growth and reproduction. </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00037">37</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00039">39</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -898,7 +903,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00070">70</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00073">73</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -916,7 +921,7 @@ Private Attributes</h2></td></tr>
 
 <p>= E1 </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00086">86</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00089">89</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -934,7 +939,7 @@ Private Attributes</h2></td></tr>
 
 <p>Number of eggs per unit weight of gonad ,Enberg et al. 2009,growth and reproduction. </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00041">41</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00043">43</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -950,7 +955,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00121">121</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00124">124</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -968,7 +973,7 @@ Private Attributes</h2></td></tr>
 
 <p>= 1-beta </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00074">74</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00077">77</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -986,7 +991,7 @@ Private Attributes</h2></td></tr>
 
 <p>= alpha </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00075">75</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00078">78</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1004,7 +1009,7 @@ Private Attributes</h2></td></tr>
 
 <p>= -b </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00090">90</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00093">93</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1020,7 +1025,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00128">128</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00131">131</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1036,7 +1041,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00123">123</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00126">126</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1065,11 +1070,27 @@ Private Attributes</h2></td></tr>
 <div class="ttc" id="afish_8h_html_a89f06228ff5716588bc00ee3cc4adb97ac93435785041b0a243231bb5fcb9d88d"><div class="ttname"><a href="fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ac93435785041b0a243231bb5fcb9d88d">GrowthModel::Bioenergetic</a></div><div class="ttdeci">@ Bioenergetic</div></div>
 <div class="ttc" id="afish_8h_html_a89f06228ff5716588bc00ee3cc4adb97ae7066101a9d482c483c6ffb5f85d7581"><div class="ttname"><a href="fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ae7066101a9d482c483c6ffb5f85d7581">GrowthModel::Dankel22</a></div><div class="ttdeci">@ Dankel22</div></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00016">16</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">   16</span>                                                   {</div>
-<div class="line"><span class="lineno">   17</span>        {<span class="stringliteral">&quot;Dankel22&quot;</span>,     <a class="code hl_enumvalue" href="fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ae7066101a9d482c483c6ffb5f85d7581">GrowthModel::Dankel22</a>}, </div>
-<div class="line"><span class="lineno">   18</span>        {<span class="stringliteral">&quot;Bioenergetic&quot;</span>, <a class="code hl_enumvalue" href="fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ac93435785041b0a243231bb5fcb9d88d">GrowthModel::Bioenergetic</a>}};</div>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00017">17</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   17</span>                                                   {</div>
+<div class="line"><span class="lineno">   18</span>        {<span class="stringliteral">&quot;Dankel22&quot;</span>,     <a class="code hl_enumvalue" href="fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ae7066101a9d482c483c6ffb5f85d7581">GrowthModel::Dankel22</a>}, </div>
+<div class="line"><span class="lineno">   19</span>        {<span class="stringliteral">&quot;Bioenergetic&quot;</span>, <a class="code hl_enumvalue" href="fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ac93435785041b0a243231bb5fcb9d88d">GrowthModel::Bioenergetic</a>}};</div>
 </div><!-- fragment -->
+</div>
+</div>
+<a id="afb08e689068a8cfd836cc42c8a2cdf31" name="afb08e689068a8cfd836cc42c8a2cdf31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb08e689068a8cfd836cc42c8a2cdf31">&#9670;&#160;</a></span>growth_noise_sd</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">double FishParams::growth_noise_sd</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00049">49</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+
 </div>
 </div>
 <a id="acf01d19ab76737f5bf5696da262c0b8e" name="acf01d19ab76737f5bf5696da262c0b8e"></a>
@@ -1086,7 +1107,7 @@ Private Attributes</h2></td></tr>
 
 <p>= r/q </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00078">78</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00081">81</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1102,7 +1123,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00095">95</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00098">98</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1120,7 +1141,7 @@ Private Attributes</h2></td></tr>
 
 <p>Length-weight coefficient,estimated,growth and reproduction. </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00039">39</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00041">41</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1136,7 +1157,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00114">114</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00117">117</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1154,7 +1175,7 @@ Private Attributes</h2></td></tr>
 
 <p>Length at initial age. </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00059">59</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00062">62</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1170,7 +1191,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00113">113</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00116">116</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1188,7 +1209,7 @@ Private Attributes</h2></td></tr>
 
 <p>Reference length in mortality function. </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00046">46</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00048">48</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1206,7 +1227,7 @@ Private Attributes</h2></td></tr>
 
 <p>Length independent mortality rate. </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00056">56</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00059">59</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1225,10 +1246,10 @@ Private Attributes</h2></td></tr>
 <div class="line">                                  1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000,</div>
 <div class="line">                                  1.00000000, 1.00000000, 1.00000000, 1.00000000}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00105">105</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  105</span>                           {0,  0.00000000, 0.00000000, 0.00020000, 0.00270054, 0.05375589, 0.28351881, 0.46168639, 0.57433361, 0.65978050, 0.69259962, 0.65432099, 0.35714286, 1.00000000,</div>
-<div class="line"><span class="lineno">  106</span>                                  1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000,</div>
-<div class="line"><span class="lineno">  107</span>                                  1.00000000, 1.00000000, 1.00000000, 1.00000000};   <span class="comment">// maturation probability with age</span></div>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00108">108</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  108</span>                           {0,  0.00000000, 0.00000000, 0.00020000, 0.00270054, 0.05375589, 0.28351881, 0.46168639, 0.57433361, 0.65978050, 0.69259962, 0.65432099, 0.35714286, 1.00000000,</div>
+<div class="line"><span class="lineno">  109</span>                                  1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000, 1.00000000,</div>
+<div class="line"><span class="lineno">  110</span>                                  1.00000000, 1.00000000, 1.00000000, 1.00000000};   <span class="comment">// maturation probability with age</span></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1246,9 +1267,9 @@ Private Attributes</h2></td></tr>
 <b>Initial value:</b><div class="fragment"><div class="line">= {0, 1.48936, 0.61272, 0.36018, 0.26108, 0.22300, 0.20447, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000,</div>
 <div class="line">                                  0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00108">108</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  108</span>                            {0, 1.48936, 0.61272, 0.36018, 0.26108, 0.22300, 0.20447, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000,</div>
-<div class="line"><span class="lineno">  109</span>                                  0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000}; <span class="comment">// mortality rate of immature indivuduals</span></div>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00111">111</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  111</span>                            {0, 1.48936, 0.61272, 0.36018, 0.26108, 0.22300, 0.20447, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000,</div>
+<div class="line"><span class="lineno">  112</span>                                  0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000}; <span class="comment">// mortality rate of immature indivuduals</span></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1266,9 +1287,9 @@ Private Attributes</h2></td></tr>
 <b>Initial value:</b><div class="fragment"><div class="line">= {0, 1.48936, 0.61272, 0.36018, 0.26108, 0.22300, 0.20447, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000,</div>
 <div class="line">                                  0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000}</div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00110">110</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  110</span>                            {0, 1.48936, 0.61272, 0.36018, 0.26108, 0.22300, 0.20447, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000,</div>
-<div class="line"><span class="lineno">  111</span>                                  0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000}; <span class="comment">// mortality rate of mature indivuduals</span></div>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00113">113</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  113</span>                            {0, 1.48936, 0.61272, 0.36018, 0.26108, 0.22300, 0.20447, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000,</div>
+<div class="line"><span class="lineno">  114</span>                                  0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000, 0.20000}; <span class="comment">// mortality rate of mature indivuduals</span></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1284,7 +1305,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00129">129</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00132">132</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1300,7 +1321,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00124">124</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00127">127</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1329,10 +1350,10 @@ Private Attributes</h2></td></tr>
 <div class="ttc" id="afish_8h_html_a766487207e230e4d3b30e953ab944741ac93435785041b0a243231bb5fcb9d88d"><div class="ttname"><a href="fish_8h.html#a766487207e230e4d3b30e953ab944741ac93435785041b0a243231bb5fcb9d88d">MaturationModel::Bioenergetic</a></div><div class="ttdeci">@ Bioenergetic</div></div>
 <div class="ttc" id="afish_8h_html_a766487207e230e4d3b30e953ab944741ae7066101a9d482c483c6ffb5f85d7581"><div class="ttname"><a href="fish_8h.html#a766487207e230e4d3b30e953ab944741ae7066101a9d482c483c6ffb5f85d7581">MaturationModel::Dankel22</a></div><div class="ttdeci">@ Dankel22</div></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00020">20</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">   20</span>                                                           {</div>
-<div class="line"><span class="lineno">   21</span>        {<span class="stringliteral">&quot;Dankel22&quot;</span>,     <a class="code hl_enumvalue" href="fish_8h.html#a766487207e230e4d3b30e953ab944741ae7066101a9d482c483c6ffb5f85d7581">MaturationModel::Dankel22</a>}, </div>
-<div class="line"><span class="lineno">   22</span>        {<span class="stringliteral">&quot;Bioenergetic&quot;</span>, <a class="code hl_enumvalue" href="fish_8h.html#a766487207e230e4d3b30e953ab944741ac93435785041b0a243231bb5fcb9d88d">MaturationModel::Bioenergetic</a>}};</div>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00021">21</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   21</span>                                                           {</div>
+<div class="line"><span class="lineno">   22</span>        {<span class="stringliteral">&quot;Dankel22&quot;</span>,     <a class="code hl_enumvalue" href="fish_8h.html#a766487207e230e4d3b30e953ab944741ae7066101a9d482c483c6ffb5f85d7581">MaturationModel::Dankel22</a>}, </div>
+<div class="line"><span class="lineno">   23</span>        {<span class="stringliteral">&quot;Bioenergetic&quot;</span>, <a class="code hl_enumvalue" href="fish_8h.html#a766487207e230e4d3b30e953ab944741ac93435785041b0a243231bb5fcb9d88d">MaturationModel::Bioenergetic</a>}};</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1348,7 +1369,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00130">130</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00133">133</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1364,7 +1385,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00125">125</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00128">128</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1389,14 +1410,17 @@ Private Attributes</h2></td></tr>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">{</div>
 <div class="line">        {<span class="stringliteral">&quot;Dankel22&quot;</span>,     <a class="code hl_enumvalue" href="fish_8h.html#addafdf700de3f88fbc8b58b294a0e9beae7066101a9d482c483c6ffb5f85d7581">MortalityModel::Dankel22</a>}, </div>
-<div class="line">        {<span class="stringliteral">&quot;Bioenergetic&quot;</span>, <a class="code hl_enumvalue" href="fish_8h.html#addafdf700de3f88fbc8b58b294a0e9beac93435785041b0a243231bb5fcb9d88d">MortalityModel::Bioenergetic</a>}}</div>
+<div class="line">        {<span class="stringliteral">&quot;Bioenergetic&quot;</span>, <a class="code hl_enumvalue" href="fish_8h.html#addafdf700de3f88fbc8b58b294a0e9beac93435785041b0a243231bb5fcb9d88d">MortalityModel::Bioenergetic</a>},</div>
+<div class="line">        {<span class="stringliteral">&quot;Empirical&quot;</span>, <a class="code hl_enumvalue" href="fish_8h.html#addafdf700de3f88fbc8b58b294a0e9bea71dac3f0f562eb0fbbfdf1e456dfad3e">MortalityModel::Empirical</a>}}</div>
+<div class="ttc" id="afish_8h_html_addafdf700de3f88fbc8b58b294a0e9bea71dac3f0f562eb0fbbfdf1e456dfad3e"><div class="ttname"><a href="fish_8h.html#addafdf700de3f88fbc8b58b294a0e9bea71dac3f0f562eb0fbbfdf1e456dfad3e">MortalityModel::Empirical</a></div><div class="ttdeci">@ Empirical</div></div>
 <div class="ttc" id="afish_8h_html_addafdf700de3f88fbc8b58b294a0e9beac93435785041b0a243231bb5fcb9d88d"><div class="ttname"><a href="fish_8h.html#addafdf700de3f88fbc8b58b294a0e9beac93435785041b0a243231bb5fcb9d88d">MortalityModel::Bioenergetic</a></div><div class="ttdeci">@ Bioenergetic</div></div>
 <div class="ttc" id="afish_8h_html_addafdf700de3f88fbc8b58b294a0e9beae7066101a9d482c483c6ffb5f85d7581"><div class="ttname"><a href="fish_8h.html#addafdf700de3f88fbc8b58b294a0e9beae7066101a9d482c483c6ffb5f85d7581">MortalityModel::Dankel22</a></div><div class="ttdeci">@ Dankel22</div></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00024">24</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">   24</span>                                                         {</div>
-<div class="line"><span class="lineno">   25</span>        {<span class="stringliteral">&quot;Dankel22&quot;</span>,     <a class="code hl_enumvalue" href="fish_8h.html#addafdf700de3f88fbc8b58b294a0e9beae7066101a9d482c483c6ffb5f85d7581">MortalityModel::Dankel22</a>}, </div>
-<div class="line"><span class="lineno">   26</span>        {<span class="stringliteral">&quot;Bioenergetic&quot;</span>, <a class="code hl_enumvalue" href="fish_8h.html#addafdf700de3f88fbc8b58b294a0e9beac93435785041b0a243231bb5fcb9d88d">MortalityModel::Bioenergetic</a>}};</div>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00025">25</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   25</span>                                                         {</div>
+<div class="line"><span class="lineno">   26</span>        {<span class="stringliteral">&quot;Dankel22&quot;</span>,     <a class="code hl_enumvalue" href="fish_8h.html#addafdf700de3f88fbc8b58b294a0e9beae7066101a9d482c483c6ffb5f85d7581">MortalityModel::Dankel22</a>}, </div>
+<div class="line"><span class="lineno">   27</span>        {<span class="stringliteral">&quot;Bioenergetic&quot;</span>, <a class="code hl_enumvalue" href="fish_8h.html#addafdf700de3f88fbc8b58b294a0e9beac93435785041b0a243231bb5fcb9d88d">MortalityModel::Bioenergetic</a>},</div>
+<div class="line"><span class="lineno">   28</span>        {<span class="stringliteral">&quot;Empirical&quot;</span>, <a class="code hl_enumvalue" href="fish_8h.html#addafdf700de3f88fbc8b58b294a0e9bea71dac3f0f562eb0fbbfdf1e456dfad3e">MortalityModel::Empirical</a>}};</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1414,7 +1438,7 @@ Private Attributes</h2></td></tr>
 
 <p>Coefficient of length-dependent mortality rate. </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00054">54</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00057">57</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1432,7 +1456,7 @@ Private Attributes</h2></td></tr>
 
 <p>Natural mortality rate due to spawning. </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00096">96</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00099">99</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1450,7 +1474,7 @@ Private Attributes</h2></td></tr>
 
 <p>PMRN envelope. </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00045">45</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00047">47</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1468,7 +1492,7 @@ Private Attributes</h2></td></tr>
 
 <p>= pmrn_lp50 </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00081">81</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00084">84</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1486,7 +1510,7 @@ Private Attributes</h2></td></tr>
 
 <p>PMRN midpoint. </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00042">42</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00044">44</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1504,7 +1528,7 @@ Private Attributes</h2></td></tr>
 
 <p>PMRN slope. </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00044">44</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00046">46</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1522,7 +1546,7 @@ Private Attributes</h2></td></tr>
 
 <p>PMRN width. </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00043">43</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00045">45</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1540,7 +1564,7 @@ Private Attributes</h2></td></tr>
 
 <p>Energy density of soma compared to gonads,assumed,growth and reproduction. </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00038">38</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00040">40</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1558,7 +1582,7 @@ Private Attributes</h2></td></tr>
 
 <p>Energetic GSI,estimated,growth and reproduction. </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00036">36</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00038">38</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1574,7 +1598,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00117">117</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00120">120</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1590,7 +1614,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00131">131</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00134">134</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1606,7 +1630,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00126">126</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00129">129</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1639,12 +1663,12 @@ Private Attributes</h2></td></tr>
 <div class="ttc" id="afish_8h_html_a6b9df9c7d3841677a1c4dbd1c70b1435aeb73b67e0c87041d6368060109f7bacc"><div class="ttname"><a href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435aeb73b67e0c87041d6368060109f7bacc">RecruitmentModel::RickerDirect</a></div><div class="ttdeci">@ RickerDirect</div></div>
 <div class="ttc" id="afish_8h_html_a6b9df9c7d3841677a1c4dbd1c70b1435afe7d015872eef9b736741e84344a5a97"><div class="ttname"><a href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435afe7d015872eef9b736741e84344a5a97">RecruitmentModel::RickerBioenergetic</a></div><div class="ttdeci">@ RickerBioenergetic</div></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00028">28</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">   28</span>                                                             {</div>
-<div class="line"><span class="lineno">   29</span>        {<span class="stringliteral">&quot;BevertonHoltDirect&quot;</span>,       <a class="code hl_enumvalue" href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435ab2f7da5d0d71bc19e7cc301e76a7510f">RecruitmentModel::BevertonHoltDirect</a>}, </div>
-<div class="line"><span class="lineno">   30</span>        {<span class="stringliteral">&quot;BevertonHoltBioenergetic&quot;</span>, <a class="code hl_enumvalue" href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435ad188171b78078c74cc28412d1182eb52">RecruitmentModel::BevertonHoltBioenergetic</a>},</div>
-<div class="line"><span class="lineno">   31</span>        {<span class="stringliteral">&quot;RickerDirect&quot;</span>,             <a class="code hl_enumvalue" href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435aeb73b67e0c87041d6368060109f7bacc">RecruitmentModel::RickerDirect</a>}, </div>
-<div class="line"><span class="lineno">   32</span>        {<span class="stringliteral">&quot;RickerBioenergetic&quot;</span>,       <a class="code hl_enumvalue" href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435afe7d015872eef9b736741e84344a5a97">RecruitmentModel::RickerBioenergetic</a>}};</div>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00030">30</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   30</span>                                                             {</div>
+<div class="line"><span class="lineno">   31</span>        {<span class="stringliteral">&quot;BevertonHoltDirect&quot;</span>,       <a class="code hl_enumvalue" href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435ab2f7da5d0d71bc19e7cc301e76a7510f">RecruitmentModel::BevertonHoltDirect</a>}, </div>
+<div class="line"><span class="lineno">   32</span>        {<span class="stringliteral">&quot;BevertonHoltBioenergetic&quot;</span>, <a class="code hl_enumvalue" href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435ad188171b78078c74cc28412d1182eb52">RecruitmentModel::BevertonHoltBioenergetic</a>},</div>
+<div class="line"><span class="lineno">   33</span>        {<span class="stringliteral">&quot;RickerDirect&quot;</span>,             <a class="code hl_enumvalue" href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435aeb73b67e0c87041d6368060109f7bacc">RecruitmentModel::RickerDirect</a>}, </div>
+<div class="line"><span class="lineno">   34</span>        {<span class="stringliteral">&quot;RickerBioenergetic&quot;</span>,       <a class="code hl_enumvalue" href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435afe7d015872eef9b736741e84344a5a97">RecruitmentModel::RickerBioenergetic</a>}};</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -1662,7 +1686,7 @@ Private Attributes</h2></td></tr>
 
 <p>Egg survival probability. </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00060">60</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00063">63</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1680,7 +1704,7 @@ Private Attributes</h2></td></tr>
 
 <p>steepness of the PMRN, calculated during initialization </p>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00082">82</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00085">85</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1696,7 +1720,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00100">100</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00103">103</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1712,7 +1736,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00066">66</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00069">69</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1728,7 +1752,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00071">71</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00074">74</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1744,7 +1768,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00067">67</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00070">70</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1760,7 +1784,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00137">137</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00140">140</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>
@@ -1776,7 +1800,7 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00101">101</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00104">104</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
 
 </div>
 </div>

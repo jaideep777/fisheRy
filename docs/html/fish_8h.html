@@ -107,15 +107,16 @@ $(document).ready(function(){initNavTree('fish_8h.html',''); initResizable(); })
 <code>#include &lt;map&gt;</code><br />
 <code>#include &quot;<a class="el" href="functions_8h_source.html">functions.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="initializer__v2_8h_source.html">initializer_v2.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="cubic__spline_8h_source.html">cubic_spline.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for fish.h:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="fish_8h__incl.svg" width="998" height="183"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="fish_8h__incl.svg" width="1274" height="183"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="fish_8h__dep__incl.svg" width="1160" height="344"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="fish_8h__dep__incl.svg" width="727" height="344"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 <p><a href="fish_8h_source.html">Go to the source code of this file.</a></p>
@@ -139,6 +140,7 @@ Enumerations</h2></td></tr>
 <tr class="separator:a766487207e230e4d3b30e953ab944741"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addafdf700de3f88fbc8b58b294a0e9be" id="r_addafdf700de3f88fbc8b58b294a0e9be"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fish_8h.html#addafdf700de3f88fbc8b58b294a0e9be">MortalityModel</a> { <a class="el" href="fish_8h.html#addafdf700de3f88fbc8b58b294a0e9beae7066101a9d482c483c6ffb5f85d7581">Dankel22</a>
 , <a class="el" href="fish_8h.html#addafdf700de3f88fbc8b58b294a0e9beac93435785041b0a243231bb5fcb9d88d">Bioenergetic</a>
+, <a class="el" href="fish_8h.html#addafdf700de3f88fbc8b58b294a0e9bea71dac3f0f562eb0fbbfdf1e456dfad3e">Empirical</a>
  }</td></tr>
 <tr class="separator:addafdf700de3f88fbc8b58b294a0e9be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6b9df9c7d3841677a1c4dbd1c70b1435" id="r_a6b9df9c7d3841677a1c4dbd1c70b1435"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435">RecruitmentModel</a> { <a class="el" href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435ab2f7da5d0d71bc19e7cc301e76a7510f">BevertonHoltDirect</a>
@@ -173,8 +175,8 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="a89f06228ff5716588bc00ee3cc4adb97ac93435785041b0a243231bb5fcb9d88d" name="a89f06228ff5716588bc00ee3cc4adb97ac93435785041b0a243231bb5fcb9d88d"></a>Bioenergetic&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00009">9</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">    9</span>{<a class="code hl_enumvalue" href="fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ae7066101a9d482c483c6ffb5f85d7581">Dankel22</a>, <a class="code hl_enumvalue" href="fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ac93435785041b0a243231bb5fcb9d88d">Bioenergetic</a>};</div>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00010">10</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   10</span>{<a class="code hl_enumvalue" href="fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ae7066101a9d482c483c6ffb5f85d7581">Dankel22</a>, <a class="code hl_enumvalue" href="fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ac93435785041b0a243231bb5fcb9d88d">Bioenergetic</a>};</div>
 <div class="ttc" id="afish_8h_html_a89f06228ff5716588bc00ee3cc4adb97ac93435785041b0a243231bb5fcb9d88d"><div class="ttname"><a href="fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ac93435785041b0a243231bb5fcb9d88d">GrowthModel::Bioenergetic</a></div><div class="ttdeci">@ Bioenergetic</div></div>
 <div class="ttc" id="afish_8h_html_a89f06228ff5716588bc00ee3cc4adb97ae7066101a9d482c483c6ffb5f85d7581"><div class="ttname"><a href="fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ae7066101a9d482c483c6ffb5f85d7581">GrowthModel::Dankel22</a></div><div class="ttdeci">@ Dankel22</div></div>
 </div><!-- fragment -->
@@ -204,8 +206,8 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="a766487207e230e4d3b30e953ab944741ac93435785041b0a243231bb5fcb9d88d" name="a766487207e230e4d3b30e953ab944741ac93435785041b0a243231bb5fcb9d88d"></a>Bioenergetic&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00010">10</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">   10</span>{<a class="code hl_enumvalue" href="fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ae7066101a9d482c483c6ffb5f85d7581">Dankel22</a>, <a class="code hl_enumvalue" href="fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ac93435785041b0a243231bb5fcb9d88d">Bioenergetic</a>};</div>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00011">11</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   11</span>{<a class="code hl_enumvalue" href="fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ae7066101a9d482c483c6ffb5f85d7581">Dankel22</a>, <a class="code hl_enumvalue" href="fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ac93435785041b0a243231bb5fcb9d88d">Bioenergetic</a>};</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -231,10 +233,12 @@ Enumerations</h2></td></tr>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="addafdf700de3f88fbc8b58b294a0e9beae7066101a9d482c483c6ffb5f85d7581" name="addafdf700de3f88fbc8b58b294a0e9beae7066101a9d482c483c6ffb5f85d7581"></a>Dankel22&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="addafdf700de3f88fbc8b58b294a0e9beac93435785041b0a243231bb5fcb9d88d" name="addafdf700de3f88fbc8b58b294a0e9beac93435785041b0a243231bb5fcb9d88d"></a>Bioenergetic&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="addafdf700de3f88fbc8b58b294a0e9bea71dac3f0f562eb0fbbfdf1e456dfad3e" name="addafdf700de3f88fbc8b58b294a0e9bea71dac3f0f562eb0fbbfdf1e456dfad3e"></a>Empirical&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00011">11</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">   11</span>{<a class="code hl_enumvalue" href="fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ae7066101a9d482c483c6ffb5f85d7581">Dankel22</a>, <a class="code hl_enumvalue" href="fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ac93435785041b0a243231bb5fcb9d88d">Bioenergetic</a>};</div>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00012">12</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   12</span>{<a class="code hl_enumvalue" href="fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ae7066101a9d482c483c6ffb5f85d7581">Dankel22</a>, <a class="code hl_enumvalue" href="fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ac93435785041b0a243231bb5fcb9d88d">Bioenergetic</a>, <a class="code hl_enumvalue" href="fish_8h.html#addafdf700de3f88fbc8b58b294a0e9bea71dac3f0f562eb0fbbfdf1e456dfad3e">Empirical</a>};</div>
+<div class="ttc" id="afish_8h_html_addafdf700de3f88fbc8b58b294a0e9bea71dac3f0f562eb0fbbfdf1e456dfad3e"><div class="ttname"><a href="fish_8h.html#addafdf700de3f88fbc8b58b294a0e9bea71dac3f0f562eb0fbbfdf1e456dfad3e">MortalityModel::Empirical</a></div><div class="ttdeci">@ Empirical</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -264,8 +268,8 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="a6b9df9c7d3841677a1c4dbd1c70b1435afe7d015872eef9b736741e84344a5a97" name="a6b9df9c7d3841677a1c4dbd1c70b1435afe7d015872eef9b736741e84344a5a97"></a>RickerBioenergetic&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00012">12</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">   12</span>{<a class="code hl_enumvalue" href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435ab2f7da5d0d71bc19e7cc301e76a7510f">BevertonHoltDirect</a>, <a class="code hl_enumvalue" href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435ad188171b78078c74cc28412d1182eb52">BevertonHoltBioenergetic</a>, <a class="code hl_enumvalue" href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435aeb73b67e0c87041d6368060109f7bacc">RickerDirect</a>, <a class="code hl_enumvalue" href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435afe7d015872eef9b736741e84344a5a97">RickerBioenergetic</a>};</div>
+<p class="definition">Definition at line <a class="el" href="fish_8h_source.html#l00013">13</a> of file <a class="el" href="fish_8h_source.html">fish.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   13</span>{<a class="code hl_enumvalue" href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435ab2f7da5d0d71bc19e7cc301e76a7510f">BevertonHoltDirect</a>, <a class="code hl_enumvalue" href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435ad188171b78078c74cc28412d1182eb52">BevertonHoltBioenergetic</a>, <a class="code hl_enumvalue" href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435aeb73b67e0c87041d6368060109f7bacc">RickerDirect</a>, <a class="code hl_enumvalue" href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435afe7d015872eef9b736741e84344a5a97">RickerBioenergetic</a>};</div>
 <div class="ttc" id="afish_8h_html_a6b9df9c7d3841677a1c4dbd1c70b1435ab2f7da5d0d71bc19e7cc301e76a7510f"><div class="ttname"><a href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435ab2f7da5d0d71bc19e7cc301e76a7510f">RecruitmentModel::BevertonHoltDirect</a></div><div class="ttdeci">@ BevertonHoltDirect</div></div>
 <div class="ttc" id="afish_8h_html_a6b9df9c7d3841677a1c4dbd1c70b1435ad188171b78078c74cc28412d1182eb52"><div class="ttname"><a href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435ad188171b78078c74cc28412d1182eb52">RecruitmentModel::BevertonHoltBioenergetic</a></div><div class="ttdeci">@ BevertonHoltBioenergetic</div></div>
 <div class="ttc" id="afish_8h_html_a6b9df9c7d3841677a1c4dbd1c70b1435aeb73b67e0c87041d6368060109f7bacc"><div class="ttname"><a href="fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435aeb73b67e0c87041d6368060109f7bacc">RecruitmentModel::RickerDirect</a></div><div class="ttdeci">@ RickerDirect</div></div>

@@ -2,6 +2,7 @@ var fleet_8h =
 [
     [ "WindowProps", "classWindowProps.html", "classWindowProps" ],
     [ "FleetParams", "classFleetParams.html", "classFleetParams" ],
+    [ "FleetUtils", "classFleetUtils.html", "classFleetUtils" ],
     [ "Fleet", "classFleet.html", "classFleet" ],
-    [ "rd", "fleet_8h.html#a7071b0092ad8c5b57d6cc40c5f803df5", null ]
+    [ "operator+", "fleet_8h.html#ac634ac9b2348e080a8df7961e4d5c61a", null ]
 ];

@@ -1,0 +1,32 @@
+<map id="inst/include/cubic_spline.h" name="inst/include/cubic_spline.h">
+<area shape="rect" id="Node000001" title=" " alt="" coords="296,5,431,45"/>
+<area shape="rect" id="Node000002" href="$fish_8h.html" title=" " alt="" coords="152,93,288,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="319,54,242,95,240,91,316,49"/>
+<area shape="rect" id="Node000009" href="$fleet_8h.html" title=" " alt="" coords="436,240,579,265"/>
+<area shape="poly" id="edge18_Node000001_Node000009" title=" " alt="" coords="396,53,442,103,485,165,501,205,509,239,503,240,495,207,480,168,437,106,392,57"/>
+<area shape="rect" id="Node000003" href="$fisheRy_8h.html" title=" " alt="" coords="140,167,299,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="222,132,222,167,217,167,217,132"/>
+<area shape="rect" id="Node000005" href="$stock_8h.html" title=" " alt="" coords="323,167,471,192"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="262,121,369,164,367,169,260,126"/>
+<area shape="rect" id="Node000007" href="$fish__glue_8cpp.html" title=" " alt="" coords="201,401,332,427"/>
+<area shape="poly" id="edge17_Node000002_Node000007" title=" " alt="" coords="138,123,61,142,30,154,11,168,9,179,12,192,17,231,23,246,34,264,56,289,81,311,136,350,191,379,236,399,234,404,188,384,133,355,78,316,52,292,30,267,18,248,12,232,7,192,3,178,7,165,27,150,59,137,137,117"/>
+<area shape="rect" id="Node000012" href="$fish_8cpp.html" title=" " alt="" coords="22,167,116,192"/>
+<area shape="poly" id="edge16_Node000002_Node000012" title=" " alt="" coords="184,127,95,169,93,164,182,122"/>
+<area shape="rect" id="Node000004" href="$RcppExports_8cpp.html" title=" " alt="" coords="44,240,198,265"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="195,202,139,242,136,238,192,198"/>
+<area shape="rect" id="Node000006" href="$fishery__system_8h.html" title=" " alt="" coords="399,313,544,353"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="405,205,414,234,426,264,458,312,454,315,421,267,409,236,400,206"/>
+<area shape="poly" id="edge13_Node000005_Node000007" title=" " alt="" coords="368,202,340,222,311,248,284,279,264,314,258,337,258,361,265,401,260,402,253,361,253,337,259,312,280,276,307,244,337,218,365,198"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="428,197,491,238,488,242,425,202"/>
+<area shape="rect" id="Node000010" href="$fleet_8cpp.html" title=" " alt="" coords="273,321,374,346"/>
+<area shape="poly" id="edge14_Node000005_Node000010" title=" " alt="" coords="388,206,332,322,327,319,383,203"/>
+<area shape="rect" id="Node000011" href="$stock_8cpp.html" title=" " alt="" coords="620,321,726,346"/>
+<area shape="poly" id="edge15_Node000005_Node000011" title=" " alt="" coords="479,193,536,210,592,238,617,257,638,279,668,319,664,322,634,283,613,261,589,242,534,215,477,198"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="411,361,298,404,296,399,409,356"/>
+<area shape="rect" id="Node000008" href="$fishery__system_8cpp.html" title=" " alt="" coords="386,401,557,427"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="474,367,474,401,469,401,469,367"/>
+<area shape="poly" id="edge9_Node000009_Node000006" title=" " alt="" coords="499,279,483,314,478,312,494,277"/>
+<area shape="poly" id="edge10_Node000009_Node000007" title=" " alt="" coords="533,273,548,291,561,312,566,334,558,355,527,369,469,383,332,406,331,401,468,378,525,364,554,352,560,334,556,314,544,294,529,277"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="470,273,352,323,350,318,468,268"/>
+<area shape="poly" id="edge12_Node000009_Node000011" title=" " alt="" coords="545,269,650,318,648,323,543,274"/>
+</map>

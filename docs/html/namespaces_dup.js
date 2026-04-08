@@ -10,6 +10,7 @@ var namespaces_dup =
       [ "maturation_steepness", "namespacefish.html#a79ee7b63f43f9e9bda95cc04deb3a082", null ],
       [ "weight_fish", "namespacefish.html#a8eda92863da99cec25dc0a2f09571998", null ]
     ] ],
+    [ "flare", "namespaceflare.html", "namespaceflare" ],
     [ "io", "namespaceio.html", "namespaceio" ],
     [ "pn", "namespacepn.html", "namespacepn" ]
 ];

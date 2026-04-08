@@ -1,12 +1,11 @@
 var fish__glue_8cpp =
 [
+    [ "get_fished_dry_run_wrapper", "fish__glue_8cpp.html#a0603d003cf54b50cb33e1d12efe52a4f", null ],
     [ "RCPP_EXPOSED_CLASS", "fish__glue_8cpp.html#a98419b0e357e28499fdbf638fbe73e50", null ],
     [ "RCPP_EXPOSED_CLASS", "fish__glue_8cpp.html#a61cb614a3f9dc0f2b7238e44ffb4d55d", null ],
     [ "RCPP_EXPOSED_CLASS", "fish__glue_8cpp.html#abef93d8b682ec93cf83cb9137488f626", null ],
     [ "RCPP_EXPOSED_CLASS", "fish__glue_8cpp.html#a6d85de7514c5d17a372a21224e287424", null ],
     [ "RCPP_EXPOSED_CLASS", "fish__glue_8cpp.html#a105d46e138327c933b6f5d094d7ed7c5", null ],
-    [ "RCPP_EXPOSED_CLASS", "fish__glue_8cpp.html#a0a48a8421c09272bf10328a0f84d3c56", null ],
-    [ "RCPP_EXPOSED_CLASS", "fish__glue_8cpp.html#ac432fdbab3d6eb56303fe0c2bac528ef", null ],
     [ "RCPP_EXPOSED_CLASS", "fish__glue_8cpp.html#ab55db998c424cc4029006614b710ecdc", null ],
     [ "RCPP_EXPOSED_CLASS", "fish__glue_8cpp.html#acd09b5f7669323ce9de8e5842df6ac0f", null ],
     [ "RCPP_EXPOSED_CLASS", "fish__glue_8cpp.html#a7bdb2f200bfe1b4fb610dcc15c00a216", null ],

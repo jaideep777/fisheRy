@@ -98,24 +98,25 @@ $(document).ready(function(){initNavTree('stock_8cpp.html',''); initResizable();
 
 <div class="header">
   <div class="summary">
-<a href="#define-members">Macros</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle"><div class="title">stock.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &quot;<a class="el" href="population_8h_source.html">population.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="pn__zero_8h_source.html">pn_zero.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="pn__zero_8h_source.html">pn_zero.h</a>&quot;</code><br />
 <code>#include &lt;cmath&gt;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;numeric&gt;</code><br />
 <code>#include &lt;iostream&gt;</code><br />
 <code>#include &lt;fstream&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
 <code>#include &lt;cassert&gt;</code><br />
 <code>#include &quot;<a class="el" href="stock_8h_source.html">stock.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="fleet_8h_source.html">fleet.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="random__utils_8h_source.html">random_utils.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for stock.cpp:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="stock_8cpp__incl.svg" width="1099" height="330"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="stock_8cpp__incl.svg" width="1372" height="403"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 <p><a href="stock_8cpp_source.html">Go to the source code of this file.</a></p>
@@ -126,13 +127,6 @@ Macros</h2></td></tr>
 <tr class="separator:aac0e2f7a2e9c0486798d5373060b873c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28d234c610d7d5cbde8b32bf664a7129" id="r_a28d234c610d7d5cbde8b32bf664a7129"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="stock_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(x)&#160;&#160;&#160;std::cout &lt;&lt; #x &lt;&lt; &quot; = &quot; &lt;&lt; x &lt;&lt; &quot;\n&quot;</td></tr>
 <tr class="separator:a28d234c610d7d5cbde8b32bf664a7129"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
-Functions</h2></td></tr>
-<tr class="memitem:a448644b6a3a0fa7cd89a6ce52b9bd3aa" id="r_a448644b6a3a0fa7cd89a6ce52b9bd3aa"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="stock_8cpp.html#a448644b6a3a0fa7cd89a6ce52b9bd3aa">runif</a> (double rmin=0, double rmax=1)</td></tr>
-<tr class="separator:a448644b6a3a0fa7cd89a6ce52b9bd3aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61a9d6b6e4939c3d945009e0406dc44f" id="r_a61a9d6b6e4939c3d945009e0406dc44f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="stock_8cpp.html#a61a9d6b6e4939c3d945009e0406dc44f">rnorm</a> (double mu=0, double sd=1)</td></tr>
-<tr class="separator:a61a9d6b6e4939c3d945009e0406dc44f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a id="a28d234c610d7d5cbde8b32bf664a7129" name="a28d234c610d7d5cbde8b32bf664a7129"></a>
@@ -169,93 +163,6 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a61a9d6b6e4939c3d945009e0406dc44f" name="a61a9d6b6e4939c3d945009e0406dc44f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a61a9d6b6e4939c3d945009e0406dc44f">&#9670;&#160;</a></span>rnorm()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">double rnorm </td>
-          <td>(</td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>mu</em> = <code>0</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>sd</em> = <code>1</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00149">149</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  149</span>                                             {</div>
-<div class="line"><span class="lineno">  150</span>    <span class="keywordtype">double</span> u = <a class="code hl_function" href="stock_8cpp.html#a448644b6a3a0fa7cd89a6ce52b9bd3aa">runif</a>(), v = <a class="code hl_function" href="stock_8cpp.html#a448644b6a3a0fa7cd89a6ce52b9bd3aa">runif</a>();        <span class="comment">// uniform rn&#39;s [0,1] for box-muller</span></div>
-<div class="line"><span class="lineno">  151</span>    <span class="keywordtype">double</span> x = sqrt(-2.0*log(u)) * cos(2*M_PI*v);</div>
-<div class="line"><span class="lineno">  152</span>    <span class="keywordflow">return</span> mu + sd*x;</div>
-<div class="line"><span class="lineno">  153</span>}</div>
-<div class="ttc" id="astock_8cpp_html_a448644b6a3a0fa7cd89a6ce52b9bd3aa"><div class="ttname"><a href="stock_8cpp.html#a448644b6a3a0fa7cd89a6ce52b9bd3aa">runif</a></div><div class="ttdeci">double runif(double rmin=0, double rmax=1)</div><div class="ttdef"><b>Definition</b> <a href="stock_8cpp_source.html#l00144">stock.cpp:144</a></div></div>
-</div><!-- fragment -->
-</div>
-</div>
-<a id="a448644b6a3a0fa7cd89a6ce52b9bd3aa" name="a448644b6a3a0fa7cd89a6ce52b9bd3aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a448644b6a3a0fa7cd89a6ce52b9bd3aa">&#9670;&#160;</a></span>runif()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">double runif </td>
-          <td>(</td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>rmin</em> = <code>0</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>rmax</em> = <code>1</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00144">144</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  144</span>                                                 {</div>
-<div class="line"><span class="lineno">  145</span>    <span class="keywordtype">double</span> r = double(rand())/RAND_MAX; </div>
-<div class="line"><span class="lineno">  146</span>    <span class="keywordflow">return</span> rmin + (rmax-rmin)*r;</div>
-<div class="line"><span class="lineno">  147</span>}</div>
-</div><!-- fragment -->
 </div>
 </div>
 </div><!-- contents -->

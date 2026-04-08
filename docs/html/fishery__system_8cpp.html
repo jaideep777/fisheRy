@@ -98,65 +98,98 @@ $(document).ready(function(){initNavTree('fishery__system_8cpp.html',''); initRe
 
 <div class="header">
   <div class="summary">
+<a href="#define-members">Macros</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">fishery_system.cpp File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;<a class="el" href="fishery__system_8h_source.html">fishery_system.h</a>&gt;</code><br />
 <code>#include &lt;fstream&gt;</code><br />
+<code>#include &quot;<a class="el" href="random__utils_8h_source.html">random_utils.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for fishery_system.cpp:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="fishery__system_8cpp__incl.svg" width="1006" height="476"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="fishery__system_8cpp__incl.svg" width="1483" height="476"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 <p><a href="fishery__system_8cpp_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:aac0e2f7a2e9c0486798d5373060b873c" id="r_aac0e2f7a2e9c0486798d5373060b873c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fishery__system_8cpp.html#aac0e2f7a2e9c0486798d5373060b873c">READ_PAR</a>(x)&#160;&#160;&#160;x = I.get&lt;double&gt;(&quot;fishery&quot;, #x)</td></tr>
+<tr class="separator:aac0e2f7a2e9c0486798d5373060b873c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28d234c610d7d5cbde8b32bf664a7129" id="r_a28d234c610d7d5cbde8b32bf664a7129"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fishery__system_8cpp.html#a28d234c610d7d5cbde8b32bf664a7129">PRINT_PAR</a>(x)&#160;&#160;&#160;std::cout &lt;&lt; #x &lt;&lt; &quot; = &quot; &lt;&lt; x &lt;&lt; &quot;\n&quot;</td></tr>
+<tr class="separator:a28d234c610d7d5cbde8b32bf664a7129"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a448644b6a3a0fa7cd89a6ce52b9bd3aa" id="r_a448644b6a3a0fa7cd89a6ce52b9bd3aa"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fishery__system_8cpp.html#a448644b6a3a0fa7cd89a6ce52b9bd3aa">runif</a> (double rmin=0, double rmax=1)</td></tr>
-<tr class="separator:a448644b6a3a0fa7cd89a6ce52b9bd3aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a2aec343c151304395503fd8b1d6a78" id="r_a2a2aec343c151304395503fd8b1d6a78"><td class="memItemLeft" align="right" valign="top">Rcpp::NumericVector&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fishery__system_8cpp.html#a2a2aec343c151304395503fd8b1d6a78">tensor2array</a> (<a class="el" href="classTensor.html">Tensor</a>&lt; double &gt; &amp;v)</td></tr>
+<tr class="separator:a2a2aec343c151304395503fd8b1d6a78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a448644b6a3a0fa7cd89a6ce52b9bd3aa" name="a448644b6a3a0fa7cd89a6ce52b9bd3aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a448644b6a3a0fa7cd89a6ce52b9bd3aa">&#9670;&#160;</a></span>runif()</h2>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a28d234c610d7d5cbde8b32bf664a7129" name="a28d234c610d7d5cbde8b32bf664a7129"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28d234c610d7d5cbde8b32bf664a7129">&#9670;&#160;</a></span>PRINT_PAR</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">double runif </td>
+          <td class="memname">#define PRINT_PAR</td>
           <td>(</td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>rmin</em> = <code>0</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>rmax</em> = <code>1</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td>&#160;&#160;&#160;std::cout &lt;&lt; #x &lt;&lt; &quot; = &quot; &lt;&lt; x &lt;&lt; &quot;\n&quot;</td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fishery__system_8cpp_source.html#l00004">4</a> of file <a class="el" href="fishery__system_8cpp_source.html">fishery_system.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">    4</span>                                                 {</div>
-<div class="line"><span class="lineno">    5</span>    <span class="keywordtype">double</span> r = double(rand())/RAND_MAX; </div>
-<div class="line"><span class="lineno">    6</span>    <span class="keywordflow">return</span> rmin + (rmax-rmin)*r;</div>
-<div class="line"><span class="lineno">    7</span>}</div>
+</div>
+</div>
+<a id="aac0e2f7a2e9c0486798d5373060b873c" name="aac0e2f7a2e9c0486798d5373060b873c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac0e2f7a2e9c0486798d5373060b873c">&#9670;&#160;</a></span>READ_PAR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define READ_PAR</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">x</td><td>)</td>
+          <td>&#160;&#160;&#160;x = I.get&lt;double&gt;(&quot;fishery&quot;, #x)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a2a2aec343c151304395503fd8b1d6a78" name="a2a2aec343c151304395503fd8b1d6a78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a2aec343c151304395503fd8b1d6a78">&#9670;&#160;</a></span>tensor2array()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Rcpp::NumericVector tensor2array </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classTensor.html">Tensor</a>&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="fishery__system_8cpp_source.html#l00660">660</a> of file <a class="el" href="fishery__system_8cpp_source.html">fishery_system.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  660</span>                                                 {</div>
+<div class="line"><span class="lineno">  661</span>    Rcpp::NumericVector out(v.<a class="code hl_variable" href="classTensor.html#ad6fd4444f23bec83eb5613f67f08dca2">vec</a>.begin(), v.<a class="code hl_variable" href="classTensor.html#ad6fd4444f23bec83eb5613f67f08dca2">vec</a>.end()); </div>
+<div class="line"><span class="lineno">  662</span>    std::vector&lt;int&gt; dims = v.<a class="code hl_variable" href="classTensor.html#ac2d4eb335475d9fa83009fdc3502bd51">dim</a>;</div>
+<div class="line"><span class="lineno">  663</span>    std::reverse(dims.begin(), dims.end());</div>
+<div class="line"><span class="lineno">  664</span>    out.attr(<span class="stringliteral">&quot;dim&quot;</span>) = dims;</div>
+<div class="line"><span class="lineno">  665</span>    <span class="keywordflow">return</span> out;</div>
+<div class="line"><span class="lineno">  666</span>}</div>
+<div class="ttc" id="aclassTensor_html_ac2d4eb335475d9fa83009fdc3502bd51"><div class="ttname"><a href="classTensor.html#ac2d4eb335475d9fa83009fdc3502bd51">Tensor::dim</a></div><div class="ttdeci">std::vector&lt; int &gt; dim</div><div class="ttdef"><b>Definition</b> <a href="tensor_8h_source.html#l00073">tensor.h:73</a></div></div>
+<div class="ttc" id="aclassTensor_html_ad6fd4444f23bec83eb5613f67f08dca2"><div class="ttname"><a href="classTensor.html#ad6fd4444f23bec83eb5613f67f08dca2">Tensor::vec</a></div><div class="ttdeci">std::vector&lt; T &gt; vec</div><div class="ttdef"><b>Definition</b> <a href="tensor_8h_source.html#l00074">tensor.h:74</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>

@@ -30,19 +30,20 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fa-home fa-lg"></span> Home</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-theory" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fa-pencil fa-lg"></span> Theory</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-theory">
-<li><a class="dropdown-item" href="../articles/theory_bio.html"><span class="fa fa-fish"></span> Biological model</a></li>
-  </ul>
-</li>
 <li class="active nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fa-book fa-lg"></span> Tutorials</button>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials">
-<li><a class="dropdown-item" href="../articles/fishability_selectivity.html"><span class="fa fa-fish"></span> Understanding fishability and selectivity</a></li>
-    <li><a class="dropdown-item" href="../articles/effort_control_stock.html"><span class="fa fa-fish"></span> Testing effort control</a></li>
-    <li><a class="dropdown-item" href="../articles/unfished_population_stock.html"><span class="fa fa-fish"></span> Simulating an unfished population</a></li>
-    <li><a class="dropdown-item" href="../articles/fished_population_stock.html"><span class="fa fa-fish"></span> Simulating a fished population (biological model only)</a></li>
+<li><a class="dropdown-item" href="../articles/theory_bio.html"><span class="fa fa-fish"></span> Biological model of a single fish</a></li>
+    <li><a class="dropdown-item" href="../articles/unfished_population_stock.html"><span class="fa fa-fish"></span> Simulating an Unfished Population</a></li>
+    <li><a class="dropdown-item" href="../articles/calibrate_fishing_mort.html"><span class="fa fa-fish"></span> Calibrate Fishing Mortality</a></li>
+    <li><a class="dropdown-item" href="../articles/fishability_selectivity.html"><span class="fa fa-fish"></span> Fishability and Selectivity</a></li>
+    <li><a class="dropdown-item" href="../articles/effort_control_stock.html"><span class="fa fa-fish"></span> Effort Control - 1 Stock 1 Fleet</a></li>
+    <li><a class="dropdown-item" href="../articles/effort_control_stock_2fleets.html"><span class="fa fa-fish"></span> Effort Control - 1 Stock 2 Fleets</a></li>
+    <li><a class="dropdown-item" href="../articles/fished_population_stock.html"><span class="fa fa-fish"></span> Simulating a fished population</a></li>
+    <li><a class="dropdown-item" href="../articles/plot_calibration.html"><span class="fa fa-fish"></span> Plot Calibration</a></li>
+    <li><a class="dropdown-item" href="../articles/quota_calc_debug.html"><span class="fa fa-fish"></span> Quota Calculation Debug</a></li>
+    <li><a class="dropdown-item" href="../articles/h_scan.html"><span class="fa fa-fish"></span> Scan over harvest rate</a></li>
+    <li><a class="dropdown-item" href="../articles/hxT_scan.html"><span class="fa fa-fish"></span> Scan over harvest rate and temperature</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../html/index.html"><span class="fa fa-code fa-lg"></span> API</a></li>
@@ -87,7 +88,7 @@
 <code class="sourceCode R"><span><span class="va">params_file</span> <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"params/cod_params_dankel22.ini"</span><span class="op">)</span></span></code></pre></div>
 <p>Let us set parameters that allow us to reproduce the Dankel et al XXXX model.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fish</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Fish</span>, <span class="va">params_file</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">fish</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/methods/new.html" class="external-link">new</a></span><span class="op">(</span><span class="va">Fish</span>, <span class="va">params_file</span><span class="op">)</span></span>
 <span><span class="va">fish</span><span class="op">$</span><span class="va">par</span><span class="op">$</span><span class="va">Bhalf</span> <span class="op">=</span> <span class="fl">3.65e8</span></span>
 <span></span>
 <span><span class="va">fish</span><span class="op">$</span><span class="va">par</span><span class="op">$</span><span class="va">growth_model_name</span> <span class="op">=</span> <span class="st">"Dankel22"</span></span>
@@ -124,7 +125,7 @@
 </h3>
 <p>The constructor for the population requires a Fish object as an argument. This fish object will be used as a prototype to construct all fish in the population. You can create a fish population as follows:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pop</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Stock</span>, <span class="va">fish</span><span class="op">)</span>  </span>
+<code class="sourceCode R"><span><span class="va">pop</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/methods/new.html" class="external-link">new</a></span><span class="op">(</span><span class="va">Stock</span>, <span class="va">fish</span><span class="op">)</span>  </span>
 <span><span class="va">pop</span><span class="op">$</span><span class="fu">readParams</span><span class="op">(</span><span class="va">params_file</span>, <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0</span></span></code></pre>
 <!-- Inserted: explanation of Stock, superfish_size and scaling -->
@@ -202,7 +203,7 @@
 <span><span class="co">#   nfish[i] = pop$nfish()</span></span>
 <span><span class="co"># }</span></span>
 <span></span>
-<span><span class="va">v</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="fu">equilibriate_without_fishing</span><span class="op">(</span><span class="fl">5.61</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">v</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="fu">equilibriate_without_fishing</span><span class="op">(</span><span class="fl">5.61</span>, <span class="fl">200</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>nrow<span class="op">=</span><span class="fl">200</span>, byrow<span class="op">=</span><span class="cn">T</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>      <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ssb"</span>, <span class="st">"tsb"</span>, <span class="st">"maturity"</span>, <span class="st">"nr"</span>, <span class="st">"dr"</span>, <span class="st">"nfish"</span><span class="op">)</span><span class="op">)</span></span>
@@ -299,16 +300,17 @@
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">fisheRy</span><span class="op">)</span></span>
 <span><span class="va">params_file</span> <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"params/cod_params.ini"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fish</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Fish</span>, <span class="va">params_file</span><span class="op">)</span></span>
+<span><span class="va">fish</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/methods/new.html" class="external-link">new</a></span><span class="op">(</span><span class="va">Fish</span>, <span class="va">params_file</span><span class="op">)</span></span>
 <span><span class="va">fish</span><span class="op">$</span><span class="va">par</span><span class="op">$</span><span class="va">s0</span> <span class="op">=</span> <span class="fl">0.0192</span></span>
+<span><span class="va">fish</span><span class="op">$</span><span class="fu">setMortalityCurveEmpirical</span><span class="op">(</span><span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"data/naturalmort.spline.csv"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">pop</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Stock</span>, <span class="va">fish</span><span class="op">)</span></span>
+<span><span class="va">pop</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/methods/new.html" class="external-link">new</a></span><span class="op">(</span><span class="va">Stock</span>, <span class="va">fish</span><span class="op">)</span></span>
 <span><span class="va">pop</span><span class="op">$</span><span class="fu">readParams</span><span class="op">(</span><span class="va">params_file</span>, <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 0</span></span></code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pop</span><span class="op">$</span><span class="va">superfish_size</span> <span class="op">=</span> <span class="fl">1e6</span>  <span class="co"># Each superfish contains so many fish</span></span>
 <span></span>
-<span><span class="va">v</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="fu">equilibriate_without_fishing</span><span class="op">(</span><span class="fl">5.61</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>nrow<span class="op">=</span><span class="fl">200</span>, byrow<span class="op">=</span><span class="cn">T</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ssb"</span>, <span class="st">"tsb"</span>, <span class="st">"maturity"</span>, <span class="st">"nr"</span>, <span class="st">"dr"</span>, <span class="st">"nfish"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">v</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="fu">equilibriate_without_fishing</span><span class="op">(</span><span class="fl">5.61</span>, <span class="fl">200</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>nrow<span class="op">=</span><span class="fl">200</span>, byrow<span class="op">=</span><span class="cn">T</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ssb"</span>, <span class="st">"tsb"</span>, <span class="st">"maturity"</span>, <span class="st">"nr"</span>, <span class="st">"dr"</span>, <span class="st">"nfish"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">d</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="fu">get_state</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">dist</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">age</span>, <span class="va">d</span><span class="op">$</span><span class="va">length</span><span class="op">)</span></span>

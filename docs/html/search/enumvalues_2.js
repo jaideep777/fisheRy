@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['rickerbioenergetic_0',['RickerBioenergetic',['../fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435afe7d015872eef9b736741e84344a5a97',1,'fish.h']]],
-  ['rickerdirect_1',['RickerDirect',['../fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435aeb73b67e0c87041d6368060109f7bacc',1,'fish.h']]]
+  ['dankel22_0',['dankel22',['../fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ae7066101a9d482c483c6ffb5f85d7581',1,'Dankel22:&#160;fish.h'],['../fish_8h.html#a766487207e230e4d3b30e953ab944741ae7066101a9d482c483c6ffb5f85d7581',1,'Dankel22:&#160;fish.h'],['../fish_8h.html#addafdf700de3f88fbc8b58b294a0e9beae7066101a9d482c483c6ffb5f85d7581',1,'Dankel22:&#160;fish.h']]]
 ];

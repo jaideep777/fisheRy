@@ -12,7 +12,8 @@ var fish_8h =
     ] ],
     [ "MortalityModel", "fish_8h.html#addafdf700de3f88fbc8b58b294a0e9be", [
       [ "Dankel22", "fish_8h.html#addafdf700de3f88fbc8b58b294a0e9beae7066101a9d482c483c6ffb5f85d7581", null ],
-      [ "Bioenergetic", "fish_8h.html#addafdf700de3f88fbc8b58b294a0e9beac93435785041b0a243231bb5fcb9d88d", null ]
+      [ "Bioenergetic", "fish_8h.html#addafdf700de3f88fbc8b58b294a0e9beac93435785041b0a243231bb5fcb9d88d", null ],
+      [ "Empirical", "fish_8h.html#addafdf700de3f88fbc8b58b294a0e9bea71dac3f0f562eb0fbbfdf1e456dfad3e", null ]
     ] ],
     [ "RecruitmentModel", "fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435", [
       [ "BevertonHoltDirect", "fish_8h.html#a6b9df9c7d3841677a1c4dbd1c70b1435ab2f7da5d0d71bc19e7cc301e76a7510f", null ],

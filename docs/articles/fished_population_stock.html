@@ -30,19 +30,20 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fa-home fa-lg"></span> Home</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-theory" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fa-pencil fa-lg"></span> Theory</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-theory">
-<li><a class="dropdown-item" href="../articles/theory_bio.html"><span class="fa fa-fish"></span> Biological model</a></li>
-  </ul>
-</li>
 <li class="active nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fa-book fa-lg"></span> Tutorials</button>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials">
-<li><a class="dropdown-item" href="../articles/fishability_selectivity.html"><span class="fa fa-fish"></span> Understanding fishability and selectivity</a></li>
-    <li><a class="dropdown-item" href="../articles/effort_control_stock.html"><span class="fa fa-fish"></span> Testing effort control</a></li>
-    <li><a class="dropdown-item" href="../articles/unfished_population_stock.html"><span class="fa fa-fish"></span> Simulating an unfished population</a></li>
-    <li><a class="dropdown-item" href="../articles/fished_population_stock.html"><span class="fa fa-fish"></span> Simulating a fished population (biological model only)</a></li>
+<li><a class="dropdown-item" href="../articles/theory_bio.html"><span class="fa fa-fish"></span> Biological model of a single fish</a></li>
+    <li><a class="dropdown-item" href="../articles/unfished_population_stock.html"><span class="fa fa-fish"></span> Simulating an Unfished Population</a></li>
+    <li><a class="dropdown-item" href="../articles/calibrate_fishing_mort.html"><span class="fa fa-fish"></span> Calibrate Fishing Mortality</a></li>
+    <li><a class="dropdown-item" href="../articles/fishability_selectivity.html"><span class="fa fa-fish"></span> Fishability and Selectivity</a></li>
+    <li><a class="dropdown-item" href="../articles/effort_control_stock.html"><span class="fa fa-fish"></span> Effort Control - 1 Stock 1 Fleet</a></li>
+    <li><a class="dropdown-item" href="../articles/effort_control_stock_2fleets.html"><span class="fa fa-fish"></span> Effort Control - 1 Stock 2 Fleets</a></li>
+    <li><a class="dropdown-item" href="../articles/fished_population_stock.html"><span class="fa fa-fish"></span> Simulating a fished population</a></li>
+    <li><a class="dropdown-item" href="../articles/plot_calibration.html"><span class="fa fa-fish"></span> Plot Calibration</a></li>
+    <li><a class="dropdown-item" href="../articles/quota_calc_debug.html"><span class="fa fa-fish"></span> Quota Calculation Debug</a></li>
+    <li><a class="dropdown-item" href="../articles/h_scan.html"><span class="fa fa-fish"></span> Scan over harvest rate</a></li>
+    <li><a class="dropdown-item" href="../articles/hxT_scan.html"><span class="fa fa-fish"></span> Scan over harvest rate and temperature</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../html/index.html"><span class="fa fa-code fa-lg"></span> API</a></li>
@@ -63,7 +64,7 @@
       <h1>Fished Population and Stock Analysis</h1>
                         <h4 data-toc-skip class="author">Jaideep</h4>
             
-            <h4 data-toc-skip class="date">2025-12-04</h4>
+            <h4 data-toc-skip class="date">2026-04-09</h4>
       
 
       <div class="d-none name"><code>fished_population_stock.Rmd</code></div>
@@ -79,16 +80,15 @@
 <p>Let us now set up the fishery system using parameter files for fleet and fish, and inspect initial parameters.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># define parameter files</span></span>
-<span><span class="va">params_file_fleet</span> <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/here/man/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"params/fleet_1_params.ini"</span><span class="op">)</span></span>
-<span><span class="va">params_file_fish</span>  <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/here/man/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"params/cod_params.ini"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Create a fleet and read parameters</span></span>
-<span><span class="va">fleet</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Fleet</span><span class="op">)</span></span>
-<span><span class="va">fleet</span><span class="op">$</span><span class="fu">readParams</span><span class="op">(</span><span class="va">params_file_fleet</span>, <span class="cn">T</span><span class="op">)</span></span>
-<span><span class="va">fleet</span><span class="op">$</span><span class="va">par</span><span class="op">$</span><span class="fu">print</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">params_file_fleet</span> <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"params/fleet_1_params.ini"</span><span class="op">)</span></span>
+<span><span class="va">params_file_spf</span> <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"params/fleet_1s_params.ini"</span><span class="op">)</span></span>
+<span><span class="va">params_file_fish</span>  <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"params/cod_params.ini"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create a prototype fish to construct the population</span></span>
 <span><span class="va">fish</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Fish</span>, <span class="va">params_file_fish</span><span class="op">)</span></span>
+<span><span class="co"># fish$natural_mort_scalar = 1</span></span>
+<span><span class="co"># fish$setMortalityCurveEmpirical(here::here("data/naturalmort.spline.csv"))</span></span>
+<span><span class="va">fish</span><span class="op">$</span><span class="va">par</span><span class="op">$</span><span class="fu">print</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Craeate the fishery. Note that we do not need to explicitly create a population - it is contained within the fishery</span></span>
 <span><span class="va">fishery</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Fishery</span>, <span class="va">params_file_fish</span>, <span class="va">fish</span><span class="op">)</span>;</span>
@@ -105,68 +105,183 @@
 <li>Initialize the fishery - this creates fish in the real fish population.</li>
 </ul>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">fishery</span><span class="op">$</span><span class="fu">set_harvestProp</span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span>;</span>
+<code class="sourceCode R"><span><span class="va">h</span> <span class="op">=</span> <span class="fl">0.22</span></span>
+<span><span class="va">fishery</span><span class="op">$</span><span class="fu">set_harvestProp</span><span class="op">(</span><span class="va">h</span><span class="op">)</span>;</span>
 <span><span class="va">fishery</span><span class="op">$</span><span class="fu">addFleet</span><span class="op">(</span><span class="va">params_file_fleet</span>, <span class="cn">T</span><span class="op">)</span>;</span>
+<span><span class="va">fishery</span><span class="op">$</span><span class="fu">addSpawnerFleet</span><span class="op">(</span><span class="va">params_file_spf</span>, <span class="cn">T</span><span class="op">)</span>;</span>
 <span></span>
-<span><span class="co"># Simulate the Fishery's hypothetical unfished population to equilibrium</span></span>
-<span><span class="va">v</span> <span class="op">=</span> <span class="va">fishery</span><span class="op">$</span><span class="fu">equilibriateNaturalPopulation</span><span class="op">(</span><span class="fl">5.61</span>, <span class="fl">2e6</span><span class="op">)</span>;</span>
-<span></span>
+<span><span class="co"># Verify added fleet's fishing mortality curve</span></span>
+<span><span class="fu">tibble</span><span class="op">(</span>len<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">10</span>,<span class="fl">200</span>,length.out<span class="op">=</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>Fref <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_dbl</a></span><span class="op">(</span><span class="va">len</span>, <span class="op">~</span><span class="va">fishery</span><span class="op">$</span><span class="fu">get_fref</span><span class="op">(</span><span class="fl">0</span>, <span class="va">.x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">len</span>, y<span class="op">=</span><span class="va">Fref</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="fished_population_stock_files/figure-html/configure-fishery-1.png" width="700"></p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Simulate the Fishery's hypothetical unfished population to equilibrium</span></span>
+<span><span class="va">v</span> <span class="op">=</span> <span class="va">fishery</span><span class="op">$</span><span class="fu">equilibriateNaturalPopulation</span><span class="op">(</span><span class="fl">5.61</span>, <span class="fl">2e6</span>, <span class="fl">200</span><span class="op">)</span>;</span>
+<span><span class="va">fishery</span><span class="op">$</span><span class="fu">set_superFishSize</span><span class="op">(</span><span class="fl">2e6</span><span class="op">)</span></span>
 <span><span class="co"># Initialize the </span></span>
 <span><span class="va">fishery</span><span class="op">$</span><span class="fu">init</span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">0</span>, <span class="fl">5.61</span><span class="op">)</span>;</span>
+<span><span class="va">v2</span> <span class="op">=</span> <span class="va">fishery</span><span class="op">$</span><span class="fu">equilibriateWithoutFishing</span><span class="op">(</span><span class="fl">5.61</span>, <span class="fl">200</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Just a demo calc of the initial quota corresponding to the set defined harvest proportion. The Fishery will recalculate this every year.</span></span>
 <span><span class="va">quota</span> <span class="op">=</span> <span class="va">fishery</span><span class="op">$</span><span class="fu">calc_quota</span><span class="op">(</span><span class="fl">5.61</span><span class="op">)</span>;</span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Quota: "</span>, <span class="va">quota</span>, <span class="st">'\n'</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Quota:  600228.7</span></span></code></pre>
+<pre><code><span><span class="co">## Quota:  1055554787</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="running-and-visualizing-simulation">Running and Visualizing Simulation<a class="anchor" aria-label="anchor" href="#running-and-visualizing-simulation"></a>
 </h2>
 <p>Simulate the fishery over time and visualize key outputs.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">fishery</span><span class="op">$</span><span class="fu">simulate</span><span class="op">(</span><span class="fl">45</span>, <span class="fl">0.55</span>, <span class="fl">300</span>, <span class="fl">0</span>, <span class="fl">5.61</span>, <span class="cn">T</span>, <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/here/man/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"fishery_output/age_dist_pred.csv"</span><span class="op">)</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="va">fishery</span><span class="op">$</span><span class="fu">simulate</span><span class="op">(</span><span class="fl">45</span>, <span class="fl">0.22</span>, <span class="fl">300</span>, <span class="fl">1.93e3</span>, <span class="fl">5.61</span>, <span class="cn">F</span>, <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"fishery_output/age_dist_pred.csv"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">dat</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##         ssb        tsb   maturity  quota_fgf      yield effort</span></span>
-<span><span class="co">## 1         0          0        NaN    5908047    6103354      0</span></span>
-<span><span class="co">## 2         0          0        NaN   33614539   48577494      0</span></span>
-<span><span class="co">## 3  14931417  784202660 0.02114804  149167941  151122216      0</span></span>
-<span><span class="co">## 4  67640089 1575607147 0.04797048  653714083  660750429      0</span></span>
-<span><span class="co">## 5 195773758 2081257667 0.10263158 1198779550 1217286201      0</span></span>
-<span><span class="co">## 6 414948056 2010792087 0.19305019 1259638400 1270915497      0</span></span></code></pre>
+<pre><code><span><span class="co">##          ssb     yield employment      profit   effort        tsb  maturity</span></span>
+<span><span class="co">## 1 4080242964 927363199   6129.927 20524327767 68329.74 4232880983 0.7310345</span></span>
+<span><span class="co">## 2 3048017401 820637343   5783.368 17360578152 78841.21 3160629755 0.6836735</span></span>
+<span><span class="co">## 3 2188066516 426478212   3188.780  7706158084 50353.22 2271192442 0.6496350</span></span>
+<span><span class="co">## 4 1693229407 249489807   2002.748  3403463643 36486.71 1780251539 0.6122449</span></span>
+<span><span class="co">## 5 1465856031 334863394   2775.108  5169743373 53428.18 1551397601 0.4842105</span></span>
+<span><span class="co">## 6 1064121735 384839038   3414.467  5914578917 72931.49 1222707672 0.1346154</span></span>
+<span><span class="co">##       quota recruits quota_fgf yield_fgf effort_fgf employment_sea_fgf</span></span>
+<span><span class="co">## 1 922502790 2.80e+07 811802455 866323777   68233.31          1332.7350</span></span>
+<span><span class="co">## 2 771960500 2.20e+07 679325240 673654648   78733.50          1537.8251</span></span>
+<span><span class="co">## 3 457304622 3.00e+07 402428068 375577228   50264.60           981.7697</span></span>
+<span><span class="co">## 4 260578876 1.00e+07 229309411 229737053   36421.07           711.3774</span></span>
+<span><span class="co">## 5 325508842 4.80e+07 286447781 289851189   53332.53          1041.6925</span></span>
+<span><span class="co">## 6 402625563 2.88e+08 354310496 375343826   72770.33          1421.3522</span></span>
+<span><span class="co">##   employment_shore_fgf profit_sea_fgf profit_shore_fgf quota_spf yield_spf</span></span>
+<span><span class="co">## 1             4479.680    13852643110       6121916045 110700335  61039423</span></span>
+<span><span class="co">## 2             3483.406     9792701574       4726048035  92635260 146982696</span></span>
+<span><span class="co">## 3             1942.075     4860072896       2566507807  54876555  50900984</span></span>
+<span><span class="co">## 4             1187.949     2444111900       1509910749  31269465  19752754</span></span>
+<span><span class="co">## 5             1498.794     3102020345       1945431477  39061061  45012205</span></span>
+<span><span class="co">## 6             1940.868     4176805361       2564816830  48315068   9495212</span></span>
+<span><span class="co">##   effort_spf employment_sea_spf employment_shore_spf profit_sea_spf</span></span>
+<span><span class="co">## 1   96.42929           1.883460            315.62918      262054835</span></span>
+<span><span class="co">## 2  107.70497           2.103697            760.03385     1931464596</span></span>
+<span><span class="co">## 3   88.62166           1.730961            263.20426       65315545</span></span>
+<span><span class="co">## 4   65.64078           1.282098            102.13966     -539155120</span></span>
+<span><span class="co">## 5   95.65145           1.868267            232.75392      -49306683</span></span>
+<span><span class="co">## 6  161.15935           3.147769             49.09886     -741324554</span></span>
+<span><span class="co">##   profit_shore_spf       ssb0 ssb_spawning ssb_spawning_ref ssb_after_spawning</span></span>
+<span><span class="co">## 1        287713777 4080242964   4033069534       4024892797         4033069534</span></span>
+<span><span class="co">## 2        910363947 3048017401   3030361786       3001699771         3030361786</span></span>
+<span><span class="co">## 3        214261837 2188066516   2188066516       2160628239         2188066516</span></span>
+<span><span class="co">## 4        -11403885 1693229407   1673476653       1677594674         1673476653</span></span>
+<span><span class="co">## 5        171598233 1465856031   1420843826       1446325500         1420843826</span></span>
+<span><span class="co">## 6        -85718721 1064121735   1054626523       1039964202         1054626523</span></span>
+<span><span class="co">##   ssb_after_spawning_ref       ssbn   ssbn_ref   yield_1 effort_1</span></span>
+<span><span class="co">## 1             4024892797 4019203542 3969542629 866323777 68233.31</span></span>
+<span><span class="co">## 2             3001699771 2901034706 2955382141 673654648 78733.50</span></span>
+<span><span class="co">## 3             2160628239 2137165532 2133189962 375577228 50264.60</span></span>
+<span><span class="co">## 4             1677594674 1673476653 1661959942 229737053 36421.07</span></span>
+<span><span class="co">## 5             1446325500 1420843826 1426794970 289851189 53332.53</span></span>
+<span><span class="co">## 6             1039964202 1054626523 1015806668 375343826 72770.33</span></span>
+<span><span class="co">##   employment_sea_1 employment_shore_1 profit_sea_1 profit_shore_1</span></span>
+<span><span class="co">## 1        1332.7350           4479.680  13852643110     6121916045</span></span>
+<span><span class="co">## 2        1537.8251           3483.406   9792701574     4726048035</span></span>
+<span><span class="co">## 3         981.7697           1942.075   4860072896     2566507807</span></span>
+<span><span class="co">## 4         711.3774           1187.949   2444111900     1509910749</span></span>
+<span><span class="co">## 5        1041.6925           1498.794   3102020345     1945431477</span></span>
+<span><span class="co">## 6        1421.3522           1940.868   4176805361     2564816830</span></span></code></pre>
+<div class="section level3">
+<h3 id="plot-all-output-variables">Plot all output variables<a class="anchor" aria-label="anchor" href="#plot-all-output-variables"></a>
+</h3>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>t<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">pivot_longer</span><span class="op">(</span><span class="op">-</span><span class="va">t</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">t</span>, y<span class="op">=</span><span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span>col<span class="op">=</span><span class="st">"seagreen"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">name</span>, scales<span class="op">=</span><span class="st">"free_y"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html" class="external-link">bind_rows</a></span><span class="op">(</span> </span>
+<span>  <span class="va">dat</span> <span class="op">|&gt;</span> <span class="fu">select</span><span class="op">(</span></span>
+<span>    sim <span class="op">=</span> <span class="va">ssb_spawning</span>, ref <span class="op">=</span> <span class="va">ssb_spawning_ref</span>, </span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>group <span class="op">=</span> <span class="st">"before spawning"</span><span class="op">)</span>,</span>
+<span></span>
+<span>  <span class="va">dat</span> <span class="op">|&gt;</span> <span class="fu">select</span><span class="op">(</span></span>
+<span>    sim <span class="op">=</span> <span class="va">ssb_after_spawning</span>, ref <span class="op">=</span> <span class="va">ssb_after_spawning_ref</span>, </span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>group <span class="op">=</span> <span class="st">"after_spawning"</span><span class="op">)</span>,</span>
+<span></span>
+<span>  <span class="va">dat</span> <span class="op">|&gt;</span> <span class="fu">select</span><span class="op">(</span></span>
+<span>    sim <span class="op">=</span> <span class="va">ssbn</span>, ref <span class="op">=</span> <span class="va">ssbn_ref</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>group <span class="op">=</span> <span class="st">"after_spawning_&amp;_spf"</span><span class="op">)</span>,</span>
+<span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">as_tibble</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">ref</span>, y<span class="op">=</span><span class="va">sim</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu">geom_abline</span><span class="op">(</span>slope<span class="op">=</span><span class="fl">1</span>,intercept<span class="op">=</span><span class="fl">1</span>,col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span><span class="va">group</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></span></code></pre></div>
+<p><img src="fished_population_stock_files/figure-html/plot-all-1.png" width="700"></p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span></code></pre></div>
+<p><img src="fished_population_stock_files/figure-html/plot-all-2.png" width="700"></p>
+</div>
 <div class="section level3">
 <h3 id="quota-fgf-vs-yield">Quota (FGF) vs Yield<a class="anchor" aria-label="anchor" href="#quota-fgf-vs-yield"></a>
 </h3>
 <p>This plot compares the feeding ground fishery quota to the yield, excluding the first 10 iterations.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">slice</span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">quota_fgf</span>, y<span class="op">=</span><span class="va">yield</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">quota</span>, y<span class="op">=</span><span class="va">yield</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_abline</span><span class="op">(</span>slope<span class="op">=</span><span class="fl">1</span>, intercept<span class="op">=</span><span class="fl">0</span>, color<span class="op">=</span><span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fished_population_stock_files/figure-html/plot-quota-fgf-yield-1.png" width="700"></p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">slice</span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">quota_fgf</span>, y<span class="op">=</span><span class="va">yield_fgf</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_abline</span><span class="op">(</span>slope<span class="op">=</span><span class="fl">1</span>, intercept<span class="op">=</span><span class="fl">0</span>, color<span class="op">=</span><span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="fished_population_stock_files/figure-html/plot-quota-fgf-yield-2.png" width="700"></p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">slice</span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">quota_spf</span>, y<span class="op">=</span><span class="va">yield_spf</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_abline</span><span class="op">(</span>slope<span class="op">=</span><span class="fl">1</span>, intercept<span class="op">=</span><span class="fl">0</span>, color<span class="op">=</span><span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="fished_population_stock_files/figure-html/plot-quota-fgf-yield-3.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="tsb-vs-quota-fgf">TSB vs Quota (FGF)<a class="anchor" aria-label="anchor" href="#tsb-vs-quota-fgf"></a>
 </h3>
 <p>This plot shows the relationship between total stock biomass and feeding ground fishery quota. Slope should be equal to harvest proportion.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">slice</span><span class="op">(</span><span class="op">-</span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">tsb</span>, y<span class="op">=</span><span class="va">quota_fgf</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">tsb</span>, y<span class="op">=</span><span class="va">quota</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_smooth</span><span class="op">(</span>method<span class="op">=</span><span class="st">"lm"</span>, se<span class="op">=</span><span class="cn">F</span>, formula <span class="op">=</span> <span class="va">y</span> <span class="op">~</span> <span class="va">x</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">geom_abline</span><span class="op">(</span>slope<span class="op">=</span><span class="fl">0.5</span>, intercept<span class="op">=</span><span class="fl">0</span>, color<span class="op">=</span><span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu">geom_abline</span><span class="op">(</span>slope<span class="op">=</span><span class="va">h</span>, intercept<span class="op">=</span><span class="fl">0</span>, color<span class="op">=</span><span class="st">"red"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fished_population_stock_files/figure-html/plot-tsb-quota-fgf-1.png" width="700"></p>
 </div>
 <div class="section level3">
 <h3 id="ssb-over-simulation">SSB Over Simulation<a class="anchor" aria-label="anchor" href="#ssb-over-simulation"></a>
 </h3>
 <p>This plot tracks spawning stock biomass over the course of the simulation.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, y<span class="op">=</span><span class="va">ssb</span><span class="op">/</span><span class="fl">1e9</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>t <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="co"># filter(t &gt; 200) |&gt;</span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">t</span>, y<span class="op">=</span><span class="va">ssb</span><span class="op">/</span><span class="fl">1e9</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fished_population_stock_files/figure-html/plot-ssb-simulation-1.png" width="700"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>t <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fu">n</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">t</span> <span class="op">&gt;</span> <span class="fl">200</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">t</span>, y<span class="op">=</span><span class="va">quota_fgf</span><span class="op">/</span><span class="fl">1e9</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">t</span>, y<span class="op">=</span><span class="va">yield_fgf</span><span class="op">/</span><span class="fl">1e9</span><span class="op">)</span>, col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span> </span></code></pre></div>
+<p><img src="fished_population_stock_files/figure-html/plot-ssb-simulation-2.png" width="700"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

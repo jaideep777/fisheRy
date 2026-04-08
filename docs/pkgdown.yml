@@ -2,12 +2,18 @@ pandoc: 2.2.1
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
+  calibrate_fishing_mort: calibrate_fishing_mort.html
   effort_control_stock: effort_control_stock.html
+  effort_control_stock_2fleets: effort_control_stock_2fleets.html
   fishability_selectivity: fishability_selectivity.html
   fished_population_stock: fished_population_stock.html
+  h_scan: h_scan.html
+  hxT_scan: hxT_scan.html
+  plot_calibration: plot_calibration.html
+  quota_calc_debug: quota_calc_debug.html
   theory_bio: theory_bio.html
   unfished_population_stock: unfished_population_stock.html
-last_built: 2025-12-03T10:33Z
+last_built: 2026-04-08T18:44Z
 urls:
   reference: https://jaideep777.github.io/fisheRy/reference
   article: https://jaideep777.github.io/fisheRy/articles

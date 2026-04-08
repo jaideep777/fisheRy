@@ -1,9 +1,15 @@
 <urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
 <url><loc>https://jaideep777.github.io/fisheRy/404.html</loc></url>
+<url><loc>https://jaideep777.github.io/fisheRy/articles/calibrate_fishing_mort.html</loc></url>
 <url><loc>https://jaideep777.github.io/fisheRy/articles/effort_control_stock.html</loc></url>
+<url><loc>https://jaideep777.github.io/fisheRy/articles/effort_control_stock_2fleets.html</loc></url>
 <url><loc>https://jaideep777.github.io/fisheRy/articles/fishability_selectivity.html</loc></url>
 <url><loc>https://jaideep777.github.io/fisheRy/articles/fished_population_stock.html</loc></url>
+<url><loc>https://jaideep777.github.io/fisheRy/articles/hxT_scan.html</loc></url>
+<url><loc>https://jaideep777.github.io/fisheRy/articles/h_scan.html</loc></url>
 <url><loc>https://jaideep777.github.io/fisheRy/articles/index.html</loc></url>
+<url><loc>https://jaideep777.github.io/fisheRy/articles/plot_calibration.html</loc></url>
+<url><loc>https://jaideep777.github.io/fisheRy/articles/quota_calc_debug.html</loc></url>
 <url><loc>https://jaideep777.github.io/fisheRy/articles/theory_bio.html</loc></url>
 <url><loc>https://jaideep777.github.io/fisheRy/articles/unfished_population_stock.html</loc></url>
 <url><loc>https://jaideep777.github.io/fisheRy/authors.html</loc></url>

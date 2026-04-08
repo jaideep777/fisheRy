@@ -1,11 +1,16 @@
 var searchData=
 [
-  ['get_0',['get',['../classio_1_1Initializer.html#a098a8511a950a4449925c8315af36bdb',1,'io::Initializer::get(const std::string &amp;sectionname, const std::string &amp;keyname) const'],['../classio_1_1Initializer.html#a41b492ac4af541e44df0494f6fa1815d',1,'io::Initializer::get(const std::string &amp;keyname) const']]],
-  ['get_5fsection_1',['get_section',['../classio_1_1Initializer.html#abcceeacc354e5a35e4d60d7854d62c7b',1,'io::Initializer']]],
-  ['get_5fstate_2',['get_state',['../classFish.html#aa5c5cb34e7f19c6a4ca93858adf3e16a',1,'Fish::get_state()'],['../classPopulation.html#a62f07e15a6d75f0e37e6e24e6a2eaec2',1,'Population::get_state()'],['../classStock.html#a3d10154163f6d187aa1c17c557f11852',1,'Stock::get_state()']]],
-  ['get_5ftraits_3',['get_traits',['../classFish.html#ada02edec02f9bed880911ea21b6d1a60',1,'Fish::get_traits()'],['../classPopulation.html#a29fa674d9ce3986f71b07f11d2374fde',1,'Population::get_traits()'],['../classStock.html#acecc4a4fd01cf5b643c868c4ba0a9214',1,'Stock::get_traits()']]],
-  ['get_5fvalue_4',['get_value',['../classio_1_1Initializer.html#a06fe79d6d19f76180836e03e3ad6b7fb',1,'io::Initializer']]],
-  ['get_5fvector_5',['get_vector',['../classio_1_1Initializer.html#ad892ca97cc8dffc3234102705f01a63f',1,'io::Initializer::get_vector(const std::string &amp;sectionname, const std::string &amp;keyname) const'],['../classio_1_1Initializer.html#a171cd1104aec44046ca98917d63fe269',1,'io::Initializer::get_vector(const std::string &amp;keyname) const']]],
-  ['grow_6',['grow',['../classFish.html#abe4b5c9e5d1f6d3c56cc6be997db71cd',1,'Fish']]],
-  ['gsi_7',['gsi',['../namespacefish.html#a7f532daff6b69774cc75d40ed18aad31',1,'fish']]]
+  ['get_0',['get',['../classio_1_1Initializer.html#a41b492ac4af541e44df0494f6fa1815d',1,'io::Initializer::get(const std::string &amp;keyname) const'],['../classio_1_1Initializer.html#a098a8511a950a4449925c8315af36bdb',1,'io::Initializer::get(const std::string &amp;sectionname, const std::string &amp;keyname) const']]],
+  ['get_5ffished_1',['get_fished',['../classStock.html#a3de2a85928dc7025c36f0abe4bff3a98',1,'Stock']]],
+  ['get_5ffished_5fdry_5frun_2',['get_fished_dry_run',['../classStock.html#a41988b8401559edddecac23a588e0313',1,'Stock']]],
+  ['get_5ffished_5fdry_5frun_5fwrapper_3',['get_fished_dry_run_wrapper',['../RcppExports_8cpp.html#a0603d003cf54b50cb33e1d12efe52a4f',1,'get_fished_dry_run_wrapper(SEXP stock_ptr, Rcpp::List fleets_list, const std::vector&lt; double &gt; &amp;x, double y, bool a, bool b):&#160;fish_glue.cpp'],['../fish__glue_8cpp.html#a0603d003cf54b50cb33e1d12efe52a4f',1,'get_fished_dry_run_wrapper(SEXP stock_ptr, Rcpp::List fleets_list, const std::vector&lt; double &gt; &amp;x, double y, bool a, bool b):&#160;fish_glue.cpp']]],
+  ['get_5ffref_4',['get_fref',['../classFishery.html#aded11ec7adc9274e702d031cb4648193',1,'Fishery']]],
+  ['get_5fline_5fraw_5',['get_line_raw',['../classflare_1_1CSVRow.html#a0208e1851bf346857473b49a85ebe733',1,'flare::CSVRow']]],
+  ['get_5fsection_6',['get_section',['../classio_1_1Initializer.html#abcceeacc354e5a35e4d60d7854d62c7b',1,'io::Initializer']]],
+  ['get_5fstate_7',['get_state',['../classFish.html#aa5c5cb34e7f19c6a4ca93858adf3e16a',1,'Fish::get_state()'],['../classStock.html#a3d10154163f6d187aa1c17c557f11852',1,'Stock::get_state()']]],
+  ['get_5ftraits_8',['get_traits',['../classFish.html#ada02edec02f9bed880911ea21b6d1a60',1,'Fish::get_traits()'],['../classStock.html#acecc4a4fd01cf5b643c868c4ba0a9214',1,'Stock::get_traits()']]],
+  ['get_5fvalue_9',['get_value',['../classio_1_1Initializer.html#a06fe79d6d19f76180836e03e3ad6b7fb',1,'io::Initializer']]],
+  ['get_5fvector_10',['get_vector',['../classio_1_1Initializer.html#ad892ca97cc8dffc3234102705f01a63f',1,'io::Initializer::get_vector(const std::string &amp;sectionname, const std::string &amp;keyname) const'],['../classio_1_1Initializer.html#a171cd1104aec44046ca98917d63fe269',1,'io::Initializer::get_vector(const std::string &amp;keyname) const']]],
+  ['grow_11',['grow',['../classFish.html#abe4b5c9e5d1f6d3c56cc6be997db71cd',1,'Fish']]],
+  ['gsi_12',['gsi',['../namespacefish.html#a7f532daff6b69774cc75d40ed18aad31',1,'fish']]]
 ];

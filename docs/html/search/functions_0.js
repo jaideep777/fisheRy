@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['_5frcpp_5fmodule_5fboot_5ffish_5fmodule_0',['_rcpp_module_boot_fish_module',['../RcppExports_8cpp.html#a42d29bf0e89d6de6d2764c6afd6a870b',1,'RcppExports.cpp']]],
-  ['_5frcpp_5fmodule_5fboot_5ffleet_5fmodule_1',['_rcpp_module_boot_fleet_module',['../RcppExports_8cpp.html#a002fa90fd5ce11e324c1ccaabc5f2e0e',1,'RcppExports.cpp']]],
-  ['_5frcpp_5fmodule_5fboot_5fpopulation_5fmodule_2',['_rcpp_module_boot_population_module',['../RcppExports_8cpp.html#a7d9d52680ffa6e67ae3754347c22bb5c',1,'RcppExports.cpp']]],
-  ['_5frcpp_5fmodule_5fboot_5fsimulator_5fmodule_3',['_rcpp_module_boot_simulator_module',['../RcppExports_8cpp.html#a9da42ccddde27d87e53deed1dba87844',1,'RcppExports.cpp']]]
+  ['_5ffishery_5fget_5ffished_5fdry_5frun_5fwrapper_0',['_fisheRy_get_fished_dry_run_wrapper',['../RcppExports_8cpp.html#a75d34bbdd4f69b4a995367e3361f41b9',1,'RcppExports.cpp']]],
+  ['_5frcpp_5fmodule_5fboot_5ffish_5fmodule_1',['_rcpp_module_boot_fish_module',['../RcppExports_8cpp.html#a42d29bf0e89d6de6d2764c6afd6a870b',1,'RcppExports.cpp']]],
+  ['_5frcpp_5fmodule_5fboot_5ffleet_5fmodule_2',['_rcpp_module_boot_fleet_module',['../RcppExports_8cpp.html#a002fa90fd5ce11e324c1ccaabc5f2e0e',1,'RcppExports.cpp']]],
+  ['_5frcpp_5fmodule_5fboot_5fpopulation_5fmodule_3',['_rcpp_module_boot_population_module',['../RcppExports_8cpp.html#a7d9d52680ffa6e67ae3754347c22bb5c',1,'RcppExports.cpp']]],
+  ['_5frcpp_5fmodule_5fboot_5fsimulator_5fmodule_4',['_rcpp_module_boot_simulator_module',['../RcppExports_8cpp.html#a9da42ccddde27d87e53deed1dba87844',1,'RcppExports.cpp']]]
 ];

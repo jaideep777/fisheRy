@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['linregresult_0',['linregresult',['../structlinregresult.html',1,'']]]
+  ['initializer_0',['Initializer',['../classio_1_1Initializer.html',1,'io']]]
 ];

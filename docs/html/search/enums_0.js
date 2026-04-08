@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['growthmodel_0',['GrowthModel',['../fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97',1,'fish.h']]]
+  ['extr_0',['Extr',['../classSpline.html#ae5abfe66422cb4e2514d8062194506ed',1,'Spline']]]
 ];

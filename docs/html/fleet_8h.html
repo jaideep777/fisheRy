@@ -99,20 +99,21 @@ $(document).ready(function(){initNavTree('fleet_8h.html',''); initResizable(); }
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">fleet.h File Reference</div></div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="stock_8h_source.html">stock.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="cubic__spline_8h_source.html">cubic_spline.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for fleet.h:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="fleet_8h__incl.svg" width="999" height="330"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="fleet_8h__incl.svg" width="1274" height="330"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="fleet_8h__dep__incl.svg" width="386" height="198"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="fleet_8h__dep__incl.svg" width="516" height="198"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 </div>
 </div>
 <p><a href="fleet_8h_source.html">Go to the source code of this file.</a></p>
@@ -123,17 +124,19 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFleetParams.html">FleetParams</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFleetUtils.html">FleetUtils</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFleet.html">Fleet</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:a7071b0092ad8c5b57d6cc40c5f803df5" id="r_a7071b0092ad8c5b57d6cc40c5f803df5"><td class="memItemLeft" align="right" valign="top">std::random_device&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fleet_8h.html#a7071b0092ad8c5b57d6cc40c5f803df5">rd</a></td></tr>
-<tr class="separator:a7071b0092ad8c5b57d6cc40c5f803df5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:ac634ac9b2348e080a8df7961e4d5c61a" id="r_ac634ac9b2348e080a8df7961e4d5c61a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFleetUtils.html">FleetUtils</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="fleet_8h.html#ac634ac9b2348e080a8df7961e4d5c61a">operator+</a> (const <a class="el" href="classFleetUtils.html">FleetUtils</a> &amp;a, const <a class="el" href="classFleetUtils.html">FleetUtils</a> &amp;b)</td></tr>
+<tr class="separator:ac634ac9b2348e080a8df7961e4d5c61a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Variable Documentation</h2>
-<a id="a7071b0092ad8c5b57d6cc40c5f803df5" name="a7071b0092ad8c5b57d6cc40c5f803df5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7071b0092ad8c5b57d6cc40c5f803df5">&#9670;&#160;</a></span>rd</h2>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="ac634ac9b2348e080a8df7961e4d5c61a" name="ac634ac9b2348e080a8df7961e4d5c61a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac634ac9b2348e080a8df7961e4d5c61a">&#9670;&#160;</a></span>operator+()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -142,18 +145,49 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::random_device rd</td>
+          <td class="memname"><a class="el" href="classFleetUtils.html">FleetUtils</a> operator+ </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classFleetUtils.html">FleetUtils</a> &amp;&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classFleetUtils.html">FleetUtils</a> &amp;&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="fleet_8cpp_source.html#l00172">172</a> of file <a class="el" href="fleet_8cpp_source.html">fleet.cpp</a>.</p>
-
+<p class="definition">Definition at line <a class="el" href="fleet_8h_source.html#l00092">92</a> of file <a class="el" href="fleet_8h_source.html">fleet.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   92</span>                                                                      {</div>
+<div class="line"><span class="lineno">   93</span>    <a class="code hl_class" href="classFleetUtils.html">FleetUtils</a> result;</div>
+<div class="line"><span class="lineno">   94</span>    result.<a class="code hl_variable" href="classFleetUtils.html#adebe97a6a50bff9a72820de516c74e5a">effort</a> = a.<a class="code hl_variable" href="classFleetUtils.html#adebe97a6a50bff9a72820de516c74e5a">effort</a> + b.<a class="code hl_variable" href="classFleetUtils.html#adebe97a6a50bff9a72820de516c74e5a">effort</a>;</div>
+<div class="line"><span class="lineno">   95</span>    result.<a class="code hl_variable" href="classFleetUtils.html#a7b602b9008c2cbfc127b7d6167fc1bab">employment_sea</a> = a.<a class="code hl_variable" href="classFleetUtils.html#a7b602b9008c2cbfc127b7d6167fc1bab">employment_sea</a> + b.<a class="code hl_variable" href="classFleetUtils.html#a7b602b9008c2cbfc127b7d6167fc1bab">employment_sea</a>;</div>
+<div class="line"><span class="lineno">   96</span>    result.<a class="code hl_variable" href="classFleetUtils.html#a1d16cbf02620c33f5a079b071ecd3b94">employment_shore</a> = a.<a class="code hl_variable" href="classFleetUtils.html#a1d16cbf02620c33f5a079b071ecd3b94">employment_shore</a> + b.<a class="code hl_variable" href="classFleetUtils.html#a1d16cbf02620c33f5a079b071ecd3b94">employment_shore</a>;</div>
+<div class="line"><span class="lineno">   97</span>    result.<a class="code hl_variable" href="classFleetUtils.html#ae2bf0e77248756ebd33dba3534dd341e">yield</a> = a.<a class="code hl_variable" href="classFleetUtils.html#ae2bf0e77248756ebd33dba3534dd341e">yield</a> + b.<a class="code hl_variable" href="classFleetUtils.html#ae2bf0e77248756ebd33dba3534dd341e">yield</a>;</div>
+<div class="line"><span class="lineno">   98</span>    result.<a class="code hl_variable" href="classFleetUtils.html#ac04a875b49647dd3f7d6d7e87c8a23ca">profit_sea</a> = a.<a class="code hl_variable" href="classFleetUtils.html#ac04a875b49647dd3f7d6d7e87c8a23ca">profit_sea</a> + b.<a class="code hl_variable" href="classFleetUtils.html#ac04a875b49647dd3f7d6d7e87c8a23ca">profit_sea</a>;</div>
+<div class="line"><span class="lineno">   99</span>    result.<a class="code hl_variable" href="classFleetUtils.html#a00f54e5402f2857a5617cee3fc451f6f">profit_shore</a> = a.<a class="code hl_variable" href="classFleetUtils.html#a00f54e5402f2857a5617cee3fc451f6f">profit_shore</a> + b.<a class="code hl_variable" href="classFleetUtils.html#a00f54e5402f2857a5617cee3fc451f6f">profit_shore</a>;</div>
+<div class="line"><span class="lineno">  100</span>    <span class="keywordflow">return</span> result;</div>
+<div class="line"><span class="lineno">  101</span>}</div>
+<div class="ttc" id="aclassFleetUtils_html"><div class="ttname"><a href="classFleetUtils.html">FleetUtils</a></div><div class="ttdef"><b>Definition</b> <a href="fleet_8h_source.html#l00082">fleet.h:82</a></div></div>
+<div class="ttc" id="aclassFleetUtils_html_a00f54e5402f2857a5617cee3fc451f6f"><div class="ttname"><a href="classFleetUtils.html#a00f54e5402f2857a5617cee3fc451f6f">FleetUtils::profit_shore</a></div><div class="ttdeci">double profit_shore</div><div class="ttdef"><b>Definition</b> <a href="fleet_8h_source.html#l00089">fleet.h:89</a></div></div>
+<div class="ttc" id="aclassFleetUtils_html_a1d16cbf02620c33f5a079b071ecd3b94"><div class="ttname"><a href="classFleetUtils.html#a1d16cbf02620c33f5a079b071ecd3b94">FleetUtils::employment_shore</a></div><div class="ttdeci">double employment_shore</div><div class="ttdef"><b>Definition</b> <a href="fleet_8h_source.html#l00086">fleet.h:86</a></div></div>
+<div class="ttc" id="aclassFleetUtils_html_a7b602b9008c2cbfc127b7d6167fc1bab"><div class="ttname"><a href="classFleetUtils.html#a7b602b9008c2cbfc127b7d6167fc1bab">FleetUtils::employment_sea</a></div><div class="ttdeci">double employment_sea</div><div class="ttdef"><b>Definition</b> <a href="fleet_8h_source.html#l00085">fleet.h:85</a></div></div>
+<div class="ttc" id="aclassFleetUtils_html_ac04a875b49647dd3f7d6d7e87c8a23ca"><div class="ttname"><a href="classFleetUtils.html#ac04a875b49647dd3f7d6d7e87c8a23ca">FleetUtils::profit_sea</a></div><div class="ttdeci">double profit_sea</div><div class="ttdef"><b>Definition</b> <a href="fleet_8h_source.html#l00088">fleet.h:88</a></div></div>
+<div class="ttc" id="aclassFleetUtils_html_adebe97a6a50bff9a72820de516c74e5a"><div class="ttname"><a href="classFleetUtils.html#adebe97a6a50bff9a72820de516c74e5a">FleetUtils::effort</a></div><div class="ttdeci">double effort</div><div class="ttdef"><b>Definition</b> <a href="fleet_8h_source.html#l00084">fleet.h:84</a></div></div>
+<div class="ttc" id="aclassFleetUtils_html_ae2bf0e77248756ebd33dba3534dd341e"><div class="ttname"><a href="classFleetUtils.html#ae2bf0e77248756ebd33dba3534dd341e">FleetUtils::yield</a></div><div class="ttdeci">double yield</div><div class="ttdef"><b>Definition</b> <a href="fleet_8h_source.html#l00087">fleet.h:87</a></div></div>
+</div><!-- fragment -->
 </div>
 </div>
 </div><!-- contents -->

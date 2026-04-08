@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['rcppexports_2ecpp_0',['RcppExports.cpp',['../RcppExports_8cpp.html',1,'']]]
+  ['linreg_2eh_0',['linreg.h',['../linreg_8h.html',1,'']]]
 ];

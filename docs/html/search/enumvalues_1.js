@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['dankel22_0',['dankel22',['../fish_8h.html#a89f06228ff5716588bc00ee3cc4adb97ae7066101a9d482c483c6ffb5f85d7581',1,'Dankel22:&#160;fish.h'],['../fish_8h.html#a766487207e230e4d3b30e953ab944741ae7066101a9d482c483c6ffb5f85d7581',1,'Dankel22:&#160;fish.h'],['../fish_8h.html#addafdf700de3f88fbc8b58b294a0e9beae7066101a9d482c483c6ffb5f85d7581',1,'Dankel22:&#160;fish.h']]]
+  ['constant_0',['CONSTANT',['../classSpline.html#ae5abfe66422cb4e2514d8062194506edaf5f21b1143a7e243398bed10a21aa106',1,'Spline']]],
+  ['constrained_5fcubic_1',['CONSTRAINED_CUBIC',['../classSpline.html#ae805682e3d11b057a2eb8aaaad0328ceaa056c24d2fdfef1f4ad3338065ebd069',1,'Spline']]],
+  ['cubic_2',['CUBIC',['../classSpline.html#ae805682e3d11b057a2eb8aaaad0328ceaee13a16cc933b0e7f343c6ca94ce5e27',1,'Spline']]]
 ];

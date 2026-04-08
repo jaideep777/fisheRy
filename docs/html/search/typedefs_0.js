@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['section_0',['section',['../classio_1_1Initializer.html#a033d39bde39fc7f14c184b10bf313132',1,'io::Initializer']]]
+  ['float_0',['Float',['../cubic__spline_8h.html#a74e8443ef1ba64fac1dbb8f9f2c32eef',1,'cubic_spline.h']]]
 ];

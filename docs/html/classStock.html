@@ -110,7 +110,7 @@ $(document).ready(function(){initNavTree('classStock.html',''); initResizable();
 <div class="dynheader">
 Collaboration diagram for Stock:</div>
 <div class="dyncontent">
-<div class="center"><iframe scrolling="no" frameborder="0" src="classStock__coll__graph.svg" width="1475" height="502"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" frameborder="0" src="classStock__coll__graph.svg" width="1551" height="575"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -143,8 +143,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a8f7f7e9910052b74f445dbe0de0811eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a106f65b25a49f3e76244385d02eb91b6" id="r_a106f65b25a49f3e76244385d02eb91b6"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classFish.html">Fish</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStock.html#a106f65b25a49f3e76244385d02eb91b6">spawn</a> (double ssb_now, double tsb_now, double temp, <a class="el" href="structStockSummary.html">StockSummary</a> &amp;stock_summary)</td></tr>
 <tr class="separator:a106f65b25a49f3e76244385d02eb91b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a032121d3398442895372f3547edebb96" id="r_a032121d3398442895372f3547edebb96"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStock.html#a032121d3398442895372f3547edebb96">equilibriate_without_fishing</a> (double temp)</td></tr>
-<tr class="separator:a032121d3398442895372f3547edebb96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a191c90f809f5c1336650cba36909478d" id="r_a191c90f809f5c1336650cba36909478d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStock.html#a191c90f809f5c1336650cba36909478d">equilibriate_without_fishing</a> (double temp, int nsteps)</td></tr>
+<tr class="separator:a191c90f809f5c1336650cba36909478d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3de2a85928dc7025c36f0abe4bff3a98" id="r_a3de2a85928dc7025c36f0abe4bff3a98"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStock.html#a3de2a85928dc7025c36f0abe4bff3a98">get_fished</a> (std::vector&lt; <a class="el" href="classFleet.html">Fleet</a> &gt; &amp;fleets, const std::vector&lt; double &gt; &amp;quotas, double temp, bool use_average_weight, bool return_progress)</td></tr>
+<tr class="separator:a3de2a85928dc7025c36f0abe4bff3a98"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41988b8401559edddecac23a588e0313" id="r_a41988b8401559edddecac23a588e0313"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStock.html#a41988b8401559edddecac23a588e0313">get_fished_dry_run</a> (std::vector&lt; <a class="el" href="classFleet.html">Fleet</a> &gt; &amp;fleets, const std::vector&lt; double &gt; &amp;quotas, double temp, bool use_average_weight, bool return_progress)</td></tr>
+<tr class="separator:a41988b8401559edddecac23a588e0313"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1d9d3225857ad2b8419c8e90aa529e1a" id="r_a1d9d3225857ad2b8419c8e90aa529e1a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStock.html#a1d9d3225857ad2b8419c8e90aa529e1a">nfish</a> ()</td></tr>
 <tr class="separator:a1d9d3225857ad2b8419c8e90aa529e1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae49585ba65294316c58e5ee47c4a2371" id="r_ae49585ba65294316c58e5ee47c4a2371"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStock.html#ae49585ba65294316c58e5ee47c4a2371">summarize</a> ()</td></tr>
@@ -169,21 +173,19 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:af8e482424a6000b73b381b4829411e54" id="r_af8e482424a6000b73b381b4829411e54"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStock.html#af8e482424a6000b73b381b4829411e54">superfish_size</a> = 5e6</td></tr>
 <tr class="memdesc:af8e482424a6000b73b381b4829411e54"><td class="mdescLeft">&#160;</td><td class="mdescRight">superfish size  <br /></td></tr>
 <tr class="separator:af8e482424a6000b73b381b4829411e54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58c9732b83e1116ab1fed88d81c8a739" id="r_a58c9732b83e1116ab1fed88d81c8a739"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStock.html#a58c9732b83e1116ab1fed88d81c8a739">debug</a> = false</td></tr>
+<tr class="separator:a58c9732b83e1116ab1fed88d81c8a739"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a33bca6819148bffb6b1f548636de4c1f" id="r_a33bca6819148bffb6b1f548636de4c1f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStock.html#a33bca6819148bffb6b1f548636de4c1f">std_missing_value</a> = -1e20</td></tr>
 <tr class="separator:a33bca6819148bffb6b1f548636de4c1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a08c3b8278253d7ef4eabd370b1064395" id="r_a08c3b8278253d7ef4eabd370b1064395"><td class="memItemLeft" align="right" valign="top">std::default_random_engine&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStock.html#a08c3b8278253d7ef4eabd370b1064395">generator</a></td></tr>
-<tr class="separator:a08c3b8278253d7ef4eabd370b1064395"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a532b86696e2db111d06d12e3bcfa8b88" id="r_a532b86696e2db111d06d12e3bcfa8b88"><td class="memItemLeft" align="right" valign="top">std::normal_distribution&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStock.html#a532b86696e2db111d06d12e3bcfa8b88">normal_dist</a></td></tr>
-<tr class="separator:a532b86696e2db111d06d12e3bcfa8b88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6303f70699e5b55133afae771b4e869c" id="r_a6303f70699e5b55133afae771b4e869c"><td class="memItemLeft" align="right" valign="top">std::vector&lt; double &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classStock.html#a6303f70699e5b55133afae771b4e869c">nrecruits_vec</a></td></tr>
 <tr class="separator:a6303f70699e5b55133afae771b4e869c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock">
-<p class="definition">Definition at line <a class="el" href="stock_8h_source.html#l00085">85</a> of file <a class="el" href="stock_8h_source.html">stock.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="stock_8h_source.html#l00088">88</a> of file <a class="el" href="stock_8h_source.html">stock.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a77bd8b64e17344df53b0bf234ae9525f" name="a77bd8b64e17344df53b0bf234ae9525f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a77bd8b64e17344df53b0bf234ae9525f">&#9670;&#160;</a></span>Stock()</h2>
@@ -201,10 +203,10 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00035">35</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">   35</span>                   : <a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>(f){</div>
-<div class="line"><span class="lineno">   36</span>}</div>
-<div class="ttc" id="aclassStock_html_a7456c571f5421aea9db2efc9d4a68791"><div class="ttname"><a href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">Stock::proto_fish</a></div><div class="ttdeci">Fish proto_fish</div><div class="ttdoc">Prototype fish. A copy of this fish is always used to initialize new fish in population.</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00107">stock.h:107</a></div></div>
+<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00039">39</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   39</span>                   : <a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>(f){</div>
+<div class="line"><span class="lineno">   40</span>}</div>
+<div class="ttc" id="aclassStock_html_a7456c571f5421aea9db2efc9d4a68791"><div class="ttname"><a href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">Stock::proto_fish</a></div><div class="ttdeci">Fish proto_fish</div><div class="ttdoc">Prototype fish. A copy of this fish is always used to initialize new fish in population.</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00108">stock.h:108</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -235,18 +237,18 @@ template&lt;class Func &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="stock_8h_source.html#l00095">95</a> of file <a class="el" href="stock_8h_source.html">stock.h</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">   95</span>                                                       {</div>
-<div class="line"><span class="lineno">   96</span>        <span class="keywordtype">int</span> amax = <a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_variable" href="classFish.html#a129810432fa88278c08c3463ae9694d1">par</a>.<a class="code hl_variable" href="classFishParams.html#a287fe53d1b93baff05c3aa404043ff64">amax</a>+2;</div>
-<div class="line"><span class="lineno">   97</span>        std::vector&lt;double&gt; val(amax, 0);</div>
-<div class="line"><span class="lineno">   98</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; f : <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>){</div>
-<div class="line"><span class="lineno">   99</span>            val[f.age] += get_property(f);</div>
-<div class="line"><span class="lineno">  100</span>        }</div>
-<div class="line"><span class="lineno">  101</span>        <span class="keywordflow">return</span> val;</div>
-<div class="line"><span class="lineno">  102</span>    }</div>
-<div class="ttc" id="aclassFishParams_html_a287fe53d1b93baff05c3aa404043ff64"><div class="ttname"><a href="classFishParams.html#a287fe53d1b93baff05c3aa404043ff64">FishParams::amax</a></div><div class="ttdeci">double amax</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00103">fish.h:103</a></div></div>
-<div class="ttc" id="aclassFish_html_a129810432fa88278c08c3463ae9694d1"><div class="ttname"><a href="classFish.html#a129810432fa88278c08c3463ae9694d1">Fish::par</a></div><div class="ttdeci">FishParams par</div><div class="ttdoc">Parameters object that holds all necessary fish parameters.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00155">fish.h:155</a></div></div>
-<div class="ttc" id="aclassStock_html_a8867359bd5157d1e2f9ce25bbbeec251"><div class="ttname"><a href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">Stock::fishes</a></div><div class="ttdeci">std::vector&lt; Fish &gt; fishes</div><div class="ttdoc">Vector of all fish in the population.</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00108">stock.h:108</a></div></div>
+<p class="definition">Definition at line <a class="el" href="stock_8h_source.html#l00096">96</a> of file <a class="el" href="stock_8h_source.html">stock.h</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   96</span>                                                       {</div>
+<div class="line"><span class="lineno">   97</span>        <span class="keywordtype">int</span> amax = <a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_variable" href="classFish.html#a129810432fa88278c08c3463ae9694d1">par</a>.<a class="code hl_variable" href="classFishParams.html#a287fe53d1b93baff05c3aa404043ff64">amax</a>+2;</div>
+<div class="line"><span class="lineno">   98</span>        std::vector&lt;double&gt; val(amax, 0);</div>
+<div class="line"><span class="lineno">   99</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; f : <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>){</div>
+<div class="line"><span class="lineno">  100</span>            val[f.age] += get_property(f);</div>
+<div class="line"><span class="lineno">  101</span>        }</div>
+<div class="line"><span class="lineno">  102</span>        <span class="keywordflow">return</span> val;</div>
+<div class="line"><span class="lineno">  103</span>    }</div>
+<div class="ttc" id="aclassFishParams_html_a287fe53d1b93baff05c3aa404043ff64"><div class="ttname"><a href="classFishParams.html#a287fe53d1b93baff05c3aa404043ff64">FishParams::amax</a></div><div class="ttdeci">double amax</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00106">fish.h:106</a></div></div>
+<div class="ttc" id="aclassFish_html_a129810432fa88278c08c3463ae9694d1"><div class="ttname"><a href="classFish.html#a129810432fa88278c08c3463ae9694d1">Fish::par</a></div><div class="ttdeci">FishParams par</div><div class="ttdoc">Parameters object that holds all necessary fish parameters.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00158">fish.h:158</a></div></div>
+<div class="ttc" id="aclassStock_html_a8867359bd5157d1e2f9ce25bbbeec251"><div class="ttname"><a href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">Stock::fishes</a></div><div class="ttdeci">std::vector&lt; Fish &gt; fishes</div><div class="ttdoc">Vector of all fish in the population.</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00109">stock.h:109</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -300,19 +302,19 @@ template&lt;class Func &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>averaged quantity </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00130">130</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  130</span>                                                                                              {</div>
-<div class="line"><span class="lineno">  131</span>    <span class="keywordtype">double</span> Q_sum = 0;</div>
-<div class="line"><span class="lineno">  132</span>    <span class="keywordtype">int</span> nQ = 0;</div>
-<div class="line"><span class="lineno">  133</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> a = amin; a &lt;= amax; ++a){</div>
-<div class="line"><span class="lineno">  134</span>        <span class="keywordflow">if</span> (Qa[a] != missing_value){</div>
-<div class="line"><span class="lineno">  135</span>            Q_sum += Qa[a];</div>
-<div class="line"><span class="lineno">  136</span>            nQ += 1;</div>
-<div class="line"><span class="lineno">  137</span>        }</div>
-<div class="line"><span class="lineno">  138</span>    }</div>
-<div class="line"><span class="lineno">  139</span>    <span class="keywordflow">if</span> (nQ == 0) <span class="keywordflow">return</span> 0;</div>
-<div class="line"><span class="lineno">  140</span>    <span class="keywordflow">else</span> <span class="keywordflow">return</span> Q_sum/nQ;</div>
-<div class="line"><span class="lineno">  141</span>}</div>
+<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00134">134</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  134</span>                                                                                              {</div>
+<div class="line"><span class="lineno">  135</span>    <span class="keywordtype">double</span> Q_sum = 0;</div>
+<div class="line"><span class="lineno">  136</span>    <span class="keywordtype">int</span> nQ = 0;</div>
+<div class="line"><span class="lineno">  137</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> a = amin; a &lt;= amax; ++a){</div>
+<div class="line"><span class="lineno">  138</span>        <span class="keywordflow">if</span> (Qa[a] != missing_value){</div>
+<div class="line"><span class="lineno">  139</span>            Q_sum += Qa[a];</div>
+<div class="line"><span class="lineno">  140</span>            nQ += 1;</div>
+<div class="line"><span class="lineno">  141</span>        }</div>
+<div class="line"><span class="lineno">  142</span>    }</div>
+<div class="line"><span class="lineno">  143</span>    <span class="keywordflow">if</span> (nQ == 0) <span class="keywordflow">return</span> 0;</div>
+<div class="line"><span class="lineno">  144</span>    <span class="keywordflow">else</span> <span class="keywordflow">return</span> Q_sum/nQ;</div>
+<div class="line"><span class="lineno">  145</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -332,14 +334,14 @@ template&lt;class Func &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00118">118</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  118</span>                                       {</div>
-<div class="line"><span class="lineno">  119</span>    <span class="keywordflow">return</span> </div>
-<div class="line"><span class="lineno">  120</span>    std::accumulate(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.begin(), <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.end(), 0.0, </div>
-<div class="line"><span class="lineno">  121</span>        [age, <span class="keyword">this</span>](<span class="keywordtype">double</span> sum, <span class="keyword">const</span> <a class="code hl_class" href="classFish.html">Fish</a>&amp; f) { return sum + ((f.isAlive &amp;&amp; f.age == age) ? superfish_size : 0); }</div>
-<div class="line"><span class="lineno">  122</span>    );</div>
-<div class="line"><span class="lineno">  123</span>}</div>
-<div class="ttc" id="aclassFish_html"><div class="ttname"><a href="classFish.html">Fish</a></div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00150">fish.h:150</a></div></div>
+<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00122">122</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  122</span>                                       {</div>
+<div class="line"><span class="lineno">  123</span>    <span class="keywordflow">return</span> </div>
+<div class="line"><span class="lineno">  124</span>    std::accumulate(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.begin(), <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.end(), 0.0, </div>
+<div class="line"><span class="lineno">  125</span>        [age, <span class="keyword">this</span>](<span class="keywordtype">double</span> sum, <span class="keyword">const</span> <a class="code hl_class" href="classFish.html">Fish</a>&amp; f) { return sum + ((f.isAlive &amp;&amp; f.age == age) ? superfish_size : 0); }</div>
+<div class="line"><span class="lineno">  126</span>    );</div>
+<div class="line"><span class="lineno">  127</span>}</div>
+<div class="ttc" id="aclassFish_html"><div class="ttname"><a href="classFish.html">Fish</a></div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00153">fish.h:153</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -359,20 +361,20 @@ template&lt;class Func &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00103">103</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  103</span>                                        {</div>
-<div class="line"><span class="lineno">  104</span>    <span class="keywordflow">return</span> </div>
-<div class="line"><span class="lineno">  105</span>    std::accumulate(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.begin(), <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.end(), 0.0, </div>
-<div class="line"><span class="lineno">  106</span>        [min_age, <span class="keyword">this</span>](<span class="keywordtype">double</span> sum, <span class="keyword">const</span> <a class="code hl_class" href="classFish.html">Fish</a>&amp; f) { </div>
-<div class="line"><span class="lineno">  107</span>            return sum + ((f.isAlive &amp;&amp; f.isMature &amp;&amp; f.age &gt;= min_age) ? 1 : 0); </div>
-<div class="line"><span class="lineno">  108</span>        }</div>
-<div class="line"><span class="lineno">  109</span>    ) / </div>
-<div class="line"><span class="lineno">  110</span>    std::accumulate(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.begin(), <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.end(), 0.0, </div>
-<div class="line"><span class="lineno">  111</span>        [min_age, <span class="keyword">this</span>](<span class="keywordtype">double</span> sum, <span class="keyword">const</span> <a class="code hl_class" href="classFish.html">Fish</a>&amp; f) { </div>
-<div class="line"><span class="lineno">  112</span>            return sum + ((f.isAlive &amp;&amp; f.age &gt;= min_age) ? 1 : 0); </div>
-<div class="line"><span class="lineno">  113</span>        }</div>
-<div class="line"><span class="lineno">  114</span>    );</div>
-<div class="line"><span class="lineno">  115</span>} </div>
+<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00107">107</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  107</span>                                        {</div>
+<div class="line"><span class="lineno">  108</span>    <span class="keywordflow">return</span> </div>
+<div class="line"><span class="lineno">  109</span>    std::accumulate(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.begin(), <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.end(), 0.0, </div>
+<div class="line"><span class="lineno">  110</span>        [min_age, <span class="keyword">this</span>](<span class="keywordtype">double</span> sum, <span class="keyword">const</span> <a class="code hl_class" href="classFish.html">Fish</a>&amp; f) { </div>
+<div class="line"><span class="lineno">  111</span>            return sum + ((f.isAlive &amp;&amp; f.isMature &amp;&amp; f.age &gt;= min_age) ? 1 : 0); </div>
+<div class="line"><span class="lineno">  112</span>        }</div>
+<div class="line"><span class="lineno">  113</span>    ) / </div>
+<div class="line"><span class="lineno">  114</span>    (std::accumulate(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.begin(), <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.end(), 0.0, </div>
+<div class="line"><span class="lineno">  115</span>        [min_age, <span class="keyword">this</span>](<span class="keywordtype">double</span> sum, <span class="keyword">const</span> <a class="code hl_class" href="classFish.html">Fish</a>&amp; f) { </div>
+<div class="line"><span class="lineno">  116</span>            return sum + ((f.isAlive &amp;&amp; f.age &gt;= min_age) ? 1 : 0); </div>
+<div class="line"><span class="lineno">  117</span>        }</div>
+<div class="line"><span class="lineno">  118</span>    )+1e-12);</div>
+<div class="line"><span class="lineno">  119</span>} </div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -392,15 +394,15 @@ template&lt;class Func &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00083">83</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">   83</span>                                   {</div>
-<div class="line"><span class="lineno">   84</span>    <span class="keywordflow">return</span> </div>
-<div class="line"><span class="lineno">   85</span>    std::accumulate(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.begin(), <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.end(), 0.0, </div>
-<div class="line"><span class="lineno">   86</span>        [min_age, <span class="keyword">this</span>](<span class="keywordtype">double</span> sum, <span class="keyword">const</span> <a class="code hl_class" href="classFish.html">Fish</a>&amp; f) { </div>
-<div class="line"><span class="lineno">   87</span>            return sum + ((f.isAlive &amp;&amp; f.isMature &amp;&amp; f.age &gt;= min_age) ? f.weight * superfish_size : 0); </div>
-<div class="line"><span class="lineno">   88</span>        }</div>
-<div class="line"><span class="lineno">   89</span>    );</div>
-<div class="line"><span class="lineno">   90</span>}</div>
+<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00087">87</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   87</span>                                   {</div>
+<div class="line"><span class="lineno">   88</span>    <span class="keywordflow">return</span> </div>
+<div class="line"><span class="lineno">   89</span>    std::accumulate(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.begin(), <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.end(), 0.0, </div>
+<div class="line"><span class="lineno">   90</span>        [min_age, <span class="keyword">this</span>](<span class="keywordtype">double</span> sum, <span class="keyword">const</span> <a class="code hl_class" href="classFish.html">Fish</a>&amp; f) { </div>
+<div class="line"><span class="lineno">   91</span>            return sum + ((f.isAlive &amp;&amp; f.isMature &amp;&amp; f.age &gt;= min_age) ? f.weight * superfish_size : 0); </div>
+<div class="line"><span class="lineno">   92</span>        }</div>
+<div class="line"><span class="lineno">   93</span>    );</div>
+<div class="line"><span class="lineno">   94</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -420,20 +422,20 @@ template&lt;class Func &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00093">93</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">   93</span>                                   {</div>
-<div class="line"><span class="lineno">   94</span>    <span class="keywordflow">return</span> </div>
-<div class="line"><span class="lineno">   95</span>    std::accumulate(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.begin(), <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.end(), 0.0, </div>
-<div class="line"><span class="lineno">   96</span>        [min_age, <span class="keyword">this</span>](<span class="keywordtype">double</span> sum, <span class="keyword">const</span> <a class="code hl_class" href="classFish.html">Fish</a>&amp; f) { </div>
-<div class="line"><span class="lineno">   97</span>            return sum + ((f.isAlive &amp;&amp; f.age &gt;= min_age) ? f.weight * superfish_size : 0); </div>
-<div class="line"><span class="lineno">   98</span>        }</div>
-<div class="line"><span class="lineno">   99</span>    );</div>
-<div class="line"><span class="lineno">  100</span>}</div>
+<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00097">97</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   97</span>                                   {</div>
+<div class="line"><span class="lineno">   98</span>    <span class="keywordflow">return</span> </div>
+<div class="line"><span class="lineno">   99</span>    std::accumulate(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.begin(), <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.end(), 0.0, </div>
+<div class="line"><span class="lineno">  100</span>        [min_age, <span class="keyword">this</span>](<span class="keywordtype">double</span> sum, <span class="keyword">const</span> <a class="code hl_class" href="classFish.html">Fish</a>&amp; f) { </div>
+<div class="line"><span class="lineno">  101</span>            return sum + ((f.isAlive &amp;&amp; f.age &gt;= min_age) ? f.weight * superfish_size : 0); </div>
+<div class="line"><span class="lineno">  102</span>        }</div>
+<div class="line"><span class="lineno">  103</span>    );</div>
+<div class="line"><span class="lineno">  104</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
-<a id="a032121d3398442895372f3547edebb96" name="a032121d3398442895372f3547edebb96"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a032121d3398442895372f3547edebb96">&#9670;&#160;</a></span>equilibriate_without_fishing()</h2>
+<a id="a191c90f809f5c1336650cba36909478d" name="a191c90f809f5c1336650cba36909478d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a191c90f809f5c1336650cba36909478d">&#9670;&#160;</a></span>equilibriate_without_fishing()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -442,43 +444,51 @@ template&lt;class Func &gt; </div>
           <td class="memname">vector&lt; double &gt; Stock::equilibriate_without_fishing </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>temp</em></td><td>)</td>
+          <td class="paramname"><em>temp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>nsteps</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00220">220</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  220</span>                                                             {</div>
-<div class="line"><span class="lineno">  221</span>    <span class="comment">// start with 1000 age-1 superfish created under the specified temperature</span></div>
-<div class="line"><span class="lineno">  222</span>    <a class="code hl_function" href="classStock.html#a3ab310b4d86e99892d378c3691404117">init</a>(1000, 0, temp); </div>
-<div class="line"><span class="lineno">  223</span>    <a class="code hl_struct" href="structStockSummary.html">StockSummary</a> stock_summary;</div>
-<div class="line"><span class="lineno">  224</span> </div>
-<div class="line"><span class="lineno">  225</span>    std::vector&lt;double&gt; state_t;</div>
-<div class="line"><span class="lineno">  226</span>    <span class="comment">// run 200 years of population dynamics</span></div>
-<div class="line"><span class="lineno">  227</span>    <span class="keywordtype">int</span> nsteps = 200;</div>
-<div class="line"><span class="lineno">  228</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> t=0; t&lt;nsteps; ++t){</div>
-<div class="line"><span class="lineno">  229</span>        stock_summary = <a class="code hl_struct" href="structStockSummary.html">StockSummary</a>(); <span class="comment">// reset stock summary for each year</span></div>
-<div class="line"><span class="lineno">  230</span> </div>
-<div class="line"><span class="lineno">  231</span>        <span class="keywordtype">double</span> ssb = <a class="code hl_function" href="classStock.html#ace5fdd83ce66a5f64ebcfdcd34460f70">calcSSB</a>(<a class="code hl_variable" href="classStock.html#ab21c26bfbf054360095bc491f9e9746e">par</a>.<a class="code hl_variable" href="classStockParams.html#a0017cbca9db75966e9f0e242443c6ce0">recruitmentAge</a>);</div>
-<div class="line"><span class="lineno">  232</span>        <span class="keywordtype">double</span> tsb = <a class="code hl_function" href="classStock.html#abdfcf1bb4cf065136301fb4daa0735d9">calcTSB</a>(<a class="code hl_variable" href="classStock.html#ab21c26bfbf054360095bc491f9e9746e">par</a>.<a class="code hl_variable" href="classStockParams.html#a0017cbca9db75966e9f0e242443c6ce0">recruitmentAge</a>);</div>
-<div class="line"><span class="lineno">  233</span>        <span class="keywordtype">double</span> maturity = <a class="code hl_function" href="classStock.html#a6641936ba78d9564c667e5466062f7dd">calcMaturity</a>(<a class="code hl_variable" href="classStock.html#ab21c26bfbf054360095bc491f9e9746e">par</a>.<a class="code hl_variable" href="classStockParams.html#a0017cbca9db75966e9f0e242443c6ce0">recruitmentAge</a>);</div>
-<div class="line"><span class="lineno">  234</span> </div>
-<div class="line"><span class="lineno">  235</span>        <span class="comment">// 1. Maturation</span></div>
-<div class="line"><span class="lineno">  236</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; f: <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>) f.updateMaturity(temp);</div>
-<div class="line"><span class="lineno">  237</span> </div>
-<div class="line"><span class="lineno">  238</span>        <span class="comment">// 2. Growth</span></div>
-<div class="line"><span class="lineno">  239</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; f: <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>) f.grow(tsb/1e6, temp); <span class="comment">// convert tsb to kT</span></div>
-<div class="line"><span class="lineno">  240</span> </div>
-<div class="line"><span class="lineno">  241</span>        <span class="comment">// 3. Reproduction</span></div>
-<div class="line"><span class="lineno">  242</span>        vector&lt;Fish&gt; recruits = <a class="code hl_function" href="classStock.html#a106f65b25a49f3e76244385d02eb91b6">spawn</a>(ssb, tsb, temp, stock_summary);</div>
-<div class="line"><span class="lineno">  243</span> </div>
-<div class="line"><span class="lineno">  244</span>        <span class="comment">// 4. Mortality</span></div>
-<div class="line"><span class="lineno">  245</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; f: <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>) {</div>
-<div class="line"><span class="lineno">  246</span>            <span class="keywordtype">double</span> mortality_rate = f.naturalMortalityRate(temp);</div>
-<div class="line"><span class="lineno">  247</span>            <span class="keywordtype">double</span> survival_prob = exp(-mortality_rate*1.0);</div>
-<div class="line"><span class="lineno">  248</span> </div>
-<div class="line"><span class="lineno">  249</span>            f.isAlive = f.isAlive &amp;&amp; (<a class="code hl_function" href="fishery__system_8cpp.html#a448644b6a3a0fa7cd89a6ce52b9bd3aa">runif</a>() &lt;= survival_prob);    <span class="comment">// set the fish to die probabilistically, if not dead already.</span></div>
+<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00222">222</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  222</span>                                                                         {</div>
+<div class="line"><span class="lineno">  223</span>    <span class="comment">// start with 1000 age-1 superfish created under the specified temperature</span></div>
+<div class="line"><span class="lineno">  224</span>    <a class="code hl_function" href="classStock.html#a3ab310b4d86e99892d378c3691404117">init</a>(1000, 0, temp); </div>
+<div class="line"><span class="lineno">  225</span>    <a class="code hl_struct" href="structStockSummary.html">StockSummary</a> stock_summary;</div>
+<div class="line"><span class="lineno">  226</span>    </div>
+<div class="line"><span class="lineno">  227</span>    std::vector&lt;double&gt; state_t;</div>
+<div class="line"><span class="lineno">  228</span>    <span class="comment">// run nsteps years of population dynamics</span></div>
+<div class="line"><span class="lineno">  229</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> t=0; t&lt;nsteps; ++t){</div>
+<div class="line"><span class="lineno">  230</span>        stock_summary = <a class="code hl_struct" href="structStockSummary.html">StockSummary</a>(); <span class="comment">// reset stock summary for each year</span></div>
+<div class="line"><span class="lineno">  231</span> </div>
+<div class="line"><span class="lineno">  232</span>        <span class="keywordtype">double</span> ssb = <a class="code hl_function" href="classStock.html#ace5fdd83ce66a5f64ebcfdcd34460f70">calcSSB</a>(<a class="code hl_variable" href="classStock.html#ab21c26bfbf054360095bc491f9e9746e">par</a>.<a class="code hl_variable" href="classStockParams.html#a0017cbca9db75966e9f0e242443c6ce0">recruitmentAge</a>);</div>
+<div class="line"><span class="lineno">  233</span>        <span class="keywordtype">double</span> tsb = <a class="code hl_function" href="classStock.html#abdfcf1bb4cf065136301fb4daa0735d9">calcTSB</a>(<a class="code hl_variable" href="classStock.html#ab21c26bfbf054360095bc491f9e9746e">par</a>.<a class="code hl_variable" href="classStockParams.html#a0017cbca9db75966e9f0e242443c6ce0">recruitmentAge</a>);</div>
+<div class="line"><span class="lineno">  234</span>        <span class="keywordtype">double</span> maturity = <a class="code hl_function" href="classStock.html#a6641936ba78d9564c667e5466062f7dd">calcMaturity</a>(<a class="code hl_variable" href="classStock.html#ab21c26bfbf054360095bc491f9e9746e">par</a>.<a class="code hl_variable" href="classStockParams.html#a0017cbca9db75966e9f0e242443c6ce0">recruitmentAge</a>);</div>
+<div class="line"><span class="lineno">  235</span> </div>
+<div class="line"><span class="lineno">  236</span>        <span class="comment">// 1. Maturation</span></div>
+<div class="line"><span class="lineno">  237</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; f: <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>) f.updateMaturity(temp);</div>
+<div class="line"><span class="lineno">  238</span> </div>
+<div class="line"><span class="lineno">  239</span>        <span class="comment">// 2. Growth</span></div>
+<div class="line"><span class="lineno">  240</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; f: <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>) f.grow(tsb/1e6, temp); <span class="comment">// convert tsb to kT</span></div>
+<div class="line"><span class="lineno">  241</span> </div>
+<div class="line"><span class="lineno">  242</span>        <span class="comment">// 3. Reproduction</span></div>
+<div class="line"><span class="lineno">  243</span>        vector&lt;Fish&gt; recruits = <a class="code hl_function" href="classStock.html#a106f65b25a49f3e76244385d02eb91b6">spawn</a>(ssb, tsb, temp, stock_summary);</div>
+<div class="line"><span class="lineno">  244</span> </div>
+<div class="line"><span class="lineno">  245</span>        <span class="comment">// 4. Mortality</span></div>
+<div class="line"><span class="lineno">  246</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; f: <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>) {</div>
+<div class="line"><span class="lineno">  247</span>            <span class="keywordtype">double</span> mortality_rate = f.naturalMortalityRate(temp);</div>
+<div class="line"><span class="lineno">  248</span>            <span class="keywordtype">double</span> survival_prob = exp(-mortality_rate*1.0);</div>
+<div class="line"><span class="lineno">  249</span>            f.isAlive = f.isAlive &amp;&amp; (<a class="code hl_function" href="random__utils_8cpp.html#a6f0606b445f88e8d53876ae8380c0b2f">runif</a>() &lt;= survival_prob);    <span class="comment">// set the fish to die probabilistically, if not dead already.</span></div>
 <div class="line"><span class="lineno">  250</span>        }</div>
 <div class="line"><span class="lineno">  251</span> </div>
 <div class="line"><span class="lineno">  252</span>        <span class="comment">// 6. remove dead fish from population</span></div>
@@ -503,15 +513,302 @@ template&lt;class Func &gt; </div>
 <div class="line"><span class="lineno">  271</span> </div>
 <div class="line"><span class="lineno">  272</span>    <span class="keywordflow">return</span> state_t;</div>
 <div class="line"><span class="lineno">  273</span>}</div>
-<div class="ttc" id="aclassStockParams_html_a0017cbca9db75966e9f0e242443c6ce0"><div class="ttname"><a href="classStockParams.html#a0017cbca9db75966e9f0e242443c6ce0">StockParams::recruitmentAge</a></div><div class="ttdeci">int recruitmentAge</div><div class="ttdoc">Age at recruitment.</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00018">stock.h:18</a></div></div>
-<div class="ttc" id="aclassStock_html_a106f65b25a49f3e76244385d02eb91b6"><div class="ttname"><a href="classStock.html#a106f65b25a49f3e76244385d02eb91b6">Stock::spawn</a></div><div class="ttdeci">std::vector&lt; Fish &gt; spawn(double ssb_now, double tsb_now, double temp, StockSummary &amp;stock_summary)</div><div class="ttdef"><b>Definition</b> <a href="stock_8cpp_source.html#l00156">stock.cpp:156</a></div></div>
-<div class="ttc" id="aclassStock_html_a3ab310b4d86e99892d378c3691404117"><div class="ttname"><a href="classStock.html#a3ab310b4d86e99892d378c3691404117">Stock::init</a></div><div class="ttdeci">void init(int n, double t_init, double temp)</div><div class="ttdef"><b>Definition</b> <a href="stock_8cpp_source.html#l00049">stock.cpp:49</a></div></div>
-<div class="ttc" id="aclassStock_html_a6641936ba78d9564c667e5466062f7dd"><div class="ttname"><a href="classStock.html#a6641936ba78d9564c667e5466062f7dd">Stock::calcMaturity</a></div><div class="ttdeci">double calcMaturity(double min_age=0)</div><div class="ttdef"><b>Definition</b> <a href="stock_8cpp_source.html#l00103">stock.cpp:103</a></div></div>
-<div class="ttc" id="aclassStock_html_ab21c26bfbf054360095bc491f9e9746e"><div class="ttname"><a href="classStock.html#ab21c26bfbf054360095bc491f9e9746e">Stock::par</a></div><div class="ttdeci">StockParams par</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00105">stock.h:105</a></div></div>
-<div class="ttc" id="aclassStock_html_abdfcf1bb4cf065136301fb4daa0735d9"><div class="ttname"><a href="classStock.html#abdfcf1bb4cf065136301fb4daa0735d9">Stock::calcTSB</a></div><div class="ttdeci">double calcTSB(double min_age=0)</div><div class="ttdef"><b>Definition</b> <a href="stock_8cpp_source.html#l00093">stock.cpp:93</a></div></div>
-<div class="ttc" id="aclassStock_html_ace5fdd83ce66a5f64ebcfdcd34460f70"><div class="ttname"><a href="classStock.html#ace5fdd83ce66a5f64ebcfdcd34460f70">Stock::calcSSB</a></div><div class="ttdeci">double calcSSB(double min_age=0)</div><div class="ttdef"><b>Definition</b> <a href="stock_8cpp_source.html#l00083">stock.cpp:83</a></div></div>
-<div class="ttc" id="afishery__system_8cpp_html_a448644b6a3a0fa7cd89a6ce52b9bd3aa"><div class="ttname"><a href="fishery__system_8cpp.html#a448644b6a3a0fa7cd89a6ce52b9bd3aa">runif</a></div><div class="ttdeci">double runif(double rmin=0, double rmax=1)</div><div class="ttdef"><b>Definition</b> <a href="fishery__system_8cpp_source.html#l00004">fishery_system.cpp:4</a></div></div>
-<div class="ttc" id="astructStockSummary_html"><div class="ttname"><a href="structStockSummary.html">StockSummary</a></div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00027">stock.h:27</a></div></div>
+<div class="ttc" id="aclassStockParams_html_a0017cbca9db75966e9f0e242443c6ce0"><div class="ttname"><a href="classStockParams.html#a0017cbca9db75966e9f0e242443c6ce0">StockParams::recruitmentAge</a></div><div class="ttdeci">int recruitmentAge</div><div class="ttdoc">Age at recruitment.</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00019">stock.h:19</a></div></div>
+<div class="ttc" id="aclassStock_html_a106f65b25a49f3e76244385d02eb91b6"><div class="ttname"><a href="classStock.html#a106f65b25a49f3e76244385d02eb91b6">Stock::spawn</a></div><div class="ttdeci">std::vector&lt; Fish &gt; spawn(double ssb_now, double tsb_now, double temp, StockSummary &amp;stock_summary)</div><div class="ttdef"><b>Definition</b> <a href="stock_8cpp_source.html#l00148">stock.cpp:148</a></div></div>
+<div class="ttc" id="aclassStock_html_a3ab310b4d86e99892d378c3691404117"><div class="ttname"><a href="classStock.html#a3ab310b4d86e99892d378c3691404117">Stock::init</a></div><div class="ttdeci">void init(int n, double t_init, double temp)</div><div class="ttdef"><b>Definition</b> <a href="stock_8cpp_source.html#l00053">stock.cpp:53</a></div></div>
+<div class="ttc" id="aclassStock_html_a6641936ba78d9564c667e5466062f7dd"><div class="ttname"><a href="classStock.html#a6641936ba78d9564c667e5466062f7dd">Stock::calcMaturity</a></div><div class="ttdeci">double calcMaturity(double min_age=0)</div><div class="ttdef"><b>Definition</b> <a href="stock_8cpp_source.html#l00107">stock.cpp:107</a></div></div>
+<div class="ttc" id="aclassStock_html_ab21c26bfbf054360095bc491f9e9746e"><div class="ttname"><a href="classStock.html#ab21c26bfbf054360095bc491f9e9746e">Stock::par</a></div><div class="ttdeci">StockParams par</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00106">stock.h:106</a></div></div>
+<div class="ttc" id="aclassStock_html_abdfcf1bb4cf065136301fb4daa0735d9"><div class="ttname"><a href="classStock.html#abdfcf1bb4cf065136301fb4daa0735d9">Stock::calcTSB</a></div><div class="ttdeci">double calcTSB(double min_age=0)</div><div class="ttdef"><b>Definition</b> <a href="stock_8cpp_source.html#l00097">stock.cpp:97</a></div></div>
+<div class="ttc" id="aclassStock_html_ace5fdd83ce66a5f64ebcfdcd34460f70"><div class="ttname"><a href="classStock.html#ace5fdd83ce66a5f64ebcfdcd34460f70">Stock::calcSSB</a></div><div class="ttdeci">double calcSSB(double min_age=0)</div><div class="ttdef"><b>Definition</b> <a href="stock_8cpp_source.html#l00087">stock.cpp:87</a></div></div>
+<div class="ttc" id="arandom__utils_8cpp_html_a6f0606b445f88e8d53876ae8380c0b2f"><div class="ttname"><a href="random__utils_8cpp.html#a6f0606b445f88e8d53876ae8380c0b2f">runif</a></div><div class="ttdeci">double runif(double rmin, double rmax)</div><div class="ttdef"><b>Definition</b> <a href="random__utils_8cpp_source.html#l00008">random_utils.cpp:8</a></div></div>
+<div class="ttc" id="astructStockSummary_html"><div class="ttname"><a href="structStockSummary.html">StockSummary</a></div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00029">stock.h:29</a></div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a3de2a85928dc7025c36f0abe4bff3a98" name="a3de2a85928dc7025c36f0abe4bff3a98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3de2a85928dc7025c36f0abe4bff3a98">&#9670;&#160;</a></span>get_fished()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; double &gt; Stock::get_fished </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; <a class="el" href="classFleet.html">Fleet</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>fleets</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>quotas</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>temp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>use_average_weight</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>return_progress</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00275">275</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  275</span>                                                                                                                                                        {</div>
+<div class="line"><span class="lineno">  276</span>    <span class="keywordtype">double</span> window_dt = 0.1;</div>
+<div class="line"><span class="lineno">  277</span>    <a class="code hl_class" href="classFleet.html">Fleet</a>&amp; ref_fleet = fleets[0];</div>
+<div class="line"><span class="lineno">  278</span> </div>
+<div class="line"><span class="lineno">  279</span>    <span class="comment">// Calculate total quota</span></div>
+<div class="line"><span class="lineno">  280</span>    <span class="keywordtype">double</span> quota = std::accumulate(quotas.begin(), quotas.end(), 0.0);</div>
+<div class="line"><span class="lineno">  281</span> </div>
+<div class="line"><span class="lineno">  282</span>    <span class="comment">// Live fish to sample per window</span></div>
+<div class="line"><span class="lineno">  283</span>    <span class="keywordtype">int</span> n_alive = std::accumulate(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.begin(), <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.end(), 0, </div>
+<div class="line"><span class="lineno">  284</span>        [<span class="keyword">this</span>](<span class="keywordtype">int</span> sum, <span class="keyword">const</span> <a class="code hl_class" href="classFish.html">Fish</a>&amp; f) { return sum + ((f.isAlive) ? 1 : 0); }</div>
+<div class="line"><span class="lineno">  285</span>    );</div>
+<div class="line"><span class="lineno">  286</span>    <span class="keywordtype">int</span> window_n = std::ceil(window_dt*n_alive);</div>
+<div class="line"><span class="lineno">  287</span> </div>
+<div class="line"><span class="lineno">  288</span>    <span class="comment">// Randomize fishes vector</span></div>
+<div class="line"><span class="lineno">  289</span>    std::shuffle(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.begin(), <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.end(), <a class="code hl_variable" href="random__utils_8h.html#adbe79e918414b2480135e3a7871b44ac">rng</a>);</div>
+<div class="line"><span class="lineno">  290</span> </div>
+<div class="line"><span class="lineno">  291</span>    <span class="comment">// Total available biomass to be sampled</span></div>
+<div class="line"><span class="lineno">  292</span>    <span class="keywordtype">double</span> B = ref_fleet.<a class="code hl_function" href="classFleet.html#a0f5fa101ac01eead3bde3f5f41dc61c9">biomassFishable</a>(*<span class="keyword">this</span>, 0, use_average_weight);</div>
+<div class="line"><span class="lineno">  293</span> </div>
+<div class="line"><span class="lineno">  294</span>    <span class="comment">// Clear window props vector in all fleets</span></div>
+<div class="line"><span class="lineno">  295</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; fl : fleets) fl.window_props_vec.clear(); <span class="comment">// clear old data in windows </span></div>
+<div class="line"><span class="lineno">  296</span> </div>
+<div class="line"><span class="lineno">  297</span>    <span class="keywordtype">double</span> B_sampled = 0, yield_expected = 0;</div>
+<div class="line"><span class="lineno">  298</span>    <span class="keywordtype">double</span> yield = 0, to_sea_bed = 0;</div>
+<div class="line"><span class="lineno">  299</span>    <span class="keywordtype">int</span> windows_sampled = 0;</div>
+<div class="line"><span class="lineno">  300</span> </div>
+<div class="line"><span class="lineno">  301</span>    <span class="comment">// fleet-wise yields</span></div>
+<div class="line"><span class="lineno">  302</span>    std::vector&lt;double&gt; yields(fleets.size(), 0);</div>
+<div class="line"><span class="lineno">  303</span> </div>
+<div class="line"><span class="lineno">  304</span>    <a class="code hl_class" href="classWindowProps.html">WindowProps</a> wp_total_debug;</div>
+<div class="line"><span class="lineno">  305</span>    std::vector&lt;WindowProps&gt; wps_per_fleet(fleets.size()); <span class="comment">// create a new WindowProps object for each fleet</span></div>
+<div class="line"><span class="lineno">  306</span>    std::vector&lt;double&gt; progress;</div>
+<div class="line"><span class="lineno">  307</span> </div>
+<div class="line"><span class="lineno">  308</span>    <span class="keywordtype">int</span> live_fish_count = 0;</div>
+<div class="line"><span class="lineno">  309</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; f : <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>){</div>
+<div class="line"><span class="lineno">  310</span>        <span class="keywordflow">if</span> (!f.isAlive) <span class="keywordflow">continue</span>; <span class="comment">// skip dead fish</span></div>
+<div class="line"><span class="lineno">  311</span> </div>
+<div class="line"><span class="lineno">  312</span>        ++live_fish_count;</div>
+<div class="line"><span class="lineno">  313</span> </div>
+<div class="line"><span class="lineno">  314</span>        <span class="comment">// If this is beginning of window, update start-of-window window_props</span></div>
+<div class="line"><span class="lineno">  315</span>        <span class="keywordflow">if</span> (live_fish_count % window_n == 1){</div>
+<div class="line"><span class="lineno">  316</span>            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;fleets.size(); ++k){</div>
+<div class="line"><span class="lineno">  317</span>                wps_per_fleet[k].B_start = B - yield - to_sea_bed; <span class="comment">// biomass at start of window is total biomass - biomass died so far</span></div>
+<div class="line"><span class="lineno">  318</span>                wps_per_fleet[k].chi = fleets[k].chi;</div>
+<div class="line"><span class="lineno">  319</span>            }</div>
+<div class="line"><span class="lineno">  320</span>        }</div>
+<div class="line"><span class="lineno">  321</span> </div>
+<div class="line"><span class="lineno">  322</span>        <span class="keywordtype">double</span> f_weight = (use_average_weight)? (f.weight - f.delta_weight/2) : f.weight;</div>
+<div class="line"><span class="lineno">  323</span>        <span class="keywordtype">double</span> fishability_f = ref_fleet.<a class="code hl_function" href="classFleet.html#acc2c8a4fc120db0ccbb1df2df1c4070f">fishability</a>(f.length);</div>
+<div class="line"><span class="lineno">  324</span> </div>
+<div class="line"><span class="lineno">  325</span>        <span class="comment">// fishable biomass of current fish and fishable biomass sampled until this point</span></div>
+<div class="line"><span class="lineno">  326</span>        <span class="keywordtype">double</span> B_sampled_t = fishability_f * f_weight * <a class="code hl_variable" href="classStock.html#af8e482424a6000b73b381b4829411e54">superfish_size</a>;</div>
+<div class="line"><span class="lineno">  327</span>        B_sampled += B_sampled_t;</div>
+<div class="line"><span class="lineno">  328</span>        wp_total_debug.<a class="code hl_variable" href="classWindowProps.html#a58f522b589528987b5ed70d13102961b">B_sampled</a> += B_sampled_t;</div>
+<div class="line"><span class="lineno">  329</span>        <span class="keywordflow">if</span> (B_sampled &gt; B+1){</div>
+<div class="line"><span class="lineno">  330</span>            std::cout &lt;&lt; <span class="stringliteral">&quot;Sampled fishable biomass exceeds total fishable biomass: &quot;</span> &lt;&lt; B_sampled &lt;&lt; <span class="stringliteral">&quot; / &quot;</span> &lt;&lt; B &lt;&lt; std::endl;</div>
+<div class="line"><span class="lineno">  331</span>            <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><span class="lineno">  332</span>        }</div>
+<div class="line"><span class="lineno">  333</span> </div>
+<div class="line"><span class="lineno">  334</span>        <span class="comment">// expected yield until this point</span></div>
+<div class="line"><span class="lineno">  335</span>        yield_expected = (B_sampled/B) * quota;</div>
+<div class="line"><span class="lineno">  336</span> </div>
+<div class="line"><span class="lineno">  337</span>        <span class="comment">// fleet-wise fishing mort rates</span></div>
+<div class="line"><span class="lineno">  338</span>        std::vector&lt;double&gt; fishing_morts;</div>
+<div class="line"><span class="lineno">  339</span>        fishing_morts.reserve(fleets.size());</div>
+<div class="line"><span class="lineno">  340</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; fl : fleets) fishing_morts.emplace_back(fl.fishingMortality(f.length)); </div>
+<div class="line"><span class="lineno">  341</span> </div>
+<div class="line"><span class="lineno">  342</span>        <span class="comment">// total fishing mort and natural mort rates</span></div>
+<div class="line"><span class="lineno">  343</span>        <span class="keywordtype">double</span> fishing_mort_rate = std::accumulate(fishing_morts.begin(), fishing_morts.end(), 0.0); <span class="comment">// total fishing mort rate from all fleets</span></div>
+<div class="line"><span class="lineno">  344</span>        <span class="keywordtype">double</span> natural_mort_rate = f.naturalMortalityRate(temp); <span class="comment">// This does not (should not) include spawning-related mortality</span></div>
+<div class="line"><span class="lineno">  345</span>        <span class="keywordtype">double</span> mortality_rate = natural_mort_rate + fishing_mort_rate; <span class="comment">// post-spawning mortality rate is same for mature and immature individuals</span></div>
+<div class="line"><span class="lineno">  346</span>        <span class="keywordtype">double</span> survival_prob = exp(-mortality_rate*1.0);    <span class="comment">// mortality in feeding grounds (post-spawning), over full year. Note that survival prob must be annualized because this fish will be iterated over only once</span></div>
+<div class="line"><span class="lineno">  347</span> </div>
+<div class="line"><span class="lineno">  348</span>        <span class="keywordflow">if</span> (<a class="code hl_variable" href="classStock.html#a58c9732b83e1116ab1fed88d81c8a739">debug</a> &amp;&amp; natural_mort_rate &gt; 100) std::cout &lt;&lt; <span class="stringliteral">&quot;Unusually high M: &quot;</span> &lt;&lt; f.age &lt;&lt; <span class="stringliteral">&quot; / &quot;</span> &lt;&lt; f.length &lt;&lt; <span class="stringliteral">&quot; / &quot;</span> &lt;&lt; natural_mort_rate &lt;&lt; <span class="charliteral">&#39;\n&#39;</span>;</div>
+<div class="line"><span class="lineno">  349</span> </div>
+<div class="line"><span class="lineno">  350</span>        <span class="comment">// Set fish to die based on total mort</span></div>
+<div class="line"><span class="lineno">  351</span>        f.isAlive = f.isAlive &amp;&amp; (<a class="code hl_function" href="random__utils_8cpp.html#a6f0606b445f88e8d53876ae8380c0b2f">runif</a>() &lt;= survival_prob);    <span class="comment">// set the fish to die probabilistically, if not dead already.</span></div>
+<div class="line"><span class="lineno">  352</span>        </div>
+<div class="line"><span class="lineno">  353</span>        <span class="keywordflow">if</span> (!f.isAlive){</div>
+<div class="line"><span class="lineno">  354</span>            f.fraction_caught = fishing_mort_rate/mortality_rate; <span class="comment">// what fraction of the superfish goes to yield (vs seabed)?</span></div>
+<div class="line"><span class="lineno">  355</span> </div>
+<div class="line"><span class="lineno">  356</span>            <span class="keywordtype">double</span> yield_t = f.fraction_caught * <a class="code hl_variable" href="classStock.html#af8e482424a6000b73b381b4829411e54">superfish_size</a> * f_weight; <span class="comment">// catch_frac fraction goes to yield</span></div>
+<div class="line"><span class="lineno">  357</span>            yield += yield_t;</div>
+<div class="line"><span class="lineno">  358</span>            wp_total_debug.<a class="code hl_variable" href="classWindowProps.html#aef843fbaaa9cb259dd19482093a5c00a">yield</a> += yield_t;</div>
+<div class="line"><span class="lineno">  359</span>            to_sea_bed += (1-f.fraction_caught) * <a class="code hl_variable" href="classStock.html#af8e482424a6000b73b381b4829411e54">superfish_size</a> * f_weight;  <span class="comment">// remaining fraction goes to sea bed</span></div>
+<div class="line"><span class="lineno">  360</span> </div>
+<div class="line"><span class="lineno">  361</span>            <span class="comment">// Allot yield to each fleet</span></div>
+<div class="line"><span class="lineno">  362</span>            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;fleets.size(); ++k){</div>
+<div class="line"><span class="lineno">  363</span>                <span class="keywordtype">double</span> catch_frac_fleet = fishing_morts[k]/mortality_rate;</div>
+<div class="line"><span class="lineno">  364</span>                <span class="keywordtype">double</span> yield_t_k = catch_frac_fleet * <a class="code hl_variable" href="classStock.html#af8e482424a6000b73b381b4829411e54">superfish_size</a> * f_weight;</div>
+<div class="line"><span class="lineno">  365</span>                wps_per_fleet[k].yield += yield_t_k;</div>
+<div class="line"><span class="lineno">  366</span>                yields[k] += yield_t_k;</div>
+<div class="line"><span class="lineno">  367</span>            }</div>
+<div class="line"><span class="lineno">  368</span>        }</div>
+<div class="line"><span class="lineno">  369</span> </div>
+<div class="line"><span class="lineno">  370</span>        <span class="comment">// Fill remaining window_props for each fleet</span></div>
+<div class="line"><span class="lineno">  371</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;fleets.size(); ++k){</div>
+<div class="line"><span class="lineno">  372</span>            wps_per_fleet[k].B_sampled += B_sampled_t;</div>
+<div class="line"><span class="lineno">  373</span>            wps_per_fleet[k].chi = fleets[k].chi;</div>
+<div class="line"><span class="lineno">  374</span>            <span class="keywordflow">if</span> (f.age &lt;= f.par.amax){ <span class="comment">// Need to skip age 31 fish as M is 1e20</span></div>
+<div class="line"><span class="lineno">  375</span>                wps_per_fleet[k].F_fishable += fishability_f * fishing_morts[k];</div>
+<div class="line"><span class="lineno">  376</span>                wps_per_fleet[k].M_fishable += fishability_f * natural_mort_rate;</div>
+<div class="line"><span class="lineno">  377</span>                wps_per_fleet[k].n_fishable += fishability_f * 1;</div>
+<div class="line"><span class="lineno">  378</span>            }</div>
+<div class="line"><span class="lineno">  379</span>        }</div>
+<div class="line"><span class="lineno">  380</span> </div>
+<div class="line"><span class="lineno">  381</span>        <span class="comment">// When we&#39;ve sampled all live fish in this window, perform window closing operations</span></div>
+<div class="line"><span class="lineno">  382</span>        <span class="keywordflow">if</span> (live_fish_count % window_n == 0){</div>
+<div class="line"><span class="lineno">  383</span>            ++windows_sampled;</div>
+<div class="line"><span class="lineno">  384</span> </div>
+<div class="line"><span class="lineno">  385</span>            <span class="keywordtype">double</span> bs_remainder = B - B_sampled;</div>
+<div class="line"><span class="lineno">  386</span> </div>
+<div class="line"><span class="lineno">  387</span>            <span class="comment">// For each fleet</span></div>
+<div class="line"><span class="lineno">  388</span>            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;fleets.size(); ++k){</div>
+<div class="line"><span class="lineno">  389</span>                <span class="comment">// Compute average window properties</span></div>
+<div class="line"><span class="lineno">  390</span>                wps_per_fleet[k].F_fishable /= wps_per_fleet[k].n_fishable;</div>
+<div class="line"><span class="lineno">  391</span>                wps_per_fleet[k].M_fishable /= wps_per_fleet[k].n_fishable;</div>
+<div class="line"><span class="lineno">  392</span>                wps_per_fleet[k].C_rate = wps_per_fleet[k].yield / window_dt;</div>
+<div class="line"><span class="lineno">  393</span> </div>
+<div class="line"><span class="lineno">  394</span>                <span class="comment">// Push window props into vector</span></div>
+<div class="line"><span class="lineno">  395</span>                fleets[k].window_props_vec.push_back(wps_per_fleet[k]);</div>
+<div class="line"><span class="lineno">  396</span> </div>
+<div class="line"><span class="lineno">  397</span>                <span class="comment">// update chi</span></div>
+<div class="line"><span class="lineno">  398</span>                <span class="keywordtype">double</span> yield_remainder = quotas[k] - yields[k];</div>
+<div class="line"><span class="lineno">  399</span>                fleets[k].update_chi_implicit(yield_remainder, bs_remainder);</div>
+<div class="line"><span class="lineno">  400</span> </div>
+<div class="line"><span class="lineno">  401</span>                <span class="comment">// reset WindowProps</span></div>
+<div class="line"><span class="lineno">  402</span>                wps_per_fleet[k] = <a class="code hl_class" href="classWindowProps.html">WindowProps</a>();</div>
+<div class="line"><span class="lineno">  403</span>            }</div>
+<div class="line"><span class="lineno">  404</span> </div>
+<div class="line"><span class="lineno">  405</span>        }</div>
+<div class="line"><span class="lineno">  406</span> </div>
+<div class="line"><span class="lineno">  407</span>        <span class="keywordflow">if</span> (return_progress){</div>
+<div class="line"><span class="lineno">  408</span>            progress.insert(progress.end(), </div>
+<div class="line"><span class="lineno">  409</span>                {</div>
+<div class="line"><span class="lineno">  410</span>                    static_cast&lt;double&gt;(f.age),</div>
+<div class="line"><span class="lineno">  411</span>                    B,</div>
+<div class="line"><span class="lineno">  412</span>                    B_sampled,</div>
+<div class="line"><span class="lineno">  413</span>                    yield,</div>
+<div class="line"><span class="lineno">  414</span>                    yield_expected</div>
+<div class="line"><span class="lineno">  415</span>                });</div>
+<div class="line"><span class="lineno">  416</span>            </div>
+<div class="line"><span class="lineno">  417</span>            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;fleets.size(); ++k){</div>
+<div class="line"><span class="lineno">  418</span>                progress.insert(progress.end(), </div>
+<div class="line"><span class="lineno">  419</span>                {</div>
+<div class="line"><span class="lineno">  420</span>                    fleets[k].chi,</div>
+<div class="line"><span class="lineno">  421</span>                    wps_per_fleet[k].chi,</div>
+<div class="line"><span class="lineno">  422</span>                    wps_per_fleet[k].B_sampled,</div>
+<div class="line"><span class="lineno">  423</span>                    wps_per_fleet[k].B_start,</div>
+<div class="line"><span class="lineno">  424</span>                    wps_per_fleet[k].yield,</div>
+<div class="line"><span class="lineno">  425</span>                    wps_per_fleet[k].F_fishable,</div>
+<div class="line"><span class="lineno">  426</span>                    <span class="comment">// Below effort calc is only for debugging</span></div>
+<div class="line"><span class="lineno">  427</span>                    fleets[k].effort_constantC(fleets[k].par.q, fleets[k].par.b, B)*fleets[k].par.dsea,</div>
+<div class="line"><span class="lineno">  428</span>                    fleets[k].effort_constantF(fleets[k].par.q, fleets[k].par.b, B)*fleets[k].par.dsea</div>
+<div class="line"><span class="lineno">  429</span>                });</div>
+<div class="line"><span class="lineno">  430</span>            }</div>
+<div class="line"><span class="lineno">  431</span>        }</div>
+<div class="line"><span class="lineno">  432</span> </div>
+<div class="line"><span class="lineno">  433</span>        <span class="keywordflow">if</span> (std::isnan(yield)){</div>
+<div class="line"><span class="lineno">  434</span>            std::cout &lt;&lt; <span class="stringliteral">&quot;Yield is NaN. Dump = \n&quot;</span>;</div>
+<div class="line"><span class="lineno">  435</span>            <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;progress.size(); ++i){</div>
+<div class="line"><span class="lineno">  436</span>                <span class="keywordflow">if</span> (i &gt; 0 &amp; i % (5 + 8*fleets.size()) == 0) std::cout &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line"><span class="lineno">  437</span>                cout &lt;&lt; progress[i] &lt;&lt; <span class="stringliteral">&quot; &quot;</span>; </div>
+<div class="line"><span class="lineno">  438</span>            }</div>
+<div class="line"><span class="lineno">  439</span>            std::cout &lt;&lt; std::endl;</div>
+<div class="line"><span class="lineno">  440</span> </div>
+<div class="line"><span class="lineno">  441</span>            std::cout &lt;&lt; <span class="stringliteral">&quot;Window props = \n&quot;</span>;</div>
+<div class="line"><span class="lineno">  442</span>            <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; w : fleets[0].window_props_vec){</div>
+<div class="line"><span class="lineno">  443</span>                cout &lt;&lt; w.B_sampled &lt;&lt; <span class="stringliteral">&quot; &quot;</span> &lt;&lt; w.yield &lt;&lt; <span class="stringliteral">&quot; &quot;</span> &lt;&lt; w.chi &lt;&lt; std::endl;</div>
+<div class="line"><span class="lineno">  444</span>            }</div>
+<div class="line"><span class="lineno">  445</span>        }</div>
+<div class="line"><span class="lineno">  446</span>    }</div>
+<div class="line"><span class="lineno">  447</span> </div>
+<div class="line"><span class="lineno">  448</span>    <span class="keywordflow">if</span> (return_progress) <span class="keywordflow">return</span> progress;</div>
+<div class="line"><span class="lineno">  449</span>    <span class="keywordflow">else</span> <span class="keywordflow">return</span> yields;</div>
+<div class="line"><span class="lineno">  450</span>}</div>
+<div class="ttc" id="aclassFleet_html"><div class="ttname"><a href="classFleet.html">Fleet</a></div><div class="ttdef"><b>Definition</b> <a href="fleet_8h_source.html#l00103">fleet.h:103</a></div></div>
+<div class="ttc" id="aclassFleet_html_a0f5fa101ac01eead3bde3f5f41dc61c9"><div class="ttname"><a href="classFleet.html#a0f5fa101ac01eead3bde3f5f41dc61c9">Fleet::biomassFishable</a></div><div class="ttdeci">double biomassFishable(const Stock &amp;stock, double min_age, bool use_average_weight)</div><div class="ttdoc">Calculate natural mortality, maturity, and fishing mortality rates averaged over fishable individuals...</div><div class="ttdef"><b>Definition</b> <a href="fleet_8cpp_source.html#l00204">fleet.cpp:204</a></div></div>
+<div class="ttc" id="aclassFleet_html_acc2c8a4fc120db0ccbb1df2df1c4070f"><div class="ttname"><a href="classFleet.html#acc2c8a4fc120db0ccbb1df2df1c4070f">Fleet::fishability</a></div><div class="ttdeci">double fishability(double length)</div><div class="ttdef"><b>Definition</b> <a href="fleet_8cpp_source.html#l00181">fleet.cpp:181</a></div></div>
+<div class="ttc" id="aclassStock_html_a58c9732b83e1116ab1fed88d81c8a739"><div class="ttname"><a href="classStock.html#a58c9732b83e1116ab1fed88d81c8a739">Stock::debug</a></div><div class="ttdeci">bool debug</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00112">stock.h:112</a></div></div>
+<div class="ttc" id="aclassStock_html_af8e482424a6000b73b381b4829411e54"><div class="ttname"><a href="classStock.html#af8e482424a6000b73b381b4829411e54">Stock::superfish_size</a></div><div class="ttdeci">double superfish_size</div><div class="ttdoc">superfish size</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00110">stock.h:110</a></div></div>
+<div class="ttc" id="aclassWindowProps_html"><div class="ttname"><a href="classWindowProps.html">WindowProps</a></div><div class="ttdef"><b>Definition</b> <a href="fleet_8h_source.html#l00007">fleet.h:7</a></div></div>
+<div class="ttc" id="aclassWindowProps_html_a58f522b589528987b5ed70d13102961b"><div class="ttname"><a href="classWindowProps.html#a58f522b589528987b5ed70d13102961b">WindowProps::B_sampled</a></div><div class="ttdeci">double B_sampled</div><div class="ttdoc">Fishable biomass sampled during this window.</div><div class="ttdef"><b>Definition</b> <a href="fleet_8h_source.html#l00014">fleet.h:14</a></div></div>
+<div class="ttc" id="aclassWindowProps_html_aef843fbaaa9cb259dd19482093a5c00a"><div class="ttname"><a href="classWindowProps.html#aef843fbaaa9cb259dd19482093a5c00a">WindowProps::yield</a></div><div class="ttdeci">double yield</div><div class="ttdoc">yield acquired within window</div><div class="ttdef"><b>Definition</b> <a href="fleet_8h_source.html#l00013">fleet.h:13</a></div></div>
+<div class="ttc" id="arandom__utils_8h_html_adbe79e918414b2480135e3a7871b44ac"><div class="ttname"><a href="random__utils_8h.html#adbe79e918414b2480135e3a7871b44ac">rng</a></div><div class="ttdeci">std::mt19937 rng</div></div>
+</div><!-- fragment -->
+</div>
+</div>
+<a id="a41988b8401559edddecac23a588e0313" name="a41988b8401559edddecac23a588e0313"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41988b8401559edddecac23a588e0313">&#9670;&#160;</a></span>get_fished_dry_run()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; double &gt; Stock::get_fished_dry_run </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; <a class="el" href="classFleet.html">Fleet</a> &gt; &amp;&#160;</td>
+          <td class="paramname"><em>fleets</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; double &gt; &amp;&#160;</td>
+          <td class="paramname"><em>quotas</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>temp</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>use_average_weight</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>return_progress</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00453">453</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  453</span>                                                                                                                                                                {</div>
+<div class="line"><span class="lineno">  454</span>    <a class="code hl_class" href="classStock.html">Stock</a> stock_copy = *<span class="keyword">this</span>;</div>
+<div class="line"><span class="lineno">  455</span>    <span class="keywordflow">return</span> stock_copy.<a class="code hl_function" href="classStock.html#a3de2a85928dc7025c36f0abe4bff3a98">get_fished</a>(fleets, quotas, temp, use_average_weight, return_progress);</div>
+<div class="line"><span class="lineno">  456</span>}</div>
+<div class="ttc" id="aclassStock_html"><div class="ttname"><a href="classStock.html">Stock</a></div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00088">stock.h:88</a></div></div>
+<div class="ttc" id="aclassStock_html_a3de2a85928dc7025c36f0abe4bff3a98"><div class="ttname"><a href="classStock.html#a3de2a85928dc7025c36f0abe4bff3a98">Stock::get_fished</a></div><div class="ttdeci">std::vector&lt; double &gt; get_fished(std::vector&lt; Fleet &gt; &amp;fleets, const std::vector&lt; double &gt; &amp;quotas, double temp, bool use_average_weight, bool return_progress)</div><div class="ttdef"><b>Definition</b> <a href="stock_8cpp_source.html#l00275">stock.cpp:275</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -530,62 +827,62 @@ template&lt;class Func &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00687">687</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  687</span>                              {</div>
-<div class="line"><span class="lineno">  688</span>    vector&lt;double&gt; col(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size());</div>
-<div class="line"><span class="lineno">  689</span>    Rcpp::DataFrame df = Rcpp::DataFrame::create();</div>
-<div class="line"><span class="lineno">  690</span>    </div>
-<div class="line"><span class="lineno">  691</span>    vector&lt;double&gt; x;</div>
-<div class="line"><span class="lineno">  692</span>    x.clear(); x.reserve(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size());</div>
-<div class="line"><span class="lineno">  693</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;f : <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>){</div>
-<div class="line"><span class="lineno">  694</span>        x.push_back(f.t_birth); </div>
-<div class="line"><span class="lineno">  695</span>    }</div>
-<div class="line"><span class="lineno">  696</span>    df.push_back(x, <span class="stringliteral">&quot;t.birth&quot;</span>);</div>
-<div class="line"><span class="lineno">  697</span>    </div>
-<div class="line"><span class="lineno">  698</span>    <span class="comment">//vector&lt;double&gt; x;</span></div>
-<div class="line"><span class="lineno">  699</span>    x.clear(); x.reserve(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size());</div>
-<div class="line"><span class="lineno">  700</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;f : <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>){</div>
-<div class="line"><span class="lineno">  701</span>        x.push_back(f.age); </div>
-<div class="line"><span class="lineno">  702</span>    }</div>
-<div class="line"><span class="lineno">  703</span>    df.push_back(x, <span class="stringliteral">&quot;age&quot;</span>);</div>
-<div class="line"><span class="lineno">  704</span> </div>
-<div class="line"><span class="lineno">  705</span>    vector&lt;bool&gt; bx;</div>
-<div class="line"><span class="lineno">  706</span>    bx.clear(); bx.reserve(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size());</div>
-<div class="line"><span class="lineno">  707</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;f : <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>){</div>
-<div class="line"><span class="lineno">  708</span>        bx.push_back(f.isMature);   </div>
-<div class="line"><span class="lineno">  709</span>    }</div>
-<div class="line"><span class="lineno">  710</span>    df.push_back(bx, <span class="stringliteral">&quot;isMature&quot;</span>);</div>
-<div class="line"><span class="lineno">  711</span> </div>
-<div class="line"><span class="lineno">  712</span>    <span class="comment">//vector&lt;bool&gt; bx;</span></div>
-<div class="line"><span class="lineno">  713</span>    bx.clear(); bx.reserve(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size());</div>
-<div class="line"><span class="lineno">  714</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;f : <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>){</div>
-<div class="line"><span class="lineno">  715</span>        bx.push_back(f.isAlive);    </div>
-<div class="line"><span class="lineno">  716</span>    }</div>
-<div class="line"><span class="lineno">  717</span>    df.push_back(bx, <span class="stringliteral">&quot;isAlive&quot;</span>);</div>
-<div class="line"><span class="lineno">  718</span> </div>
-<div class="line"><span class="lineno">  719</span>    <span class="comment">//vector&lt;double&gt; x;</span></div>
-<div class="line"><span class="lineno">  720</span>    x.clear(); x.reserve(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size());</div>
-<div class="line"><span class="lineno">  721</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;f : <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>){</div>
-<div class="line"><span class="lineno">  722</span>        x.push_back(f.length);  </div>
-<div class="line"><span class="lineno">  723</span>    }</div>
-<div class="line"><span class="lineno">  724</span>    df.push_back(x, <span class="stringliteral">&quot;length&quot;</span>);</div>
-<div class="line"><span class="lineno">  725</span> </div>
-<div class="line"><span class="lineno">  726</span>    <span class="comment">//vector&lt;double&gt; x;</span></div>
-<div class="line"><span class="lineno">  727</span>    x.clear(); x.reserve(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size());</div>
-<div class="line"><span class="lineno">  728</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;f : <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>){</div>
-<div class="line"><span class="lineno">  729</span>        x.push_back(f.weight);  </div>
-<div class="line"><span class="lineno">  730</span>    }</div>
-<div class="line"><span class="lineno">  731</span>    df.push_back(x, <span class="stringliteral">&quot;weight&quot;</span>);</div>
-<div class="line"><span class="lineno">  732</span> </div>
-<div class="line"><span class="lineno">  733</span>    <span class="comment">// add flag from parameters for debug</span></div>
-<div class="line"><span class="lineno">  734</span>    <span class="comment">//vector&lt;double&gt; x;</span></div>
-<div class="line"><span class="lineno">  735</span>    x.clear(); x.reserve(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size());</div>
-<div class="line"><span class="lineno">  736</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;f : <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>){</div>
-<div class="line"><span class="lineno">  737</span>        x.push_back(f.par.flag);    </div>
-<div class="line"><span class="lineno">  738</span>    }</div>
-<div class="line"><span class="lineno">  739</span>    df.push_back(x, <span class="stringliteral">&quot;flag&quot;</span>);</div>
-<div class="line"><span class="lineno">  740</span>    <span class="keywordflow">return</span> df;  </div>
-<div class="line"><span class="lineno">  741</span>}</div>
+<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00869">869</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  869</span>                              {</div>
+<div class="line"><span class="lineno">  870</span>    vector&lt;double&gt; col(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size());</div>
+<div class="line"><span class="lineno">  871</span>    Rcpp::DataFrame df = Rcpp::DataFrame::create();</div>
+<div class="line"><span class="lineno">  872</span>    </div>
+<div class="line"><span class="lineno">  873</span>    vector&lt;double&gt; x;</div>
+<div class="line"><span class="lineno">  874</span>    x.clear(); x.reserve(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size());</div>
+<div class="line"><span class="lineno">  875</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;f : <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>){</div>
+<div class="line"><span class="lineno">  876</span>        x.push_back(f.t_birth); </div>
+<div class="line"><span class="lineno">  877</span>    }</div>
+<div class="line"><span class="lineno">  878</span>    df.push_back(x, <span class="stringliteral">&quot;t.birth&quot;</span>);</div>
+<div class="line"><span class="lineno">  879</span>    </div>
+<div class="line"><span class="lineno">  880</span>    <span class="comment">//vector&lt;double&gt; x;</span></div>
+<div class="line"><span class="lineno">  881</span>    x.clear(); x.reserve(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size());</div>
+<div class="line"><span class="lineno">  882</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;f : <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>){</div>
+<div class="line"><span class="lineno">  883</span>        x.push_back(f.age); </div>
+<div class="line"><span class="lineno">  884</span>    }</div>
+<div class="line"><span class="lineno">  885</span>    df.push_back(x, <span class="stringliteral">&quot;age&quot;</span>);</div>
+<div class="line"><span class="lineno">  886</span> </div>
+<div class="line"><span class="lineno">  887</span>    vector&lt;bool&gt; bx;</div>
+<div class="line"><span class="lineno">  888</span>    bx.clear(); bx.reserve(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size());</div>
+<div class="line"><span class="lineno">  889</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;f : <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>){</div>
+<div class="line"><span class="lineno">  890</span>        bx.push_back(f.isMature);   </div>
+<div class="line"><span class="lineno">  891</span>    }</div>
+<div class="line"><span class="lineno">  892</span>    df.push_back(bx, <span class="stringliteral">&quot;isMature&quot;</span>);</div>
+<div class="line"><span class="lineno">  893</span> </div>
+<div class="line"><span class="lineno">  894</span>    <span class="comment">//vector&lt;bool&gt; bx;</span></div>
+<div class="line"><span class="lineno">  895</span>    bx.clear(); bx.reserve(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size());</div>
+<div class="line"><span class="lineno">  896</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;f : <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>){</div>
+<div class="line"><span class="lineno">  897</span>        bx.push_back(f.isAlive);    </div>
+<div class="line"><span class="lineno">  898</span>    }</div>
+<div class="line"><span class="lineno">  899</span>    df.push_back(bx, <span class="stringliteral">&quot;isAlive&quot;</span>);</div>
+<div class="line"><span class="lineno">  900</span> </div>
+<div class="line"><span class="lineno">  901</span>    <span class="comment">//vector&lt;double&gt; x;</span></div>
+<div class="line"><span class="lineno">  902</span>    x.clear(); x.reserve(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size());</div>
+<div class="line"><span class="lineno">  903</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;f : <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>){</div>
+<div class="line"><span class="lineno">  904</span>        x.push_back(f.length);  </div>
+<div class="line"><span class="lineno">  905</span>    }</div>
+<div class="line"><span class="lineno">  906</span>    df.push_back(x, <span class="stringliteral">&quot;length&quot;</span>);</div>
+<div class="line"><span class="lineno">  907</span> </div>
+<div class="line"><span class="lineno">  908</span>    <span class="comment">//vector&lt;double&gt; x;</span></div>
+<div class="line"><span class="lineno">  909</span>    x.clear(); x.reserve(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size());</div>
+<div class="line"><span class="lineno">  910</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;f : <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>){</div>
+<div class="line"><span class="lineno">  911</span>        x.push_back(f.weight);  </div>
+<div class="line"><span class="lineno">  912</span>    }</div>
+<div class="line"><span class="lineno">  913</span>    df.push_back(x, <span class="stringliteral">&quot;weight&quot;</span>);</div>
+<div class="line"><span class="lineno">  914</span> </div>
+<div class="line"><span class="lineno">  915</span>    <span class="comment">// add flag from parameters for debug</span></div>
+<div class="line"><span class="lineno">  916</span>    <span class="comment">//vector&lt;double&gt; x;</span></div>
+<div class="line"><span class="lineno">  917</span>    x.clear(); x.reserve(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size());</div>
+<div class="line"><span class="lineno">  918</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span> &amp;f : <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>){</div>
+<div class="line"><span class="lineno">  919</span>        x.push_back(f.par.flag);    </div>
+<div class="line"><span class="lineno">  920</span>    }</div>
+<div class="line"><span class="lineno">  921</span>    df.push_back(x, <span class="stringliteral">&quot;flag&quot;</span>);</div>
+<div class="line"><span class="lineno">  922</span>    <span class="keywordflow">return</span> df;  </div>
+<div class="line"><span class="lineno">  923</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -604,26 +901,26 @@ template&lt;class Func &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00744">744</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  744</span>                               {</div>
-<div class="line"><span class="lineno">  745</span>    vector&lt;double&gt; traits = <a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_function" href="classFish.html#ada02edec02f9bed880911ea21b6d1a60">get_traits</a>();</div>
-<div class="line"><span class="lineno">  746</span>    vector&lt;vector&lt;double&gt;&gt; all_traits(traits.size());</div>
-<div class="line"><span class="lineno">  747</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; f: <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>){</div>
-<div class="line"><span class="lineno">  748</span>        traits = f.get_traits();</div>
-<div class="line"><span class="lineno">  749</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;traits.size(); ++i){</div>
-<div class="line"><span class="lineno">  750</span>            all_traits[i].push_back(traits[i]);</div>
-<div class="line"><span class="lineno">  751</span>        }</div>
-<div class="line"><span class="lineno">  752</span>    }</div>
-<div class="line"><span class="lineno">  753</span> </div>
-<div class="line"><span class="lineno">  754</span>    Rcpp::DataFrame df = Rcpp::DataFrame::create();</div>
-<div class="line"><span class="lineno">  755</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;<a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_variable" href="classFish.html#a0274f458e85d2ffbf59379a56e4386cc">trait_names</a>.size(); ++i){</div>
-<div class="line"><span class="lineno">  756</span>        df.push_back(all_traits[i], <a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_variable" href="classFish.html#a0274f458e85d2ffbf59379a56e4386cc">trait_names</a>[i]);</div>
-<div class="line"><span class="lineno">  757</span>    }</div>
-<div class="line"><span class="lineno">  758</span>    <span class="comment">// df.push_back(nrecruits_vec, &quot;nrecruits&quot;);</span></div>
-<div class="line"><span class="lineno">  759</span>    <span class="keywordflow">return</span> df;</div>
-<div class="line"><span class="lineno">  760</span>}</div>
-<div class="ttc" id="aclassFish_html_a0274f458e85d2ffbf59379a56e4386cc"><div class="ttname"><a href="classFish.html#a0274f458e85d2ffbf59379a56e4386cc">Fish::trait_names</a></div><div class="ttdeci">std::vector&lt; std::string &gt; trait_names</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00177">fish.h:177</a></div></div>
-<div class="ttc" id="aclassFish_html_ada02edec02f9bed880911ea21b6d1a60"><div class="ttname"><a href="classFish.html#ada02edec02f9bed880911ea21b6d1a60">Fish::get_traits</a></div><div class="ttdeci">std::vector&lt; double &gt; get_traits()</div><div class="ttdef"><b>Definition</b> <a href="fish_8cpp_source.html#l00089">fish.cpp:89</a></div></div>
+<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00926">926</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  926</span>                               {</div>
+<div class="line"><span class="lineno">  927</span>    vector&lt;double&gt; traits = <a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_function" href="classFish.html#ada02edec02f9bed880911ea21b6d1a60">get_traits</a>();</div>
+<div class="line"><span class="lineno">  928</span>    vector&lt;vector&lt;double&gt;&gt; all_traits(traits.size());</div>
+<div class="line"><span class="lineno">  929</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; f: <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>){</div>
+<div class="line"><span class="lineno">  930</span>        traits = f.get_traits();</div>
+<div class="line"><span class="lineno">  931</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;traits.size(); ++i){</div>
+<div class="line"><span class="lineno">  932</span>            all_traits[i].push_back(traits[i]);</div>
+<div class="line"><span class="lineno">  933</span>        }</div>
+<div class="line"><span class="lineno">  934</span>    }</div>
+<div class="line"><span class="lineno">  935</span> </div>
+<div class="line"><span class="lineno">  936</span>    Rcpp::DataFrame df = Rcpp::DataFrame::create();</div>
+<div class="line"><span class="lineno">  937</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;<a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_variable" href="classFish.html#a0274f458e85d2ffbf59379a56e4386cc">trait_names</a>.size(); ++i){</div>
+<div class="line"><span class="lineno">  938</span>        df.push_back(all_traits[i], <a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_variable" href="classFish.html#a0274f458e85d2ffbf59379a56e4386cc">trait_names</a>[i]);</div>
+<div class="line"><span class="lineno">  939</span>    }</div>
+<div class="line"><span class="lineno">  940</span>    <span class="comment">// df.push_back(nrecruits_vec, &quot;nrecruits&quot;);</span></div>
+<div class="line"><span class="lineno">  941</span>    <span class="keywordflow">return</span> df;</div>
+<div class="line"><span class="lineno">  942</span>}</div>
+<div class="ttc" id="aclassFish_html_a0274f458e85d2ffbf59379a56e4386cc"><div class="ttname"><a href="classFish.html#a0274f458e85d2ffbf59379a56e4386cc">Fish::trait_names</a></div><div class="ttdeci">std::vector&lt; std::string &gt; trait_names</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00186">fish.h:186</a></div></div>
+<div class="ttc" id="aclassFish_html_ada02edec02f9bed880911ea21b6d1a60"><div class="ttname"><a href="classFish.html#ada02edec02f9bed880911ea21b6d1a60">Fish::get_traits</a></div><div class="ttdeci">std::vector&lt; double &gt; get_traits()</div><div class="ttdef"><b>Definition</b> <a href="fish_8cpp_source.html#l00103">fish.cpp:103</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -659,15 +956,15 @@ template&lt;class Func &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00049">49</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">   49</span>                                                 {</div>
-<div class="line"><span class="lineno">   50</span>    <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.clear();</div>
-<div class="line"><span class="lineno">   51</span>    <a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_function" href="classFish.html#adf85bf269f1651352506e371ffd2cecc">init</a>(0, temp); <span class="comment">// initialize prototype fish under 0 tsb conditions</span></div>
-<div class="line"><span class="lineno">   52</span>    <a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_variable" href="classFish.html#ab633aa14c9ed71e73053671061683d13">t_birth</a> = t_init;</div>
-<div class="line"><span class="lineno">   53</span>    <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.resize(n, <a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>);</div>
-<div class="line"><span class="lineno">   54</span>}</div>
-<div class="ttc" id="aclassFish_html_ab633aa14c9ed71e73053671061683d13"><div class="ttname"><a href="classFish.html#ab633aa14c9ed71e73053671061683d13">Fish::t_birth</a></div><div class="ttdeci">double t_birth</div><div class="ttdoc">Year of birth (not used)</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00173">fish.h:173</a></div></div>
-<div class="ttc" id="aclassFish_html_adf85bf269f1651352506e371ffd2cecc"><div class="ttname"><a href="classFish.html#adf85bf269f1651352506e371ffd2cecc">Fish::init</a></div><div class="ttdeci">void init(double tsb, double temp)</div><div class="ttdoc">Initializes the fish, i.e., initializes parameters and sets the initial state (age = 1,...</div><div class="ttdef"><b>Definition</b> <a href="fish_8cpp_source.html#l00032">fish.cpp:32</a></div></div>
+<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00053">53</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   53</span>                                                 {</div>
+<div class="line"><span class="lineno">   54</span>    <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.clear();</div>
+<div class="line"><span class="lineno">   55</span>    <a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_function" href="classFish.html#adf85bf269f1651352506e371ffd2cecc">init</a>(0, temp); <span class="comment">// initialize prototype fish under 0 tsb conditions</span></div>
+<div class="line"><span class="lineno">   56</span>    <a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_variable" href="classFish.html#ab633aa14c9ed71e73053671061683d13">t_birth</a> = t_init;</div>
+<div class="line"><span class="lineno">   57</span>    <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.resize(n, <a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>);</div>
+<div class="line"><span class="lineno">   58</span>}</div>
+<div class="ttc" id="aclassFish_html_ab633aa14c9ed71e73053671061683d13"><div class="ttname"><a href="classFish.html#ab633aa14c9ed71e73053671061683d13">Fish::t_birth</a></div><div class="ttdeci">double t_birth</div><div class="ttdoc">Year of birth (not used)</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00182">fish.h:182</a></div></div>
+<div class="ttc" id="aclassFish_html_adf85bf269f1651352506e371ffd2cecc"><div class="ttname"><a href="classFish.html#adf85bf269f1651352506e371ffd2cecc">Fish::init</a></div><div class="ttdeci">void init(double tsb, double temp)</div><div class="ttdoc">Initializes the fish, i.e., initializes parameters and sets the initial state (age = 1,...</div><div class="ttdef"><b>Definition</b> <a href="fish_8cpp_source.html#l00044">fish.cpp:44</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -740,10 +1037,10 @@ template&lt;class Func &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00125">125</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  125</span>                {</div>
-<div class="line"><span class="lineno">  126</span>    <span class="keywordflow">return</span> <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size();</div>
-<div class="line"><span class="lineno">  127</span>}</div>
+<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00129">129</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  129</span>                {</div>
+<div class="line"><span class="lineno">  130</span>    <span class="keywordflow">return</span> <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size();</div>
+<div class="line"><span class="lineno">  131</span>}</div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -790,12 +1087,12 @@ template&lt;class Func &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00038">38</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">   38</span>                                                     {</div>
-<div class="line"><span class="lineno">   39</span>    <a class="code hl_variable" href="classStock.html#ab21c26bfbf054360095bc491f9e9746e">par</a>.<a class="code hl_function" href="classStockParams.html#ab0f523169314c59696216d7b3c7959eb">initFromFile</a>(filename, verbose);</div>
-<div class="line"><span class="lineno">   40</span>    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><span class="lineno">   41</span>}</div>
-<div class="ttc" id="aclassStockParams_html_ab0f523169314c59696216d7b3c7959eb"><div class="ttname"><a href="classStockParams.html#ab0f523169314c59696216d7b3c7959eb">StockParams::initFromFile</a></div><div class="ttdeci">void initFromFile(std::string params_file, bool verbose=false)</div><div class="ttdef"><b>Definition</b> <a href="stock_8cpp_source.html#l00014">stock.cpp:14</a></div></div>
+<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00042">42</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">   42</span>                                                     {</div>
+<div class="line"><span class="lineno">   43</span>    <a class="code hl_variable" href="classStock.html#ab21c26bfbf054360095bc491f9e9746e">par</a>.<a class="code hl_function" href="classStockParams.html#ab0f523169314c59696216d7b3c7959eb">initFromFile</a>(filename, verbose);</div>
+<div class="line"><span class="lineno">   44</span>    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><span class="lineno">   45</span>}</div>
+<div class="ttc" id="aclassStockParams_html_ab0f523169314c59696216d7b3c7959eb"><div class="ttname"><a href="classStockParams.html#ab0f523169314c59696216d7b3c7959eb">StockParams::initFromFile</a></div><div class="ttdeci">void initFromFile(std::string params_file, bool verbose=false)</div><div class="ttdef"><b>Definition</b> <a href="stock_8cpp_source.html#l00016">stock.cpp:16</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -837,83 +1134,92 @@ template&lt;class Func &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00156">156</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
-<div class="fragment"><div class="line"><span class="lineno">  156</span>                                                                                                  {</div>
-<div class="line"><span class="lineno">  157</span>    <span class="comment">// 3.b.1: Get the number of recruits for each fish </span></div>
-<div class="line"><span class="lineno">  158</span>    <span class="comment">// -------------------------------------------------</span></div>
-<div class="line"><span class="lineno">  159</span>    std::vector&lt;double&gt; <a class="code hl_variable" href="classStock.html#a6303f70699e5b55133afae771b4e869c">nrecruits_vec</a>(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size(), 0.0);</div>
+<p class="definition">Definition at line <a class="el" href="stock_8cpp_source.html#l00148">148</a> of file <a class="el" href="stock_8cpp_source.html">stock.cpp</a>.</p>
+<div class="fragment"><div class="line"><span class="lineno">  148</span>                                                                                                  {</div>
+<div class="line"><span class="lineno">  149</span>    <span class="comment">// 3.b.1: Get the number of recruits for each fish </span></div>
+<div class="line"><span class="lineno">  150</span>    <span class="comment">// -------------------------------------------------</span></div>
+<div class="line"><span class="lineno">  151</span>    std::vector&lt;double&gt; <a class="code hl_variable" href="classStock.html#a6303f70699e5b55133afae771b4e869c">nrecruits_vec</a>(<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size(), 0.0);</div>
+<div class="line"><span class="lineno">  152</span> </div>
+<div class="line"><span class="lineno">  153</span>    <span class="keywordtype">double</span> nrecruits_total = 0;</div>
+<div class="line"><span class="lineno">  154</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size(); ++k) {</div>
+<div class="line"><span class="lineno">  155</span>        <span class="keyword">auto</span> &amp;f = <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>[k];</div>
+<div class="line"><span class="lineno">  156</span>        <span class="keywordflow">if</span> (f.isAlive &amp;&amp; f.isMature){  <span class="comment">// fish survives the spawning-grounds fishery until actual spawning time</span></div>
+<div class="line"><span class="lineno">  157</span>            <span class="comment">// count this fish as spawner and calculate its potential recruits without density effect (for analysis only)</span></div>
+<div class="line"><span class="lineno">  158</span>            stock_summary.<a class="code hl_variable" href="structStockSummary.html#a90b3a62179b282fd39a1f09aa06764a2">nspawners</a> += <a class="code hl_variable" href="classStock.html#af8e482424a6000b73b381b4829411e54">superfish_size</a>; </div>
+<div class="line"><span class="lineno">  159</span>            stock_summary.<a class="code hl_variable" href="structStockSummary.html#afe5c800c8b50c759a9c5381700dda69c">nrecruits_potential</a> += f.produceRecruits(  0, temp) * <a class="code hl_variable" href="classStock.html#af8e482424a6000b73b381b4829411e54">superfish_size</a>;</div>
 <div class="line"><span class="lineno">  160</span> </div>
-<div class="line"><span class="lineno">  161</span>    <span class="keywordtype">double</span> nrecruits_total = 0;</div>
-<div class="line"><span class="lineno">  162</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;<a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>.size(); ++k) {</div>
-<div class="line"><span class="lineno">  163</span>        <span class="keyword">auto</span> &amp;f = <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>[k];</div>
-<div class="line"><span class="lineno">  164</span>        <span class="keywordflow">if</span> (f.isAlive &amp;&amp; f.isMature){  <span class="comment">// fish survives the spawning-grounds fishery until actual spawning time</span></div>
-<div class="line"><span class="lineno">  165</span>            <span class="comment">// count this fish as spawner and calculate its potential recruits without density effect (for analysis only)</span></div>
-<div class="line"><span class="lineno">  166</span>            stock_summary.<a class="code hl_variable" href="structStockSummary.html#a90b3a62179b282fd39a1f09aa06764a2">nspawners</a> += <a class="code hl_variable" href="classStock.html#af8e482424a6000b73b381b4829411e54">superfish_size</a>; </div>
-<div class="line"><span class="lineno">  167</span>            stock_summary.<a class="code hl_variable" href="structStockSummary.html#afe5c800c8b50c759a9c5381700dda69c">nrecruits_potential</a> += f.produceRecruits(  0, temp) * <a class="code hl_variable" href="classStock.html#af8e482424a6000b73b381b4829411e54">superfish_size</a>;</div>
-<div class="line"><span class="lineno">  168</span> </div>
-<div class="line"><span class="lineno">  169</span>            <span class="comment">// Recruit production</span></div>
-<div class="line"><span class="lineno">  170</span>            <span class="keywordtype">double</span> nrecruits_fish = f.produceRecruits(ssb_now, temp) * <a class="code hl_variable" href="classStock.html#af8e482424a6000b73b381b4829411e54">superfish_size</a>;</div>
-<div class="line"><span class="lineno">  171</span>            <a class="code hl_variable" href="classStock.html#a6303f70699e5b55133afae771b4e869c">nrecruits_vec</a>[k]  = nrecruits_fish;</div>
-<div class="line"><span class="lineno">  172</span>            nrecruits_total  += nrecruits_fish;</div>
-<div class="line"><span class="lineno">  173</span> </div>
-<div class="line"><span class="lineno">  174</span>            <span class="comment">// Mortality due to spawning</span></div>
-<div class="line"><span class="lineno">  175</span>            <span class="keywordtype">double</span> p_survival_spawning = exp(-f.par.Mspawning);</div>
-<div class="line"><span class="lineno">  176</span>            f.isAlive = f.isAlive &amp;&amp; (<a class="code hl_function" href="fishery__system_8cpp.html#a448644b6a3a0fa7cd89a6ce52b9bd3aa">runif</a>() &lt;= p_survival_spawning);</div>
-<div class="line"><span class="lineno">  177</span>        }</div>
-<div class="line"><span class="lineno">  178</span>    }</div>
-<div class="line"><span class="lineno">  179</span> </div>
-<div class="line"><span class="lineno">  180</span>    <span class="comment">//nrecruits *= exp(rnorm(-par.sigmaf*par.sigmaf/2, par.sigmaf));</span></div>
-<div class="line"><span class="lineno">  181</span>    stock_summary.<a class="code hl_variable" href="structStockSummary.html#a374c2a8e6009760952dca57e1548f86d">nrecruits_real</a> = std::clamp(nrecruits_total, 1.0, <a class="code hl_variable" href="classStock.html#ab21c26bfbf054360095bc491f9e9746e">par</a>.<a class="code hl_variable" href="classStockParams.html#ac6e23d8d8ff73b76cf3efc8850dfac4f">rmax</a>);</div>
-<div class="line"><span class="lineno">  182</span>    <span class="comment">//  for (auto&amp; nn : nrecruits_vec) nn = nn*nrecruits_real/(nrecruits_total+1e-20); </span></div>
+<div class="line"><span class="lineno">  161</span>            <span class="comment">// Recruit production</span></div>
+<div class="line"><span class="lineno">  162</span>            <span class="keywordtype">double</span> nrecruits_fish = f.produceRecruits(ssb_now, temp) * <a class="code hl_variable" href="classStock.html#af8e482424a6000b73b381b4829411e54">superfish_size</a>;</div>
+<div class="line"><span class="lineno">  163</span>            <a class="code hl_variable" href="classStock.html#a6303f70699e5b55133afae771b4e869c">nrecruits_vec</a>[k]  = nrecruits_fish;</div>
+<div class="line"><span class="lineno">  164</span>            nrecruits_total  += nrecruits_fish;</div>
+<div class="line"><span class="lineno">  165</span> </div>
+<div class="line"><span class="lineno">  166</span>            <span class="comment">// Mortality due to spawning</span></div>
+<div class="line"><span class="lineno">  167</span>            <span class="keywordtype">double</span> p_survival_spawning = exp(-f.par.Mspawning);</div>
+<div class="line"><span class="lineno">  168</span>            f.isAlive = f.isAlive &amp;&amp; (<a class="code hl_function" href="random__utils_8cpp.html#a6f0606b445f88e8d53876ae8380c0b2f">runif</a>() &lt;= p_survival_spawning);</div>
+<div class="line"><span class="lineno">  169</span>        }</div>
+<div class="line"><span class="lineno">  170</span>    }</div>
+<div class="line"><span class="lineno">  171</span> </div>
+<div class="line"><span class="lineno">  172</span>    <span class="keywordtype">double</span> nrecruits_before_noise = nrecruits_total;</div>
+<div class="line"><span class="lineno">  173</span>    <span class="keywordtype">double</span> noise_multiplier = exp(<a class="code hl_function" href="random__utils_8cpp.html#a98358adc5596091716c6f76bccda774d">rnorm</a>(-<a class="code hl_variable" href="classStock.html#ab21c26bfbf054360095bc491f9e9746e">par</a>.<a class="code hl_variable" href="classStockParams.html#ac414ae811c31cd5c5ad8833b71dda05c">sigmaf</a>*<a class="code hl_variable" href="classStock.html#ab21c26bfbf054360095bc491f9e9746e">par</a>.<a class="code hl_variable" href="classStockParams.html#ac414ae811c31cd5c5ad8833b71dda05c">sigmaf</a>/2, <a class="code hl_variable" href="classStock.html#ab21c26bfbf054360095bc491f9e9746e">par</a>.<a class="code hl_variable" href="classStockParams.html#ac414ae811c31cd5c5ad8833b71dda05c">sigmaf</a>));</div>
+<div class="line"><span class="lineno">  174</span>    noise_multiplier = clamp(noise_multiplier, 1e-3, 10.0);</div>
+<div class="line"><span class="lineno">  175</span>    nrecruits_total *= noise_multiplier;</div>
+<div class="line"><span class="lineno">  176</span>    stock_summary.<a class="code hl_variable" href="structStockSummary.html#a374c2a8e6009760952dca57e1548f86d">nrecruits_real</a> = std::clamp(nrecruits_total, 1.0, <a class="code hl_variable" href="classStock.html#ab21c26bfbf054360095bc491f9e9746e">par</a>.<a class="code hl_variable" href="classStockParams.html#ac6e23d8d8ff73b76cf3efc8850dfac4f">rmax</a>);</div>
+<div class="line"><span class="lineno">  177</span>    <span class="comment">//  for (auto&amp; nn : nrecruits_vec) nn = nn*nrecruits_real/(nrecruits_total+1e-20); </span></div>
+<div class="line"><span class="lineno">  178</span> </div>
+<div class="line"><span class="lineno">  179</span>    <span class="comment">// ** for analysis</span></div>
+<div class="line"><span class="lineno">  180</span>    stock_summary.<a class="code hl_variable" href="structStockSummary.html#aa338f9bc55a8ff2f8e43e3d20422087f">r0_avg</a> = (ssb_now &gt; 0)? (stock_summary.<a class="code hl_variable" href="structStockSummary.html#a374c2a8e6009760952dca57e1548f86d">nrecruits_real</a> * (1 + ssb_now/<a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_variable" href="classFish.html#a129810432fa88278c08c3463ae9694d1">par</a>.<a class="code hl_variable" href="classFishParams.html#aac12f457c42496d0253c1d952d75af5a">Bhalf</a>) / ssb_now) : -999;</div>
+<div class="line"><span class="lineno">  181</span>    stock_summary.<a class="code hl_variable" href="structStockSummary.html#addd678759a149f99bb07917b9d8c3f9f">factor_dr</a> = stock_summary.<a class="code hl_variable" href="structStockSummary.html#a374c2a8e6009760952dca57e1548f86d">nrecruits_real</a> / (stock_summary.<a class="code hl_variable" href="structStockSummary.html#afe5c800c8b50c759a9c5381700dda69c">nrecruits_potential</a>+1e-12);</div>
+<div class="line"><span class="lineno">  182</span>    stock_summary.<a class="code hl_variable" href="structStockSummary.html#aeb3cfa6a3e46781be336fc5cc4cedf6a">nrecruits_per_fish</a> = stock_summary.<a class="code hl_variable" href="structStockSummary.html#a374c2a8e6009760952dca57e1548f86d">nrecruits_real</a> / stock_summary.<a class="code hl_variable" href="structStockSummary.html#a90b3a62179b282fd39a1f09aa06764a2">nspawners</a>;</div>
 <div class="line"><span class="lineno">  183</span> </div>
-<div class="line"><span class="lineno">  184</span>    <span class="comment">// ** for analysis</span></div>
-<div class="line"><span class="lineno">  185</span>    stock_summary.<a class="code hl_variable" href="structStockSummary.html#aa338f9bc55a8ff2f8e43e3d20422087f">r0_avg</a> = (ssb_now &gt; 0)? (stock_summary.<a class="code hl_variable" href="structStockSummary.html#a374c2a8e6009760952dca57e1548f86d">nrecruits_real</a> * (1 + ssb_now/<a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_variable" href="classFish.html#a129810432fa88278c08c3463ae9694d1">par</a>.<a class="code hl_variable" href="classFishParams.html#aac12f457c42496d0253c1d952d75af5a">Bhalf</a>) / ssb_now) : -999;</div>
-<div class="line"><span class="lineno">  186</span>    stock_summary.<a class="code hl_variable" href="structStockSummary.html#addd678759a149f99bb07917b9d8c3f9f">factor_dr</a> = stock_summary.<a class="code hl_variable" href="structStockSummary.html#a374c2a8e6009760952dca57e1548f86d">nrecruits_real</a> / (stock_summary.<a class="code hl_variable" href="structStockSummary.html#afe5c800c8b50c759a9c5381700dda69c">nrecruits_potential</a>+1e-12);</div>
-<div class="line"><span class="lineno">  187</span>    stock_summary.<a class="code hl_variable" href="structStockSummary.html#aeb3cfa6a3e46781be336fc5cc4cedf6a">nrecruits_per_fish</a> = stock_summary.<a class="code hl_variable" href="structStockSummary.html#a374c2a8e6009760952dca57e1548f86d">nrecruits_real</a> / stock_summary.<a class="code hl_variable" href="structStockSummary.html#a90b3a62179b282fd39a1f09aa06764a2">nspawners</a>;</div>
-<div class="line"><span class="lineno">  188</span> </div>
-<div class="line"><span class="lineno">  189</span>    <span class="comment">// 3.b.2: Generate recruits, inheriting traits from parents</span></div>
-<div class="line"><span class="lineno">  190</span>    <span class="comment">// -------------------------------------------------</span></div>
-<div class="line"><span class="lineno">  191</span>    <span class="keywordtype">int</span> n_super_recruits = std::ceil(stock_summary.<a class="code hl_variable" href="structStockSummary.html#a374c2a8e6009760952dca57e1548f86d">nrecruits_real</a> / <a class="code hl_variable" href="classStock.html#af8e482424a6000b73b381b4829411e54">superfish_size</a>);</div>
-<div class="line"><span class="lineno">  192</span> </div>
-<div class="line"><span class="lineno">  193</span>    vector&lt;Fish&gt; recruits;</div>
-<div class="line"><span class="lineno">  194</span>    recruits.reserve(n_super_recruits);</div>
-<div class="line"><span class="lineno">  195</span> </div>
-<div class="line"><span class="lineno">  196</span>    ++<a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_variable" href="classFish.html#ab633aa14c9ed71e73053671061683d13">t_birth</a>;</div>
-<div class="line"><span class="lineno">  197</span>    std::discrete_distribution&lt;size_t&gt; fitness_dist(<a class="code hl_variable" href="classStock.html#a6303f70699e5b55133afae771b4e869c">nrecruits_vec</a>.begin(), <a class="code hl_variable" href="classStock.html#a6303f70699e5b55133afae771b4e869c">nrecruits_vec</a>.end());</div>
-<div class="line"><span class="lineno">  198</span> </div>
-<div class="line"><span class="lineno">  199</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;n_super_recruits; ++i){</div>
-<div class="line"><span class="lineno">  200</span>        vector&lt;double&gt; mother_traits = <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>[fitness_dist(<a class="code hl_variable" href="classStock.html#a08c3b8278253d7ef4eabd370b1064395">generator</a>)].get_traits();</div>
-<div class="line"><span class="lineno">  201</span>        vector&lt;double&gt; father_traits = <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>[fitness_dist(<a class="code hl_variable" href="classStock.html#a08c3b8278253d7ef4eabd370b1064395">generator</a>)].get_traits();</div>
-<div class="line"><span class="lineno">  202</span>        vector&lt;double&gt; offspring_traits(mother_traits.size());</div>
-<div class="line"><span class="lineno">  203</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;mother_traits.size(); ++k){</div>
-<div class="line"><span class="lineno">  204</span>            offspring_traits[k] = (mother_traits[k] + father_traits[k])/2 + sqrt(<a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_variable" href="classFish.html#a1644ec1a0b47added288932e8b39ab72">trait_variances</a>[k])*<a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_variable" href="classFish.html#aefd848f56b2cf75414cead9f462af278">trait_scalars</a>[k]*<a class="code hl_variable" href="classStock.html#a532b86696e2db111d06d12e3bcfa8b88">normal_dist</a>(<a class="code hl_variable" href="classStock.html#a08c3b8278253d7ef4eabd370b1064395">generator</a>);</div>
-<div class="line"><span class="lineno">  205</span>        }</div>
-<div class="line"><span class="lineno">  206</span>        <a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_function" href="classFish.html#aaa3e67187a587efc7a99485b4a6ee248">set_traits</a>(offspring_traits);</div>
-<div class="line"><span class="lineno">  207</span>        <a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_function" href="classFish.html#adf85bf269f1651352506e371ffd2cecc">init</a>(tsb_now/1e6, temp);</div>
-<div class="line"><span class="lineno">  208</span>        recruits.push_back(<a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>);</div>
-<div class="line"><span class="lineno">  209</span>    }</div>
-<div class="line"><span class="lineno">  210</span> </div>
-<div class="line"><span class="lineno">  211</span>    <span class="comment">// FIXME: uncomment these</span></div>
-<div class="line"><span class="lineno">  212</span>    <span class="comment">// stock_summary.ssb_after_spawning = calcSSB(par.recruitmentAge);</span></div>
-<div class="line"><span class="lineno">  213</span>    <span class="comment">// stock_summary.ssb_after_spawning_ref = stock_summary.ssb0*exp(-proto_fish.par.Mspawning)*(1-par.f_spf_before*h_spf);</span></div>
-<div class="line"><span class="lineno">  214</span> </div>
-<div class="line"><span class="lineno">  215</span>    <span class="keywordflow">return</span> recruits;</div>
-<div class="line"><span class="lineno">  216</span>}</div>
-<div class="ttc" id="aclassFishParams_html_aac12f457c42496d0253c1d952d75af5a"><div class="ttname"><a href="classFishParams.html#aac12f457c42496d0253c1d952d75af5a">FishParams::Bhalf</a></div><div class="ttdeci">double Bhalf</div><div class="ttdoc">SSB at which recruitment falls by 50%.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00061">fish.h:61</a></div></div>
-<div class="ttc" id="aclassFish_html_a1644ec1a0b47added288932e8b39ab72"><div class="ttname"><a href="classFish.html#a1644ec1a0b47added288932e8b39ab72">Fish::trait_variances</a></div><div class="ttdeci">std::vector&lt; double &gt; trait_variances</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00176">fish.h:176</a></div></div>
-<div class="ttc" id="aclassFish_html_aaa3e67187a587efc7a99485b4a6ee248"><div class="ttname"><a href="classFish.html#aaa3e67187a587efc7a99485b4a6ee248">Fish::set_traits</a></div><div class="ttdeci">void set_traits(std::vector&lt; double &gt; traits)</div><div class="ttdef"><b>Definition</b> <a href="fish_8cpp_source.html#l00079">fish.cpp:79</a></div></div>
-<div class="ttc" id="aclassFish_html_aefd848f56b2cf75414cead9f462af278"><div class="ttname"><a href="classFish.html#aefd848f56b2cf75414cead9f462af278">Fish::trait_scalars</a></div><div class="ttdeci">std::vector&lt; double &gt; trait_scalars</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00175">fish.h:175</a></div></div>
-<div class="ttc" id="aclassStockParams_html_ac6e23d8d8ff73b76cf3efc8850dfac4f"><div class="ttname"><a href="classStockParams.html#ac6e23d8d8ff73b76cf3efc8850dfac4f">StockParams::rmax</a></div><div class="ttdeci">double rmax</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00017">stock.h:17</a></div></div>
-<div class="ttc" id="aclassStock_html_a08c3b8278253d7ef4eabd370b1064395"><div class="ttname"><a href="classStock.html#a08c3b8278253d7ef4eabd370b1064395">Stock::generator</a></div><div class="ttdeci">std::default_random_engine generator</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00089">stock.h:89</a></div></div>
-<div class="ttc" id="aclassStock_html_a532b86696e2db111d06d12e3bcfa8b88"><div class="ttname"><a href="classStock.html#a532b86696e2db111d06d12e3bcfa8b88">Stock::normal_dist</a></div><div class="ttdeci">std::normal_distribution&lt; double &gt; normal_dist</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00090">stock.h:90</a></div></div>
-<div class="ttc" id="aclassStock_html_a6303f70699e5b55133afae771b4e869c"><div class="ttname"><a href="classStock.html#a6303f70699e5b55133afae771b4e869c">Stock::nrecruits_vec</a></div><div class="ttdeci">std::vector&lt; double &gt; nrecruits_vec</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00091">stock.h:91</a></div></div>
-<div class="ttc" id="aclassStock_html_af8e482424a6000b73b381b4829411e54"><div class="ttname"><a href="classStock.html#af8e482424a6000b73b381b4829411e54">Stock::superfish_size</a></div><div class="ttdeci">double superfish_size</div><div class="ttdoc">superfish size</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00109">stock.h:109</a></div></div>
-<div class="ttc" id="astructStockSummary_html_a374c2a8e6009760952dca57e1548f86d"><div class="ttname"><a href="structStockSummary.html#a374c2a8e6009760952dca57e1548f86d">StockSummary::nrecruits_real</a></div><div class="ttdeci">double nrecruits_real</div><div class="ttdoc">Actual number of recruits.</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00053">stock.h:53</a></div></div>
-<div class="ttc" id="astructStockSummary_html_a90b3a62179b282fd39a1f09aa06764a2"><div class="ttname"><a href="structStockSummary.html#a90b3a62179b282fd39a1f09aa06764a2">StockSummary::nspawners</a></div><div class="ttdeci">double nspawners</div><div class="ttdoc">Number of spawning fish.</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00058">stock.h:58</a></div></div>
-<div class="ttc" id="astructStockSummary_html_aa338f9bc55a8ff2f8e43e3d20422087f"><div class="ttname"><a href="structStockSummary.html#aa338f9bc55a8ff2f8e43e3d20422087f">StockSummary::r0_avg</a></div><div class="ttdeci">double r0_avg</div><div class="ttdoc">Average recruitment rate.</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00057">stock.h:57</a></div></div>
-<div class="ttc" id="astructStockSummary_html_addd678759a149f99bb07917b9d8c3f9f"><div class="ttname"><a href="structStockSummary.html#addd678759a149f99bb07917b9d8c3f9f">StockSummary::factor_dr</a></div><div class="ttdeci">double factor_dr</div><div class="ttdoc">Density-dependent recruitment factor.</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00056">stock.h:56</a></div></div>
-<div class="ttc" id="astructStockSummary_html_aeb3cfa6a3e46781be336fc5cc4cedf6a"><div class="ttname"><a href="structStockSummary.html#aeb3cfa6a3e46781be336fc5cc4cedf6a">StockSummary::nrecruits_per_fish</a></div><div class="ttdeci">double nrecruits_per_fish</div><div class="ttdoc">Recruits per spawning fish.</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00055">stock.h:55</a></div></div>
-<div class="ttc" id="astructStockSummary_html_afe5c800c8b50c759a9c5381700dda69c"><div class="ttname"><a href="structStockSummary.html#afe5c800c8b50c759a9c5381700dda69c">StockSummary::nrecruits_potential</a></div><div class="ttdeci">double nrecruits_potential</div><div class="ttdoc">Potential number of recruits.</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00054">stock.h:54</a></div></div>
+<div class="line"><span class="lineno">  184</span>    <span class="comment">// 3.b.2: Generate recruits, inheriting traits from parents</span></div>
+<div class="line"><span class="lineno">  185</span>    <span class="comment">// -------------------------------------------------</span></div>
+<div class="line"><span class="lineno">  186</span>    <span class="keywordtype">int</span> n_super_recruits = std::ceil(stock_summary.<a class="code hl_variable" href="structStockSummary.html#a374c2a8e6009760952dca57e1548f86d">nrecruits_real</a> / <a class="code hl_variable" href="classStock.html#af8e482424a6000b73b381b4829411e54">superfish_size</a>);</div>
+<div class="line"><span class="lineno">  187</span> </div>
+<div class="line"><span class="lineno">  188</span>    vector&lt;Fish&gt; recruits;</div>
+<div class="line"><span class="lineno">  189</span>    <span class="keywordflow">try</span>{</div>
+<div class="line"><span class="lineno">  190</span>        recruits.reserve(n_super_recruits);</div>
+<div class="line"><span class="lineno">  191</span>    }</div>
+<div class="line"><span class="lineno">  192</span>    <span class="keywordflow">catch</span>(std::exception &amp;e){</div>
+<div class="line"><span class="lineno">  193</span>        std::cout &lt;&lt; <span class="stringliteral">&quot;Could not reserve recruits vec - required size: &quot;</span> &lt;&lt; n_super_recruits &lt;&lt; <span class="stringliteral">&quot; / &quot;</span> &lt;&lt; e.what() &lt;&lt; std::endl;</div>
+<div class="line"><span class="lineno">  194</span>        std::cout &lt;&lt; <span class="stringliteral">&quot;nrecruits_before_noise / nrecruits_total = &quot;</span> &lt;&lt; nrecruits_before_noise &lt;&lt; <span class="stringliteral">&quot; / &quot;</span> &lt;&lt; nrecruits_total &lt;&lt; std::endl;</div>
+<div class="line"><span class="lineno">  195</span>        <span class="keywordflow">throw</span> e;</div>
+<div class="line"><span class="lineno">  196</span>    }</div>
+<div class="line"><span class="lineno">  197</span> </div>
+<div class="line"><span class="lineno">  198</span>    ++<a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_variable" href="classFish.html#ab633aa14c9ed71e73053671061683d13">t_birth</a>;</div>
+<div class="line"><span class="lineno">  199</span>    std::discrete_distribution&lt;size_t&gt; fitness_dist(<a class="code hl_variable" href="classStock.html#a6303f70699e5b55133afae771b4e869c">nrecruits_vec</a>.begin(), <a class="code hl_variable" href="classStock.html#a6303f70699e5b55133afae771b4e869c">nrecruits_vec</a>.end());</div>
+<div class="line"><span class="lineno">  200</span> </div>
+<div class="line"><span class="lineno">  201</span>    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i=0; i&lt;n_super_recruits; ++i){</div>
+<div class="line"><span class="lineno">  202</span>        vector&lt;double&gt; mother_traits = <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>[fitness_dist(<a class="code hl_variable" href="random__utils_8h.html#adbe79e918414b2480135e3a7871b44ac">rng</a>)].get_traits();</div>
+<div class="line"><span class="lineno">  203</span>        vector&lt;double&gt; father_traits = <a class="code hl_variable" href="classStock.html#a8867359bd5157d1e2f9ce25bbbeec251">fishes</a>[fitness_dist(<a class="code hl_variable" href="random__utils_8h.html#adbe79e918414b2480135e3a7871b44ac">rng</a>)].get_traits();</div>
+<div class="line"><span class="lineno">  204</span>        vector&lt;double&gt; offspring_traits(mother_traits.size());</div>
+<div class="line"><span class="lineno">  205</span>        <span class="keywordflow">for</span> (<span class="keywordtype">int</span> k=0; k&lt;mother_traits.size(); ++k){</div>
+<div class="line"><span class="lineno">  206</span>            offspring_traits[k] = (mother_traits[k] + father_traits[k])/2 + sqrt(<a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_variable" href="classFish.html#a1644ec1a0b47added288932e8b39ab72">trait_variances</a>[k])*<a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_variable" href="classFish.html#aefd848f56b2cf75414cead9f462af278">trait_scalars</a>[k]*<a class="code hl_function" href="random__utils_8cpp.html#a98358adc5596091716c6f76bccda774d">rnorm</a>();</div>
+<div class="line"><span class="lineno">  207</span>        }</div>
+<div class="line"><span class="lineno">  208</span>        <a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_function" href="classFish.html#aaa3e67187a587efc7a99485b4a6ee248">set_traits</a>(offspring_traits);</div>
+<div class="line"><span class="lineno">  209</span>        <a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>.<a class="code hl_function" href="classFish.html#adf85bf269f1651352506e371ffd2cecc">init</a>(tsb_now/1e6, temp);</div>
+<div class="line"><span class="lineno">  210</span>        recruits.push_back(<a class="code hl_variable" href="classStock.html#a7456c571f5421aea9db2efc9d4a68791">proto_fish</a>);</div>
+<div class="line"><span class="lineno">  211</span>    }</div>
+<div class="line"><span class="lineno">  212</span> </div>
+<div class="line"><span class="lineno">  213</span>    <span class="comment">// FIXME: uncomment these</span></div>
+<div class="line"><span class="lineno">  214</span>    <span class="comment">// stock_summary.ssb_after_spawning = calcSSB(par.recruitmentAge);</span></div>
+<div class="line"><span class="lineno">  215</span>    <span class="comment">// stock_summary.ssb_after_spawning_ref = stock_summary.ssb0*exp(-proto_fish.par.Mspawning)*(1-par.f_spf_before*h_spf);</span></div>
+<div class="line"><span class="lineno">  216</span> </div>
+<div class="line"><span class="lineno">  217</span>    <span class="keywordflow">return</span> recruits;</div>
+<div class="line"><span class="lineno">  218</span>}</div>
+<div class="ttc" id="aclassFishParams_html_aac12f457c42496d0253c1d952d75af5a"><div class="ttname"><a href="classFishParams.html#aac12f457c42496d0253c1d952d75af5a">FishParams::Bhalf</a></div><div class="ttdeci">double Bhalf</div><div class="ttdoc">SSB at which recruitment falls by 50%.</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00064">fish.h:64</a></div></div>
+<div class="ttc" id="aclassFish_html_a1644ec1a0b47added288932e8b39ab72"><div class="ttname"><a href="classFish.html#a1644ec1a0b47added288932e8b39ab72">Fish::trait_variances</a></div><div class="ttdeci">std::vector&lt; double &gt; trait_variances</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00185">fish.h:185</a></div></div>
+<div class="ttc" id="aclassFish_html_aaa3e67187a587efc7a99485b4a6ee248"><div class="ttname"><a href="classFish.html#aaa3e67187a587efc7a99485b4a6ee248">Fish::set_traits</a></div><div class="ttdeci">void set_traits(std::vector&lt; double &gt; traits)</div><div class="ttdef"><b>Definition</b> <a href="fish_8cpp_source.html#l00093">fish.cpp:93</a></div></div>
+<div class="ttc" id="aclassFish_html_aefd848f56b2cf75414cead9f462af278"><div class="ttname"><a href="classFish.html#aefd848f56b2cf75414cead9f462af278">Fish::trait_scalars</a></div><div class="ttdeci">std::vector&lt; double &gt; trait_scalars</div><div class="ttdef"><b>Definition</b> <a href="fish_8h_source.html#l00184">fish.h:184</a></div></div>
+<div class="ttc" id="aclassStockParams_html_ac414ae811c31cd5c5ad8833b71dda05c"><div class="ttname"><a href="classStockParams.html#ac414ae811c31cd5c5ad8833b71dda05c">StockParams::sigmaf</a></div><div class="ttdeci">double sigmaf</div><div class="ttdoc">Std dev of environmental stochasticity lognormal.</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00020">stock.h:20</a></div></div>
+<div class="ttc" id="aclassStockParams_html_ac6e23d8d8ff73b76cf3efc8850dfac4f"><div class="ttname"><a href="classStockParams.html#ac6e23d8d8ff73b76cf3efc8850dfac4f">StockParams::rmax</a></div><div class="ttdeci">double rmax</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00018">stock.h:18</a></div></div>
+<div class="ttc" id="aclassStock_html_a6303f70699e5b55133afae771b4e869c"><div class="ttname"><a href="classStock.html#a6303f70699e5b55133afae771b4e869c">Stock::nrecruits_vec</a></div><div class="ttdeci">std::vector&lt; double &gt; nrecruits_vec</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00092">stock.h:92</a></div></div>
+<div class="ttc" id="arandom__utils_8cpp_html_a98358adc5596091716c6f76bccda774d"><div class="ttname"><a href="random__utils_8cpp.html#a98358adc5596091716c6f76bccda774d">rnorm</a></div><div class="ttdeci">double rnorm(double mu, double sd)</div><div class="ttdef"><b>Definition</b> <a href="random__utils_8cpp_source.html#l00013">random_utils.cpp:13</a></div></div>
+<div class="ttc" id="astructStockSummary_html_a374c2a8e6009760952dca57e1548f86d"><div class="ttname"><a href="structStockSummary.html#a374c2a8e6009760952dca57e1548f86d">StockSummary::nrecruits_real</a></div><div class="ttdeci">double nrecruits_real</div><div class="ttdoc">Actual number of recruits.</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00055">stock.h:55</a></div></div>
+<div class="ttc" id="astructStockSummary_html_a90b3a62179b282fd39a1f09aa06764a2"><div class="ttname"><a href="structStockSummary.html#a90b3a62179b282fd39a1f09aa06764a2">StockSummary::nspawners</a></div><div class="ttdeci">double nspawners</div><div class="ttdoc">Number of spawning fish.</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00060">stock.h:60</a></div></div>
+<div class="ttc" id="astructStockSummary_html_aa338f9bc55a8ff2f8e43e3d20422087f"><div class="ttname"><a href="structStockSummary.html#aa338f9bc55a8ff2f8e43e3d20422087f">StockSummary::r0_avg</a></div><div class="ttdeci">double r0_avg</div><div class="ttdoc">Average recruitment rate.</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00059">stock.h:59</a></div></div>
+<div class="ttc" id="astructStockSummary_html_addd678759a149f99bb07917b9d8c3f9f"><div class="ttname"><a href="structStockSummary.html#addd678759a149f99bb07917b9d8c3f9f">StockSummary::factor_dr</a></div><div class="ttdeci">double factor_dr</div><div class="ttdoc">Density-dependent recruitment factor.</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00058">stock.h:58</a></div></div>
+<div class="ttc" id="astructStockSummary_html_aeb3cfa6a3e46781be336fc5cc4cedf6a"><div class="ttname"><a href="structStockSummary.html#aeb3cfa6a3e46781be336fc5cc4cedf6a">StockSummary::nrecruits_per_fish</a></div><div class="ttdeci">double nrecruits_per_fish</div><div class="ttdoc">Recruits per spawning fish.</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00057">stock.h:57</a></div></div>
+<div class="ttc" id="astructStockSummary_html_afe5c800c8b50c759a9c5381700dda69c"><div class="ttname"><a href="structStockSummary.html#afe5c800c8b50c759a9c5381700dda69c">StockSummary::nrecruits_potential</a></div><div class="ttdeci">double nrecruits_potential</div><div class="ttdoc">Potential number of recruits.</div><div class="ttdef"><b>Definition</b> <a href="stock_8h_source.html#l00056">stock.h:56</a></div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -935,6 +1241,22 @@ template&lt;class Func &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a58c9732b83e1116ab1fed88d81c8a739" name="a58c9732b83e1116ab1fed88d81c8a739"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a58c9732b83e1116ab1fed88d81c8a739">&#9670;&#160;</a></span>debug</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Stock::debug = false</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="stock_8h_source.html#l00112">112</a> of file <a class="el" href="stock_8h_source.html">stock.h</a>.</p>
+
+</div>
+</div>
 <a id="a8867359bd5157d1e2f9ce25bbbeec251" name="a8867359bd5157d1e2f9ce25bbbeec251"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8867359bd5157d1e2f9ce25bbbeec251">&#9670;&#160;</a></span>fishes</h2>
 
@@ -949,55 +1271,7 @@ template&lt;class Func &gt; </div>
 
 <p>Vector of all fish in the population. </p>
 
-<p class="definition">Definition at line <a class="el" href="stock_8h_source.html#l00108">108</a> of file <a class="el" href="stock_8h_source.html">stock.h</a>.</p>
-
-</div>
-</div>
-<a id="a08c3b8278253d7ef4eabd370b1064395" name="a08c3b8278253d7ef4eabd370b1064395"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a08c3b8278253d7ef4eabd370b1064395">&#9670;&#160;</a></span>generator</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::default_random_engine Stock::generator</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="stock_8h_source.html#l00089">89</a> of file <a class="el" href="stock_8h_source.html">stock.h</a>.</p>
-
-</div>
-</div>
-<a id="a532b86696e2db111d06d12e3bcfa8b88" name="a532b86696e2db111d06d12e3bcfa8b88"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a532b86696e2db111d06d12e3bcfa8b88">&#9670;&#160;</a></span>normal_dist</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::normal_distribution&lt;double&gt; Stock::normal_dist</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p class="definition">Definition at line <a class="el" href="stock_8h_source.html#l00090">90</a> of file <a class="el" href="stock_8h_source.html">stock.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="stock_8h_source.html#l00109">109</a> of file <a class="el" href="stock_8h_source.html">stock.h</a>.</p>
 
 </div>
 </div>
@@ -1021,7 +1295,7 @@ template&lt;class Func &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="stock_8h_source.html#l00091">91</a> of file <a class="el" href="stock_8h_source.html">stock.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="stock_8h_source.html#l00092">92</a> of file <a class="el" href="stock_8h_source.html">stock.h</a>.</p>
 
 </div>
 </div>
@@ -1037,7 +1311,7 @@ template&lt;class Func &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="stock_8h_source.html#l00105">105</a> of file <a class="el" href="stock_8h_source.html">stock.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="stock_8h_source.html#l00106">106</a> of file <a class="el" href="stock_8h_source.html">stock.h</a>.</p>
 
 </div>
 </div>
@@ -1055,7 +1329,7 @@ template&lt;class Func &gt; </div>
 
 <p>Prototype fish. A copy of this fish is always used to initialize new fish in population. </p>
 
-<p class="definition">Definition at line <a class="el" href="stock_8h_source.html#l00107">107</a> of file <a class="el" href="stock_8h_source.html">stock.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="stock_8h_source.html#l00108">108</a> of file <a class="el" href="stock_8h_source.html">stock.h</a>.</p>
 
 </div>
 </div>
@@ -1079,7 +1353,7 @@ template&lt;class Func &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="stock_8h_source.html#l00087">87</a> of file <a class="el" href="stock_8h_source.html">stock.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="stock_8h_source.html#l00090">90</a> of file <a class="el" href="stock_8h_source.html">stock.h</a>.</p>
 
 </div>
 </div>
@@ -1097,7 +1371,7 @@ template&lt;class Func &gt; </div>
 
 <p>superfish size </p>
 
-<p class="definition">Definition at line <a class="el" href="stock_8h_source.html#l00109">109</a> of file <a class="el" href="stock_8h_source.html">stock.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="stock_8h_source.html#l00110">110</a> of file <a class="el" href="stock_8h_source.html">stock.h</a>.</p>
 
 </div>
 </div>

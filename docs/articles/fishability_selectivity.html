@@ -30,19 +30,20 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../index.html"><span class="fa fa-home fa-lg"></span> Home</a></li>
-<li class="nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-theory" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fa-pencil fa-lg"></span> Theory</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-theory">
-<li><a class="dropdown-item" href="../articles/theory_bio.html"><span class="fa fa-fish"></span> Biological model</a></li>
-  </ul>
-</li>
 <li class="active nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true"><span class="fa fa-book fa-lg"></span> Tutorials</button>
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-tutorials" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Tutorials</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-tutorials">
-<li><a class="dropdown-item" href="../articles/fishability_selectivity.html"><span class="fa fa-fish"></span> Understanding fishability and selectivity</a></li>
-    <li><a class="dropdown-item" href="../articles/effort_control_stock.html"><span class="fa fa-fish"></span> Testing effort control</a></li>
-    <li><a class="dropdown-item" href="../articles/unfished_population_stock.html"><span class="fa fa-fish"></span> Simulating an unfished population</a></li>
-    <li><a class="dropdown-item" href="../articles/fished_population_stock.html"><span class="fa fa-fish"></span> Simulating a fished population (biological model only)</a></li>
+<li><a class="dropdown-item" href="../articles/theory_bio.html"><span class="fa fa-fish"></span> Biological model of a single fish</a></li>
+    <li><a class="dropdown-item" href="../articles/unfished_population_stock.html"><span class="fa fa-fish"></span> Simulating an Unfished Population</a></li>
+    <li><a class="dropdown-item" href="../articles/calibrate_fishing_mort.html"><span class="fa fa-fish"></span> Calibrate Fishing Mortality</a></li>
+    <li><a class="dropdown-item" href="../articles/fishability_selectivity.html"><span class="fa fa-fish"></span> Fishability and Selectivity</a></li>
+    <li><a class="dropdown-item" href="../articles/effort_control_stock.html"><span class="fa fa-fish"></span> Effort Control - 1 Stock 1 Fleet</a></li>
+    <li><a class="dropdown-item" href="../articles/effort_control_stock_2fleets.html"><span class="fa fa-fish"></span> Effort Control - 1 Stock 2 Fleets</a></li>
+    <li><a class="dropdown-item" href="../articles/fished_population_stock.html"><span class="fa fa-fish"></span> Simulating a fished population</a></li>
+    <li><a class="dropdown-item" href="../articles/plot_calibration.html"><span class="fa fa-fish"></span> Plot Calibration</a></li>
+    <li><a class="dropdown-item" href="../articles/quota_calc_debug.html"><span class="fa fa-fish"></span> Quota Calculation Debug</a></li>
+    <li><a class="dropdown-item" href="../articles/h_scan.html"><span class="fa fa-fish"></span> Scan over harvest rate</a></li>
+    <li><a class="dropdown-item" href="../articles/hxT_scan.html"><span class="fa fa-fish"></span> Scan over harvest rate and temperature</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../html/index.html"><span class="fa fa-code fa-lg"></span> API</a></li>
@@ -80,6 +81,7 @@
 <p>To simulate a fished population, we start with creating a fish and constructing a population from it, as usual.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fish</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Fish</span>, <span class="va">params_file</span><span class="op">)</span></span>
+<span><span class="co"># fish$setMortalityCurveEmpirical(here::here("data/naturalmort.spline.csv"))</span></span>
 <span></span>
 <span><span class="va">pop</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Stock</span>, <span class="va">fish</span><span class="op">)</span></span>
 <span><span class="va">pop</span><span class="op">$</span><span class="fu">readParams</span><span class="op">(</span><span class="va">params_file</span>, <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
@@ -92,7 +94,7 @@
 </h3>
 <p>For simulating fishing, it is important for the population to start with a realistic state distribution. Therfore, we “spin-up” the population under no-fishing conditions.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">v</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="fu">equilibriate_without_fishing</span><span class="op">(</span><span class="fl">5.61</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>nrow<span class="op">=</span><span class="fl">200</span>, byrow<span class="op">=</span><span class="cn">T</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ssb"</span>, <span class="st">"tsb"</span>, <span class="st">"maturity"</span>, <span class="st">"nr"</span>, <span class="st">"dr"</span>, <span class="st">"nfish"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">v</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="fu">equilibriate_without_fishing</span><span class="op">(</span><span class="fl">5.61</span>, <span class="fl">200</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span>nrow<span class="op">=</span><span class="fl">200</span>, byrow<span class="op">=</span><span class="cn">T</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ssb"</span>, <span class="st">"tsb"</span>, <span class="st">"maturity"</span>, <span class="st">"nr"</span>, <span class="st">"dr"</span>, <span class="st">"nfish"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Let’s see how the population state looks after no-fishing equilibrium.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">=</span> <span class="va">pop</span><span class="op">$</span><span class="fu">get_state</span><span class="op">(</span><span class="op">)</span></span>
@@ -112,8 +114,19 @@
 <h2 id="reference-fishing-mortality-curve">Reference fishing mortality curve<a class="anchor" aria-label="anchor" href="#reference-fishing-mortality-curve"></a>
 </h2>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">F1</span> <span class="op">=</span> <span class="fl">0.6901</span></span>
+<span><span class="va">F2</span> <span class="op">=</span> <span class="fl">0.06517</span></span>
+<span><span class="va">F3</span> <span class="op">=</span> <span class="fl">68.81</span></span>
+<span><span class="va">F4</span> <span class="op">=</span> <span class="fl">0.4151</span></span>
+<span><span class="va">F5</span> <span class="op">=</span> <span class="fl">112.8</span></span>
+<span><span class="va">F6</span> <span class="op">=</span> <span class="fl">0.4381674</span></span>
+<span><span class="va">lmin</span> <span class="op">=</span> <span class="fl">45</span></span>
+<span></span>
+<span><span class="va">file</span> <span class="op">=</span> <span class="fu">here</span><span class="fu">::</span><span class="fu"><a href="https://here.r-lib.org/reference/here.html" class="external-link">here</a></span><span class="op">(</span><span class="st">"data/selection.spline.csv"</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fleet</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Fleet</span><span class="op">)</span></span>
 <span><span class="va">fleet</span><span class="op">$</span><span class="fu">readParams</span><span class="op">(</span><span class="va">params_file_fleet</span>, <span class="cn">F</span><span class="op">)</span></span>
+<span><span class="va">fleet</span><span class="op">$</span><span class="fu">set_referenceFishingMortalityCurveLogistic</span><span class="op">(</span><span class="va">F1</span>,<span class="va">F2</span>,<span class="va">F3</span>,<span class="va">F4</span>,<span class="va">F5</span>,<span class="va">F6</span>,<span class="va">lmin</span><span class="op">)</span></span>
 <span><span class="va">fleet</span><span class="op">$</span><span class="va">par</span><span class="op">$</span><span class="fu">print</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">fleet</span><span class="op">$</span><span class="va">par</span><span class="op">$</span><span class="va">control_model</span> <span class="op">=</span> <span class="st">"linear"</span></span>
 <span><span class="va">fleet</span><span class="op">$</span><span class="va">chi</span> <span class="op">=</span> <span class="fl">100</span></span>
@@ -125,9 +138,9 @@
 <span>  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>x<span class="op">=</span><span class="st">"Length (cm)"</span>, y<span class="op">=</span><span class="st">"Ref Fishing mortality (F)"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="fishability_selectivity_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
+<p><img src="fishability_selectivity_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
 <p>Fishability: values used as weights for computing averages over fishable population</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span></span>
 <span><span class="fu">tibble</span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">200</span>, length.out<span class="op">=</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">mutate</span><span class="op">(</span></span>
@@ -140,8 +153,8 @@
 <span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">length</span>, y<span class="op">=</span><span class="va">fishability</span><span class="op">)</span>, col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>x<span class="op">=</span><span class="st">"Length (cm)"</span>, y<span class="op">=</span><span class="st">"p_death and fishability"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="fishability_selectivity_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<p><img src="fishability_selectivity_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">get_fishing_mortality</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">length</span>, <span class="va">chi</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">fleet</span><span class="op">$</span><span class="va">chi</span> <span class="op">=</span> <span class="va">chi</span></span>
 <span>  <span class="va">fleet</span><span class="op">$</span><span class="fu">fishingMortality</span><span class="op">(</span><span class="va">length</span><span class="op">)</span></span>
@@ -164,12 +177,12 @@
 <span><span class="co">## <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
 <span><span class="co">## <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
 <span><span class="co">## <span style="color: #555555;">generated.</span></span></span></code></pre>
-<p><img src="fishability_selectivity_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
+<p><img src="fishability_selectivity_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="initial-chi">Initial chi<a class="anchor" aria-label="anchor" href="#initial-chi"></a>
 </h2>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">init_chi</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">F_fgf</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">fleet</span><span class="op">$</span><span class="fu">init_chi</span><span class="op">(</span><span class="va">pop</span>, <span class="va">F_fgf</span>, <span class="fl">5.61</span><span class="op">)</span></span>
 <span>  <span class="va">fleet</span><span class="op">$</span><span class="va">chi</span></span>
@@ -183,7 +196,52 @@
 <span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">h</span>, y<span class="op">=</span><span class="va">chi</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">labs</span><span class="op">(</span>x<span class="op">=</span><span class="st">"Harvest prop (h)"</span>, y<span class="op">=</span><span class="st">"Initial chi (chi)"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="fishability_selectivity_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
+<p><img src="fishability_selectivity_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<div class="section level3">
+<h3 id="fleet-with-empirical-fishing-mortality-used-for-calibration">Fleet with empirical fishing mortality (used for calibration)<a class="anchor" aria-label="anchor" href="#fleet-with-empirical-fishing-mortality-used-for-calibration"></a>
+</h3>
+<p>Now we try to create a fleet with an empirical fishing mortality function.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fleet2</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Fleet</span><span class="op">)</span></span>
+<span><span class="va">fleet2</span><span class="op">$</span><span class="fu">readParams</span><span class="op">(</span><span class="va">params_file_fleet</span>, <span class="cn">F</span><span class="op">)</span></span>
+<span><span class="va">fleet2</span><span class="op">$</span><span class="fu">set_referenceFishingMortalityCurveEmpirical</span><span class="op">(</span><span class="va">file</span>,<span class="va">lmin</span><span class="op">)</span></span>
+<span><span class="va">fleet2</span><span class="op">$</span><span class="va">par</span><span class="op">$</span><span class="fu">print</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">fleet2</span><span class="op">$</span><span class="va">par</span><span class="op">$</span><span class="va">control_model</span> <span class="op">=</span> <span class="st">"linear"</span></span>
+<span><span class="va">fleet2</span><span class="op">$</span><span class="va">chi</span> <span class="op">=</span> <span class="fl">100</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span></span>
+<span><span class="fu">tibble</span><span class="op">(</span>length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">200</span>, length.out<span class="op">=</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>f <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_dbl</a></span><span class="op">(</span><span class="va">length</span>, <span class="op">~</span><span class="va">fleet2</span><span class="op">$</span><span class="fu">fishingMortalityRef</span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>f_logistic <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html" class="external-link">map_dbl</a></span><span class="op">(</span><span class="va">length</span>, <span class="op">~</span><span class="va">fleet</span><span class="op">$</span><span class="fu">fishingMortalityRef</span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">length</span>, y<span class="op">=</span><span class="va">f</span><span class="op">)</span>, col<span class="op">=</span><span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">length</span>, y<span class="op">=</span><span class="va">f_logistic</span><span class="op">)</span>, col<span class="op">=</span><span class="st">"cyan4"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">labs</span><span class="op">(</span>x<span class="op">=</span><span class="st">"Length (cm)"</span>, y<span class="op">=</span><span class="st">"Ref Fishing mortality (F)"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p><img src="fishability_selectivity_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
+</div>
+<div class="section level3">
+<h3 id="visualize-the-effect-of-changing-min-size-limit">Visualize the effect of changing min size limit<a class="anchor" aria-label="anchor" href="#visualize-the-effect-of-changing-min-size-limit"></a>
+</h3>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fleet</span> <span class="op">=</span> <span class="fu">new</span><span class="op">(</span><span class="va">Fleet</span><span class="op">)</span></span>
+<span><span class="va">fleet</span><span class="op">$</span><span class="fu">readParams</span><span class="op">(</span><span class="va">params_file_fleet</span>, <span class="cn">F</span><span class="op">)</span></span>
+<span><span class="va">fleet</span><span class="op">$</span><span class="fu">set_referenceFishingMortalityCurveLogistic</span><span class="op">(</span><span class="va">F1</span>,<span class="va">F2</span>,<span class="va">F3</span>,<span class="va">F4</span>,<span class="va">F5</span>,<span class="va">F6</span>,<span class="va">lmin</span><span class="op">)</span></span>
+<span><span class="va">fleet</span><span class="op">$</span><span class="va">par</span><span class="op">$</span><span class="fu">print</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">fleet</span><span class="op">$</span><span class="va">par</span><span class="op">$</span><span class="va">control_model</span> <span class="op">=</span> <span class="st">"linear"</span></span>
+<span><span class="va">fleet</span><span class="op">$</span><span class="va">chi</span> <span class="op">=</span> <span class="fl">1</span></span>
+<span></span>
+<span><span class="va">get_fishing_mortality</span> <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">length</span>, <span class="va">lminx</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">fleet</span><span class="op">$</span><span class="fu">set_referenceFishingMortalityCurveLogistic</span><span class="op">(</span><span class="va">F1</span>,<span class="va">F2</span>,<span class="va">F3</span><span class="op">+</span><span class="va">lminx</span><span class="op">-</span><span class="va">lmin</span>,<span class="va">F4</span>,<span class="va">F5</span><span class="op">+</span><span class="va">lminx</span><span class="op">-</span><span class="va">lmin</span>,<span class="va">F6</span>,<span class="va">lminx</span><span class="op">)</span></span>
+<span>  <span class="va">fleet</span><span class="op">$</span><span class="fu">fishingMortality</span><span class="op">(</span><span class="va">length</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html" class="external-link">expand.grid</a></span><span class="op">(</span>lmin<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">25</span>, <span class="fl">65</span>, by<span class="op">=</span><span class="fl">10</span><span class="op">)</span>, length<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">200</span>, length.out<span class="op">=</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">mutate</span><span class="op">(</span>F <span class="op">=</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html" class="external-link">map2_dbl</a></span><span class="op">(</span><span class="va">length</span>, <span class="va">lmin</span>, <span class="op">~</span><span class="fu">get_fishing_mortality</span><span class="op">(</span><span class="va">.x</span>, <span class="va">.y</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x<span class="op">=</span><span class="va">length</span>, y<span class="op">=</span><span class="cn">F</span>, col<span class="op">=</span><span class="va">lmin</span>, group<span class="op">=</span><span class="va">lmin</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_line</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="fishability_selectivity_files/figure-html/unnamed-chunk-12-1.png" width="700"></p>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

@@ -1,12 +1,12 @@
 var searchData=
 [
   ['a0_0',['a0',['../classFishParams.html#a3493aac14e79432bd756e440b1520fe0',1,'FishParams']]],
-  ['a_5fthresh_1',['a_thresh',['../classPopulationParams.html#a46be5a275459f9dfbf66fbe179dc8cc0',1,'PopulationParams']]],
-  ['accumulate_2',['accumulate',['../classTensor.html#aa62c40ba67729387b0064dbd838d7917',1,'Tensor']]],
-  ['accumulate_5fdim_3',['accumulate_dim',['../classTensor.html#abbfd4d8d3390394254f1d42fcb845bd2',1,'Tensor']]],
-  ['addfleet_4',['addFleet',['../classFishery.html#a94e3f684c30d3a59d1ce90d79f526f0f',1,'Fishery']]],
+  ['accumulate_1',['accumulate',['../classTensor.html#aa62c40ba67729387b0064dbd838d7917',1,'Tensor']]],
+  ['accumulate_5fdim_2',['accumulate_dim',['../classTensor.html#abbfd4d8d3390394254f1d42fcb845bd2',1,'Tensor']]],
+  ['addfleet_3',['addFleet',['../classFishery.html#a94e3f684c30d3a59d1ce90d79f526f0f',1,'Fishery']]],
+  ['addspawnerfleet_4',['addSpawnerFleet',['../classFishery.html#a8ffc2e100107b5826c346162f57aa540',1,'Fishery']]],
   ['age_5',['age',['../classFish.html#a7dc6e636eca8b9001992b87fa6105b16',1,'Fish']]],
-  ['aggregatebyage_6',['aggregatebyage',['../classPopulation.html#ad1a0e8e4ea3e203afdbb0e067bd913b8',1,'Population::aggregateByAge()'],['../classStock.html#a58e93a4e32926af0bedabf1719e034af',1,'Stock::aggregateByAge()']]],
+  ['aggregatebyage_6',['aggregateByAge',['../classStock.html#a58e93a4e32926af0bedabf1719e034af',1,'Stock']]],
   ['alpha_7',['alpha',['../classFishParams.html#a5037f8b88a066532da0395848519916c',1,'FishParams']]],
   ['alpha1_8',['alpha1',['../classFishParams.html#a93a4b8af845f7e94b1dc06dd721444fc',1,'FishParams']]],
   ['alpha1_5fref_9',['alpha1_ref',['../classFishParams.html#a72bc687996096dc025a384720183ff1e',1,'FishParams']]],
@@ -16,6 +16,6 @@ var searchData=
   ['alpha5_13',['alpha5',['../classFishParams.html#ae992a7e92f9ca9d870814879621edb29',1,'FishParams']]],
   ['amax_14',['amax',['../classFishParams.html#a287fe53d1b93baff05c3aa404043ff64',1,'FishParams']]],
   ['avg_5fdim_15',['avg_dim',['../classTensor.html#a1978f9841ed74b044fe61005de3bb304',1,'Tensor']]],
-  ['avgoverages_16',['avgoverages',['../classPopulation.html#aae7135fdeb3e365cb03d444af510eaa5',1,'Population::avgOverAges()'],['../classStock.html#a8f7f7e9910052b74f445dbe0de0811eb',1,'Stock::avgOverAges()']]],
+  ['avgoverages_16',['avgOverAges',['../classStock.html#a8f7f7e9910052b74f445dbe0de0811eb',1,'Stock']]],
   ['avgoverfishable_17',['avgOverFishable',['../classFleet.html#a05be8797b17f217452ddfdfc7f97b0b7',1,'Fleet']]]
 ];
