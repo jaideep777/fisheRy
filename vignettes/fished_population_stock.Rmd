@@ -25,6 +25,7 @@ Let us now set up the fishery system using parameter files for fleet and fish, a
 ```{r setup-fishery}
 # define parameter files
 params_file_fleet = here::here("params/fleet_1_params.ini")
+params_file_spf = here::here("params/fleet_1s_params.ini")
 params_file_fish  = here::here("params/cod_params.ini")
 
 # Create a prototype fish to construct the population
@@ -51,6 +52,7 @@ Configure the fishery:
 h = 0.22
 fishery$set_harvestProp(h);
 fishery$addFleet(params_file_fleet, T);
+fishery$addSpawnerFleet(params_file_spf, T);
 
 # Verify added fleet's fishing mortality curve
 tibble(len=seq(10,200,length.out=100)) |> 
@@ -173,6 +175,6 @@ dat |>
   filter(t > 200) |>
   ggplot() +
   geom_line(aes(x=t, y=quota_fgf/1e9)) +
-  geom_line(aes(x=t, y=yield/1e9), col="red") 
+  geom_line(aes(x=t, y=yield_fgf/1e9), col="red") 
 ```
 

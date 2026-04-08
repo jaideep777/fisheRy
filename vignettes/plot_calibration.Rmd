@@ -65,7 +65,7 @@ age_dist_obs = N_v_age_obs %>%
 
 ### Simulate Population
 ```{r simulate-population}
-simulate_pop = function(par, nsup = 1e6, verbose=F, nsteps=500, nymax=50, params_file_fish, params_file_fleet, out_file = "", using_empirical_mort = TRUE){
+simulate_pop = function(par, nsup = 1e6, verbose=F, nsteps=500, nymax=50, params_file_fish, params_file_fleet, params_file_spf, out_file = "", using_empirical_mort = TRUE){
   h = 0.22
   lf = 45
 
@@ -94,6 +94,7 @@ simulate_pop = function(par, nsup = 1e6, verbose=F, nsteps=500, nymax=50, params
   fishery$set_harvestProp(h)
   fishery$set_minSizeLimit(lf)
   fishery$addFleet(params_file_fleet, FALSE);
+  fishery$addSpawnerFleet(params_file_spf, FALSE);
   fishery$pop$debug = FALSE
   cat(">>> Fleet added to fishery --------------\n")
 
@@ -123,6 +124,7 @@ par_opt_empirical = c(s0=0.01924969, nms=0.2, M0=0.25)
 l = simulate_pop(par = par_opt, 
                  params_file_fish = here("params/cod_params.ini"), 
                  params_file_fleet = here("params/fleet_1_params.ini"), 
+                 params_file_spf = here("params/fleet_1s_params.ini"), 
                  nsup=1e6, 
                  nsteps=200,
                  verbose=T, 
@@ -215,6 +217,7 @@ par_opt_empirical = c(s0=0.01924969, nms=0.2, M0=0.25)
 l = simulate_pop(par = par_opt_empirical, 
                  params_file_fish = here("params/cod_params.ini"), 
                  params_file_fleet = here("params/fleet_1_params.ini"), 
+                 params_file_spf = here("params/fleet_1s_params.ini"), 
                  nsup=1e6, 
                  nsteps=200,
                  verbose=T, 

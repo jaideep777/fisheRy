@@ -25,6 +25,7 @@ Let us now set up the fishery system using parameter files for fleet and fish, a
 ```{r setup-fishery}
 # define parameter files
 params_file_fleet = here::here("params/fleet_1_params.ini")
+params_file_spf = here::here("params/fleet_1s_params.ini")
 params_file_fish  = here::here("params/cod_params.ini")
 
 # Create a prototype fish to construct the population
@@ -52,6 +53,7 @@ h = 0.6
 fishery$set_harvestProp(h);
 fishery$set_minSizeLimit(45);
 fishery$addFleet(params_file_fleet, T);
+fishery$addSpawnerFleet(params_file_spf, T);
 
 # Verify added fleet's fishing mortality curve
 tibble(len=seq(10,200,length.out=100)) |> 
