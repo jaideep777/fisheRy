@@ -38,6 +38,7 @@ stakeholder_satisfaction = function(utils_std, weights, profit_mask, utilnames, 
 
     utils_std[profit_mask] = NA       # mask utils_std 
 
+    # ALERT: below line requires that dim(res) == c("t", "h", "lmin", "T", "u") - must change if C++ code changes
     utils_S = utils_std[,,,,1:4, drop = FALSE] |>  # This assumes that desired utility components are 1st 4 in column vector
         rep(times=nstake) |>          # repeat full utils block along outer S dimension
         array(dim = dimsizes_st)      # utils_S is now [t, c, u, S]

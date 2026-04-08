@@ -289,6 +289,7 @@ RCPP_MODULE(simulator_module){
 		.field("par", &Fishery::par)
 		.field("pop", &Fishery::pop) // Use updated getter and setter
 		.field("debug", &Fishery::debug)
+		.field("colnames", &Fishery::colnames)
 
 		// Wrappers for population functions exposed from Fishery because they modify population state
 		.method("set_superFishSize", &Fishery::set_superFishSize)
@@ -297,6 +298,7 @@ RCPP_MODULE(simulator_module){
 
 		// core Fishery functions
 		.method("addFleet", &Fishery::addFleet)
+		.method("addSpawnerFleet", &Fishery::addSpawnerFleet)
 		.method("calc_quota", &Fishery::calc_quota)
 		.method("equilibriateNaturalPopulation", &Fishery::equilibriateNaturalPopulation)
 		.method("init", &Fishery::init)

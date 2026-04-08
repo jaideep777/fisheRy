@@ -79,6 +79,27 @@ class FleetParams{
 	void print();
 };
 
+class FleetUtils{
+	public:
+	double effort = 0;
+	double employment_sea = 0;
+	double employment_shore = 0;
+	double yield = 0;
+	double profit_sea = 0;
+	double profit_shore = 0;
+};
+
+inline FleetUtils operator+(const FleetUtils &a, const FleetUtils &b) {
+	FleetUtils result;
+	result.effort = a.effort + b.effort;
+	result.employment_sea = a.employment_sea + b.employment_sea;
+	result.employment_shore = a.employment_shore + b.employment_shore;
+	result.yield = a.yield + b.yield;
+	result.profit_sea = a.profit_sea + b.profit_sea;
+	result.profit_shore = a.profit_shore + b.profit_shore;
+	return result;
+}
+
 class Fleet{
 
 	public:
@@ -141,6 +162,12 @@ class Fleet{
 
     double fishing_mort_constantC(const WindowProps &w, double K);
     double catch_rate_constantF(const WindowProps &w, double K);
+
+    /// @brief Calculate socioeconomic outputs of the fishery
+    /// @param yield 
+    /// @param K  Carrying capacity of unfished population (used only for FGF)
+	/// @param h  Harvest proportion (used only for SPF)
+    FleetUtils calc_socioeconomics(double yield, double K, double h, bool is_spawner);
 
 private:
 

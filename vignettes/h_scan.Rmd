@@ -17,6 +17,7 @@ setwd(here::here("vignettes"))
 ```{r setup-fishery}
 # define parameter files
 params_file_fleet = here::here("params/fleet_1_params.ini")
+params_file_spf = here::here("params/fleet_1s_params.ini")
 params_file_fish  = here::here("params/cod_params.ini")
 
 # Create a fleet and read parameters
@@ -45,6 +46,7 @@ fishery = new(Fishery, params_file_fish, fish);
 fishery$par$print()
 
 fishery$addFleet(params_file_fleet, T);
+fishery$addSpawnerFleet(params_file_spf, T);
 
 v = fishery$equilibriateNaturalPopulation(5.61, 2e6, 200);
 fishery$set_superFishSize(2e6)
@@ -77,17 +79,12 @@ df |>
 Simulate the fishery over time and visualize key outputs.
 
 ```{r}
-colnames=c(
-		"ssb", "yield", "employment", "profit", "effort",
-		"tsb", "maturity", "quota", "quota_fgf", "quota_spf", "yield_fgf", "yield_spf", "recruits", 
-		"ssb0", "ssb_spawning", "ssb_spawning_ref", "ssb_after_spawning", "ssb_after_spawning_ref", "ssbn", "ssbn_ref", 
-    "yield0", "effort0", "employment_sea0", "employment_shore0", "profit_sea0", "profit_shore0"
-)
+colnames = fishery$colnames
 ```
 
 
 ```{r run-simulation}
-v3 = fishery$simulate_multi(Tvec, lminvec, hvec, 200, 0, 5, F)
+v3 = fishery$simulate_multi(Tvec, lminvec, hvec, 200, 0, 3, F)
 
 v3_avg = apply(v3, MARGIN=c(2,5), FUN=mean)
 
@@ -95,12 +92,37 @@ v3_avg |>
   as.data.frame() |> 
   setNames(colnames) |> 
   mutate(h = hvec) |> 
-  select(h, ssb:profit, effort0:profit_shore0) |> 
+  select(h, ssb, quota_fgf:profit_shore_fgf, maturity) |> 
   pivot_longer(-h) |> 
   ggplot(aes(x=h, y=value)) +
   geom_line() + 
   expand_limits(y=0) + 
   facet_wrap(~name, scales="free")
+
+v3_avg |> 
+  as.data.frame() |> 
+  setNames(colnames) |> 
+  mutate(h = hvec) |> 
+  select(h, ssb, quota_spf:profit_shore_spf, yield_fgf) |> 
+  mutate(yield_spf_pc = yield_spf/(yield_spf+yield_fgf)) |> 
+  select(-yield_fgf) |>
+  pivot_longer(-h) |> 
+  ggplot(aes(x=h, y=value)) +
+  geom_line() + 
+  expand_limits(y=0) + 
+  facet_wrap(~name, scales="free")
+
+v3_avg |> 
+  as.data.frame() |> 
+  setNames(colnames) |> 
+  mutate(h = hvec) |> 
+  select(h, ssb:profit) |> 
+  pivot_longer(-h) |> 
+  ggplot(aes(x=h, y=value)) +
+  geom_line() + 
+  expand_limits(y=0) + 
+  facet_wrap(~name, scales="free")
+
 
 v3 |> dim()
 
@@ -143,7 +165,7 @@ max_avg_utils[,1,1,] |>
   as.data.frame() |> 
   setNames(colnames) |>
   mutate(h = hvec) |> 
-  select(h, ssb:profit, effort0:profit_shore0) |> 
+  select(h, ssb, quota_fgf:profit_shore_fgf, yield_spf) |> 
   pivot_longer(-h) |> 
   ggplot(aes(x=h, y=value)) +
   geom_line() + 
@@ -198,7 +220,7 @@ utils_std_tavg[,1,1,] |>
   as.data.frame() |> 
   setNames(colnames) |>
   mutate(h = hvec) |> 
-  select(h, ssb:profit, effort0:profit_shore0) |> 
+  select(h, ssb, quota_fgf:profit_shore_fgf, yield_spf) |> 
   pivot_longer(-h) |> 
   ggplot(aes(x=h, y=value)) +
   geom_line() + 

@@ -19,7 +19,8 @@ standardized_utils = function(res, utilnames){
     utils_r = res |>   # res is [t, c, u]
         apply(MARGIN=dims_tavg, FUN=mean)   # Preserve all dimensions except time [c, u]
 
-    profit_mask = utils_r[,,,profit_index] < 0   # profit mask is [c]. This line requires that dim(res) == c("t", "h", "lmin", "T", "u")
+    # ALERT: below line requires that dim(res) == c("t", "h", "lmin", "T", "u") - must change if C++ code changes
+    profit_mask = utils_r[,,,profit_index] < 0   # profit mask is [c]. 
     profit_mask = profit_mask |>
         rep(dimsizes[dims["u"]]) |>    # repeat block along outer u dimension
         array(dim=dimsizes[dims_tavg])  # profit mask is now [c, u]

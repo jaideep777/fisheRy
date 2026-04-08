@@ -76,6 +76,17 @@ void Fishery::set_referenceFishingMortalityCurve(Fleet &fleet){
 	}
 }
 
+void Fishery::update_referenceFishingMortalityCurve_AllFleets(){
+	// Update the effective fleet and all other fleets based on new parameters
+	set_referenceFishingMortalityCurve(fleet_effective);
+	for (auto& fl : fleets) {
+		set_referenceFishingMortalityCurve(fl);
+	}
+	for (auto& fl : spawner_fleets) {
+		set_referenceFishingMortalityCurve(fl);
+	}
+}
+
 // ---------------------------------------------------------
 // Wrapper functions for enabling R interface for Fishery
 // ---------------------------------------------------------
@@ -86,11 +97,8 @@ int Fishery::readParams(std::string filename, bool verbose) {
 	// update population based on new parameters
 	pop.readParams(filename, verbose);
 
-	// Update the effective fleet and all other fleets based on new parameters
-	set_referenceFishingMortalityCurve(fleet_effective);
-	for (auto& fl : fleets) {
-		set_referenceFishingMortalityCurve(fl);
-	}
+	// update all fleets based on new par object
+	update_referenceFishingMortalityCurve_AllFleets();
 	
 	return 0;
 }
@@ -122,11 +130,9 @@ void Fishery::set_minSizeLimit(double _lf50){
 	// If using empirical fishing mort, throw error if lmin is changed
 	if (par.using_empirical_fref && fabs(dl) > 1e-6) throw std::runtime_error("Cannot alter lmin when using empirical fishing mortality function");
 
-	// Else update the effective fleet and all other fleets based on new parameters
-	set_referenceFishingMortalityCurve(fleet_effective);
-	for (auto& fl : fleets) {
-		set_referenceFishingMortalityCurve(fl);
-	}
+	// update all fleets with modified par object
+	update_referenceFishingMortalityCurve_AllFleets();
+
 }
 
 
@@ -224,231 +230,11 @@ void Fishery::addFleet(std::string params_file, bool verbose){
 	colnames.push_back("profit_shore_"+std::to_string(fleets.size()));
 }
 
-
-// std::vector<double> Fishery::update(double temp){
-// 	if (debug){
-// 		// at the start of the step, ensure that all fish are alive and not caught
-// 		for (auto& f : pop.fishes) assert(f.isAlive);
-// 		for (auto& f : pop.fishes) assert(!f.isCaught);
-// 	}
-
-// 	// Reset the stock summary variables
-// 	stock_summary = StockSummary();
-
-// 	// Calculate number of fish and average mortality/maturity at the beginning of the season
-// 	stock_summary.nfish_start = pop.fishes.size();
-
-// 	stock_summary.Mort_fishable = pop.avgOverFishable(
-// 		[temp](const Fish& f) { 
-// 			return f.naturalMortalityRate(temp) + double(f.isMature)*f.par.Mspawning;
-// 		}
-// 	);
-
-// 	stock_summary.Mat_fishable = pop.avgOverFishable(
-// 		[temp](const Fish& f) { 
-// 			return (f.isMature)? 1:0;
-// 		}
-// 	);
-
-// 	// Adundance at age
-// 	stock_summary.n_a = aggregateByAge([this](const Fish &f){
-// 		return (f.isAlive)? pop.par.n : 0;
-// 	});
-
-// 	// Avg weight at age
-// 	stock_summary.w_a = aggregateByAge([this](const Fish &f){
-// 			return (f.isAlive)? pop.par.n*f.weight : 0;
-// 	});
-// 	for (int i=0; i<stock_summary.w_a.size(); ++i) stock_summary.w_a[i] /= (stock_summary.n_a[i]+1e-20);
-
-// 	// Maturity at age
-// 	stock_summary.mat_a = aggregateByAge([this](const Fish &f){
-// 		return (f.isAlive && f.isMature)? pop.par.n : 0;
-// 	});
-// 	for (int i=0; i<stock_summary.mat_a.size(); ++i) stock_summary.mat_a[i] /= (stock_summary.n_a[i]+1e-20);
-
-// 	// Overall maturity
-// 	stock_summary.maturity = std::accumulate(fishes.begin(), fishes.end(), 0.0, 
-// 		[](double sum, const Fish& f) { 
-// 			return sum + ((f.isAlive && f.isMature) ? 1 : 0); 
-// 		}
-// 	) / fishes.size();
-
-// 	// Number of fish at recruitment age
-// 	stock_summary.nfish_ra = std::accumulate(fishes.begin(), fishes.end(), 0.0, 
-// 		[this](double sum, const Fish& f) { 
-// 			return sum + ((f.isAlive && f.age == pop.par.recruitmentAge) ? pop.par.n : 0); 
-// 		}
-// 	);
-
-// 	// Spawing and total stock biomass
-// 	stock_summary.ssb = pop.calcSSB(pop.par.recruitmentAge);
-// 	stock_summary.tsb = pop.calcTSB(pop.par.recruitmentAge);
-
-// 	// Max length
-// 	stock_summary.lmax = std::accumulate(fishes.begin(), fishes.end(), 0.0, 
-// 		[](double lmax, const Fish& f) { 
-// 			return fmax(lmax,  f.length); 
-// 		}
-// 	);
-
-// 	// Average length of the top 5% fish
-// 	vector<Fish> ff = fishes;
-// 	std::sort(ff.begin(), ff.end(), [](const Fish &f1, const Fish &f2){return f1.length > f2.length;});  // sort fishes descending by length
-// 	for (int i=1; i<ff.size(); ++i) assert(ff[i].length <= ff[i-1].length); // Fixme: This is just checking whether the array got sorted, can go
-
-// 	stock_summary.length90 = 0;
-// 	double cut = 0.05;
-// 	for (int i=0; i < ceil(cut*ff.size()); ++i) stock_summary.length90 += ff[i].length;
-// 	stock_summary.length90 /= ceil(cut*ff.size());
-
-
-// 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// 	//  0. Initialize fleets
-// 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// 	// compute average fishing mortality rate for each fleet - needed by fleets to initialize chi 
-// 	for (auto& fl : fleets){
-// 		fl.Fref_fishable = pop.avgOverFishable(
-// 			[&fl](const Fish& f) { 
-// 				return fl.fishingMortalityRef(f.length);
-// 			}
-// 		);
-// 	}
-
-// 	// Initialize fishing mortality rates of fleets
-// 	for (auto& fl : fleets) fl.init_chi(1-stock_summary.Mat_fishable*par.rho);  
-
-// 	// Initialize the fishing mortality rate for the spawning grounds fishery based on total harvest proportion
-// 	double F_spf = par.rho * (-log(1-harvest_prop));
-
-// 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// 	//  1. Maturation 
-// 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// 	// update maturity 
-// 	for (auto& f : fishes){
-// 		f.updateMaturity(temp);
-// 	}
-
-// 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// 	//  2. Growth
-// 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// 	for (auto& f : fishes){
-// 		f.grow(stock_summary.tsb/1e6, temp); // convert tsb to kT
-// 	}
-	
-// 	// calculate metrics to analyse density-inhibition on growth
-// 	stock_summary.factor_dg = std::accumulate(fishes.begin(), fishes.end(), 0.0, 
-// 		[](double sum, const Fish& f) { 
-// 			return sum + f.dl_real/(f.dl_potential+1e-12); 
-// 		}
-// 	) / fishes.size();
-	
-// 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// 	//  3. Reproduction and Spawning grounds fishery
-// 	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// 	stock_summary.ssb0 = pop.calcSSB(pop.par.recruitmentAge);
-	
-// 	// 3a. pre-spawning part of the SPF
-// 	double yield_spf = 0;
-// 	double ssb_spawning = 0;
-// 	double h_spf = 1-exp(-F_spf*1);
-// 	double p_survival_spf_before = 1 - par.f_spf_before*h_spf;
-// 	for (int k=0; k<fishes.size(); ++k) {
-// 		auto &f = fishes[k];
-// 		if (f.isAlive && f.isMature){ // only alive and mature fish are exposed to SPF
-// 			f.isAlive = f.isAlive && (runif() <= p_survival_spf_before);
-
-// 			if (f.isAlive) ssb_spawning += par.n * f.weight; // surviving individuals contribute to SSB
-// 			if (!f.isAlive) yield_spf += par.n * f.weight;   // dying individuals contribute to yield
-// 			if (!f.isAlive) f.isCaught = true;               // mark fish as caught
-// 		}
-// 	}
-// 	double ssb_spawning_ref = ssb0*p_survival_spf_before;
-// 	if (verbose) cout << "ssb spawning = " << ssb_spawning << " / " << ssb_spawning_ref << endl;
-
-// 	// 3b. Spawning
-// 	// double nrecruits = par.r0*ssb / (1 + ssb/par.Bhalf); // * exp(rnorm(-par.sigmaf*par.sigmaf/2, par.sigmaf));
-// 	double nspawners = 0;
-// 	nrecruits_vec.resize(fishes.size());
-// 	std::fill(nrecruits_vec.begin(), nrecruits_vec.end(), 0.0);
-// 	double nrecruits_total = 0;
-// 	double nrecruits_potential = 0;
-// 	for (int k=0; k<fishes.size(); ++k) {
-// 		auto &f = fishes[k];
-// 		// nrecruits += par.r0*n*f.weight/(1+ssb/par.Bhalf);
-// 		if (f.isAlive && f.isMature){  // fish survies the spawning-grounds fishery until actual spawning time
-// 			// count as spawner (for analysis only)
-// 			nspawners += par.n; 
-
-// 			// Recruitment
-// 			double nrecruits_fish = f.produceRecruits(ssb_spawning, temp) * par.n;
-// 			nrecruits_vec[k] = nrecruits_fish;
-// 			nrecruits_total     += nrecruits_fish; // * (1/(1+ssb/f.par.Bhalf));
-// 			nrecruits_potential += f.produceRecruits(  0, temp) * par.n;
-
-// 			// Mortality due to spawning
-// 			double p_survival_spawning = exp(-f.par.Mspawning);
-// 			f.isAlive = f.isAlive && (runif() <= p_survival_spawning);
-// 		}
-// 	}
-// 	//nrecruits *= exp(rnorm(-par.sigmaf*par.sigmaf/2, par.sigmaf));
-// 	double nrecruits_real = std::min(nrecruits_total, par.rmax);
-// //	for (auto& nn : nrecruits_vec) nn = nn*nrecruits_real/(nrecruits_total+1e-20); 
-
-// 	// ** for analysis
-// 	double r0_avg = (ssb_spawning>0)? (nrecruits_real * (1 + ssb_spawning/proto_fish.par.Bhalf) / ssb_spawning) : -999;
-// 	double factor_dr = nrecruits_real / (nrecruits_potential+1e-12);
-// 	double nrecruits_per_fish = nrecruits_real/nspawners;
-// 	double ssb_after_spawning = calcSSB(par.recruitmentAge);
-// 	if (verbose) cout << "n_spawners / n_recruits = " << nspawners << " / " << nrecruits_real << endl;
-// 	// **
-
-// 	// Generate recruits (in a separate vector)
-// 	int nr = nrecruits_real/par.n;
-// 	if (nr <= 0) nr = 1;
-// 	std::discrete_distribution<size_t> fitness_dist(nrecruits_vec.begin(), nrecruits_vec.end());
-// 	++proto_fish.t_birth;
-// 	if (verbose) cout << "n_recruits (actual) = " << nr << endl;
-
-// 	vector<Fish> recruits;
-// 	recruits.reserve(nr);
-
-// 	for (int i=0; i<nr; ++i){
-// 		vector<double> mother_traits = fishes[fitness_dist(generator)].get_traits();
-// 		vector<double> father_traits = fishes[fitness_dist(generator)].get_traits();
-// 		vector<double> offspring_traits(mother_traits.size());
-// 		for (int k=0; k<mother_traits.size(); ++k){
-// 			offspring_traits[k] = (mother_traits[k] + father_traits[k])/2 + sqrt(proto_fish.trait_variances[k])*proto_fish.trait_scalars[k]*normal_dist(generator);
-// 		}
-// 		proto_fish.set_traits(offspring_traits);
-// 		proto_fish.init(tsb/1e6, temp);
-// 		recruits.push_back(proto_fish);
-// 	}
-
-// 	double ssb_after_spawning_ref = ssb0*exp(-proto_fish.par.Mspawning)*(1-par.f_spf_before*h_spf);
-// 	if (verbose) cout << "ssb after spawning = " << ssb_after_spawning << " / " << ssb_after_spawning_ref << endl;
-
-// 	// 3c. post-spawning part of the SPF
-// 	double p_survival_spf_after = (1-h_spf)/(1 - par.f_spf_before*h_spf);
-// 	for (int k=0; k<fishes.size(); ++k) {
-// 		auto &f = fishes[k];
-// 		if (f.isAlive && f.isMature){ // only mature fish are exposed to SPF
-// 			f.isAlive = f.isAlive && (runif() <= p_survival_spf_after);
-
-// 			if (!f.isAlive) yield_spf += par.n * f.weight;
-// 			if (!f.isAlive) f.isCaught = true;               // mark fish as caught
-
-// 		}
-// 	}
-
-// 	double ssbn = calcSSB(par.recruitmentAge);
-
-// 	double yield_spf_ref = ssb0*h_spf*(par.f_spf_before + (1-par.f_spf_before)*exp(-proto_fish.par.Mspawning));
-// 	double ssbn_ref = ssb0*(1-h_spf)*exp(-proto_fish.par.Mspawning);
-
-
-// }
-
+void Fishery::addSpawnerFleet(std::string params_file, bool verbose){
+	spawner_fleets.emplace_back();
+	spawner_fleets.back().readParams(params_file, verbose);
+	set_referenceFishingMortalityCurve(spawner_fleets.back());
+}
 
 void Fishery::summarize_population_metrics(){
 	// Calc by-age metrics
@@ -500,7 +286,6 @@ void Fishery::summarize_spawner_fishery_metrics(const std::vector<double>& spf_s
 }
 
 
-// TODO: Move to a spawner fleet?
 std::vector<double> Fishery::spawner_fishery(double quota){
 	double ssb_before = pop.calcSSB(pop.par.recruitmentAge);
 	double yield_spf = 0;
@@ -518,7 +303,7 @@ std::vector<double> Fishery::spawner_fishery(double quota){
 		}
 	}
 	
-	return {ssb_before, ssb_remaining, yield_spf};
+	return {ssb_before, ssb_remaining, yield_spf, h_spf};
 }
 
 // Which weight should be used for quota calc? Before growth, so (w - dw)?
@@ -546,6 +331,7 @@ std::vector<double> Fishery::update(double temp, double K){
 	std::vector<double> spf_summary_after = spawner_fishery(quota_spf * (1-par.f_spf_before));
 	summarize_spawner_fishery_metrics(spf_summary_before, spf_summary_after, quota_spf);
 	double yield_spf = spf_summary_before[2] + spf_summary_after[2];
+	double h_spf_eff = spf_summary_before[3] + spf_summary_after[3];
 
 	// 4. Maturation
 	for (auto& f: pop.fishes) f.updateMaturity(temp);
@@ -575,46 +361,53 @@ std::vector<double> Fishery::update(double temp, double K){
 	// 9. Finally, add recruits to population 
 	pop.fishes.insert(pop.fishes.end(), recruits.begin(), recruits.end());
 	
-	// 10. Calculate socioeconomic metrics for analysis
-	std::vector<double> fleet_efforts(fleets.size()), employments_sea(fleets.size()), employments_shore(fleets.size());
-	std::vector<double> profits_sea(fleets.size()), profits_shore(fleets.size());
-	
+	// 10a. Calculate socioeconomic metrics of feeding grounds fleets
+	std::vector<FleetUtils> fleet_utils_fgf;
 	for (int k=0; k<fleets.size(); ++k){
-		auto& fl = fleets[k];
-		double effortC = fl.effort_constantC(fl.par.q, fl.par.b, K);
-		fleet_efforts[k] = effortC;
-		employments_sea[k] = effortC*fl.par.dsea;
-		employments_shore[k] = fl.par.dshr * fleet_harvests[k];
-		// FIXME: These computations need to be verified with Mikko 
-		profits_sea[k] = fleet_harvests[k]*fl.par.price_sea*(1-fl.par.fee_ratio) - fl.par.scale_catch*(employments_sea[k]*fl.par.salary_sea + fleet_efforts[k]*fl.par.variable_costs_sea + fl.par.fixed_costs_sea);
-		profits_shore[k] = fleet_harvests[k]*(fl.par.price_shore - fl.par.price_sea) - fleet_harvests[k]*fl.par.dshr * fl.par.salary_shore - fl.par.scale_catch*fl.par.fixed_costs_shore;
+		fleet_utils_fgf.push_back(fleets[k].calc_socioeconomics(fleet_harvests[k], K, -9e99, false));
 	}
 
-	double employment = std::accumulate(employments_sea.begin(), employments_sea.end(), 0.0, std::plus<double>())
-	                  + std::accumulate(employments_shore.begin(), employments_shore.end(), 0.0, std::plus<double>())
-					  + 0; // employment from SPF
-	double profit = std::accumulate(profits_sea.begin(), profits_sea.end(), 0.0, std::plus<double>())
-	              + std::accumulate(profits_shore.begin(), profits_shore.end(), 0.0, std::plus<double>())
-				  + 0; // employment from SPF
-	double yield_fgf = std::accumulate(fleet_harvests.begin(), fleet_harvests.end(), 0.0, std::plus<double>()); // total yield from the feeding grounds fishery
-	double effort = 0;
-	double yield = yield_fgf + yield_spf;
+	// 10b. Calculate socioeconomic metrics of spawner fleets
+	if (spawner_fleets.size() == 0) throw std::runtime_error("No spawner fishery has been added");
+	std::vector<FleetUtils> fleet_utils_spf;
+	for (int k=0; k<spawner_fleets.size(); ++k){
+		double fleet_k_yield = spawner_fleets[k].par.quota * yield_spf;
+		double fleet_k_hspf  = spawner_fleets[k].par.quota * h_spf_eff;
+		fleet_utils_spf.push_back(spawner_fleets[k].calc_socioeconomics(fleet_k_yield, -9e99, fleet_k_hspf, true));
+	}
+
+	// 11. Calculate total utils
+	FleetUtils spf_total_utils = std::accumulate(fleet_utils_spf.begin(), fleet_utils_spf.end(), FleetUtils(), std::plus<FleetUtils>());
+	FleetUtils fgf_total_utils = std::accumulate(fleet_utils_fgf.begin(), fleet_utils_fgf.end(), FleetUtils(), std::plus<FleetUtils>());
+	FleetUtils total_utils = spf_total_utils+fgf_total_utils;
 
 	std::vector<double> out = {
 		ssb, 
-		yield,
-		employment,
-		profit,
-		effort,
+		total_utils.yield,
+		total_utils.employment_sea + total_utils.employment_shore,
+		total_utils.profit_sea + total_utils.profit_shore,
+		total_utils.effort,
 
 		tsb,
 		maturity,
 		quota,
-		quota_fgf,
-		quota_spf,
-		yield_fgf,
-		yield_spf,
 		stock_summary.nfish_ra,
+
+		quota_fgf,
+		fgf_total_utils.yield,
+		fgf_total_utils.effort,
+		fgf_total_utils.employment_sea,
+		fgf_total_utils.employment_shore,
+		fgf_total_utils.profit_sea,
+		fgf_total_utils.profit_shore,
+
+		quota_spf,
+		spf_total_utils.yield,
+		spf_total_utils.effort,
+		spf_total_utils.employment_sea,
+		spf_total_utils.employment_shore,
+		spf_total_utils.profit_sea,
+		spf_total_utils.profit_shore,
 
 		stock_summary.ssb0,
 		stock_summary.ssb_spawning,
@@ -626,12 +419,12 @@ std::vector<double> Fishery::update(double temp, double K){
 	};
 
 	for (int k=0; k<fleets.size(); ++k){
-		out.push_back(fleet_harvests[k]);
-		out.push_back(fleet_efforts[k]);
-		out.push_back(employments_sea[k]);
-		out.push_back(employments_shore[k]);
-		out.push_back(profits_sea[k]);
-		out.push_back(profits_shore[k]);
+		out.push_back(fleet_utils_fgf[k].yield);
+		out.push_back(fleet_utils_fgf[k].effort);
+		out.push_back(fleet_utils_fgf[k].employment_sea);
+		out.push_back(fleet_utils_fgf[k].employment_shore);
+		out.push_back(fleet_utils_fgf[k].profit_sea);
+		out.push_back(fleet_utils_fgf[k].profit_shore);
 	}
 
 	return out;

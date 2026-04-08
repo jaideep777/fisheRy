@@ -1,5 +1,5 @@
 ---
-title: "Scan over harvest rate"
+title: "Scan over harvest rate and temperature"
 author: "Jaideep"
 date: "`r Sys.Date()`"
 output: html_document
@@ -17,6 +17,7 @@ setwd(here::here("vignettes"))
 ```{r setup-fishery}
 # define parameter files
 params_file_fleet = here::here("params/fleet_1_params.ini")
+params_file_spf = here::here("params/fleet_1s_params.ini")
 params_file_fish  = here::here("params/cod_params.ini")
 
 # Create a fleet and read parameters
@@ -45,6 +46,7 @@ fishery = new(Fishery, params_file_fish, fish);
 fishery$par$print()
 
 fishery$addFleet(params_file_fleet, T);
+fishery$addSpawnerFleet(params_file_spf, T);
 
 v = fishery$equilibriateNaturalPopulation(5.61, 2e6, 200);
 fishery$set_superFishSize(2e6)
@@ -77,12 +79,7 @@ df |>
 Simulate the fishery over time and visualize key outputs.
 
 ```{r}
-colnames=c(
-		"ssb", "yield", "employment", "profit", "effort",
-		"tsb", "maturity", "quota", "quota_fgf", "quota_spf", "yield_fgf", "yield_spf", "recruits", 
-		"ssb0", "ssb_spawning", "ssb_spawning_ref", "ssb_after_spawning", "ssb_after_spawning_ref", "ssbn", "ssbn_ref", 
-    "yield0", "effort0", "employment_sea0", "employment_shore0", "profit_sea0", "profit_shore0"
-)
+colnames=fishery$colnames
 ```
 
 

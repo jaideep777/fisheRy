@@ -175,6 +175,25 @@ tibble(length = seq(0, 200, length.out=100)) |>
 ```
 
 
+## Visualize the effect of changing min size limit
+
+```{r}
+fleet = new(Fleet)
+fleet$readParams(params_file_fleet, F)
+fleet$set_referenceFishingMortalityCurveLogistic(F1,F2,F3,F4,F5,F6,lmin)
+fleet$par$print()
+fleet$par$control_model = "linear"
+fleet$chi = 1
+
+get_fishing_mortality = function(length, lminx) {
+  fleet$set_referenceFishingMortalityCurveLogistic(F1,F2,F3+lminx-lmin,F4,F5+lminx-lmin,F6,lminx)
+  fleet$fishingMortality(length)
+}
+
+expand.grid(lmin=seq(25, 65, by=10), length=seq(0,200, length.out=100)) |> 
+  mutate(F = purrr::map2_dbl(length, lmin, ~get_fishing_mortality(.x, .y))) |> 
+  ggplot(aes(x=length, y=F, col=lmin, group=lmin)) +
+  geom_line()
 
 
-
+```

@@ -539,3 +539,20 @@ double Fleet::catch_rate_constantF(const WindowProps& w, double K){
 
 	return C/((N0+C/M)*exp(-M*t) - C/M);
 }
+
+FleetUtils Fleet::calc_socioeconomics(double yield, double K, double h, bool is_spawner){
+    FleetUtils utils;
+
+	if (is_spawner) utils.effort = h / par.q;
+	else utils.effort = effort_constantC(par.q, par.b, K);
+
+	utils.yield = yield;
+	utils.employment_sea = utils.effort*par.dsea;
+	utils.employment_shore = par.dshr * yield;
+	// FIXME: These computations need to be verified with Mikko 
+	utils.profit_sea = yield*par.price_sea*(1-par.fee_ratio) - par.scale_catch*(utils.employment_sea*par.salary_sea + utils.effort*par.variable_costs_sea + par.fixed_costs_sea);
+	utils.profit_shore = yield*(par.price_shore - par.price_sea) - yield*par.dshr * par.salary_shore - par.scale_catch*par.fixed_costs_shore;
+
+	return utils;
+}
+

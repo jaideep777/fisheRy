@@ -44,13 +44,15 @@ class Fishery {
 	io::Initializer I;
 	Stock no_fishing_pop;
 
+	public:
 	std::vector<std::string> colnames = {
 		"ssb", "yield", "employment", "profit", "effort",
-		"tsb", "maturity", "quota", "quota_fgf", "quota_spf", "yield_fgf", "yield_spf", "recruits", 
+		"tsb", "maturity", "quota", "recruits",
+		"quota_fgf", "yield_fgf", "effort_fgf", "employment_sea_fgf", "employment_shore_fgf", "profit_sea_fgf", "profit_shore_fgf", 
+		"quota_spf", "yield_spf", "effort_spf", "employment_sea_spf", "employment_shore_spf", "profit_sea_spf", "profit_shore_spf", 
 		"ssb0", "ssb_spawning", "ssb_spawning_ref", "ssb_after_spawning", "ssb_after_spawning_ref", "ssbn", "ssbn_ref"
 	};
 
-	public:
 	bool debug = false; // Should debugging calculations be done?
 	bool update_env = false;
 	bool simulate_bio_only = false;
@@ -59,6 +61,8 @@ class Fishery {
 
 	Fleet fleet_effective;      ///< Hypothetical fleet representing the total effective fishing mortality from all fleets, with fishing parameters ususally set from data. Used for calculating total quota, which is then divided into actual fleets
 	std::vector<Fleet> fleets;  ///< Actual fleets which may have different fishing mortality parameters. Users need to ensure that selectivity of individual fleets are equal and equal to fleet_effective.
+	std::vector<Fleet> spawner_fleets; ///< Actual fleets which operate in the spawning grounds
+
 	FisheryParams par;
 
 	double harvest_prop;
@@ -72,9 +76,11 @@ class Fishery {
 	// Functions to specify fishery-level control parameters
 	void set_harvestProp(double _h);
 	void set_minSizeLimit(double _lf50);
-	void set_referenceFishingMortalityCurve(Fleet& fleet);
 
-	double calc_quota(double temp);
+	void set_referenceFishingMortalityCurve(Fleet& fleet);
+    void update_referenceFishingMortalityCurve_AllFleets();
+
+    double calc_quota(double temp);
 	std::vector<double> harvest(double quota, double temp, bool return_progress);
 
 	// Wrapper functions for enabling R interface
@@ -90,6 +96,7 @@ class Fishery {
 	std::vector<double> equilibriateNaturalPopulation(double temp, double _n, int nsteps);
 	std::vector<double> equilibriateWithoutFishing(double temp, int nsteps);
 	void addFleet(std::string params_file, bool verbose = false);
+	void addSpawnerFleet(std::string params_file, bool verbose = false);
 
     void summarize_population_metrics();
     void summarize_catch_metrics(bool use_average_weight);
