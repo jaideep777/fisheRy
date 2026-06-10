@@ -151,6 +151,7 @@ class Stock{
 	/// @return averaged quantity
 	double avgOverAges(const std::vector<double>& Qa, int amin, int amax, double missing_value = -1e20);
 
+    std::vector<Fish> spawn(double ssb_now, double tsb_now, double temp, double noise_multiplier, StockSummary &stock_summary);
     std::vector<Fish> spawn(double ssb_now, double tsb_now, double temp, StockSummary &stock_summary);
 
     std::vector<double> equilibriate_without_fishing(double temp, int nsteps);
