@@ -23,6 +23,9 @@ Fleet parameters must be defined in a separate parameters file. Each fleet needs
 Let us now set up the fishery system using parameter files for fleet and fish, and inspect initial parameters.
 
 ```{r setup-fishery}
+# Set rng seed for the R random generator
+set.seed(123)
+
 # define parameter files
 params_file_fleet = here::here("params/fleet_1_params.ini")
 params_file_spf = here::here("params/fleet_1s_params.ini")

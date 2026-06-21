@@ -6,8 +6,6 @@ using namespace std;
 
 int main(){
 
-	srand(0);
-
 	string params_file = "params/cod_params.ini";
 	string params_file_fleet = "params/fleet_1_params.ini";
 

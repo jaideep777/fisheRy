@@ -174,7 +174,7 @@ double Fish::maturationProb(double temp){
 // 
 
 void Fish::updateMaturity(double temp){
-	isMature = isMature || ((rand()/double(RAND_MAX)) <= maturationProb(temp));	
+	isMature = isMature || (runif() <= maturationProb(temp));
 }
 
 
