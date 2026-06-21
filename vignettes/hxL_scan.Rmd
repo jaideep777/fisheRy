@@ -1,0 +1,502 @@
+---
+title: "Scan over harvest rate and temperature"
+author: "Jaideep"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(fisheRy)
+library(plotly)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(patchwork)
+
+setwd(here::here("vignettes"))
+# setwd("/Users/huangyi/Desktop/JP_Fishery_Model/fisheRy-develop/vignettes/")
+```
+
+
+
+```{r setup-fishery}
+set.seed(0)
+fisheRy::set_rng_seed(0)
+
+# define parameter files
+params_file_fleet = here::here("params/fleet_1_params.ini")
+params_file_spf = here::here("params/fleet_1s_params.ini")
+params_file_fish  = here::here("params/cod_params.ini")
+
+# Create a fleet and read parameters
+fleet = new(Fleet)
+fleet$readParams(params_file_fleet, F)
+fleet$par$print()
+
+# Create a prototype fish to construct the population
+fish = new(Fish, params_file_fish)
+fish$natural_mort_scalar = 1
+fish$setMortalityCurveEmpirical(here::here("data/naturalmort.spline.csv"))
+fish$par$print()
+```
+
+# Fishery Simulation
+
+```{r}
+# Craeate the fishery. Note that we do not need to explicitly create a population - it is contained within the fishery
+fishery = new(Fishery, params_file_fish, fish);
+fishery$par$print()
+fishery$debug = TRUE
+
+fishery$addFleet(params_file_fleet, T);
+fishery$addSpawnerFleet(params_file_spf, T);
+
+v = fishery$equilibriateNaturalPopulation(5.61, 2e6, 200);
+fishery$set_superFishSize(2e6)
+tail(v)
+```
+
+
+```{r}
+# Initialize the 
+fishery$init(1000, 0, 5.61);
+v2 = fishery$equilibriateWithoutFishing(5.61, 200)
+
+df = as.data.frame(matrix(data=v2, nrow=200, byrow=T))
+df = df |> setNames(c(			
+      "ssb", 
+			"tsb",
+			"maturity",
+			"nrecruits",
+			"factor_dr",
+			"n_superfish"))
+
+df |> 
+  slice(-1) |>
+  mutate(t = 1:n()) |> 
+  pivot_longer(-t) |>
+  ggplot(aes(x=t, y=value)) +
+  geom_line()+
+  facet_wrap(~name, scales="free")
+
+# Equilibriate under status quo mortality
+v3 <- fishery$simulate(45, 0.22, 200, 1.93e3, rep(5.61, 200), rep(1, 200), F, here::here("fishery_output/age_dist_pred.csv"))
+tail(v3)
+
+# Set desired total recruitment noise (ideally from params file)
+rec_noise_sd = 0.4858775
+
+# Calculate CV of environmental noise, avoid negatives
+cv_rec_noise_demographic = sd(v3$recruits)/mean(v3$recruits)
+rec_noise_sd = max(sqrt(rec_noise_sd^2 - cv_rec_noise_demographic^2), 0)
+
+# Generate recruitment noise multipliers
+rec_noise_t = exp(rnorm(n=300, mean=-rec_noise_sd*rec_noise_sd/2, sd=rec_noise_sd))
+
+# Visualize recruitment noise multipliers
+hist(rec_noise_t, 20)
+tail(rec_noise_t)
+```
+
+# Running and Visualizing Simulation
+
+```{r configure-fishery}
+hvec = seq(0.1, 0.99, length.out = 8)
+hvec = hvec[1:2]
+
+#lminvec = c(45)
+lminvec = seq(1, 200, length.out = 8)
+lminvec=lminvec[7]
+
+Tvec = c(5.61)
+#Tvec = seq(3, 7, length.out=7)
+```
+
+Simulate the fishery over time and visualize key outputs.
+
+```{r}
+colnames=fishery$colnames
+```
+
+
+```{r run-simulation}
+t1 = Sys.time()
+
+v3 = fishery$simulate_multi(Tvec, lminvec, hvec,200,rec_noise_t, 0, 1, F)
+
+v3_avg = apply(v3, MARGIN=c(2,3,4,5), FUN=mean)
+
+v3_sub = v3_avg[,,,1:4, drop = F]
+
+t2 = Sys.time()
+
+t2-t1
+
+plots = list()
+for (i in 1:4){ 
+  plots[[i]] = v3_sub[,,1,i] |> 
+    as.data.frame() |> 
+    setNames(lminvec) |> 
+    mutate(h = hvec) |> 
+    pivot_longer(-h, names_to = "lmin") |> 
+    mutate(lmin = as.numeric(lmin)) |>
+    ggplot(aes(x=h, y=lmin, fill=value)) +
+    geom_raster() +
+    scale_fill_viridis_c() + 
+    ggtitle(c("SSB", "Yield", "Employment", "Profit")[i])
+}
+
+(plots[[1]]+plots[[2]])/(plots[[3]]+plots[[4]])
+
+
+```
+
+```{r}
+v3_sub = v3[,,,1,1:4, drop = F]
+
+utils = standardized_utils(v3_sub, colnames)
+
+plots = list()
+plots_3d = list()
+
+plot_titles = c("SSB", "Yield", "Employment", "Profit")
+
+for (i in 1:4){
+  
+  plot_df = utils$utils_std_tavg[, , 1, i] |>  
+    as.data.frame() |>
+    setNames(lminvec) |>
+    mutate(h = hvec) |>
+    pivot_longer(-h, names_to = "lmin") |>
+    mutate(lmin = as.numeric(lmin))
+  
+  # 2D heatmap
+  plots[[i]] = plot_df |>
+    ggplot(aes(x = h, y = lmin, fill = value)) +
+    geom_raster() +
+    scale_fill_viridis_c() + 
+    ggtitle(plot_titles[i])
+  
+  # 3D surface plot
+  z_mat = utils$utils_std_tavg[, , 1, i]
+  
+  plots_3d[[i]] = plot_ly(
+    x = hvec,
+    y = lminvec,
+    z = t(z_mat),
+    type = "surface"
+  ) |>
+    layout(
+      title = paste0(plot_titles[i], " 3D surface"),
+      scene = list(
+        xaxis = list(title = "h"),
+        yaxis = list(title = "lmin"),
+        zaxis = list(title = "value")
+      )
+    )
+}
+
+library(patchwork)
+
+# 2D heatmaps
+(plots[[1]] + plots[[2]]) / (plots[[3]] + plots[[4]])
+
+# Show 3D plots one by one
+plots_3d[[1]]
+plots_3d[[2]]
+plots_3d[[3]]
+plots_3d[[4]]
+
+```
+
+### Max avg utils with profit masking
+
+```{r}
+v3_sub = v3[,,,1,1:4, drop = F]
+
+utils = standardized_utils(v3_sub, colnames)
+
+plots = list()
+
+for (i in 1:4){
+  plots[[i]] = utils$utils_std_tavg[, , 1, i] |>  # fix T dimension
+    as.data.frame() |>
+    setNames(lminvec) |>
+    mutate(h = hvec) |>
+    pivot_longer(-h, names_to = "lmin") |>
+    mutate(lmin = as.numeric(lmin)) |>
+    ggplot(aes(x = h, y = lmin, fill = value)) +
+    geom_raster() +
+    scale_fill_viridis_c() + 
+    ggtitle(c("SSB", "Yield", "Employment", "Profit")[i])
+}
+
+library(patchwork)
+
+(plots[[1]] + plots[[2]]) / (plots[[3]] + plots[[4]])
+
+
+```
+
+
+### Stakeholder satisfaction
+
+```{r}
+weights =c(  
+#   ssb  yiel empl profit
+    0.0, 0.3, 0.0, 0.7,	  # industrial
+    0.3, 0.5, 0.1, 0.1,	  # artisanal
+    0.3, 0.2, 0.5, 0.0,	  # employment-maximizing policymakers
+    0.2, 0.2, 0.0, 0.6,	  # profit-maximizing policymakers
+    0.5, 0.1, 0.2, 0.2	  # conservationists
+)
+
+ss = stakeholder_satisfaction(utils_std=utils$utils_std, weights = weights, profit_mask=utils$profit_mask, utilnames = colnames[1:4], nstake=5, nu=4)
+
+plots = list()
+for (i in 1:5){
+  plots[[i]] = ss[,,,i] |> 
+    as.data.frame() |> 
+    setNames(lminvec) |> 
+    mutate(h = hvec) |> 
+    pivot_longer(-h, names_to = "lmin") |> 
+    mutate(lmin = as.numeric(lmin)) |>
+    ggplot(aes(x=h, y=lmin, fill=value)) +
+    geom_raster() +
+    scale_fill_viridis_c() + 
+    ggtitle(c("industrial", "artisanal", "employment", "profit", "conservationists")[i])
+}
+
+library(patchwork)
+plots[[1]] + plots[[2]] + plots[[3]] + plots[[4]] + plots[[5]] + plot_layout(guides='collect')
+
+```
+<!-- 
+```{r run-simulation replicates}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(patchwork)
+library(viridis)
+
+t1 <- Sys.time()
+
+n_rep <- 10
+
+# Run 10 replicates
+v3_rep <- vector("list", n_rep)
+
+for (r in 1:n_rep) {
+  v3_rep[[r]] <- fishery$simulate_multi(
+    Tvec, lminvec, hvec,
+    200,
+    rec_noise_t,
+    0, 1, F
+  )
+}
+
+# Combine replicates into one array
+# New first dimension = replicate
+v3_all <- simplify2array(v3_rep)
+
+# Average over replicate dimension and simulation/year dimension
+# Check dimensions first if needed:
+# dim(v3_all) [1] 200  20  20   1  36  10
+
+v3_avg <- apply(
+  v3_all,
+  MARGIN = c(2, 3, 4, 5),
+  FUN = mean,
+  na.rm = TRUE
+)
+
+v3_sub <- v3_avg[, , , 1:4, drop = FALSE]
+
+t2 <- Sys.time()
+t2 - t1
+
+plots <- list()
+
+for (i in 1:4) {
+  plots[[i]] <- v3_sub[, , 1, i] |>
+    as.data.frame() |>
+    setNames(lminvec) |>
+    mutate(h = hvec) |>
+    pivot_longer(-h, names_to = "lmin", values_to = "value") |>
+    mutate(lmin = as.numeric(lmin)) |>
+    ggplot(aes(x = h, y = lmin, fill = value)) +
+    geom_raster() +
+    scale_fill_viridis_c() +
+    ggtitle(c("SSB", "Yield", "Employment", "Profit")[i])
+}
+
+(plots[[1]] + plots[[2]]) / (plots[[3]] + plots[[4]])
+```
+
+```{r stand-utl replicates}
+n_rep <- dim(v3_all)[6]
+
+utils_rep <- vector("list", n_rep)
+
+for (r in 1:n_rep) {
+  
+  # Extract one replicate and first 4 indicators
+  v3_sub_r <- v3_all[, , , 1, 1:4, r, drop = FALSE]
+  
+  # Remove replicate dimension, but keep the 5D structure needed by standardized_utils()
+  v3_sub_r <- array(
+    v3_sub_r,
+    dim = dim(v3_sub_r)[1:5]
+  )
+  
+  utils_rep[[r]] <- standardized_utils(v3_sub_r, colnames)
+}
+
+# Stack standardized utility results across replicates
+utils_std_all <- simplify2array(
+  lapply(utils_rep, function(x) x$utils_std_tavg)
+)
+
+# Average over replicate dimension at the very end
+# replicate dimension is the last dimension after simplify2array()
+utils_std_mean <- apply(
+  utils_std_all,
+  MARGIN = 1:(length(dim(utils_std_all)) - 1),
+  FUN = mean,
+  na.rm = TRUE
+)
+
+plots <- list()
+plots_3d <- list()
+
+plot_titles <- c("SSB", "Yield", "Employment", "Profit")
+
+for (i in 1:4) {
+  
+  plot_df <- utils_std_mean[, , 1, i] |>  
+    as.data.frame() |>
+    setNames(lminvec) |>
+    mutate(h = hvec) |>
+    pivot_longer(-h, names_to = "lmin", values_to = "value") |>
+    mutate(lmin = as.numeric(lmin))
+  
+  # 2D heatmap
+  plots[[i]] <- plot_df |>
+    ggplot(aes(x = h, y = lmin, fill = value)) +
+    geom_raster() +
+    scale_fill_viridis_c() + 
+    ggtitle(plot_titles[i])
+  
+  # 3D surface plot
+  z_mat <- utils_std_mean[, , 1, i]
+  
+  plots_3d[[i]] <- plot_ly(
+    x = hvec,
+    y = lminvec,
+    z = t(z_mat),
+    type = "surface"
+  ) |>
+    layout(
+      title = paste0(plot_titles[i], " 3D surface"),
+      scene = list(
+        xaxis = list(title = "h"),
+        yaxis = list(title = "lmin"),
+        zaxis = list(title = "value")
+      )
+    )
+}
+
+# 2D heatmaps
+(plots[[1]] + plots[[2]]) / 
+(plots[[3]] + plots[[4]])
+
+# 3D plots
+plots_3d[[1]]
+plots_3d[[2]]
+plots_3d[[3]]
+plots_3d[[4]]
+```
+
+
+
+```{r - JSS 10 rep}
+
+weights <- c(  
+  # ssb yiel empl profit
+  0.0, 0.3, 0.0, 0.7,  # industrial
+  0.3, 0.5, 0.1, 0.1,  # artisanal
+  0.3, 0.2, 0.5, 0.0,  # employment
+  0.2, 0.2, 0.0, 0.6,  # profit
+  0.5, 0.1, 0.2, 0.2   # conservationists
+)
+
+n_rep <- dim(v3_all)[6]
+
+utils_rep <- vector("list", n_rep)
+ss_rep <- vector("list", n_rep)
+
+for (r in 1:n_rep) {
+  
+  # Extract one replicate and first 4 utilities
+  v3_sub_r <- v3_all[, , , 1, 1:4, r, drop = FALSE]
+  
+  # Restore to 5D array:
+  # 200 x 20 x 20 x 1 x 4
+  v3_sub_r <- array(
+    v3_sub_r,
+    dim = dim(v3_sub_r)[1:5]
+  )
+  
+  # Apply standardized_utils() to this replicate
+  utils_rep[[r]] <- standardized_utils(v3_sub_r, colnames)
+  
+  # Apply stakeholder_satisfaction() to this replicate
+  ss_rep[[r]] <- stakeholder_satisfaction(
+    utils_std  = utils_rep[[r]]$utils_std,
+    weights    = weights,
+    profit_mask = utils_rep[[r]]$profit_mask,
+    utilnames  = colnames[1:4],
+    nstake     = 5,
+    nu         = 4
+  )
+}
+
+# Stack stakeholder satisfaction results across replicates
+ss_all <- simplify2array(ss_rep)
+
+# Average over replicate dimension at the very end
+ss_mean <- apply(
+  ss_all,
+  MARGIN = 1:(length(dim(ss_all)) - 1),
+  FUN = mean,
+  na.rm = TRUE
+)
+
+plots <- list()
+
+stakeholder_titles <- c(
+  "industrial",
+  "artisanal",
+  "employment",
+  "profit",
+  "conservationists"
+)
+
+for (i in 1:5) {
+  
+  plots[[i]] <- ss_mean[, , , i] |> 
+    as.data.frame() |>
+    setNames(lminvec) |>
+    mutate(h = hvec) |>
+    pivot_longer(-h, names_to = "lmin", values_to = "value") |>
+    mutate(lmin = as.numeric(lmin)) |>
+    ggplot(aes(x = h, y = lmin, fill = value)) +
+    geom_raster() +
+    scale_fill_viridis_c() + 
+    ggtitle(stakeholder_titles[i])
+}
+
+plots[[1]] + plots[[2]] + plots[[3]] + plots[[4]] + plots[[5]] +
+  plot_layout(guides = "collect")
+``` -->

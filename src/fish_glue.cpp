@@ -63,6 +63,7 @@ using namespace Rcpp;
 
 #include "fish.h"
 #include "functions.h"
+#include "random_utils.h"
 
 RCPP_EXPOSED_CLASS(Fish);
 RCPP_EXPOSED_CLASS(FishParams);
@@ -73,7 +74,7 @@ RCPP_EXPOSED_ENUM_NODECL(MortalityModel)
 RCPP_EXPOSED_ENUM_NODECL(RecruitmentModel)
 
 RCPP_MODULE(fish_module) {
-	
+	function("set_rng_seed", &set_rng_seed);
 //	function("init_length", &fish::init_length);
 	function("length_juvenile", &fish::length_juvenile);
 	function("length_adult", &fish::length_adult);

@@ -6,7 +6,9 @@ std::uniform_real_distribution<double> uniform_dist(0.0, 1.0);
 std::normal_distribution<double> normal_dist(0.0, 1.0);
 
 void set_rng_seed(unsigned int seed){
-    rng.seed(seed);
+	rng.seed(seed);
+	uniform_dist.reset();
+	normal_dist.reset();
 }
 
 double runif(double rmin, double rmax){
