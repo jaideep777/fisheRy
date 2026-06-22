@@ -110,7 +110,7 @@ class Fleet{
 	double chi = 1;
 	// FIXME: below can be moved to FleetParams
 
-	bool debug = false; // debug mode, prints additional info
+	bool debug = true; // debug mode, prints additional info
 
 	public:
 
