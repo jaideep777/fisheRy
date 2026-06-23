@@ -307,6 +307,8 @@ RCPP_MODULE(simulator_module){
 		.method("readParams", &Fishery::readParams)
 		.method("get_fref", &Fishery::get_fref)
 
+		.method("set_debug", &Fishery::set_debug)
+		
 		.method("set_harvestProp", &Fishery::set_harvestProp)
 		.method("set_minSizeLimit", &Fishery::set_minSizeLimit)
 		// .method("set_traitVariances", &Fishery::set_traitVariances)

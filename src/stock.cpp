@@ -322,7 +322,7 @@ std::vector<double> Stock::get_fished(std::vector<Fleet>& fleets, const std::vec
 		// If this is beginning of window, update start-of-window window_props
 		if (live_fish_count % window_n == 1){
 			for (int k=0; k<fleets.size(); ++k){
-				wps_per_fleet[k].B_start = B - yield - to_sea_bed; // biomass at start of window is total biomass - biomass died so far
+				wps_per_fleet[k].B_start = fmax(B - yield - to_sea_bed, 0); // biomass at start of window is total biomass - biomass died so far
 				wps_per_fleet[k].chi = fleets[k].chi;
 			}
 		}
@@ -360,11 +360,17 @@ std::vector<double> Stock::get_fished(std::vector<Fleet>& fleets, const std::vec
 		
 		if (!f.isAlive){
 			f.fraction_caught = fishing_mort_rate/mortality_rate; // what fraction of the superfish goes to yield (vs seabed)?
-
+			// f.fraction_caught = fmin(fishability_f, f.fraction_caught);
+			
 			double yield_t = f.fraction_caught * superfish_size * f_weight; // catch_frac fraction goes to yield
 			yield += yield_t;
 			wp_total_debug.yield += yield_t;
 			to_sea_bed += (1-f.fraction_caught) * superfish_size * f_weight;  // remaining fraction goes to sea bed
+
+			// if ((yield_t > B_sampled_t || yield > B_sampled) && debug){
+			// 	std::cout << "yield exceeds sampled biomass. iFish = " << live_fish_count << std::endl;
+			// 	std::cout << "fishability / fraction_caught = " << fishability_f << " / " << f.fraction_caught << std::endl;
+			// }
 
 			// Allot yield to each fleet
 			for (int k=0; k<fleets.size(); ++k){

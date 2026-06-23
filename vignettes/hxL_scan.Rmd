@@ -21,7 +21,7 @@ setwd(here::here("vignettes"))
 
 
 ```{r setup-fishery}
-set.seed(0)
+set.seed(1)
 fisheRy::set_rng_seed(0)
 
 # define parameter files
@@ -36,8 +36,8 @@ fleet$par$print()
 
 # Create a prototype fish to construct the population
 fish = new(Fish, params_file_fish)
-fish$natural_mort_scalar = 1
-fish$setMortalityCurveEmpirical(here::here("data/naturalmort.spline.csv"))
+#fish$natural_mort_scalar = 1
+#fish$setMortalityCurveEmpirical(here::here("data/naturalmort.spline.csv"))
 fish$par$print()
 ```
 
@@ -47,10 +47,11 @@ fish$par$print()
 # Craeate the fishery. Note that we do not need to explicitly create a population - it is contained within the fishery
 fishery = new(Fishery, params_file_fish, fish);
 fishery$par$print()
-fishery$debug = TRUE
 
 fishery$addFleet(params_file_fleet, T);
 fishery$addSpawnerFleet(params_file_spf, T);
+
+fishery$set_debug(FALSE)
 
 v = fishery$equilibriateNaturalPopulation(5.61, 2e6, 200);
 fishery$set_superFishSize(2e6)
@@ -102,12 +103,21 @@ tail(rec_noise_t)
 # Running and Visualizing Simulation
 
 ```{r configure-fishery}
-hvec = seq(0.1, 0.99, length.out = 8)
-hvec = hvec[1:2]
+# problem case:
+# hvec = seq(0.1, 0.6, length.out = 5)
+# # hvec = c(0.9, 0.99)
+
+# #lminvec = c(45)
+# lminvec = seq(180, 200, length.out = 2)
+# # lminvec=lminvec[7]
+
+hvec = seq(0.1, 0.99, length.out = 20)
+# hvec = hvec[1:2]
 
 #lminvec = c(45)
-lminvec = seq(1, 200, length.out = 8)
-lminvec=lminvec[7]
+lminvec = seq(1, 200, length.out = 20)
+# lminvec=lminvec[7]
+
 
 Tvec = c(5.61)
 #Tvec = seq(3, 7, length.out=7)
