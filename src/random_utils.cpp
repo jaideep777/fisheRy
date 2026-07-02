@@ -1,12 +1,18 @@
 #include "random_utils.h"
 
-std::random_device rd;
-std::mt19937 rng(rd());
-std::uniform_real_distribution<double> uniform_dist;
-std::normal_distribution<double> normal_dist;
+static constexpr std::mt19937::result_type DEFAULT_RANDOM_SEED = 5489u;
+std::mt19937 rng(DEFAULT_RANDOM_SEED);
+std::uniform_real_distribution<double> uniform_dist(0.0, 1.0);
+std::normal_distribution<double> normal_dist(0.0, 1.0);
+
+void set_rng_seed(unsigned int seed){
+	rng.seed(seed);
+	uniform_dist.reset();
+	normal_dist.reset();
+}
 
 double runif(double rmin, double rmax){
-	double r = uniform_dist(rng); 
+	double r = uniform_dist(rng);
 	return rmin + (rmax-rmin)*r;
 }
 

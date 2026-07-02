@@ -73,6 +73,8 @@ class Fishery {
 	public:
 	Fishery(std::string _params_file, const Fish& f);
 
+	void set_debug(bool b);
+
 	// Functions to specify fishery-level control parameters
 	void set_harvestProp(double _h);
 	void set_minSizeLimit(double _lf50);
@@ -104,11 +106,12 @@ class Fishery {
 	
 	std::vector<double> spawner_fishery(double quota);
 
-    std::vector<double> update(double temp, double K);
+    std::vector<double> update(double temp, double rec_noise_multiplier, double K);
+    // std::vector<double> update(double temp, double K);
 
-	double get_fref(int fleet_id, double len); // debug function to verify reference fishing mortality rate in R
+    double get_fref(int fleet_id, double len); // debug function to verify reference fishing mortality rate in R
 
-	Tensor<double> scan(std::vector<double> Tvec, std::vector<double> lminvec, std::vector<double> hvec, int nyears, double tsb0, int niters, bool re_init);
+	Tensor<double> scan(std::vector<double> Tvec, std::vector<double> lminvec, std::vector<double> hvec, int nyears, std::vector<double> rec_noise_t, double tsb0, int niters, bool re_init);
 
     // std::vector<double> max_avg_utils(std::vector<int> dims, std::vector<double> data);
     // std::vector<double> stakeholder_satisfaction(std::vector<int> dims, std::vector<double> data);
@@ -116,8 +119,9 @@ class Fishery {
 
 #ifndef NATIVE_CPP
 	// Rcpp::NumericVector get_profit_mask();
-    Rcpp::DataFrame simulate_r(double lf, double h, int nyears, double tsb0, double temp, bool re_init, std::string output_file);
-    Rcpp::NumericVector simulate_multi_r(std::vector<double> Tvec, std::vector<double> lminvec, std::vector<double> hvec, int nyears, double tsb0, int niters, bool re_init);
+    // Rcpp::DataFrame simulate_r(double lf, double h, int nyears, double tsb0, double temp, bool re_init, std::string output_file);
+    Rcpp::DataFrame simulate_r(double lf, double h, int nyears, double tsb0, std::vector<double> temp_t, std::vector<double> rec_noise_t, bool re_init, std::string output_file);
+    Rcpp::NumericVector simulate_multi_r(std::vector<double> Tvec, std::vector<double> lminvec, std::vector<double> hvec, int nyears, std::vector<double> rec_noise_t, double tsb0, int niters, bool re_init);
 #endif
 
 };

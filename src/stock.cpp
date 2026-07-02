@@ -145,7 +145,7 @@ double Stock::avgOverAges(const std::vector<double> &Qa, int amin, int amax, dou
 }
 
 
-vector<Fish> Stock::spawn(double ssb_now, double tsb_now, double temp, StockSummary &stock_summary) {
+vector<Fish> Stock::spawn(double ssb_now, double tsb_now, double temp, double noise_multiplier, StockSummary &stock_summary) {
 	// 3.b.1: Get the number of recruits for each fish 
 	// -------------------------------------------------
 	std::vector<double> nrecruits_vec(fishes.size(), 0.0);
@@ -170,8 +170,8 @@ vector<Fish> Stock::spawn(double ssb_now, double tsb_now, double temp, StockSumm
 	}
 
 	double nrecruits_before_noise = nrecruits_total;
-	double noise_multiplier = exp(rnorm(-par.sigmaf*par.sigmaf/2, par.sigmaf));
-	noise_multiplier = clamp(noise_multiplier, 1e-3, 10.0);
+	//double noise_multiplier = exp(rnorm(-par.sigmaf*par.sigmaf/2, par.sigmaf));
+	//noise_multiplier = clamp(noise_multiplier, 1e-3, 10.0);
 	nrecruits_total *= noise_multiplier;
 	stock_summary.nrecruits_real = std::clamp(nrecruits_total, 1.0, par.rmax);
 	//	for (auto& nn : nrecruits_vec) nn = nn*nrecruits_real/(nrecruits_total+1e-20); 
@@ -217,8 +217,16 @@ vector<Fish> Stock::spawn(double ssb_now, double tsb_now, double temp, StockSumm
 	return recruits;
 }
 
+// Version of spwan which does not take noise multiplier as input, instead generates the multiplier internally.
+// This version is used in spinup / equilibriation functions where we need not specifically control noise.
+vector<Fish> Stock::spawn(double ssb_now, double tsb_now, double temp, StockSummary &stock_summary) {
+	double noise_multiplier = exp(rnorm(-par.sigmaf*par.sigmaf/2, par.sigmaf));
+	noise_multiplier = clamp(noise_multiplier, 1e-3, 10.0);
 
+	return spawn(ssb_now, tsb_now, temp, noise_multiplier, stock_summary);
+}
 
+// Note: Currently, equilibriate and such functions use a constant temperature and internally generated recruitment noise
 vector<double> Stock::equilibriate_without_fishing(double temp, int nsteps){
 	// start with 1000 age-1 superfish created under the specified temperature
 	init(1000, 0, temp); 
@@ -314,7 +322,7 @@ std::vector<double> Stock::get_fished(std::vector<Fleet>& fleets, const std::vec
 		// If this is beginning of window, update start-of-window window_props
 		if (live_fish_count % window_n == 1){
 			for (int k=0; k<fleets.size(); ++k){
-				wps_per_fleet[k].B_start = B - yield - to_sea_bed; // biomass at start of window is total biomass - biomass died so far
+				wps_per_fleet[k].B_start = fmax(B - yield - to_sea_bed, 0); // biomass at start of window is total biomass - biomass died so far
 				wps_per_fleet[k].chi = fleets[k].chi;
 			}
 		}
@@ -352,11 +360,17 @@ std::vector<double> Stock::get_fished(std::vector<Fleet>& fleets, const std::vec
 		
 		if (!f.isAlive){
 			f.fraction_caught = fishing_mort_rate/mortality_rate; // what fraction of the superfish goes to yield (vs seabed)?
-
+			// f.fraction_caught = fmin(fishability_f, f.fraction_caught);
+			
 			double yield_t = f.fraction_caught * superfish_size * f_weight; // catch_frac fraction goes to yield
 			yield += yield_t;
 			wp_total_debug.yield += yield_t;
 			to_sea_bed += (1-f.fraction_caught) * superfish_size * f_weight;  // remaining fraction goes to sea bed
+
+			// if ((yield_t > B_sampled_t || yield > B_sampled) && debug){
+			// 	std::cout << "yield exceeds sampled biomass. iFish = " << live_fish_count << std::endl;
+			// 	std::cout << "fishability / fraction_caught = " << fishability_f << " / " << f.fraction_caught << std::endl;
+			// }
 
 			// Allot yield to each fleet
 			for (int k=0; k<fleets.size(); ++k){

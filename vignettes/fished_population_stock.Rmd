@@ -23,6 +23,9 @@ Fleet parameters must be defined in a separate parameters file. Each fleet needs
 Let us now set up the fishery system using parameter files for fleet and fish, and inspect initial parameters.
 
 ```{r setup-fishery}
+# Set rng seed for the R random generator
+set.seed(123)
+
 # define parameter files
 params_file_fleet = here::here("params/fleet_1_params.ini")
 params_file_spf = here::here("params/fleet_1s_params.ini")
@@ -66,9 +69,23 @@ tibble(len=seq(10,200,length.out=100)) |>
 # Simulate the Fishery's hypothetical unfished population to equilibrium
 v = fishery$equilibriateNaturalPopulation(5.61, 2e6, 200);
 fishery$set_superFishSize(2e6)
-# Initialize the 
+
+# Initialize the fishery and equilibriate without fishing
 fishery$init(1000, 0, 5.61);
 v2 = fishery$equilibriateWithoutFishing(5.61, 200)
+
+# Equilibriate under status quo mortality
+v3 <- fishery$simulate(45, 0.22, 200, 1.93e3, rep(5.61, 200), rep(1, 200), F, here::here("fishery_output/age_dist_pred.csv"))
+
+# Set desired total recruitment noise (ideally from params file)
+rec_noise_sd = 0.4858775
+
+# Calculate CV of environmental noise, avoid negatives
+cv_rec_noise_demographic = sd(v3$recruits)/mean(v3$recruits)
+rec_noise_sd = max(sqrt(rec_noise_sd^2 - cv_rec_noise_demographic^2), 0)
+
+# Generate recruitment noise multipliers
+rec_noise_t = exp(rnorm(n=300, mean=-rec_noise_sd*rec_noise_sd/2, sd=rec_noise_sd))
 
 # Just a demo calc of the initial quota corresponding to the set defined harvest proportion. The Fishery will recalculate this every year.
 quota = fishery$calc_quota(5.61);
@@ -80,13 +97,17 @@ cat("Quota: ", quota, '\n')
 Simulate the fishery over time and visualize key outputs.
 
 ```{r run-simulation}
-dat <- fishery$simulate(45, 0.22, 300, 1.93e3, 5.61, F, here::here("fishery_output/age_dist_pred.csv"))
+# Visualize recruitment noise multipliers
+hist(rec_noise_t, 20)
+
+# Run actual run under desired control params
+dat <- fishery$simulate(45, 0.5, 300, 1.93e3, rep(5.61, 300), rec_noise_t, F, here::here("fishery_output/age_dist_pred.csv"))
 dat |> head()
 ```
-## Plot all output variables
+\## Plot all output variables
 
 ```{r plot-all}
-p1 <- dat |>
+p1 <- dplyr::bind_rows(v3, dat) |>
   mutate(t=1:n()) |>
   pivot_longer(-t) |>
   ggplot(aes(x=t, y=value)) +

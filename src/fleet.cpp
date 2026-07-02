@@ -219,6 +219,7 @@ double Fleet::biomassFishable(const Stock &stock, double min_age, bool use_avera
 void Fleet::init_chi(Stock &pop, double F_fgf, double temp){
 	std::vector<double> w_Fref = cummulativeFishingMortalityRef(pop, 0);
 	if(debug) {
+	//  { sum(wF)_below_lmin,      sum(wF)_above_lmin     sum(w)   average F weighted by w
 		std::cout << "w_Fref = "; for (auto w: w_Fref) std::cout << w << " "; std::cout << "\n";
 	}
 
@@ -228,6 +229,7 @@ void Fleet::init_chi(Stock &pop, double F_fgf, double temp){
 	double Fref_avg = w_Fref[3];
 
 	if (Fref_avg > F_fgf) chi = F_fgf/Fref_avg; // case when chi < 1
+	else if (Fref_above_lmin < 1e-6) chi = par.max_chi; // If no fishable biomass, then quota will never be met, so set chi to max
 	else chi = (wsum*F_fgf - Fref_below_lmin)/Fref_above_lmin;
 
 	double h = 1-exp(-F_fgf);
@@ -266,7 +268,7 @@ void Fleet::update_chi(const std::vector<double>& chi_in_windows,
 						bs_in_windows.begin(), y.begin(),
 						[](double yield, double bs) {
 							if (bs == 0) return 0.0;		
-							if (yield >= bs) return 25.0;
+							if (yield >= bs) return 100.0; // This should ideally be inf, but setting to inf / 100 creates spurious extremely high efforts
 							return -log(1 - (yield / bs));
 						});
 

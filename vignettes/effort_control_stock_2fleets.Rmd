@@ -141,6 +141,9 @@ F_fgf = -log(1-0.3)
 fleet1$init_chi(pop, F_fgf*0.3, 5.61)
 fleet2$init_chi(pop, F_fgf*0.7, 5.61)
 
+fleet1$debug = F
+fleet2$debug = F
+
 out = get_fished_dry_run_wrapper(pop, list(fleet1, fleet2), c(quota*0.3, quota*0.7), 5.61, TRUE, TRUE)
 df = as.data.frame(matrix(data = out, ncol=length(progress_names), byrow = T))
 colnames(df) = progress_names

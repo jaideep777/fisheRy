@@ -67,6 +67,13 @@ Fishery::Fishery(std::string _params_file, const Fish& f) : I(), no_fishing_pop(
 	this->readParams(params_file, false);
 }
 
+void Fishery::set_debug(bool b){
+	this->debug = b;
+	for (auto& fl : fleets) fl.debug = b;
+	for (auto& fl : spawner_fleets) fl.debug = b;
+	pop.debug = b;
+}
+
 void Fishery::set_referenceFishingMortalityCurve(Fleet &fleet){
 	if (par.using_empirical_fref){
 		fleet.set_referenceFishingMortalityCurveEmpirical(par.Fref_empirical_file, par.lmin);
@@ -180,7 +187,7 @@ double Fishery::calc_quota(double temp){
 		// std::cout << "Sr. / age / length / mu / F / f_isAlive / catch_prob / expt_catch: " << count << " / " << f.age << " / " << f.length << " / " << natural_mort_rate << " / " << fishing_mort_rate << " / " << f_isAlive << " / " << catch_prob << " / " << expected_catch << '\n';
 	}
 
-	if (pop.fishes.size() > 500 && Fc > 0 && expected_catch < 1e-6){
+	if (pop.fishes.size() > 500 && Fc > 0 && expected_catch < 1e-6 && debug){
 		std::cout << "Quota is 0 - probably spurious" << std::endl;
 		std::cout << "  - nFish = " << pop.fishes.size() << std::endl;
 		std::cout << "  - chi = " << fl.chi << std::endl;
@@ -312,7 +319,7 @@ std::vector<double> Fishery::spawner_fishery(double quota){
 //   Census     Spawner fishery   Maturation        Growth     FGF / Mortality     Age/Year increment
 //    1 Jan ---->   1 Jan    ------> 1 May -----> June-Aug ----> Year round  ----->   31 Dec
 //    Quota                                                  yield = avg weight
-std::vector<double> Fishery::update(double temp, double K){
+std::vector<double> Fishery::update(double temp, double rec_noise_multiplier, double K){
 	stock_summary = StockSummary(); // reset stock summary for each year. FIXME: Maybe better to do outside 
 
 	// 1. Stock assessment (census) happens here at the beginning of the year, based on which quotas are decided
@@ -327,7 +334,7 @@ std::vector<double> Fishery::update(double temp, double K){
 
 	// 3. Reproduction and spawning grounds fishery 
 	std::vector<double> spf_summary_before = spawner_fishery(quota_spf * par.f_spf_before);
-	std::vector<Fish> recruits = pop.spawn(ssb, tsb, temp, stock_summary);
+	std::vector<Fish> recruits = pop.spawn(ssb, tsb, temp, rec_noise_multiplier, stock_summary);
 	std::vector<double> spf_summary_after = spawner_fishery(quota_spf * (1-par.f_spf_before));
 	summarize_spawner_fishery_metrics(spf_summary_before, spf_summary_after, quota_spf);
 	double yield_spf = spf_summary_before[2] + spf_summary_after[2];
@@ -435,11 +442,12 @@ double Fishery::get_fref(int fleet_id, double len){
 	else return fleets[fleet_id].fishingMortalityRef(len);
 }
 
-Tensor<double> Fishery::scan(std::vector<double> Tvec, std::vector<double> lminvec, std::vector<double> hvec, int nyears, double tsb0, int niters, bool re_init){
+Tensor<double> Fishery::scan(std::vector<double> Tvec, std::vector<double> lminvec, std::vector<double> hvec, int nyears, std::vector<double> rec_noise_t, double tsb0, int niters, bool re_init){
 	Tensor<double> res({niters, static_cast<int>(colnames.size()), static_cast<int>(Tvec.size()), static_cast<int>(lminvec.size()), static_cast<int>(hvec.size()), nyears});
 	Stock pop_ref = pop;
 
 	if (fleets.empty()) throw std::runtime_error("No fleets present in Fishery");
+	if (rec_noise_t.size() < nyears) throw std::runtime_error("noise vector has "+std::to_string(rec_noise_t.size())+" values, at least "+std::to_string(nyears)+" expected");
 
 	for (int iter = 0; iter < niters; ++iter){  // loop over iterations
 	for (int it=0; it<Tvec.size(); ++it){       // loop over parameter 3 (temperature)
@@ -469,7 +477,7 @@ Tensor<double> Fishery::scan(std::vector<double> Tvec, std::vector<double> lminv
 				Tnow = Tvec[it];
 			// }
 
-			std::vector<double> state_now = update(Tnow, K_fishable);
+			std::vector<double> state_now = update(Tnow, rec_noise_t[t], K_fishable);
 			
 			for (int col=0; col<state_now.size(); ++col){
 				res({iter, col, it, il, ih, t}) = state_now[col];
@@ -590,7 +598,7 @@ Questions:
 // ************ R stuff *****************
 #ifndef NATIVE_CPP
 
-Rcpp::DataFrame Fishery::simulate_r(double lf, double h, int nyears, double tsb0, double temp, bool re_init, std::string output_file)
+Rcpp::DataFrame Fishery::simulate_r(double lf, double h, int nyears, double tsb0, std::vector<double> temp_t, std::vector<double> rec_noise_t, bool re_init, std::string output_file)
 {
     bool writestate = (output_file != "");
 
@@ -608,15 +616,16 @@ Rcpp::DataFrame Fishery::simulate_r(double lf, double h, int nyears, double tsb0
 
 	}
 
-	// no_fishing_pop.set_harvestProp(h);
-	// no_fishing_pop.set_minSizeLimit(lf);
+	if (temp_t.size() < nyears) throw std::runtime_error("temperature vector has "+std::to_string(temp_t.size())+" values, at least "+std::to_string(nyears)+" expected");
+	if (rec_noise_t.size() < nyears) throw std::runtime_error("noise vector has "+std::to_string(rec_noise_t.size())+" values, at least "+std::to_string(nyears)+" expected");
+
+	set_harvestProp(h);
+	set_minSizeLimit(lf);
+	
 	double K_fishable = fleets[0].biomassFishable(no_fishing_pop, no_fishing_pop.par.recruitmentAge, false);
 	// std::cout << "h/lf = " << h << " / " << lf << " | K = " << K << std::endl;
 
-	// pop.K_fishableBiomass = K;
-	// pop.set_harvestProp(h);
-	// pop.set_minSizeLimit(lf);
-	if (re_init) pop.init(1000, 0, temp);
+	if (re_init) pop.init(1000, 0, temp_t[0]);
 
 	std::vector<std::vector<double>> columns(colnames.size());
 	for (auto& vec : columns) vec.reserve(nyears);
@@ -624,7 +633,7 @@ Rcpp::DataFrame Fishery::simulate_r(double lf, double h, int nyears, double tsb0
 	Rcpp::DataFrame df = Rcpp::DataFrame::create();
 
 	for (int i=0; i<nyears; ++i){
-		std::vector<double> state_now = update(temp, K_fishable);
+		std::vector<double> state_now = update(temp_t[i], rec_noise_t[i], K_fishable);
 		
 		for (int col=0; col<state_now.size(); ++col){
 			columns[col].push_back(state_now[col]);
@@ -665,8 +674,8 @@ Rcpp::NumericVector tensor2array(Tensor<double>& v){
 	return out;
 }
 
-Rcpp::NumericVector Fishery::simulate_multi_r(std::vector<double> Tvec, std::vector<double> lminvec, std::vector<double> hvec, int nyears, double tsb0, int niters, bool re_init){
-	Tensor<double> res = scan(Tvec, lminvec, hvec, nyears, tsb0, niters, re_init);
+Rcpp::NumericVector Fishery::simulate_multi_r(std::vector<double> Tvec, std::vector<double> lminvec, std::vector<double> hvec, int nyears, std::vector<double> rec_noise_t, double tsb0, int niters, bool re_init){
+	Tensor<double> res = scan(Tvec, lminvec, hvec, nyears, rec_noise_t, tsb0, niters, re_init);
 	return tensor2array(res);
 }
 
