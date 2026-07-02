@@ -67,6 +67,13 @@ Fishery::Fishery(std::string _params_file, const Fish& f) : I(), no_fishing_pop(
 	this->readParams(params_file, false);
 }
 
+void Fishery::set_debug(bool b){
+	this->debug = b;
+	for (auto& fl : fleets) fl.debug = b;
+	for (auto& fl : spawner_fleets) fl.debug = b;
+	pop.debug = b;
+}
+
 void Fishery::set_referenceFishingMortalityCurve(Fleet &fleet){
 	if (par.using_empirical_fref){
 		fleet.set_referenceFishingMortalityCurveEmpirical(par.Fref_empirical_file, par.lmin);
@@ -180,7 +187,7 @@ double Fishery::calc_quota(double temp){
 		// std::cout << "Sr. / age / length / mu / F / f_isAlive / catch_prob / expt_catch: " << count << " / " << f.age << " / " << f.length << " / " << natural_mort_rate << " / " << fishing_mort_rate << " / " << f_isAlive << " / " << catch_prob << " / " << expected_catch << '\n';
 	}
 
-	if (pop.fishes.size() > 500 && Fc > 0 && expected_catch < 1e-6){
+	if (pop.fishes.size() > 500 && Fc > 0 && expected_catch < 1e-6 && debug){
 		std::cout << "Quota is 0 - probably spurious" << std::endl;
 		std::cout << "  - nFish = " << pop.fishes.size() << std::endl;
 		std::cout << "  - chi = " << fl.chi << std::endl;

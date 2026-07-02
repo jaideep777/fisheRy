@@ -73,6 +73,8 @@ class Fishery {
 	public:
 	Fishery(std::string _params_file, const Fish& f);
 
+	void set_debug(bool b);
+
 	// Functions to specify fishery-level control parameters
 	void set_harvestProp(double _h);
 	void set_minSizeLimit(double _lf50);
